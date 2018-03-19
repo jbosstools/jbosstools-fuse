@@ -11,6 +11,8 @@
 package org.jboss.tools.fuse.ui.bot.tests;
 
 import static org.jboss.tools.fuse.reddeer.SupportedCamelVersions.CAMEL_2_17_0_REDHAT_630187;
+import static org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardDeploymentType.STANDALONE;
+import static org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardRuntimeType.KARAF;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -39,7 +41,6 @@ import org.eclipse.reddeer.swt.impl.tree.DefaultTree;
 import org.jboss.tools.fuse.reddeer.JiraIssue;
 import org.jboss.tools.fuse.reddeer.LogGrapper;
 import org.jboss.tools.fuse.reddeer.ProjectTemplate;
-import org.jboss.tools.fuse.reddeer.ProjectType;
 import org.jboss.tools.fuse.reddeer.debug.IsRunning;
 import org.jboss.tools.fuse.reddeer.debug.StepOverButton;
 import org.jboss.tools.fuse.reddeer.editor.CamelEditor;
@@ -73,7 +74,8 @@ public class DebuggerTest extends DefaultTest {
 	@BeforeClass
 	public static void setupInitial() {
 
-		ProjectFactory.newProject(PROJECT_NAME).version(CAMEL_2_17_0_REDHAT_630187).template(ProjectTemplate.CBR).type(ProjectType.SPRING).create();
+		ProjectFactory.newProject(PROJECT_NAME).deploymentType(STANDALONE).runtimeType(KARAF)
+				.version(CAMEL_2_17_0_REDHAT_630187).template(ProjectTemplate.CBR_SPRING).create();
 		CamelEditor editor = new CamelEditor(CAMEL_CONTEXT);
 		editor.selectEditPart("file:work/cbr/input");
 		editor.setProperty("Uri *", "file:src/main/data?noop=true");
@@ -212,8 +214,8 @@ public class DebuggerTest extends DefaultTest {
 
 			// selects "MessageBody" from "Variables View"
 			if (msg != null) {
- 				for (TreeItem item : msg.getItems()) {
- 					item.select();
+				for (TreeItem item : msg.getItems()) {
+					item.select();
 					if (item.getText().equals("MessageBody")) {
 						item.select();
 						break;
@@ -272,8 +274,8 @@ public class DebuggerTest extends DefaultTest {
 	 * <li>create a new project from template 'Content Based Router'</li>
 	 * <li>open Project Explorer view</li>
 	 * <li>open camel-context.xml file</li>
-	 * <li>set conditional breakpoint to the choice component - simple with
-	 * "${in.header.CamelFileName} == 'order1.xml'"</li>
+	 * <li>set conditional breakpoint to the choice component - simple with "${in.header.CamelFileName} ==
+	 * 'order1.xml'"</li>
 	 * <li>set conditional breakpoint to the log component in the otherwise branch - simple with
 	 * "${in.header.CamelFileName} == 'order2.xml'"</li>
 	 * <li>debug the Camel Context without tests</li>

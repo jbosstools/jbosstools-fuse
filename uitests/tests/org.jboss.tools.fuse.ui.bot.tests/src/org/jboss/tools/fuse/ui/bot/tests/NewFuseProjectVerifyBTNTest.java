@@ -24,7 +24,7 @@ import org.eclipse.reddeer.requirements.cleanworkspace.CleanWorkspaceRequirement
 import org.eclipse.reddeer.requirements.openperspective.OpenPerspectiveRequirement.OpenPerspective;
 import org.eclipse.reddeer.swt.condition.ControlIsEnabled;
 import org.eclipse.reddeer.swt.impl.button.CancelButton;
-import org.eclipse.reddeer.swt.impl.button.FinishButton;
+import org.eclipse.reddeer.swt.impl.button.NextButton;
 import org.eclipse.reddeer.swt.impl.label.DefaultLabel;
 import org.eclipse.reddeer.swt.impl.toolbar.DefaultToolItem;
 import org.eclipse.reddeer.workbench.handler.EditorHandler;
@@ -36,6 +36,8 @@ import org.jboss.tools.fuse.reddeer.condition.LabelContainsText;
 import org.jboss.tools.fuse.reddeer.perspectives.FuseIntegrationPerspective;
 import org.jboss.tools.fuse.reddeer.preference.ConsolePreferenceUtil;
 import org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizard;
+import org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardFirstPage;
+import org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardRuntimePage;
 import org.jboss.tools.fuse.ui.bot.tests.utils.LogChecker;
 import org.jboss.tools.fuse.ui.bot.tests.utils.ProjectFactory;
 import org.junit.After;
@@ -80,7 +82,8 @@ public class NewFuseProjectVerifyBTNTest {
 	public void prepareTestEnvironment() {
 		wizard = new NewFuseIntegrationProjectWizard();
 		wizard.open();
-		wizard.setProjectName(PROJECT_NAME);
+		NewFuseIntegrationProjectWizardFirstPage firstPage = new NewFuseIntegrationProjectWizardFirstPage(wizard);
+		firstPage.setProjectName(PROJECT_NAME);
 		wizard.next();
 	} 
 	
@@ -98,9 +101,10 @@ public class NewFuseProjectVerifyBTNTest {
 	 * Test tries to verify existing supported Camel version
 	 */
 	@Test
-	public void testExistingCamelVersion() {	
-		wizard.setCamelVersion(EXISTING_CAMEL_VERSION);
-		wizard.clickVerifyButton();
+	public void testExistingCamelVersion() {
+		NewFuseIntegrationProjectWizardRuntimePage secondPage = new NewFuseIntegrationProjectWizardRuntimePage(wizard);
+		secondPage.typeCamelVersion(EXISTING_CAMEL_VERSION);
+		secondPage.clickVerifyCamelVersionButton();
 		
 		waiting();
 		finish();
@@ -112,8 +116,9 @@ public class NewFuseProjectVerifyBTNTest {
 	 */
 	@Test
 	public void testNonExistingCamelVersion() {
-		wizard.setCamelVersion(NON_EXISTING_CAMEL_VERSION);
-		wizard.clickVerifyButton();
+		NewFuseIntegrationProjectWizardRuntimePage secondPage = new NewFuseIntegrationProjectWizardRuntimePage(wizard);
+		secondPage.typeCamelVersion(NON_EXISTING_CAMEL_VERSION);
+		secondPage.clickVerifyCamelVersionButton();
 		
 		waiting();
 		assertButtons();
@@ -126,8 +131,10 @@ public class NewFuseProjectVerifyBTNTest {
 	 */
 	@Test
 	public void testCommunityCamelVersion() {
-		wizard.setCamelVersion(COMMUNITY_CAMEL_VERSION);
-		wizard.clickVerifyButton();
+		
+		NewFuseIntegrationProjectWizardRuntimePage secondPage = new NewFuseIntegrationProjectWizardRuntimePage(wizard);
+		secondPage.typeCamelVersion(COMMUNITY_CAMEL_VERSION);
+		secondPage.clickVerifyCamelVersionButton();
 		
 		waiting();
 		finish();
@@ -139,8 +146,9 @@ public class NewFuseProjectVerifyBTNTest {
 	 */
 	@Test
 	public void testInterruptVerifying() {
-		wizard.setCamelVersion(INTERRUPT_CAMEL_VERSION);
-		wizard.clickVerifyButton();
+		NewFuseIntegrationProjectWizardRuntimePage secondPage = new NewFuseIntegrationProjectWizardRuntimePage(wizard);
+		secondPage.typeCamelVersion(INTERRUPT_CAMEL_VERSION);
+		secondPage.clickVerifyCamelVersionButton();
 		
 		AbstractWait.sleep(TimePeriod.MEDIUM);
 		new DefaultToolItem(wizard, 0).click(); // click on 'Cancel Operation'
@@ -163,7 +171,7 @@ public class NewFuseProjectVerifyBTNTest {
 	 * Wait until 'Finish' button is enabled and click
 	 */
 	private void finish() {
-		new WaitUntil(new ControlIsEnabled(new FinishButton(wizard)), TimePeriod.MEDIUM);
+		new WaitUntil(new ControlIsEnabled(new NextButton(wizard)), TimePeriod.MEDIUM);
 	}
 	
 	/**
@@ -174,8 +182,8 @@ public class NewFuseProjectVerifyBTNTest {
 	}
 	
 	private void waiting() {
-		String label = "Checking availability for Camel version " + wizard.getCamelVersion() + ". Please wait...";
-		new WaitWhile(new LabelContainsText(new DefaultLabel(wizard, 5), label), TimePeriod.VERY_LONG);
+		String label = "Checking availability for Camel version " + new NewFuseIntegrationProjectWizardRuntimePage(wizard).getSelectedCamelVersion() + ". Please wait...";
+		new WaitWhile(new LabelContainsText(new DefaultLabel(wizard, 5), label), TimePeriod.VERY_LONG, false);
 	}
 	
 	/**

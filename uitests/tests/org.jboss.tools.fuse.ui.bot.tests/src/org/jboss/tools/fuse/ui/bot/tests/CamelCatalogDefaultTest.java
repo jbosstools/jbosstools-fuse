@@ -10,6 +10,8 @@
  ******************************************************************************/
 package org.jboss.tools.fuse.ui.bot.tests;
 
+import static org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardDeploymentType.STANDALONE;
+import static org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardRuntimeType.KARAF;
 import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
@@ -25,7 +27,6 @@ import org.eclipse.reddeer.workbench.handler.EditorHandler;
 import org.eclipse.reddeer.workbench.impl.shell.WorkbenchShell;
 import org.jboss.tools.fuse.reddeer.CamelCatalogUtils;
 import org.jboss.tools.fuse.reddeer.ProjectTemplate;
-import org.jboss.tools.fuse.reddeer.ProjectType;
 import org.jboss.tools.fuse.reddeer.editor.CamelEditor;
 import org.jboss.tools.fuse.reddeer.perspectives.FuseIntegrationPerspective;
 import org.jboss.tools.fuse.reddeer.preference.ConsolePreferenceUtil;
@@ -53,11 +54,11 @@ public class CamelCatalogDefaultTest {
 	private static final String PROJECT_NAME = "cbr";
 
 	private static final String CONTEXT = "camel-context.xml";
-	
+
 	private static CamelCatalogUtils catalog;
 
 	private List<String> skip = new ArrayList<>();
-	
+
 	@InjectRequirement
 	private static CamelCatalogRequirement catalogRequirement;
 
@@ -66,8 +67,9 @@ public class CamelCatalogDefaultTest {
 		new WorkbenchShell().maximize();
 		ConsolePreferenceUtil.setConsoleOpenOnError(false);
 		ConsolePreferenceUtil.setConsoleOpenOnOutput(false);
-		ProjectFactory.newProject(PROJECT_NAME).template(ProjectTemplate.CBR).type(ProjectType.SPRING)
-				.version(catalogRequirement.getConfiguration().getVersion()).create();
+		ProjectFactory.newProject(PROJECT_NAME).deploymentType(STANDALONE).runtimeType(KARAF)
+				.version(catalogRequirement.getConfiguration().getVersion()).template(ProjectTemplate.CBR_SPRING)
+				.create();
 		catalog = new CamelCatalogUtils(catalogRequirement.getConfiguration().getHome());
 	}
 
@@ -98,7 +100,7 @@ public class CamelCatalogDefaultTest {
 				missing.add(component);
 			}
 		}
-		
+
 		if (!missing.isEmpty()) {
 			StringBuilder builder = new StringBuilder();
 			builder.append("List of missing components:");
@@ -111,9 +113,9 @@ public class CamelCatalogDefaultTest {
 
 	private boolean isExist(String name) {
 		/**
-		 * 'Generic' - general component (it is not route component), without properties
-		 * 'ActiveMQ' - it is not part of the standard Apache Camel distribution, it can be used to extend Camel's functionality
-		 * 'Process' - not standard component, it is interface used to implement consumers of message exchanges 
+		 * 'Generic' - general component (it is not route component), without properties 'ActiveMQ' - it is not part of
+		 * the standard Apache Camel distribution, it can be used to extend Camel's functionality 'Process' - not
+		 * standard component, it is interface used to implement consumers of message exchanges
 		 */
 		skip.add("Generic");
 		skip.add("ActiveMQ");

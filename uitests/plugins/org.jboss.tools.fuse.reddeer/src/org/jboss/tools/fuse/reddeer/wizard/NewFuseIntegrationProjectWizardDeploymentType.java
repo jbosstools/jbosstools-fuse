@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017 Red Hat, Inc. 
+ * Copyright (c) 2018 Red Hat, Inc. 
  * Distributed under license by Red Hat, Inc. All rights reserved. 
  * This program is made available under the terms of the 
  * Eclipse Public License v1.0 which accompanies this distribution, 
@@ -10,11 +10,23 @@
  ******************************************************************************/
 package org.jboss.tools.fuse.reddeer.wizard;
 
-public class NewFuseIntegrationProjectWizardException extends RuntimeException {
+/**
+ * Represents deployment types in "New Fuse Integration Project" wizard
+ * 
+ * @author tsedmik
+ */
+public enum NewFuseIntegrationProjectWizardDeploymentType {
 
-	private static final long serialVersionUID = 4694728635991576532L;
+	OPENSHIFT("Kubernetes/OpenShift"),
+	STANDALONE("Standalone");
 
-	public NewFuseIntegrationProjectWizardException(String message) {
-		super(message);
+	private String label;
+
+	private NewFuseIntegrationProjectWizardDeploymentType(String label) {
+		this.label = label;
+	}
+
+	public String getLabel() {
+		return label;
 	}
 }

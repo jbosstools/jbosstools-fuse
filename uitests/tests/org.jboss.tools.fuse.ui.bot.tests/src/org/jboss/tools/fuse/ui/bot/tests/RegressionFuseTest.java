@@ -11,9 +11,10 @@
 package org.jboss.tools.fuse.ui.bot.tests;
 
 import static org.eclipse.reddeer.requirements.server.ServerRequirementState.PRESENT;
-import static org.jboss.tools.fuse.reddeer.ProjectTemplate.CBR;
-import static org.jboss.tools.fuse.reddeer.ProjectType.BLUEPRINT;
+import static org.jboss.tools.fuse.reddeer.ProjectTemplate.CBR_BLUEPRINT;
 import static org.jboss.tools.fuse.reddeer.SupportedCamelVersions.CAMEL_2_17_0_REDHAT_630254;
+import static org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardDeploymentType.STANDALONE;
+import static org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardRuntimeType.KARAF;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -34,8 +35,6 @@ import org.eclipse.reddeer.swt.impl.button.PushButton;
 import org.eclipse.reddeer.swt.impl.shell.DefaultShell;
 import org.eclipse.reddeer.swt.impl.tree.DefaultTreeItem;
 import org.eclipse.reddeer.workbench.ui.dialogs.WorkbenchPreferenceDialog;
-import org.jboss.tools.fuse.reddeer.ProjectTemplate;
-import org.jboss.tools.fuse.reddeer.ProjectType;
 import org.jboss.tools.fuse.reddeer.condition.FuseLogContainsText;
 import org.jboss.tools.fuse.reddeer.perspectives.FuseIntegrationPerspective;
 import org.jboss.tools.fuse.reddeer.preference.FuseServerRuntimePreferencePage;
@@ -62,7 +61,7 @@ public class RegressionFuseTest extends DefaultTest {
 
 	@InjectRequirement
 	private FuseRequirement serverRequirement;
-	
+
 	@RequirementRestriction
 	public static RequirementMatcher getRestrictionMatcher() {
 		return new RequirementMatcher(Fuse.class, "server", new ServerTypeMatcher(ServerFuse.class));
@@ -121,8 +120,8 @@ public class RegressionFuseTest extends DefaultTest {
 
 		// tests the _Cancel_ button
 		AbstractWait.sleep(TimePeriod.SHORT);
-		new DefaultTreeItem("Red Hat JBoss Middleware", "Red Hat Fuse " + serverRequirement.getConfiguration().getServer().getVersion())
-				.select();
+		new DefaultTreeItem("Red Hat JBoss Middleware",
+				"Red Hat Fuse " + serverRequirement.getConfiguration().getServer().getVersion()).select();
 		AbstractWait.sleep(TimePeriod.SHORT);
 		new PushButton("Cancel").click();
 		AbstractWait.sleep(TimePeriod.SHORT);
@@ -150,7 +149,8 @@ public class RegressionFuseTest extends DefaultTest {
 	@Test
 	public void issue_1152() {
 
-		ProjectFactory.newProject("cbr-blueprint").version(CAMEL_2_17_0_REDHAT_630254).template(CBR).type(BLUEPRINT).create();
+		ProjectFactory.newProject("cbr-blueprint").deploymentType(STANDALONE).runtimeType(KARAF)
+				.version(CAMEL_2_17_0_REDHAT_630254).template(CBR_BLUEPRINT).create();
 		String server = serverRequirement.getConfiguration().getServer().getName();
 		FuseServerManipulator.startServer(server);
 		FuseServerManipulator.addModule(server, "cbr-blueprint");
@@ -169,7 +169,8 @@ public class RegressionFuseTest extends DefaultTest {
 	@Test
 	public void issue_1252() {
 
-		ProjectFactory.newProject("camel-blueprint").template(ProjectTemplate.CBR).type(ProjectType.BLUEPRINT).create();
+		ProjectFactory.newProject("cbr-blueprint").deploymentType(STANDALONE).runtimeType(KARAF).template(CBR_BLUEPRINT)
+				.create();
 		String server = serverRequirement.getConfiguration().getServer().getName();
 		FuseServerManipulator.addModule(server, "camel-blueprint");
 		FuseServerManipulator.startServer(server);

@@ -11,7 +11,11 @@
 package org.jboss.tools.fuse.ui.bot.tests;
 
 import static org.eclipse.reddeer.requirements.server.ServerRequirementState.RUNNING;
-import static org.jboss.tools.fuse.reddeer.ProjectType.SPRING;
+import static org.jboss.tools.fuse.reddeer.ProjectTemplate.CBR_BLUEPRINT;
+import static org.jboss.tools.fuse.reddeer.ProjectTemplate.EAP_SPRING;
+import static org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardDeploymentType.STANDALONE;
+import static org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardRuntimeType.EAP;
+import static org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardRuntimeType.KARAF;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -27,8 +31,6 @@ import org.eclipse.reddeer.junit.runner.RedDeerSuite;
 import org.eclipse.reddeer.requirements.cleanworkspace.CleanWorkspaceRequirement.CleanWorkspace;
 import org.eclipse.reddeer.requirements.openperspective.OpenPerspectiveRequirement.OpenPerspective;
 import org.eclipse.reddeer.workbench.impl.shell.WorkbenchShell;
-import org.jboss.tools.fuse.reddeer.ProjectTemplate;
-import org.jboss.tools.fuse.reddeer.ProjectType;
 import org.jboss.tools.fuse.reddeer.perspectives.FuseIntegrationPerspective;
 import org.jboss.tools.fuse.reddeer.requirement.FuseRequirement;
 import org.jboss.tools.fuse.reddeer.requirement.FuseRequirement.Fuse;
@@ -65,7 +67,7 @@ public class DeploymentTest extends DefaultTest {
 
 	@InjectRequirement
 	private static FuseRequirement serverRequirement;
-	
+
 	@RequirementRestriction
 	public static RequirementMatcher getRestrictionMatcher() {
 		return new RequirementMatcher(Fuse.class, "server", new ServerTypeMatcher(ServerEAP.class, ServerFuse.class));
@@ -79,9 +81,11 @@ public class DeploymentTest extends DefaultTest {
 
 		String version = serverRequirement.getConfiguration().getCamelVersion();
 		if (serverRequirement.getConfiguration().getServer().getClass().getName().contains("EAP")) {
-			ProjectFactory.newProject(PROJECT_NAME).template(ProjectTemplate.EAP).version(version).type(SPRING).create();
+			ProjectFactory.newProject(PROJECT_NAME).deploymentType(STANDALONE).runtimeType(EAP).version(version)
+					.template(EAP_SPRING).create();
 		} else {
-			ProjectFactory.newProject(PROJECT_NAME).version(version).template(ProjectTemplate.CBR).type(ProjectType.BLUEPRINT).create();
+			ProjectFactory.newProject(PROJECT_NAME).deploymentType(STANDALONE).runtimeType(KARAF).version(version)
+					.template(CBR_BLUEPRINT).create();
 		}
 	}
 
@@ -140,7 +144,8 @@ public class DeploymentTest extends DefaultTest {
 
 		// add module
 		FuseServerManipulator.addModule(serverRequirement.getConfiguration().getServer().getName(), PROJECT_NAME);
-		assertTrue(FuseServerManipulator.hasServerModule(serverRequirement.getConfiguration().getServer().getName(), PROJECT_NAME));
+		assertTrue(FuseServerManipulator.hasServerModule(serverRequirement.getConfiguration().getServer().getName(),
+				PROJECT_NAME));
 
 		// check deployment
 		if (serverRequirement.getConfiguration().getServer().getClass().getName().contains("EAP")) {
@@ -156,7 +161,8 @@ public class DeploymentTest extends DefaultTest {
 		// remove module
 		FuseServerManipulator.removeAllModules(serverRequirement.getConfiguration().getServer().getName());
 		AbstractWait.sleep(TimePeriod.getCustom(30));
-		assertFalse(FuseServerManipulator.hasServerModule(serverRequirement.getConfiguration().getServer().getName(), PROJECT_NAME));
+		assertFalse(FuseServerManipulator.hasServerModule(serverRequirement.getConfiguration().getServer().getName(),
+				PROJECT_NAME));
 
 		// check deployment
 		if (serverRequirement.getConfiguration().getServer().getClass().getName().contains("EAP")) {
@@ -166,7 +172,8 @@ public class DeploymentTest extends DefaultTest {
 			browser.openPageURL(BROWSER_URL);
 			assertTrue(browser.getText().contains(BROWSER_CONTENT_UNDEPLOYED));
 		} else {
-			assertTrue("The project was not properly undeployed!", new FuseShellSSH().containsLog(PROJECT_IS_UNDEPLOYED));
+			assertTrue("The project was not properly undeployed!",
+					new FuseShellSSH().containsLog(PROJECT_IS_UNDEPLOYED));
 		}
 	}
 }

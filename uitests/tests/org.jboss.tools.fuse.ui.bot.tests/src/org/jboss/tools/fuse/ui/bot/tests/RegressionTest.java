@@ -11,11 +11,13 @@
 package org.jboss.tools.fuse.ui.bot.tests;
 
 import static org.eclipse.reddeer.eclipse.ui.views.markers.ProblemsView.ProblemType.ERROR;
-import static org.jboss.tools.fuse.reddeer.ProjectTemplate.CBR;
-import static org.jboss.tools.fuse.reddeer.ProjectType.BLUEPRINT;
-import static org.jboss.tools.fuse.reddeer.ProjectType.SPRING;
+import static org.jboss.tools.fuse.reddeer.ProjectTemplate.CBR_BLUEPRINT;
+import static org.jboss.tools.fuse.reddeer.ProjectTemplate.CBR_SPRING;
+import static org.jboss.tools.fuse.reddeer.ProjectTemplate.EMPTY_BLUEPRINT;
+import static org.jboss.tools.fuse.reddeer.ProjectTemplate.EMPTY_SPRING;
 import static org.jboss.tools.fuse.reddeer.SupportedCamelVersions.CAMEL_2_17_0_REDHAT_630254;
-import static org.jboss.tools.fuse.reddeer.SupportedCamelVersions.CAMEL_LATEST;
+import static org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardDeploymentType.STANDALONE;
+import static org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardRuntimeType.KARAF;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
@@ -64,7 +66,6 @@ import org.eclipse.reddeer.workbench.impl.editor.DefaultEditor;
 import org.eclipse.reddeer.workbench.impl.shell.WorkbenchShell;
 import org.eclipse.reddeer.workbench.ui.dialogs.WorkbenchPreferenceDialog;
 import org.jboss.tools.fuse.reddeer.LogGrapper;
-import org.jboss.tools.fuse.reddeer.ProjectType;
 import org.jboss.tools.fuse.reddeer.ResourceHelper;
 import org.jboss.tools.fuse.reddeer.component.ConvertBodyTo;
 import org.jboss.tools.fuse.reddeer.component.Log;
@@ -78,9 +79,8 @@ import org.jboss.tools.fuse.reddeer.preference.FuseServerRuntimePreferencePage;
 import org.jboss.tools.fuse.reddeer.projectexplorer.CamelProject;
 import org.jboss.tools.fuse.reddeer.view.FuseJMXNavigator;
 import org.jboss.tools.fuse.reddeer.view.FusePropertiesView;
-import org.jboss.tools.fuse.reddeer.view.ProblemsViewExt;
 import org.jboss.tools.fuse.reddeer.view.FusePropertiesView.PropertyType;
-import org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizard;
+import org.jboss.tools.fuse.reddeer.view.ProblemsViewExt;
 import org.jboss.tools.fuse.ui.bot.tests.utils.EditorManipulator;
 import org.jboss.tools.fuse.ui.bot.tests.utils.ProjectFactory;
 import org.junit.After;
@@ -118,7 +118,8 @@ public class RegressionTest extends DefaultTest {
 	@Test
 	public void issue_674_1728_1729() throws ParserConfigurationException, SAXException, IOException {
 
-		ProjectFactory.newProject("camel-spring").template(CBR).type(SPRING).create();
+		ProjectFactory.newProject("camel-spring").deploymentType(STANDALONE).runtimeType(KARAF).template(CBR_SPRING)
+				.create();
 		new CamelProject("camel-spring").openCamelContext("camel-context.xml");
 		new DefaultCTabItem("Source").activate();
 
@@ -155,7 +156,8 @@ public class RegressionTest extends DefaultTest {
 	@Test
 	public void issue_853() {
 
-		ProjectFactory.newProject("camel-blueprint").template(CBR).type(BLUEPRINT).create();
+		ProjectFactory.newProject("camel-spring").deploymentType(STANDALONE).runtimeType(KARAF).template(CBR_BLUEPRINT)
+				.create();
 		new ProjectExplorer().getProject("camel-blueprint")
 				.getProjectItem("src/main/resources", "OSGI-INF", "blueprint", "blueprint.xml").select();
 		try {
@@ -201,10 +203,12 @@ public class RegressionTest extends DefaultTest {
 	@Test
 	public void issue_1115() {
 
-		ProjectFactory.newProject("camel-spring").version(CAMEL_2_17_0_REDHAT_630254).template(CBR).type(ProjectType.SPRING).create();
+		ProjectFactory.newProject("camel-spring").deploymentType(STANDALONE).runtimeType(KARAF).template(CBR_SPRING)
+				.version(CAMEL_2_17_0_REDHAT_630254).create();
 		new CamelProject("camel-spring").runCamelContextWithoutTests("camel-context.xml");
 		AbstractWait.sleep(TimePeriod.DEFAULT);
-		new FuseJMXNavigator().getNode("Local Processes", "Local Camel Context", "Camel", "cbr-example-context").select();
+		new FuseJMXNavigator().getNode("Local Processes", "Local Camel Context", "Camel", "cbr-example-context")
+				.select();
 
 		try {
 			new ContextMenuItem("Close Camel Context");
@@ -230,7 +234,8 @@ public class RegressionTest extends DefaultTest {
 	@Test
 	public void issue_1123() {
 
-		ProjectFactory.newProject("camel-spring").template(CBR).type(SPRING).create();
+		ProjectFactory.newProject("camel-spring").deploymentType(STANDALONE).runtimeType(KARAF).template(CBR_SPRING)
+				.create();
 		new CamelProject("camel-spring").openCamelContext("camel-context.xml");
 		CamelEditor.switchTab("Source");
 		EditorManipulator.copyFileContentToCamelXMLEditor("resources/camel-context-routeContextId.xml");
@@ -268,7 +273,8 @@ public class RegressionTest extends DefaultTest {
 	@Test
 	public void issue_1158() {
 
-		ProjectFactory.newProject("camel-spring").version(CAMEL_2_17_0_REDHAT_630254).template(CBR).type(SPRING).create();
+		ProjectFactory.newProject("camel-spring").deploymentType(STANDALONE).runtimeType(KARAF)
+				.version(CAMEL_2_17_0_REDHAT_630254).template(CBR_SPRING).create();
 		CamelProject project = new CamelProject("camel-spring");
 		project.openCamelContext("camel-context.xml");
 		CamelEditor editor = new CamelEditor("camel-context.xml");
@@ -298,7 +304,8 @@ public class RegressionTest extends DefaultTest {
 	@Test
 	public void issue_1172() throws ParserConfigurationException, SAXException, IOException {
 
-		ProjectFactory.newProject("camel-spring").template(CBR).type(SPRING).create();
+		ProjectFactory.newProject("camel-spring").deploymentType(STANDALONE).runtimeType(KARAF).template(CBR_SPRING)
+				.create();
 		new CamelProject("camel-spring").openCamelContext("camel-context.xml");
 		CamelEditor.switchTab("Design");
 		CamelEditor editor = new CamelEditor("camel-context.xml");
@@ -326,7 +333,8 @@ public class RegressionTest extends DefaultTest {
 	@Test
 	public void issue_1243() {
 
-		ProjectFactory.newProject("camel-spring").template(CBR).type(SPRING).create();
+		ProjectFactory.newProject("camel-spring").deploymentType(STANDALONE).runtimeType(KARAF).template(CBR_SPRING)
+				.create();
 		new CamelProject("camel-spring").openCamelContext("camel-context.xml");
 		assertFalse("Camel editor should not be dirty",
 				new DefaultToolItem(new WorkbenchShell(), 1, new WithTooltipTextMatcher(new RegexMatcher("Save.*")))
@@ -342,8 +350,8 @@ public class RegressionTest extends DefaultTest {
 
 	/**
 	 * <p>
-	 * Run Configurations dialog shows launch config types for server adapters for Karaf and Fuse which
-	 * partially don't work
+	 * Run Configurations dialog shows launch config types for server adapters for Karaf and Fuse which partially don't
+	 * work
 	 * </p>
 	 * <b>Link: </b>
 	 * <a href="https://issues.jboss.org/browse/FUSETOOLS-1214">https://issues.jboss.org/browse/FUSETOOLS-1214</a>
@@ -351,7 +359,8 @@ public class RegressionTest extends DefaultTest {
 	@Test
 	public void issue_1214() {
 
-		ProjectFactory.newProject("camel-spring").template(CBR).type(SPRING).create();
+		ProjectFactory.newProject("camel-spring").deploymentType(STANDALONE).runtimeType(KARAF).template(CBR_SPRING)
+				.create();
 		new ProjectExplorer().selectProjects("camel-spring");
 		new ContextMenuItem("Run As", "Run Configurations...").select();
 		new WaitUntil(new ShellIsAvailable("Run Configurations"));
@@ -379,7 +388,8 @@ public class RegressionTest extends DefaultTest {
 	@Test
 	public void issue_1403() {
 
-		ProjectFactory.newProject("camel-blueprint").template(CBR).type(BLUEPRINT).create();
+		ProjectFactory.newProject("camel-blueprint").deploymentType(STANDALONE).runtimeType(KARAF)
+				.template(CBR_BLUEPRINT).create();
 		new CamelProject("camel-blueprint").selectProjectItem("src/main/resources", "OSGI-INF", "blueprint",
 				"blueprint.xml");
 		new ContextMenuItem("Open").select();
@@ -396,7 +406,7 @@ public class RegressionTest extends DefaultTest {
 	@Test
 	public void issue_1678() {
 
-		ProjectFactory.newProject("test-empty").version(CAMEL_LATEST).type(SPRING)
+		ProjectFactory.newProject("test-empty").deploymentType(STANDALONE).runtimeType(KARAF).template(EMPTY_SPRING)
 				.create();
 		CamelEditor editor = new CamelEditor("camel-context.xml");
 		editor.addCamelComponent(new Route(), 100, 100);
@@ -424,7 +434,8 @@ public class RegressionTest extends DefaultTest {
 	@Test
 	public void issue_1694() {
 
-		ProjectFactory.newProject("cbr-spring").version(CAMEL_2_17_0_REDHAT_630254).template(CBR).type(SPRING).create();
+		ProjectFactory.newProject("cbr-spring").deploymentType(STANDALONE).runtimeType(KARAF)
+				.version(CAMEL_2_17_0_REDHAT_630254).template(CBR_SPRING).create();
 		CamelEditor editor = new CamelEditor("camel-context.xml");
 		editor.addCamelComponent(new ConvertBodyTo(), "Route cbr-route");
 		ProblemsView problems = new ProblemsView();
@@ -446,7 +457,8 @@ public class RegressionTest extends DefaultTest {
 	@Jira("FUSETOOLS-1701")
 	@RunIf(conditionClass = IssueIsClosed.class)
 	public void issue_1701() {
-		ProjectFactory.newProject("test").type(BLUEPRINT).create();
+		ProjectFactory.newProject("test").deploymentType(STANDALONE).runtimeType(KARAF).template(EMPTY_BLUEPRINT)
+				.create();
 		CamelEditor editor = new CamelEditor("blueprint.xml");
 		editor.activate();
 		editor.addComponent("File", "Route _route1");
@@ -478,7 +490,8 @@ public class RegressionTest extends DefaultTest {
 	@Jira("FUSETOOLS-1726")
 	@RunIf(conditionClass = IssueIsClosed.class)
 	public void issue_1726() {
-		ProjectFactory.newProject("test").type(BLUEPRINT).create();
+		ProjectFactory.newProject("test").deploymentType(STANDALONE).runtimeType(KARAF).template(EMPTY_BLUEPRINT)
+				.create();
 		CamelEditor editor = new CamelEditor("blueprint.xml");
 		editor.activate();
 		editor.addComponent("IMAP", "Route _route1");
@@ -514,7 +527,8 @@ public class RegressionTest extends DefaultTest {
 	 */
 	@Test
 	public void issue_1730() {
-		ProjectFactory.newProject("camel-spring").template(CBR).type(SPRING).create();
+		ProjectFactory.newProject("camel-spring").deploymentType(STANDALONE).runtimeType(KARAF).template(EMPTY_SPRING)
+				.create();
 		CamelEditor editor = new CamelEditor("camel-context.xml");
 		editor.activate();
 		editor.setId("Route cbr-route", "1");
@@ -549,7 +563,8 @@ public class RegressionTest extends DefaultTest {
 	 */
 	@Test
 	public void issue_1993() {
-		ProjectFactory.newProject("cbr-spring").template(CBR).type(SPRING).create();
+		ProjectFactory.newProject("cbr-spring").deploymentType(STANDALONE).runtimeType(KARAF).template(CBR_SPRING)
+				.create();
 		CamelEditor editor = new CamelEditor("camel-context.xml");
 		CamelEditor.switchTab("Source");
 		String beforeContent = new DefaultStyledText().getText();
@@ -564,27 +579,6 @@ public class RegressionTest extends DefaultTest {
 
 	/**
 	 * <p>
-	 * New Fuse Integration Project Wizard should prevent selection of disabled DSL type
-	 * </p>
-	 * <b>Link:</b>
-	 * <a href="https://issues.jboss.org/browse/FUSETOOLS-2051">https://issues.jboss.org/browse/FUSETOOLS-2051</a>
-	 */
-	@Test
-	public void issue_2051() {
-		NewFuseIntegrationProjectWizard wiz = new NewFuseIntegrationProjectWizard();
-		wiz.open();
-		wiz.setProjectName("test-erfiojkn");
-		wiz.next();
-		wiz.next();
-		wiz.selectTemplate("Fuse on EAP", "Medium", "Spring on EAP");
-		if (wiz.isProjectTypeAvailable(BLUEPRINT) || wiz.isProjectTypeSelected(BLUEPRINT)) {
-			wiz.cancel();
-			fail("Disabled project type is selected - see https://issues.jboss.org/browse/FUSETOOLS-2051");
-		}
-	}
-
-	/**
-	 * <p>
 	 * Local Launch doesn't work all times
 	 * </p>
 	 * <b>Link:</b>
@@ -593,8 +587,8 @@ public class RegressionTest extends DefaultTest {
 	@Test
 	public void issue_2062() {
 
-		ProjectFactory.newProject("test-empty").version(CAMEL_2_17_0_REDHAT_630254).type(SPRING)
-				.create();
+		ProjectFactory.newProject("test-empty").deploymentType(STANDALONE).runtimeType(KARAF)
+				.version(CAMEL_2_17_0_REDHAT_630254).template(EMPTY_SPRING).create();
 		CamelEditor.switchTab("Source");
 		CamelEditor.switchTab("Design");
 		CamelEditor editor = new CamelEditor("camel-context.xml");

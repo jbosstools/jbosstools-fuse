@@ -10,14 +10,18 @@
  ******************************************************************************/
 package org.jboss.tools.fuse.reddeer;
 
-import java.util.Arrays;
-import java.util.List;
-
 public class ProjectTemplate {
 
-	public static final List<String> CBR = Arrays.asList("Red Hat Fuse", "Beginner", "Content Based Router");
-	public static final List<String> AMQ = Arrays.asList("Red Hat Fuse", "Beginner", "ActiveMQ");
-	public static final List<String> CXF = Arrays.asList("Red Hat Fuse", "Advanced", "CXF code first");
-	public static final List<String> EAP = Arrays.asList("Fuse on EAP", "Medium", "Spring on EAP");
-
+	public static final String[] SPRINGBOOT = {"Fuse on OpenShift", "SpringBoot on OpenShift - Spring DSL"};
+	public static final String[] EMPTY_BLUEPRINT = {"Empty", "Empty - Blueprint DSL"};
+	public static final String[] EMPTY_SPRING = {"Empty", "Empty - Spring DSL"};
+	public static final String[] EMPTY_JAVA = {"Empty", "Empty - JAVA DSL"};
+	public static final String[] CBR_BLUEPRINT = {"Red Hat Fuse", "Beginner", "Content Based Router - Blueprint DSL"};
+	public static final String[] CBR_SPRING = {"Red Hat Fuse", "Beginner", "Content Based Router - Spring DSL"};
+	public static final String[] CBR_JAVA = {"Red Hat Fuse", "Beginner", "Content Based Router - JAVA DSL"};
+	public static final String[] AMQ_BLUEPRINT = {"Red Hat Fuse", "Beginner", "ActiveMQ - Blueprint DSL"};
+	public static final String[] AMQ_SPRING = {"Red Hat Fuse", "Beginner", "ActiveMQ - Spring DSL"};
+	public static final String[] CXF_BLUEPRINT = {"Red Hat Fuse", "Advanced", "CXF code first - Blueprint DSL"};
+	public static final String[] CXF_SPRING = {"Red Hat Fuse", "Advanced", "CXF code first - Spring DSL"};
+	public static final String[] EAP_SPRING = {"Fuse on EAP", "Medium", "Spring on EAP - Spring DSL"};
 }

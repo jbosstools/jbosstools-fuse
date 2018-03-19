@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<routes id="_context1" xmlns="http://camel.apache.org/schema/spring">
+    <route customId="true" id="_route1">
+        <from customId="true" id="_from1" uri="timer:EverySecondTimer"/>
+        <setBody customId="true" id="_setBody1">
+            <simple>${date:now:ss}</simple>
+        </setBody>
+        <choice customId="true" id="_choice1">
+            <when customId="true" id="_when1">
+                <simple>${body} range '20..30' || ${body} range '40..50' || ${body} range '0..10'</simple>
+                <log customId="true" id="_log1" message="AAA-BBB-CCC"/>
+            </when>
+        </choice>
+    </route>
+</routes>
