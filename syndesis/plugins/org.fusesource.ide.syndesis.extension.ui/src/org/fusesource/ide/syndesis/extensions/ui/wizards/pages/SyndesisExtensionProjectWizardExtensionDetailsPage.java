@@ -401,7 +401,7 @@ public class SyndesisExtensionProjectWizardExtensionDetailsPage extends WizardPa
 	}
 	
 	public AbstractProjectTemplate getTemplate() {
-		AbstractProjectTemplate template = null;
+		AbstractProjectTemplate template;
 		
 		if (isCustomConnector()) {
 			template = new CustomConnectorProjectTemplate();

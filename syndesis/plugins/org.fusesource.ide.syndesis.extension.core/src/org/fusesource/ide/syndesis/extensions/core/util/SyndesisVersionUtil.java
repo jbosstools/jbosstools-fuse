@@ -22,6 +22,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.embedder.IMaven;
+import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.preferences.StagingRepositoriesUtils;
 import org.fusesource.ide.syndesis.extensions.core.internal.SyndesisExtensionsCoreActivator;
 
@@ -74,7 +75,7 @@ public class SyndesisVersionUtil {
 				}				
 			}
 		} catch (CoreException ex) {
-			if (ex.getMessage().indexOf("Could not resolve artifact") != -1) {
+			if (!Strings.isBlank(ex.getMessage()) && ex.getMessage().indexOf("Could not resolve artifact") != -1) {
 				// in case we just don't find the artifact we don't want to log an exception as error
 				// because in case of snapshots we are trying to resolve the issue by locating a matching existing version
 				SyndesisExtensionsCoreActivator.pluginLog().logWarning(ex);
