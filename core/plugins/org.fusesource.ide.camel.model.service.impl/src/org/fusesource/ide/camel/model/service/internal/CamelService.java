@@ -307,22 +307,26 @@ public class CamelService implements ICamelManagerService {
 	 */
 	@Override
 	public boolean isCamelVersionExisting(String camelVersion) {
-		MavenVersionManager tmpMan = new MavenVersionManager();
-		try {
-			Path grapeFolder = getGrapeFolderInsideTempFolder();
-			Path tmpFolderPath = Files.createTempDirectory(grapeFolder, UUID.randomUUID().toString());
-			File tmpFolder = tmpFolderPath.toFile();
-			tmpFolder.deleteOnExit();
-			tmpMan.setCacheDirectory(tmpFolder.getPath());
-			tmpMan.setLog(true);
-		} catch (IOException ex) {
-			logger.logError(ex);
-		} finally {
-			for (List<String> rep : StagingRepositoriesUtils.getAdditionalRepos()) {
-				tmpMan.addMavenRepository(rep.get(0), rep.get(1));
+		try (MavenVersionManager tmpMan = new MavenVersionManager()) {
+			try {
+				Path grapeFolder = getGrapeFolderInsideTempFolder();
+				Path tmpFolderPath = Files.createTempDirectory(grapeFolder, UUID.randomUUID().toString());
+				File tmpFolder = tmpFolderPath.toFile();
+				tmpFolder.deleteOnExit();
+				tmpMan.setCacheDirectory(tmpFolder.getPath());
+				tmpMan.setLog(true);
+			} catch (IOException ex) {
+				logger.logError(ex);
+			} finally {
+				for (List<String> rep : StagingRepositoriesUtils.getAdditionalRepos()) {
+					tmpMan.addMavenRepository(rep.get(0), rep.get(1));
+				}
 			}
+			return tmpMan.loadVersion(camelVersion);
+		} catch (IOException ioex) {
+			logger.logError(ioex);
 		}
-		return tmpMan.loadVersion(camelVersion);
+		return false;
 	}
 	
 	CamelModel loadCamelModelFromCatalog(CamelCatalog catalog) {
