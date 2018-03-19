@@ -16,8 +16,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.lang.reflect.InvocationTargetException;
-import java.util.Map;
 import java.util.Properties;
 
 import org.apache.maven.model.Model;
@@ -41,7 +39,6 @@ import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.projecttemplates.util.BasicProjectCreatorRunnable;
 import org.fusesource.ide.projecttemplates.util.BasicProjectCreatorRunnableUtils;
 import org.fusesource.ide.syndesis.extensions.core.model.SyndesisExtension;
-import org.fusesource.ide.syndesis.extensions.core.util.SyndesisVersionUtil;
 import org.fusesource.ide.syndesis.extensions.ui.internal.SyndesisExtensionsUIActivator;
 import org.fusesource.ide.syndesis.extensions.ui.util.NewSyndesisExtensionProjectMetaData;
 
@@ -57,21 +54,6 @@ public final class SyndesisExtensionProjectCreatorRunnable extends BasicProjectC
 	public SyndesisExtensionProjectCreatorRunnable(NewSyndesisExtensionProjectMetaData metadata) {
 		super(metadata);
 		this.syndesisMetaData = metadata;
-	}
-	
-	/* (non-Javadoc)
-	 * @see org.fusesource.ide.projecttemplates.util.BasicProjectCreatorRunnable#run(org.eclipse.core.runtime.IProgressMonitor)
-	 */
-	@Override
-	public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-		SubMonitor subMonitor = SubMonitor.convert(monitor, 2);
-		Map<String, String> versions = SyndesisVersionUtil.checkSyndesisVersionExisting(syndesisMetaData.getSyndesisExtensionConfig().getSyndesisVersion(), subMonitor.split(1));
-		if (versions.containsKey(SyndesisVersionUtil.PROP_CAMEL_VERSION)) {
-			metadata.setCamelVersion(versions.get(SyndesisVersionUtil.PROP_CAMEL_VERSION));
-		}
-		subMonitor.setWorkRemaining(0);
-		
-		super.run(monitor);
 	}
 	
 	/* (non-Javadoc)
