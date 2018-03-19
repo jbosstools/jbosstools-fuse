@@ -187,13 +187,7 @@ public abstract class SyndesisExtensionProjectCreatorRunnableIT extends Abstract
 		return marker -> {
 			try {
 				Object severity = marker.getAttribute(IMarker.SEVERITY);
-				boolean isWarning = severity == null || severity.equals(IMarker.SEVERITY_WARNING);
-				String message = (String) marker.getAttribute(IMarker.MESSAGE);
-				return isWarning
-						// TODO: managed other dependencies than camel
-						&& !message.startsWith("Duplicating managed version")
-				// TODO: manage community version and pure fis version
-						&& !message.startsWith("Overriding managed version");
+				return severity == null || severity.equals(IMarker.SEVERITY_WARNING);
 			} catch (CoreException e1) {
 				return true;
 			}
