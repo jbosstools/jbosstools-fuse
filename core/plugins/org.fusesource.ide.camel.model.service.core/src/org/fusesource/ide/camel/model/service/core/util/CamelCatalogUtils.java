@@ -159,7 +159,7 @@ public class CamelCatalogUtils {
 	 * @param mavenModel 
 	 * @return
 	 */
-	public static String getBomVersionForCamelVersion(String camelVersion, IProject project, Model mavenModel, IProgressMonitor monitor) {
+	public static String getBomVersionForCamelVersion(String camelVersion, Model mavenModel, IProgressMonitor monitor) {
 		org.apache.maven.model.Dependency fuseBomUsed = new OnlineArtifactVersionSearcher().retrieveAnyFuseBomUsed(mavenModel.getDependencyManagement());
 		return getBomVersionForCamelVersion(camelVersion, monitor, fuseBomUsed);
 	}
