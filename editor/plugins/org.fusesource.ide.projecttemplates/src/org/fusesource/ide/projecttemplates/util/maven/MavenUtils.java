@@ -232,23 +232,23 @@ public class MavenUtils {
 	 * @param project 
 	 * @param monitor 
 	 */
-	public static void alignFuseRuntimeVersion(Model mavenModel, String camelVersion, IProject project, IProgressMonitor monitor) {
-		String fuseVersionForCamelVersion = CamelCatalogUtils.getBomVersionForCamelVersion(camelVersion, project, mavenModel, monitor);
+	public static void alignFuseRuntimeVersion(Model mavenModel, String camelVersion, IProgressMonitor monitor) {
+		String fuseVersionForCamelVersion = CamelCatalogUtils.getBomVersionForCamelVersion(camelVersion, mavenModel, monitor);
 		if (fuseVersionForCamelVersion != null) {
 			Properties properties = mavenModel.getProperties();
 			if(isMavenPropertyFuseBomVersionSet(properties) && mavenModel.getDependencyManagement() != null && isFuseBomImported(mavenModel.getDependencyManagement().getDependencies())) {
 				properties.setProperty(MAVEN_PROPERTY_JBOSS_FUSE_BOM_VERSION, fuseVersionForCamelVersion);
 			} else {
-				alignFuseRuntimeVersionForNonBOMUsage(mavenModel, project, camelVersion, monitor);
+				alignFuseRuntimeVersionForNonBOMUsage(mavenModel, camelVersion, monitor);
 			}
 		}
 	}
 
-	private static void alignFuseRuntimeVersionForNonBOMUsage(Model mavenModel, IProject project, String camelVersion, IProgressMonitor monitor) {
+	private static void alignFuseRuntimeVersionForNonBOMUsage(Model mavenModel, String camelVersion, IProgressMonitor monitor) {
 		if(mavenModel.getDependencyManagement() != null){
 			for(Dependency dependency : mavenModel.getDependencyManagement().getDependencies()){
 				if(isFuseBomImportDependency(dependency)){
-					dependency.setVersion(CamelCatalogUtils.getBomVersionForCamelVersion(camelVersion, project, mavenModel, monitor));
+					dependency.setVersion(CamelCatalogUtils.getBomVersionForCamelVersion(camelVersion, mavenModel, monitor));
 					return;
 				}
 			}
@@ -317,7 +317,7 @@ public class MavenUtils {
 			MavenUtils.updateCamelVersionPlugins(m2m, m2m.getBuild().getPlugins(), newCamelVersion);
 			subMonitor.setWorkRemaining(4);
 			
-			MavenUtils.alignFuseRuntimeVersion(m2m, newCamelVersion, project, subMonitor.split(1));
+			MavenUtils.alignFuseRuntimeVersion(m2m, newCamelVersion, subMonitor.split(1));
 			
 			MavenUtils.manageStagingRepositories(m2m);
 			subMonitor.setWorkRemaining(2);
