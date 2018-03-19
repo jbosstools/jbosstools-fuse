@@ -15,7 +15,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 
@@ -73,7 +76,6 @@ public abstract class SyndesisExtensionProjectCreatorRunnableIT extends Abstract
 		ScreenshotUtil.saveScreenshotToFile(
 				String.format("%s/MavenLaunchOutput-%s_BEFORE.png", SCREENSHOT_FOLDER, projectName), SWT.IMAGE_PNG);
 
-		// TODO: for now we need the staging repos, disable before GA
 		new StagingRepositoriesPreferenceInitializer().setStagingRepositoriesEnablement(true);
 
 		versions = new IgniteVersionMapper().getMapping();
@@ -90,7 +92,7 @@ public abstract class SyndesisExtensionProjectCreatorRunnableIT extends Abstract
 	
 	protected SyndesisExtension createDefaultNewSyndesisExtension() {
 		SyndesisExtension extension = new SyndesisExtension();
-		extension.setSyndesisVersion(versions.keySet().toArray()[versions.size()-1].toString());
+		extension.setSyndesisVersion(getLatestSyndesisVersion());
 		extension.setExtensionId("com.acme.custom");
 		extension.setVersion("1.0.0");
 		extension.setName("ACME Custom Extension");
@@ -98,6 +100,13 @@ public abstract class SyndesisExtensionProjectCreatorRunnableIT extends Abstract
 		return extension;
 	}
 
+	protected String getLatestSyndesisVersion()  {
+		List<String> sortedVersions = new ArrayList<>();
+		sortedVersions.addAll(versions.keySet());
+		Collections.sort(sortedVersions, (String o1, String o2) -> o2.compareTo(o1));
+		return sortedVersions.get(0);
+	}
+	
 	protected NewSyndesisExtensionProjectMetaData createDefaultNewProjectMetadata(final String projectName) {
 		NewSyndesisExtensionProjectMetaData metadata = new NewSyndesisExtensionProjectMetaData();
 		metadata.setProjectName(projectName);

@@ -51,10 +51,14 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Widget;
 import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.foundation.ui.util.ControlDecorationHelper;
+import org.fusesource.ide.projecttemplates.adopters.AbstractProjectTemplate;
 import org.fusesource.ide.syndesis.extensions.core.model.SyndesisExtension;
 import org.fusesource.ide.syndesis.extensions.core.util.IgniteVersionMapper;
 import org.fusesource.ide.syndesis.extensions.ui.internal.Messages;
 import org.fusesource.ide.syndesis.extensions.ui.internal.SyndesisExtensionsUIActivator;
+import org.fusesource.ide.syndesis.extensions.ui.templates.CustomConnectorProjectTemplate;
+import org.fusesource.ide.syndesis.extensions.ui.templates.CustomStepAsCamelRouteProjectTemplate;
+import org.fusesource.ide.syndesis.extensions.ui.templates.CustomStepAsJavaBeanProjectTemplate;
 import org.fusesource.ide.syndesis.extensions.ui.util.SyndesisVersionChecker;
 import org.fusesource.ide.syndesis.extensions.ui.wizards.SyndesisExtensionProjectWizard;
 import org.fusesource.ide.syndesis.extensions.ui.wizards.validation.SyndesisExtensionIdValidator;
@@ -385,15 +389,29 @@ public class SyndesisExtensionProjectWizardExtensionDetailsPage extends WizardPa
 	/**
 	 * @return the camelRoute
 	 */
-	public boolean isCamelRoute() {
+	private boolean isCamelRoute() {
 		return this.camelRoute;
 	}
 	
 	/**
 	 * @return the customConnector
 	 */
-	public boolean isCustomConnector() {
+	private boolean isCustomConnector() {
 		return this.customConnector;
+	}
+	
+	public AbstractProjectTemplate getTemplate() {
+		AbstractProjectTemplate template = null;
+		
+		if (isCustomConnector()) {
+			template = new CustomConnectorProjectTemplate();
+		} else if (isCamelRoute()) {
+			template = new CustomStepAsCamelRouteProjectTemplate();
+		} else {
+			template = new CustomStepAsJavaBeanProjectTemplate();
+		}
+		
+		return template;
 	}
 	
 	class VersionValidationHandler extends SelectionAdapter {

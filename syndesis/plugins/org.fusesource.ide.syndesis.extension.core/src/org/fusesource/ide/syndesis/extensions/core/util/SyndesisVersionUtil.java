@@ -74,7 +74,13 @@ public class SyndesisVersionUtil {
 				}				
 			}
 		} catch (CoreException ex) {
-			SyndesisExtensionsCoreActivator.pluginLog().logError(ex);
+			if (ex.getMessage().indexOf("Could not resolve artifact") != -1) {
+				// in case we just don't find the artifact we don't want to log an exception as error
+				// because in case of snapshots we are trying to resolve the issue by locating a matching existing version
+				SyndesisExtensionsCoreActivator.pluginLog().logWarning(ex);
+			} else {
+				SyndesisExtensionsCoreActivator.pluginLog().logError(ex);
+			}
 		}
 		return versions;
 	}
