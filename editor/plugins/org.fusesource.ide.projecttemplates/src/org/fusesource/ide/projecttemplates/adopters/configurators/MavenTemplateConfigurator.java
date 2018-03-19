@@ -61,7 +61,7 @@ public class MavenTemplateConfigurator extends DefaultTemplateConfigurator {
 			
 			if (ok && !Strings.isBlank(metadata.getCamelVersion())) {
 				// by default configure the version of camel used in the pom.xml
-				MavenUtils.configurePomCamelVersion(project, m2model, metadata, metadata.getCamelVersion(), subMonitor.newChild(1));
+				ok = MavenUtils.configurePomCamelVersion(project, m2model, metadata, metadata.getCamelVersion(), subMonitor.newChild(1));
 			}
 			subMonitor.setWorkRemaining(1);
 		} finally {

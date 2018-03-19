@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -133,8 +134,11 @@ public class DefaultTemplateConfigurator implements TemplateConfiguratorSupport 
 
 	private void cleanTemplate(Path templateLaunchConfiguration) {
 		File templateLaunchConfigurationFile = templateLaunchConfiguration.toFile();
-		if(!templateLaunchConfigurationFile.delete()){
-			templateLaunchConfigurationFile.deleteOnExit();
+		Path filePath = Paths.get(templateLaunchConfigurationFile.toURI());
+		try {
+			Files.delete(filePath);
+		} catch (IOException ex) {
+			ProjectTemplatesActivator.pluginLog().logError(ex);
 		}
 	}
 
@@ -167,12 +171,13 @@ public class DefaultTemplateConfigurator implements TemplateConfiguratorSupport 
 	 * @throws CoreException on errors
 	 */
 	protected void installFacet(IProject project, String facetName, String facetVersion, IDataModel config, IProgressMonitor monitor) throws CoreException {
-		SubMonitor subMonitor = SubMonitor.convert(monitor, 2);
+		SubMonitor subMonitor = SubMonitor.convert(monitor, 3);
 		IFacetedProject fp = ProjectFacetsManager.create(project, true, subMonitor.newChild(1));
 		if (facetVersion != null) {
 			fp.installProjectFacet(ProjectFacetsManager.getProjectFacet(facetName).getVersion(facetVersion), config, subMonitor.newChild(1));
 		} else {
 			fp.installProjectFacet(ProjectFacetsManager.getProjectFacet(facetName).getDefaultVersion(), config, subMonitor.newChild(1));
 		}
+		project.refreshLocal(IProject.DEPTH_INFINITE, subMonitor.split(1));
 	}
 }
