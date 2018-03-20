@@ -57,7 +57,6 @@ public class Messages extends NLS {
 	public static String newProjectWizardTemplatePageName;
 	public static String newProjectWizardTemplatePageTitle;
 	public static String newProjectWizardTemplatePageDescription;
-	public static String newProjectWizardTemplatePageHeadlineLabel;
 	public static String newProjectWizardTemplatePageEmptyProjectLabel;
 	public static String newProjectWizardTemplatePageEmptyProjectDescription;
 	public static String newProjectWizardTemplatePageBlueprintDSLLabel;
@@ -74,6 +73,9 @@ public class Messages extends NLS {
 	public static String newProjectWizardTemplatePageWhereToFindMoreExamples;
 	public static String newProjectWizardTemplatePageListOfOtherExamplesReposMessage;
 	public static String newProjectWizardTemplatePageListOfOtherExamplesRepos;
+	public static String newProjectWizardRuntimePageDeploymentPlatformGroup;
+	public static String newProjectWizardRuntimePageDeploymentPlatformContainer;
+	public static String newProjectWizardRuntimePageDeploymentPlatformStanalone;
 
 	public static String unzipStreamCreatorUnzippingTemplateFileMonitorMessage;
 	
@@ -92,7 +94,6 @@ public class Messages extends NLS {
 
 	public static String dozerInformationApiBreakTitle;
 	public static String dozerInformationApiBreakMessage;
-
 
 	static {
         // initialize resource bundle

@@ -64,17 +64,7 @@ public class FuseIntegrationProjectWizardTemplatePage extends WizardPage {
 		Composite container = new Composite(parent, SWT.NULL);
 		container.setLayout(new GridLayout(3, false));
 
-		Label lblHeadline = new Label(container, SWT.None);
-		lblHeadline.setLayoutData(GridDataFactory.fillDefaults().align(SWT.LEFT, SWT.CENTER).grab(true, false).span(3, 1).create());
-		lblHeadline.setText(Messages.newProjectWizardTemplatePageHeadlineLabel);
-
-		Composite grpEmptyVsTemplate = new Composite(container, SWT.None);
-		GridLayout gridLayout = new GridLayout(1, false);
-		grpEmptyVsTemplate.setLayout(gridLayout);
-		grpEmptyVsTemplate.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).span(3, 1).hint(SWT.DEFAULT, 400).create());
-
-		createTemplatesPanel(grpEmptyVsTemplate);
-
+		createTemplatesPanel(container);
 		createLinkForOtherExamples(container);
 		
 		setControl(container);
@@ -94,22 +84,19 @@ public class FuseIntegrationProjectWizardTemplatePage extends WizardPage {
 		});
 	}
 
-	protected void createTemplatesPanel(Composite grpEmptyVsTemplate) {
-		Composite templates = new Composite(grpEmptyVsTemplate, SWT.None);
-		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true, 3, 1);
-		gd.horizontalIndent = 20;
-		templates.setLayoutData(gd);
+	protected void createTemplatesPanel(Composite container) {
+		Composite templates = new Composite(container, SWT.None);
+		templates.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).span(3, 1).hint(SWT.DEFAULT, 400).create());
 		templates.setLayout(new GridLayout(2, true));
 
+		createTemplatesTopInformation(templates);
 		listTemplates = createFilteredTree(templates);
 
 		templateInfoText = new Text(templates, SWT.MULTI | SWT.READ_ONLY | SWT.WRAP | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
 		templateInfoText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-		
-		createTemplatesBottomInformation(templates);
 	}
 
-	protected void createTemplatesBottomInformation(Composite templates) {
+	protected void createTemplatesTopInformation(Composite templates) {
 		Composite infoComposite = new Composite(templates, SWT.NONE);
 		infoComposite.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).span(2, 1).create());
 		infoComposite.setLayout(GridLayoutFactory.fillDefaults().numColumns(2).equalWidth(false).create());

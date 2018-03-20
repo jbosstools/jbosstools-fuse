@@ -261,13 +261,13 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 		Group platformGrp = new Group(container, SWT.NONE);
 		platformGrp.setLayout(new GridLayout(1, false));
 		platformGrp.setLayoutData(GridDataFactory.fillDefaults().align(SWT.FILL, SWT.CENTER).grab(true, false).create());
-		platformGrp.setText("Where are you deploying?");
+		platformGrp.setText(Messages.newProjectWizardRuntimePageDeploymentPlatformGroup);
 		
 		Button openShiftRadioButton = new Button(platformGrp, SWT.RADIO);
-		openShiftRadioButton.setText("Kubernetes/OpenShift");
+		openShiftRadioButton.setText(Messages.newProjectWizardRuntimePageDeploymentPlatformContainer);
 		
 		Button standAloneRadioButton = new Button(platformGrp, SWT.RADIO);
-		standAloneRadioButton.setText("Standalone");
+		standAloneRadioButton.setText(Messages.newProjectWizardRuntimePageDeploymentPlatformStanalone);
 		
 		SelectObservableValue<FuseDeploymentPlatform> observableValue = new SelectObservableValue<>();
 		standAloneObservable = WidgetProperties.selection().observe(standAloneRadioButton);
