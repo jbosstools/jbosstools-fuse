@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.repository.ArtifactRepository;
@@ -67,11 +68,12 @@ public class SyndesisVersionUtil {
 				versions.put(PROP_SYNDESIS_VERSION, syndesisVersion);
 				
 				Model bomModel = maven.readModel(bom.getFile());
-				if (bomModel.getProperties().containsKey(PROP_SPRINGBOOT_VERSION)) {
-					versions.put(PROP_SPRINGBOOT_VERSION, bomModel.getProperties().getProperty(PROP_SPRINGBOOT_VERSION, FALLBACK_SPRINGBOOT_VERSION));
+				Properties props = bomModel.getProperties();
+				if (props != null && props.containsKey(PROP_SPRINGBOOT_VERSION)) {
+					versions.put(PROP_SPRINGBOOT_VERSION, props.getProperty(PROP_SPRINGBOOT_VERSION, FALLBACK_SPRINGBOOT_VERSION));
 				}
-				if (bomModel.getProperties().containsKey(PROP_CAMEL_VERSION)) {
-					versions.put(PROP_CAMEL_VERSION, bomModel.getProperties().getProperty(PROP_CAMEL_VERSION, FALLBACK_CAMEL_VERSION));
+				if (props != null && props.containsKey(PROP_CAMEL_VERSION)) {
+					versions.put(PROP_CAMEL_VERSION, props.getProperty(PROP_CAMEL_VERSION, FALLBACK_CAMEL_VERSION));
 				}				
 			}
 		} catch (CoreException ex) {

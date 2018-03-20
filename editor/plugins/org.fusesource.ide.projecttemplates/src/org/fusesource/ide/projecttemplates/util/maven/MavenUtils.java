@@ -306,7 +306,7 @@ public class MavenUtils {
 			MavenUtils.manageStagingRepositories(m2m);
 			subMonitor.setWorkRemaining(1);
 
-			new org.fusesource.ide.camel.editor.utils.MavenUtils().writeNewPomFile(project, pomFile, m2m, subMonitor.newChild(1));
+			new org.fusesource.ide.camel.editor.utils.MavenUtils().writeNewPomFile(project, pomFile, m2m, subMonitor.split(1));
 		} catch (Exception ex) {
 			ProjectTemplatesActivator.pluginLog().logError(ex);
 			return false;
@@ -339,9 +339,9 @@ public class MavenUtils {
 			File pomFile = new File(project.getFile(IMavenConstants.POM_FILE_NAME).getLocation().toOSString()); //$NON-NLS-1$
 			Model m2m = new CamelMavenUtils().getMavenModel(project);
 			
-			boolean ok = configurePomCamelVersion(project, m2m, projectMetaData, camelVersion, subMonitor.newChild(6));
+			boolean ok = configurePomCamelVersion(m2m, projectMetaData, camelVersion, subMonitor.split(6));
 			if (ok) {
-				new org.fusesource.ide.camel.editor.utils.MavenUtils().writeNewPomFile(project, pomFile, m2m, subMonitor.newChild(1));
+				new org.fusesource.ide.camel.editor.utils.MavenUtils().writeNewPomFile(project, pomFile, m2m, subMonitor.split(1));
 			} else {
 				return false;
 			}
@@ -353,7 +353,7 @@ public class MavenUtils {
 		return true;
 	}
 	
-	public static boolean configurePomCamelVersion(IProject project, Model m2m, CommonNewProjectMetaData projectMetaData, String camelVersion, IProgressMonitor monitor) {
+	public static boolean configurePomCamelVersion(Model m2m, CommonNewProjectMetaData projectMetaData, String camelVersion, IProgressMonitor monitor) {
 		String newCamelVersion = Strings.isBlank(camelVersion) && projectMetaData != null && !Strings.isBlank(projectMetaData.getCamelVersion()) ? projectMetaData.getCamelVersion() : camelVersion;
 		SubMonitor subMonitor = SubMonitor.convert(monitor, Messages.mavenTemplateConfiguratorAdaptingprojectToCamelVersionMonitorMessage, 7);
 		try {

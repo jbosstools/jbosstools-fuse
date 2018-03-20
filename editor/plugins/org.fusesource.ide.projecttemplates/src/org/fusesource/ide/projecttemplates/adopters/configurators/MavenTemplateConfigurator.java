@@ -41,12 +41,12 @@ public class MavenTemplateConfigurator extends DefaultTemplateConfigurator {
 	@Override
 	public boolean configure(IProject project, CommonNewProjectMetaData metadata, IProgressMonitor monitor) {
 		SubMonitor subMonitor = SubMonitor.convert(monitor, Messages.mavenTemplateConfiguratorConfiguringTemplatesMonitorMessage, 3);
-		boolean ok = super.configure(project, metadata, subMonitor.newChild(1));
+		boolean ok = super.configure(project, metadata, subMonitor.split(1));
 
 		if (ok) {
 			// by default add the maven nature
-			ok = configureMavenNature(project, subMonitor.newChild(1));
-			new BuildAndRefreshJobWaiterUtil().waitJob(subMonitor.newChild(1));
+			ok = configureMavenNature(project, subMonitor.split(1));
+			new BuildAndRefreshJobWaiterUtil().waitJob(subMonitor.split(1));
 		}
 
 		// to not trigger too many events while configuring the pom  we reuse the model
@@ -61,11 +61,11 @@ public class MavenTemplateConfigurator extends DefaultTemplateConfigurator {
 			
 			if (ok && !Strings.isBlank(metadata.getCamelVersion())) {
 				// by default configure the version of camel used in the pom.xml
-				ok = MavenUtils.configurePomCamelVersion(project, m2model, metadata, metadata.getCamelVersion(), subMonitor.newChild(1));
+				ok = MavenUtils.configurePomCamelVersion(m2model, metadata, metadata.getCamelVersion(), subMonitor.split(1));
 			}
 			subMonitor.setWorkRemaining(1);
 		} finally {
-			MavenUtils.saveModelToPOM(project, m2model, subMonitor.newChild(1));
+			MavenUtils.saveModelToPOM(project, m2model, subMonitor.split(1));
 		}
 		return ok;
 	}
@@ -83,11 +83,11 @@ public class MavenTemplateConfigurator extends DefaultTemplateConfigurator {
 			ResolverConfiguration configuration = new ResolverConfiguration();
 			configuration.setResolveWorkspaceProjects(true);
 			configuration.setSelectedProfiles(""); //$NON-NLS-1$
-			new BuildAndRefreshJobWaiterUtil().waitJob(subMonitor.newChild(1));
+			new BuildAndRefreshJobWaiterUtil().waitJob(subMonitor.split(1));
 			IProjectConfigurationManager configurationManager = MavenPlugin.getProjectConfigurationManager();
-			configurationManager.enableMavenNature(project, configuration, subMonitor.newChild(1));
-			configurationManager.updateProjectConfiguration(project, subMonitor.newChild(1));
-			new BuildAndRefreshJobWaiterUtil().waitJob(subMonitor.newChild(1));
+			configurationManager.enableMavenNature(project, configuration, subMonitor.split(1));
+			configurationManager.updateProjectConfiguration(project, subMonitor.split(1));
+			new BuildAndRefreshJobWaiterUtil().waitJob(subMonitor.split(1));
         } catch(CoreException ex) {
         	ProjectTemplatesActivator.pluginLog().logError(ex.getMessage(), ex);
         	return false;
