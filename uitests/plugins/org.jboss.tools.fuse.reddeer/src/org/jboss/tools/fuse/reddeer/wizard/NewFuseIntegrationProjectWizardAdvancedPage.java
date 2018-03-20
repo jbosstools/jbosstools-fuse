@@ -27,7 +27,7 @@ import org.eclipse.reddeer.swt.impl.tree.DefaultTreeItem;
  */
 public class NewFuseIntegrationProjectWizardAdvancedPage extends WizardPage {
 
-	private static final String MORE_EXAMPLES_LINK = "Where can I find more examples?";
+	private static final String MORE_EXAMPLES_LINK = "Where can you find more examples to use as templates?";
 
 	public NewFuseIntegrationProjectWizardAdvancedPage(ReferencedComposite referencedComposite) {
 		super(referencedComposite);
