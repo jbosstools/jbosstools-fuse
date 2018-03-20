@@ -16,7 +16,7 @@ import org.eclipse.reddeer.swt.impl.styledtext.DefaultStyledText;
 public class WhereToFindMoreTemplatesMessageDialog extends DefaultShell {
 	
 	public WhereToFindMoreTemplatesMessageDialog() {
-		super("Where can I find more examples?");
+		super("Where can you find more examples to use as templates?");
 	}
 
 	public String getMessage() {
