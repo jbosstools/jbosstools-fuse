@@ -138,6 +138,7 @@ public class FuseIntegrationProjectWizardTemplatePage extends WizardPage {
 				new ExcludeEmptyCategoriesFilter(),
 				compatibleEnvironmentFilter);
 		listTemplates.getViewer().setInput(getTemplates());
+		listTemplates.getViewer().expandAll();
 		listTemplates.getViewer().addSelectionChangedListener(new ISelectionChangedListener() {
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
@@ -206,6 +207,7 @@ public class FuseIntegrationProjectWizardTemplatePage extends WizardPage {
 	public void refresh() {
 		if (listTemplates != null) {
 			listTemplates.getViewer().refresh();
+			listTemplates.getViewer().expandAll();
 		}
 	}
 
