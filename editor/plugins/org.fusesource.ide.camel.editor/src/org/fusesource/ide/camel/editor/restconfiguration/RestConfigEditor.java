@@ -15,6 +15,7 @@ import java.util.Map;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.ListenerList;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.ToolBarManager;
@@ -53,6 +54,7 @@ import org.eclipse.ui.part.EditorPart;
 import org.fusesource.ide.camel.editor.CamelEditor;
 import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 import org.fusesource.ide.camel.editor.internal.UIMessages;
+import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
 import org.fusesource.ide.camel.model.service.core.model.CamelBasicModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.camel.model.service.core.model.ICamelModelListener;
@@ -82,13 +84,15 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 	private Composite restOpsSection;
 	private ListViewer restList;
 	private RestEditorColorManager colorManager = new RestEditorColorManager();
-
+	private Map<String, Eip> restModel;
+	
 	/**
 	 *
 	 * @param parentEditor
 	 */
 	public RestConfigEditor(CamelEditor parentEditor) {
 		this.parentEditor = parentEditor;
+		restModel = RestModelBuilder.getRestModelFromCatalog(parentEditor.getDesignEditor().getWorkspaceProject(), new NullProgressMonitor());
 	}
 
 	@Override
@@ -173,31 +177,12 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 		form.layout();
 		toolkit.decorateFormHeading(form.getForm());
 	}
-
-	private String compareTextAndTag(String text, String tag) {
-		if (text == null || tag == null) {
-			return null;
-		}
-		if (tag.equals(text) || text.startsWith(tag)) {
-			return tag;
-		}
-		return null;
-	}
 	
 	private String getTextForImage(String text) {
-		if (compareTextAndTag(text, RestConfigConstants.GET_VERB) != null) {
-			return RestConfigConstants.GET_VERB;
+		if (restModel.containsKey(text)) {
+			return restModel.get(text).getName();
 		}
-		if (compareTextAndTag(text, RestConfigConstants.PUT_VERB) != null) {
-			return RestConfigConstants.PUT_VERB;
-		}
-		if (compareTextAndTag(text, RestConfigConstants.POST_VERB) != null) {
-			return RestConfigConstants.POST_VERB;
-		}
-		if (compareTextAndTag(text, RestConfigConstants.DELETE_VERB) != null) {
-			return RestConfigConstants.DELETE_VERB;
-		}
-		return null;
+		return text;
 	}
 	
 	private Composite createVerbComposite(Composite parent, String labelText, String content) {
@@ -233,13 +218,15 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 	private Object getDataFromSelectedUIElement(Control control) {
 		Node data = null;
 		if (!control.isDisposed()) {
-			if (control.getData(RestConfigConstants.REST_VERB_FLAG) != null) {
-				data = (Node) control.getData(RestConfigConstants.REST_VERB_FLAG);
-			} else if (control.getData(RestConfigConstants.REST_TAG) != null) {
-				data = (Node) control.getData(RestConfigConstants.REST_TAG);
-			} else if (control.getData(RestConfigConstants.REST_CONFIGURATION_TAG) != null) {
-				data = (Node) control.getData(RestConfigConstants.REST_CONFIGURATION_TAG);
+			
+			for (String key : restModel.keySet()) {
+				Object oData = control.getData(key);
+				if (oData instanceof Node) {
+					data = (Node) oData;
+					break;
+				}
 			}
+
 			if (data != null) {
 				return new CamelBasicModelElement(null, data);
 			}

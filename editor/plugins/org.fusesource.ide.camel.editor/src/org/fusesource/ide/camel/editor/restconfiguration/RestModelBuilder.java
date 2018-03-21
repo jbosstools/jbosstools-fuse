@@ -15,6 +15,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.SubMonitor;
+import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelCatalogCacheManager;
+import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelModel;
+import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -46,4 +52,15 @@ public class RestModelBuilder {
 		}
 	}
 
+	public static Map<String, Eip> getRestModelFromCatalog(IProject project, IProgressMonitor monitor) {
+		SubMonitor subMon = SubMonitor.convert(monitor, 2);
+		Map<String, Eip> restModel = new HashMap<>();
+		CamelModel catalogModel = CamelCatalogCacheManager.getInstance().getCamelModelForProject(project, subMon.split(1));
+		catalogModel.getEips().stream().filter( (Eip t) -> {
+				return 	t.getTags().contains(RestConfigConstants.REST_CONFIGURATION_TAG) || 
+						t.getTags().contains(RestConfigConstants.REST_TAG);
+		}).forEach( (Eip t) -> restModel.put(t.getName(), t) );
+		subMon.setWorkRemaining(0);
+		return restModel;
+	}
 }
