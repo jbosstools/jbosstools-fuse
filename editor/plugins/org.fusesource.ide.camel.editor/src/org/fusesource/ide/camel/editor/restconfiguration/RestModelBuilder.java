@@ -56,10 +56,10 @@ public class RestModelBuilder {
 		SubMonitor subMon = SubMonitor.convert(monitor, 2);
 		Map<String, Eip> restModel = new HashMap<>();
 		CamelModel catalogModel = CamelCatalogCacheManager.getInstance().getCamelModelForProject(project, subMon.split(1));
-		catalogModel.getEips().stream().filter( (Eip t) -> {
-				return 	t.getTags().contains(RestConfigConstants.REST_CONFIGURATION_TAG) || 
-						t.getTags().contains(RestConfigConstants.REST_TAG);
-		}).forEach( (Eip t) -> restModel.put(t.getName(), t) );
+		catalogModel.getEips().stream()
+			.filter( (Eip t) -> t.getTags().contains(RestConfigConstants.REST_CONFIGURATION_TAG) || 
+								t.getTags().contains(RestConfigConstants.REST_TAG) )
+			.forEach( (Eip t) -> restModel.put(t.getName(), t) );
 		subMon.setWorkRemaining(0);
 		return restModel;
 	}
