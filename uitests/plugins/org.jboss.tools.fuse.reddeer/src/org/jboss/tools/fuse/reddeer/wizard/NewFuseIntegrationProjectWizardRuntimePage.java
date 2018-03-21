@@ -33,9 +33,9 @@ import org.eclipse.reddeer.swt.impl.group.DefaultGroup;
  */
 public class NewFuseIntegrationProjectWizardRuntimePage extends WizardPage {
 
-	private static final String CAMEL_VERSION_GROUP_LABEL = "Select the Camel version for your new project";
-	private static final String DEPLOYMENT_GROUP_LABEL = "Where are you deploying?";
-	private static final String RUNTIME_GROUP_LABEL = "Which runtime do you want?";
+	private static final String CAMEL_VERSION_GROUP_LABEL = "Select the Camel version";
+	private static final String DEPLOYMENT_GROUP_LABEL = "Choose the deployment platform";
+	private static final String RUNTIME_GROUP_LABEL = "Choose the runtime environment";
 	private static final String CAMEL_VERSION_GROUP_VERIFY_BTN_LABEL = "Verify";
 
 	public NewFuseIntegrationProjectWizardRuntimePage(ReferencedComposite referencedComposite) {
