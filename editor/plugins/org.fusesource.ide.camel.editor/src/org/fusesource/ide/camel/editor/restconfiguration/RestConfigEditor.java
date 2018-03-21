@@ -194,8 +194,23 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 		if (compareTextAndTag(text, RestConfigConstants.POST_VERB) != null) {
 			return RestConfigConstants.POST_VERB;
 		}
+		if (compareTextAndTag(text, RestConfigConstants.PATCH_VERB) != null) {
+			return RestConfigConstants.PATCH_VERB;
+		}
 		if (compareTextAndTag(text, RestConfigConstants.DELETE_VERB) != null) {
 			return RestConfigConstants.DELETE_VERB;
+		}
+		if (compareTextAndTag(text, RestConfigConstants.HEAD_VERB) != null) {
+			return RestConfigConstants.HEAD_VERB;
+		}
+		if (compareTextAndTag(text, RestConfigConstants.TRACE_VERB) != null) {
+			return RestConfigConstants.TRACE_VERB;
+		}
+		if (compareTextAndTag(text, RestConfigConstants.CONNECT_VERB) != null) {
+			return RestConfigConstants.CONNECT_VERB;
+		}
+		if (compareTextAndTag(text, RestConfigConstants.OPTIONS_VERB) != null) {
+			return RestConfigConstants.OPTIONS_VERB;
 		}
 		return null;
 	}
