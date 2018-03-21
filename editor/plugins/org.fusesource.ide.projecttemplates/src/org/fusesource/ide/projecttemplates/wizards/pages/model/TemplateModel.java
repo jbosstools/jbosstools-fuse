@@ -34,7 +34,6 @@ public class TemplateModel {
 	private static final String PROJECT_TEMPLATE_CATEGORY_ATTR_NAME = "name";
 	private static final String PROJECT_TEMPLATE_CATEGORY_ATTR_PARENT = "parent";
 	private static final String PROJECT_TEMPLATE_CATEGORY_ATTR_WEIGHT = "weight";
-	private static final String DEFAULT_CAT_ID = "fuse.projecttemplates.DEFAULT_CATEGORY";
 	
 	private static final String PROJECT_TEMPLATE_PROVIDER_ELEMENT = "projectTemplate";
 	private static final String PROJECT_TEMPLATE_PROVIDER_ATTR_ID = "id";
@@ -45,7 +44,7 @@ public class TemplateModel {
 	private static final String PROJECT_TEMPLATE_PROVIDER_ATTR_CONFIGURATOR = "class";
 	private static final String PROJECT_TEMPLATE_PROVIDER_ATTR_WEIGHT = "weight";
 
-	private List<CategoryItem> templateCategories = new ArrayList<>();
+	private List<TemplateOrCategoryItem> templateRoots = new ArrayList<>();
 
 	private NameAndWeightComparator comparator = new NameAndWeightComparator();
 	
@@ -57,13 +56,13 @@ public class TemplateModel {
 		IConfigurationElement[] extensions = Platform.getExtensionRegistry().getConfigurationElementsFor(PROJECT_TEMPLATE_EXT_POINT_ID);
 		// first read all categories
 		for (IConfigurationElement e : extensions) {
-			if (e.getName().equals(PROJECT_TEMPLATE_CATEGORY_ELEMENT)) {
+			if (PROJECT_TEMPLATE_CATEGORY_ELEMENT.equals(e.getName())) {
 				determineCategoryExtension(e);
 			} 
 		}
 		// then read and assign all template providers
 		for (IConfigurationElement e : extensions) {
-			if (e.getName().equals(PROJECT_TEMPLATE_PROVIDER_ELEMENT)) {
+			if (PROJECT_TEMPLATE_PROVIDER_ELEMENT.equals(e.getName())) {
 				determineProviderExtension(e);
 			} 
 		} 
@@ -90,9 +89,6 @@ public class TemplateModel {
 				}
 				String catId = e.getAttribute(PROJECT_TEMPLATE_PROVIDER_ATTR_CATEGORY);
 				CategoryItem category = getCategory(catId);
-				if (category == null) {
-					category = getCategory(DEFAULT_CAT_ID);
-				}
 				createTemplateForEachDSL(template, id, name, description, keywords, iWeight, category);
 			}
 		} catch (Exception ex) {
@@ -104,7 +100,11 @@ public class TemplateModel {
 		for (CamelDSLType dslType : CamelDSLType.values()) {
 			if (template.supportsDSL(dslType)) {
 				TemplateItem item = new TemplateItem(new TemplateItemIdentity(id, name, description, keywords), iWeight, category, template, dslType);
-				category.addTemplate(item);
+				if (category !=null) {
+					category.addTemplate(item);
+				} else {
+					templateRoots.add(item);
+				}
 			}
 		}
 	}
@@ -119,25 +119,32 @@ public class TemplateModel {
 			String parent = e.getAttribute(PROJECT_TEMPLATE_CATEGORY_ATTR_PARENT);
 			int iWeight = getWeight(e, id);
 			CategoryItem item = new CategoryItem(id, name, iWeight, parent);
-			templateCategories.add(item);
+			templateRoots.add(item);
 		} catch (Exception ex) {
 			ProjectTemplatesActivator.pluginLog().logError(ex);
 		}
 		
 		// now assign the sub categories
-		Iterator<CategoryItem> catIt = templateCategories.iterator();
-		while (catIt.hasNext()) {
-			CategoryItem cat = catIt.next();
-			String parentCategory = cat.getParent();
-			if (!Strings.isBlank(parentCategory)){
-				CategoryItem parentCat = getCategory(parentCategory);
-				parentCat.addSubCategory(cat);
-				catIt.remove();
+		Iterator<TemplateOrCategoryItem> templateOrCategoryItems = templateRoots.iterator();
+		while (templateOrCategoryItems.hasNext()) {
+			TemplateOrCategoryItem templateOrCategoryItem = templateOrCategoryItems.next();
+			if (templateOrCategoryItem instanceof CategoryItem) {
+				CategoryItem categoryItem = (CategoryItem) templateOrCategoryItem;
+				String parentCategory = categoryItem.getParent();
+				if (!Strings.isBlank(parentCategory)){
+					CategoryItem parentCat = getCategory(parentCategory);
+					if (parentCat != null) {
+						parentCat.addSubCategory(categoryItem);
+					}
+					templateOrCategoryItems.remove();
+				}
+			} else {
+				templateOrCategoryItems.remove();
 			}
 		}
 		
 		// now sort the root list of categories
-		Collections.sort(templateCategories, comparator);
+		Collections.sort(templateRoots, comparator);
 	}
 
 	private int getWeight(IConfigurationElement e, String id) {
@@ -152,18 +159,22 @@ public class TemplateModel {
 	}
 
 	private CategoryItem getCategory(String id) {
-		return findCategory(templateCategories, id);
+		return findCategory(templateRoots, id);
 	}
 	
-	private CategoryItem findCategory(List<CategoryItem> categories, String catId) {
-		for (CategoryItem cat : categories) {
-			if (cat.getId().equals(catId)){
-				return cat;
-			}
-			if (!cat.getSubCategories().isEmpty()) {
-				CategoryItem catItemFoundInSubCategory = findCategory(cat.getSubCategories(), catId);
-				if(catItemFoundInSubCategory != null){
-					return catItemFoundInSubCategory;
+	private CategoryItem findCategory(List<? extends TemplateOrCategoryItem> templateOrCategoryItems, String catId) {
+		for (TemplateOrCategoryItem templateOrCategoryItem : templateOrCategoryItems) {
+			if(templateOrCategoryItem instanceof CategoryItem)  {
+				CategoryItem categoryItem = (CategoryItem)templateOrCategoryItem;
+				if (categoryItem.getId().equals(catId)) {
+					return (CategoryItem)templateOrCategoryItem;
+				}
+				List<CategoryItem> subCategories = categoryItem.getSubCategories();
+				if (!subCategories.isEmpty()) {
+					CategoryItem catItemFoundInSubCategory = findCategory(subCategories, catId);
+					if (catItemFoundInSubCategory != null) {
+						return catItemFoundInSubCategory;
+					}
 				}
 			}
 		}
@@ -175,7 +186,7 @@ public class TemplateModel {
 	 * 
 	 * @return the templateCategories
 	 */
-	public List<CategoryItem> getTemplateCategories() {
-		return this.templateCategories;
+	public List<TemplateOrCategoryItem> getRootTemplates() {
+		return this.templateRoots;
 	}
 }

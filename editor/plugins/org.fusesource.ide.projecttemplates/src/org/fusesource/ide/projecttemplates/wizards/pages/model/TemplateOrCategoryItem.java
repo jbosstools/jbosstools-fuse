@@ -13,7 +13,7 @@ package org.fusesource.ide.projecttemplates.wizards.pages.model;
 /**
  * @author lhein
  */
-public interface NameAndWeightSupport {
+public interface TemplateOrCategoryItem {
 	
 	/**
 	 * returns the name of the item

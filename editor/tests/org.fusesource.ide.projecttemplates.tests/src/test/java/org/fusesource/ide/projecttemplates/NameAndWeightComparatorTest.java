@@ -14,7 +14,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.fusesource.ide.projecttemplates.wizards.pages.model.CategoryItem;
 import org.fusesource.ide.projecttemplates.wizards.pages.model.NameAndWeightComparator;
-import org.fusesource.ide.projecttemplates.wizards.pages.model.NameAndWeightSupport;
+import org.fusesource.ide.projecttemplates.wizards.pages.model.TemplateOrCategoryItem;
 import org.junit.Test;
 
 /**
@@ -31,8 +31,8 @@ public class NameAndWeightComparatorTest {
 	 */
 	@Test
 	public void testEqualNameAndWeight() throws Exception {
-		NameAndWeightSupport o1 = new CategoryItem("o1", "test", 10, null);
-		NameAndWeightSupport o2 = new CategoryItem("o2", "test", 10, null);
+		TemplateOrCategoryItem o1 = new CategoryItem("o1", "test", 10, null);
+		TemplateOrCategoryItem o2 = new CategoryItem("o2", "test", 10, null);
 		int res = comp.compare(o1, o2);
 		assertThat(res).isEqualTo(0);
 	}
@@ -44,8 +44,8 @@ public class NameAndWeightComparatorTest {
 	 */
 	@Test
 	public void testEqualWeightDifferentName() throws Exception {
-		NameAndWeightSupport o1 = new CategoryItem("o1", "test1", 10, null);
-		NameAndWeightSupport o2 = new CategoryItem("o2", "test2", 10, null);
+		TemplateOrCategoryItem o1 = new CategoryItem("o1", "test1", 10, null);
+		TemplateOrCategoryItem o2 = new CategoryItem("o2", "test2", 10, null);
 		int res = comp.compare(o1, o2);
 		assertThat(res).isEqualTo(-1);
 	}
@@ -57,8 +57,8 @@ public class NameAndWeightComparatorTest {
 	 */
 	@Test
 	public void testNameAndWeightComparison() throws Exception {
-		NameAndWeightSupport o1 = new CategoryItem("o1", "item 1", 10, null);
-		NameAndWeightSupport o2 = new CategoryItem("o1", "item x", 0, null);
+		TemplateOrCategoryItem o1 = new CategoryItem("o1", "item 1", 10, null);
+		TemplateOrCategoryItem o2 = new CategoryItem("o1", "item x", 0, null);
 		int res = comp.compare(o1, o2);
 		assertThat(res).isEqualTo(1);
 	}

@@ -21,6 +21,7 @@ import org.fusesource.ide.projecttemplates.wizards.FuseIntegrationProjectWizard;
 import org.fusesource.ide.projecttemplates.wizards.pages.model.CategoryItem;
 import org.fusesource.ide.projecttemplates.wizards.pages.model.TemplateItem;
 import org.fusesource.ide.projecttemplates.wizards.pages.model.TemplateModel;
+import org.fusesource.ide.projecttemplates.wizards.pages.model.TemplateOrCategoryItem;
 import org.junit.Test;
 
 /**
@@ -37,7 +38,7 @@ public class FuseIntegrationProjectWizardTemplatePageIT {
 		FuseIntegrationProjectWizardTemplatePage page = getWizardTemplatePage(wiz);
 		
 		TemplateModel tm = page.getTemplates();
-		List<CategoryItem> cats = tm.getTemplateCategories();
+		List<TemplateOrCategoryItem> cats = tm.getRootTemplates();
 		
 		TemplateItem cbrTemplate = findCBRTemplate(cats);
 		assertThat(cbrTemplate).isNotNull();
@@ -46,34 +47,25 @@ public class FuseIntegrationProjectWizardTemplatePageIT {
 		assertThat(eapTemplate).isNotNull();
 	}
 
-	private TemplateItem findEAPTemplate(List<CategoryItem> cats) {
-		for (CategoryItem cat : cats) {
-			if (cat.getId().equalsIgnoreCase("fuse.projecttemplates.eap")) {
-				for (CategoryItem subCat : cat.getSubCategories()) {
-					if (subCat.getId().equals("fuse.projecttemplates.eap.medium")) {
-						List<TemplateItem> templates = subCat.getTemplates();
-						for (TemplateItem ti : templates) {
-							if (ti.getId().equals("org.fusesource.ide.projecttemplates.eapSpringTemplateMediumv7")) {
-								return ti;
-							}
-						}
-					}
+	private TemplateItem findEAPTemplate(List<TemplateOrCategoryItem> templateOrCategoryItems) {
+		for (TemplateOrCategoryItem templateOrCategoryItem : templateOrCategoryItems) {
+				if ((templateOrCategoryItem instanceof TemplateItem)
+						&& "org.fusesource.ide.projecttemplates.eapSpringTemplateMediumv7".equals(((TemplateItem)templateOrCategoryItem).getId())) {
+					return (TemplateItem)templateOrCategoryItem;
 				}
-			}
 		}
 		return null;
 	}
 
-	private TemplateItem findCBRTemplate(List<CategoryItem> cats) {
-		for (CategoryItem cat : cats) {
-			if (cat.getId().equalsIgnoreCase("fuse.projecttemplates.jbossfuse")) {
-				for (CategoryItem subCat : cat.getSubCategories()) {
-					if (subCat.getId().equals("fuse.projecttemplates.jbossfuse.simple")) {
-						List<TemplateItem> templates = subCat.getTemplates();
-						for (TemplateItem ti : templates) {
-							if (ti.getId().equals("org.fusesource.ide.projecttemplates.cbrTemplateSimplev7")) {
-								return ti;
-							}
+	private TemplateItem findCBRTemplate(List<TemplateOrCategoryItem> templateOrCategoryItems) {
+		for (TemplateOrCategoryItem templateOrCategoryItem : templateOrCategoryItems) {
+			if (templateOrCategoryItem instanceof CategoryItem) {
+				CategoryItem cat = (CategoryItem) templateOrCategoryItem;
+				if ("fuse.projecttemplates.jbossfuse.simple".equals(cat .getId())) {
+					List<TemplateItem> templates = cat.getTemplates();
+					for (TemplateItem ti : templates) {
+						if ("org.fusesource.ide.projecttemplates.cbrTemplateSimplev7".equals(ti.getId())) {
+							return ti;
 						}
 					}
 				}

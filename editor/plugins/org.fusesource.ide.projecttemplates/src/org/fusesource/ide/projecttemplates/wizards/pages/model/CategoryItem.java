@@ -17,7 +17,7 @@ import java.util.List;
 /**
  * @author lhein
  */
-public class CategoryItem implements NameAndWeightSupport {
+public class CategoryItem implements TemplateOrCategoryItem {
 	private String id;
 	private String name;
 	private String parent;

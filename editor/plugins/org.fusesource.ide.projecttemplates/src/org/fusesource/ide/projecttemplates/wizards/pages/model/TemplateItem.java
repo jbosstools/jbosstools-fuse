@@ -18,7 +18,7 @@ import org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType;
 /**
  * @author lhein
  */
-public class TemplateItem implements NameAndWeightSupport {
+public class TemplateItem implements TemplateOrCategoryItem {
 	
 	private TemplateItemIdentity templateItemIdentity;
 	private int weight;

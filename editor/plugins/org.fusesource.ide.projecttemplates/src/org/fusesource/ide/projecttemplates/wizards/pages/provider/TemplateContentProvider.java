@@ -52,7 +52,7 @@ public class TemplateContentProvider implements ITreeContentProvider {
 	@Override
 	public Object[] getChildren(Object element) {
 		if (element instanceof TemplateModel) {
-			return ((TemplateModel)element).getTemplateCategories().toArray();
+			return ((TemplateModel)element).getRootTemplates().toArray();
 		} else if (element instanceof CategoryItem) {
 			ArrayList<Object> resultSet = new ArrayList<>();
 			resultSet.addAll(((CategoryItem)element).getSubCategories());

@@ -63,41 +63,18 @@
  <extension
        point="org.fusesource.ide.projecttemplates.templates">
     <projectTemplateCategory
-          id="fuse.projecttemplates.DEFAULT_CATEGORY"
-          name="%template.category.default"
-          weight="10">
-    </projectTemplateCategory>
-    <projectTemplateCategory
-          id="fuse.projecttemplates.jbossfuse"
-          name="%template.category.jbossfuse"
-          weight="0">
-    </projectTemplateCategory>
-    <projectTemplateCategory
-          id="fuse.projecttemplates.eap"
-          name="%template.category.eap"
-          weight="1">
-    </projectTemplateCategory>
-    <projectTemplateCategory
-          id="fuse.projecttemplates.ose"
-          name="%template.category.ose"
-          weight="2">
-    </projectTemplateCategory>
-    <projectTemplateCategory
           id="fuse.projecttemplates.jbossfuse.simple"
           name="%template.category.jbossfuse.simple"
-          parent="fuse.projecttemplates.jbossfuse"
           weight="0">
     </projectTemplateCategory>
     <projectTemplateCategory
           id="fuse.projecttemplates.jbossfuse.advanced"
           name="%template.category.jbossfuse.advanced"
-          parent="fuse.projecttemplates.jbossfuse"
           weight="1">
     </projectTemplateCategory>
     <projectTemplateCategory
           id="fuse.projecttemplates.jbossfuse.expert"
           name="%template.category.jbossfuse.expert"
-          parent="fuse.projecttemplates.jbossfuse"
           weight="2">
     </projectTemplateCategory>
     <projectTemplate
@@ -127,14 +104,7 @@
           name="%template.simple.amq.name"
           weight="0">
     </projectTemplate>
-    <projectTemplateCategory
-          id="fuse.projecttemplates.eap.medium"
-          name="%template.category.eap.medium"
-          parent="fuse.projecttemplates.eap"
-          weight="0">
-    </projectTemplateCategory>
     <projectTemplate
-          category="fuse.projecttemplates.eap.medium"
           class="org.fusesource.ide.projecttemplates.impl.simple.EAPSpringTemplateForFuse6"
           description="%template.medium.eapspring.description"
           id="org.fusesource.ide.projecttemplates.eapSpringTemplateMediumv6"
@@ -143,7 +113,6 @@
           weight="0">
     </projectTemplate>
     <projectTemplate
-          category="fuse.projecttemplates.eap.medium"
           class="org.fusesource.ide.projecttemplates.impl.simple.EAPSpringTemplateForFuse7"
           description="%template.medium.eapspring.description"
           id="org.fusesource.ide.projecttemplates.eapSpringTemplateMediumv7"
@@ -152,7 +121,6 @@
           weight="0">
     </projectTemplate>
     <projectTemplate
-          category="fuse.projecttemplates.ose"
           class="org.fusesource.ide.projecttemplates.impl.simple.OSESpringBootXMLTemplateForFuse6"
           description="%template.simple.osespringboot.xml.description"
           id="org.fusesource.ide.projecttemplates.oseSpringBootv6"
@@ -161,7 +129,6 @@
           weight="50">
     </projectTemplate>
     <projectTemplate
-          category="fuse.projecttemplates.ose"
           class="org.fusesource.ide.projecttemplates.impl.simple.OSESpringBootXMLTemplateForFuse7"
           description="%template.simple.osespringboot.xml.description"
           id="org.fusesource.ide.projecttemplates.oseSpringBootv7"
