@@ -20,7 +20,9 @@ import org.fusesource.ide.projecttemplates.wizards.pages.model.CategoryItem;
 import org.fusesource.ide.projecttemplates.wizards.pages.model.EnvironmentData;
 import org.fusesource.ide.projecttemplates.wizards.pages.model.FuseDeploymentPlatform;
 import org.fusesource.ide.projecttemplates.wizards.pages.model.FuseRuntimeKind;
+import org.fusesource.ide.projecttemplates.wizards.pages.model.TemplateItem;
 import org.fusesource.ide.projecttemplates.wizards.pages.model.TemplateModel;
+import org.fusesource.ide.projecttemplates.wizards.pages.model.TemplateOrCategoryItem;
 import org.junit.Test;
 
 public class TemplateModelIT {
@@ -31,24 +33,31 @@ public class TemplateModelIT {
 	}
 	
 	@Test
-	public void testCorrectNumberOfCategories() throws Exception {
-		//currently only 4: Red Hat Fuse, Fuse on EAP, Fuse on OpenShift, Empty and Default category
-		assertThat(new TemplateModel().getTemplateCategories()).hasSize(5);
+	public void testCorrectNumberOfTopLevelCategories() throws Exception {
+		//currently only 4: Empty, Beginner, Advanced and Expert
+		List<TemplateOrCategoryItem> rootTemplates = new TemplateModel().getRootTemplates();
+		assertThat(rootTemplates.stream().filter(item -> item instanceof CategoryItem).collect(Collectors.toList())).hasSize(4);
+	}
+	
+	@Test
+	public void testCorrectNumberOfTopLevelTemplates() throws Exception {
+		//currently only 4: 2 SpringBoot, 2 EAP
+		List<TemplateOrCategoryItem> rootTemplates = new TemplateModel().getRootTemplates();
+		assertThat(rootTemplates.stream().filter(item -> item instanceof TemplateItem).collect(Collectors.toList())).hasSize(4);
 	}
 	
 	@Test
 	public void testCorrectMediumFuseContent() throws Exception {
-		List<CategoryItem> templateCategories = new TemplateModel().getTemplateCategories();
-		CategoryItem fuseOnEapCategoryItem = templateCategories.stream().filter(templateCategory -> "fuse.projecttemplates.eap".equals(templateCategory.getId())).findFirst().get();
-		CategoryItem fuseOnEapMediumCategory = fuseOnEapCategoryItem.getSubCategories().stream().filter(templateCategory -> "fuse.projecttemplates.eap.medium".equals(templateCategory.getId())).findFirst().get();
-		checkSingleTemplateForVersion(fuseOnEapMediumCategory, CamelCatalogUtils.CAMEL_VERSION_LATEST_PRODUCTIZED_63);
-		checkSingleTemplateForVersion(fuseOnEapMediumCategory, CamelCatalogUtils.CAMEL_VERSION_LATEST_COMMUNITY);
+		List<TemplateOrCategoryItem> templateOrCategoryItems = new TemplateModel().getRootTemplates();
+		checkSingleTemplateForVersion(templateOrCategoryItems, CamelCatalogUtils.CAMEL_VERSION_LATEST_PRODUCTIZED_63);
+		checkSingleTemplateForVersion(templateOrCategoryItems, CamelCatalogUtils.CAMEL_VERSION_LATEST_COMMUNITY);
 	}
 
-	private void checkSingleTemplateForVersion(CategoryItem categoryItem, String camelVersionLatestProductized63) {
-		assertThat(categoryItem.getTemplates()
+	private void checkSingleTemplateForVersion(List<TemplateOrCategoryItem> templateOrCategoryItems, String camelVersionLatestProductized63) {
+		assertThat(templateOrCategoryItems
 				.stream()
-				.filter(template -> template.isCompatible(new EnvironmentData(CamelCatalogUtils.CAMEL_VERSION_LATEST_PRODUCTIZED_63, FuseDeploymentPlatform.STANDALONE, FuseRuntimeKind.WILDFLY)))
+				.filter(templateOrCategoryItem -> templateOrCategoryItem instanceof TemplateItem)
+				.filter(template -> ((TemplateItem)template).isCompatible(new EnvironmentData(CamelCatalogUtils.CAMEL_VERSION_LATEST_PRODUCTIZED_63, FuseDeploymentPlatform.STANDALONE, FuseRuntimeKind.WILDFLY)))
 				.collect(Collectors.toList()))
 		.hasSize(1);
 	}

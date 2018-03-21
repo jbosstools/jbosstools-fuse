@@ -15,14 +15,14 @@ import java.util.Comparator;
 /**
  * @author lhein
  */
-public class NameAndWeightComparator implements Comparator<NameAndWeightSupport> {
+public class NameAndWeightComparator implements Comparator<TemplateOrCategoryItem> {
 
 	/* 
 	 * (non-Javadoc)
 	 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
 	 */
 	@Override
-	public int compare(NameAndWeightSupport o1, NameAndWeightSupport o2) {
+	public int compare(TemplateOrCategoryItem o1, TemplateOrCategoryItem o2) {
 		int res = Integer.compare(o1.getWeight(), o2.getWeight());
 		if (res == 0) {
 			res = o1.getName().compareTo(o2.getName());
