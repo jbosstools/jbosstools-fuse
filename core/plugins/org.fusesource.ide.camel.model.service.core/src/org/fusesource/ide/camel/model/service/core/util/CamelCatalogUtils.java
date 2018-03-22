@@ -35,6 +35,7 @@ import org.fusesource.ide.camel.model.service.core.util.versionmapper.CamelForFu
 import org.fusesource.ide.camel.model.service.core.util.versionmapper.CamelForFuse7ToBomMapper;
 import org.fusesource.ide.camel.model.service.core.util.versionmapper.CamelForFuseOnOpenShiftToBomMapper;
 import org.fusesource.ide.camel.model.service.core.util.versionmapper.CamelForWildflyFuse7ToBomMapper;
+import org.fusesource.ide.camel.model.service.core.util.versionmapper.DefaultVersions;
 import org.fusesource.ide.camel.model.service.core.util.versionmapper.FISBomToFabric8MavenPluginMapper;
 import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.foundation.core.util.VersionUtil;
@@ -48,7 +49,7 @@ public class CamelCatalogUtils {
 
 	public static final String KEY_CAMEL_TEST_VERSIONS = "FUSE_TOOLING_CAMEL_TEST_VERSIONS";
 
-	public static final String DEFAULT_CAMEL_VERSION = CamelForFIS20ToBomMapper.FIS_20_R3_CAMEL_VERSION;
+	public static final String DEFAULT_CAMEL_VERSION = new DefaultVersions().getDefaultCamelVersion();
 	
 	public static final String CAMEL_SPRING_BOOT_STARTER = "camel-spring-boot-starter";
 	public static final String CAMEL_WILDFLY = "org.wildfly.camel";
