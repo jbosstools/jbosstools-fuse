@@ -30,22 +30,35 @@ public class NumberValidator implements IValidator {
 	public NumberValidator(Parameter parameter) {
 		this.parameter = parameter;
 	}
+	
+	public NumberValidator() {
+	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.core.databinding.validation.IValidator#validate(java.lang.Object)
-	 */
 	@Override
 	public IStatus validate(Object value) {
-		// only check non-empty fields
-		if (CamelComponentUtils.isNumberProperty(parameter)) {
-			if (value != null && value.toString().trim().length() > 0) {
-				try {
-					PropertiesUtils.validateDuration(value.toString());
-				} catch (IllegalArgumentException ex) {
+		if (isNonEmpty(value)
+				&& !isPlaceHolder(value)
+				&& (parameter == null || CamelComponentUtils.isNumberProperty(parameter))) {
+			try {
+				PropertiesUtils.validateDuration(value.toString());
+			} catch (IllegalArgumentException ex) {
+				if (parameter != null) {
 					return ValidationStatus.error(NLS.bind(Messages.NumberValidator_messageError, parameter.getName()), ex);
+				} else {
+					return ValidationStatus.error("Invalid numeric value");
 				}
 			}
 		}
 		return ValidationStatus.ok();
+	}
+
+	private boolean isPlaceHolder(Object value) {
+		return value != null && value instanceof String
+				&& ((String) value).startsWith("{{")
+				&& ((String) value).endsWith("}}");
+	}
+
+	protected boolean isNonEmpty(Object value) {
+		return value != null && value.toString().trim().length() > 0;
 	}
 }

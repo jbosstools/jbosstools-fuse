@@ -10,13 +10,13 @@
  ******************************************************************************/ 
 package org.fusesource.ide.camel.editor.properties.creators.modifylisteners.number;
 
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.widgets.Text;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
-import org.fusesource.ide.camel.model.service.core.util.PropertiesUtils;
-import org.fusesource.ide.foundation.core.util.Strings;
+import org.fusesource.ide.camel.validation.model.NumberValidator;
 
 /**
  * @author Aurelien Pupier
@@ -27,9 +27,6 @@ public abstract class AbstractNumberModifyListener implements ModifyListener {
 	protected AbstractCamelModelElement camelModelElement;
 	protected String parameterName;
 
-	/**
-	 * @param numberParameterPropertyUICreator
-	 */
 	public AbstractNumberModifyListener(AbstractCamelModelElement camelModelElement, String parameterName) {
 		this.camelModelElement = camelModelElement;
 		this.parameterName = parameterName;
@@ -39,13 +36,11 @@ public abstract class AbstractNumberModifyListener implements ModifyListener {
 	public void modifyText(ModifyEvent e) {
 	    Text txt = (Text)e.getSource();
 	    String val = txt.getText();
-	    try {
-	    	if (val != null && !Strings.isEmpty(val)) {
-	    		PropertiesUtils.validateDuration(val);
-	    	}
+	    IStatus status = new NumberValidator().validate(val);
+	    if (status.isOK()) {
 	    	txt.setBackground(ColorConstants.white);
-			updateModel(txt.getText());
-	    } catch (IllegalArgumentException ex) {
+	    	updateModel(txt.getText());
+	    } else {
 	    	txt.setBackground(ColorConstants.red);
 	    }
 	}
