@@ -125,8 +125,8 @@ public class Wsdl2RestWizard extends Wizard implements INewWizard {
 	 */
 	private void generate() throws Exception {
 		URL wsdlLocation = new URL(options.getWsdlURL());
-		IPath path = new org.eclipse.core.runtime.Path(options.getDestinationJava());
-		IResource resource = ResourcesPlugin.getWorkspace().getRoot().findMember(path);
+		IPath javaPath = new org.eclipse.core.runtime.Path(options.getDestinationJava());
+		IResource resource = ResourcesPlugin.getWorkspace().getRoot().findMember(javaPath);
 		File javaFile = null;
 		if (resource instanceof IFolder) {
 			IFolder destFolder = (IFolder) resource;
@@ -141,22 +141,41 @@ public class Wsdl2RestWizard extends Wizard implements INewWizard {
 			// Gets native File using EFS
 			javaFile = EFS.getStore(uri).toLocalFile(0, new NullProgressMonitor());			
 		}
+		IPath camelPath = new org.eclipse.core.runtime.Path(options.getDestinationCamel());
+		IResource camelResource = ResourcesPlugin.getWorkspace().getRoot().findMember(camelPath);
+		File camelFile = null;
+		if (camelResource instanceof IFolder) {
+			IFolder camelDestFolder = (IFolder) camelResource;
+			// gets URI for EFS.
+			URI cameluri = camelDestFolder.getLocationURI();
+
+			// what if file is a link, resolve it.
+			if(camelDestFolder.isLinked()){
+				cameluri = camelDestFolder.getRawLocationURI();
+			}
+
+			// Gets native File using EFS
+			camelFile = EFS.getStore(cameluri).toLocalFile(0, new NullProgressMonitor());			
+		}
 		if (javaFile != null) {
 			ClassLoader oldLoader = Thread.currentThread().getContextClassLoader();
 			try {
 				// initialize bus using bundle classloader, to prevent project dependencies from leaking in
 				Thread.currentThread().setContextClassLoader(getClass().getClassLoader());
 
-				Path outpath = javaFile.toPath();
-				Path contextpath = new File(javaFile.getAbsolutePath() + File.separator + "rest-camel-context.xml").toPath(); //$NON-NLS-1$
-				Wsdl2Rest tool = new Wsdl2Rest(wsdlLocation, outpath);
-				tool.setTargetContext(contextpath);
-				if (!Strings.isEmpty(options.getBeanClassName())) {
-					tool.setTargetBean(options.getBeanClassName());
+				Path outJavaPath = javaFile.toPath();
+				Wsdl2Rest tool = new Wsdl2Rest(wsdlLocation, outJavaPath);
+				if (camelFile != null) {
+					Path contextpath = new File(camelFile.getAbsolutePath() + File.separator + "rest-camel-context.xml").toPath(); //$NON-NLS-1$
+					tool.setCamelContext(contextpath);
 				}
 				if (!Strings.isEmpty(options.getTargetServiceAddress())) {
 					URL targetAddressURL = new URL(options.getTargetServiceAddress());
-					tool.setTargetAddress(targetAddressURL);
+					tool.setJaxwsAddress(targetAddressURL);
+				}
+				if (!Strings.isEmpty(options.getTargetRestServiceAddress())) {
+					URL targetRestAddressURL = new URL(options.getTargetRestServiceAddress());
+					tool.setJaxrsAddress(targetRestAddressURL);
 				}
 				ClassLoader loader = tool.getClass().getClassLoader();
 				Thread.currentThread().setContextClassLoader(loader);

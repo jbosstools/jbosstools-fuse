@@ -170,16 +170,16 @@
               <stripVersion>true</stripVersion>
               <outputDirectory>lib</outputDirectory>
               <artifactItems>
-                <!-- Core -->
-                <artifactItem>
-                  <groupId>org.jboss.fuse.wsdl2rest</groupId>
-                  <artifactId>wsdl2rest</artifactId>
-                  <version>${version.wsdl2rest}</version>
-                </artifactItem>
                 <!-- Impl -->
                 <artifactItem>
                   <groupId>org.jboss.fuse.wsdl2rest</groupId>
                   <artifactId>wsdl2rest-impl</artifactId>
+                  <version>${version.wsdl2rest}</version>
+                </artifactItem>
+                <!-- Util -->
+                <artifactItem>
+                  <groupId>org.jboss.fuse.wsdl2rest</groupId>
+                  <artifactId>wsdl2rest-util</artifactId>
                   <version>${version.wsdl2rest}</version>
                 </artifactItem>
                </artifactItems>

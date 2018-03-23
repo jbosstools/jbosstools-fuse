@@ -25,7 +25,7 @@ public class Wsdl2RestOptions {
 	private String destinationJava;
 	private String destinationCamel;
 	private String targetServiceAddress;
-	private String beanClassName;
+	private String targetRestServiceAddress;
 
 	private final PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
 
@@ -110,19 +110,19 @@ public class Wsdl2RestOptions {
 	}
 
 	/**
-	 * Bean Class used by the wsdl2rest utility.
+	 * Target Rest Service Address used by the wsdl2rest utility.
 	 * @return String
 	 */
-	public String getBeanClassName() {
-		return beanClassName;
+	public String getTargetRestServiceAddress() {
+		return targetRestServiceAddress;
 	}
 
 	/**
-	 * Set Bean Class used by the wsdl2rest utility.
+	 * Set Target Rest Service Address used by the wsdl2rest utility.
 	 * @param targetServiceAddress
 	 */
-	public void setBeanClassName(String beanClassName) {
-		firePropertyChange("beanClassName", this.beanClassName, this.beanClassName = beanClassName); //$NON-NLS-1$
+	public void setTargetRestServiceAddress(String targetRestServiceAddress) {
+		firePropertyChange("targetRestServiceAddress", this.targetRestServiceAddress, this.targetRestServiceAddress = targetRestServiceAddress); //$NON-NLS-1$
 	}
 
 	/**

@@ -23,10 +23,8 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Text;
-import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.wsdl2rest.ui.internal.UIMessages;
 
 /**
@@ -97,19 +95,7 @@ public class Wsdl2RestWizardSecondPage extends Wsdl2RestWizardBasePage {
 		});
 
 		Text targetAddressText = createLabelAndText(composite, UIMessages.wsdl2RestWizardSecondPageTargetServiceAddressLabel, 3);
-
-		Text beanClassText = createLabelAndText(composite, UIMessages.wsdl2RestWizardSecondPageBeanClassLabel, 2);
-		Button classBrowse = createButton(composite, "..."); //$NON-NLS-1$
-		classBrowse.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(getOptionsFromWizard().getProjectName());
-				String beanClass = handleClassBrowse(project, Display.getCurrent().getActiveShell());
-				if (!Strings.isEmpty(beanClass)) {
-					getOptionsFromWizard().setBeanClassName(beanClass);
-				}
-			}
-		});
+		Text targetRestAddressText = createLabelAndText(composite, "Target REST Service Address", 3);
 
 		// define the data bindings
 		Binding javaPathBinding = createBinding(javaPathTextControl, "destinationJava", new PathValidator()); //$NON-NLS-1$
@@ -121,14 +107,14 @@ public class Wsdl2RestWizardSecondPage extends Wsdl2RestWizardBasePage {
 		Binding targetAddressBinding = createBinding(targetAddressText, "targetServiceAddress", new TargetURLValidator()); //$NON-NLS-1$
 		ControlDecorationSupport.create(targetAddressBinding, SWT.LEFT | SWT.TOP);
 
-		Binding beanClassBinding = createBinding(beanClassText, "beanClassName", new ClassExistsInProjectValidator(this)); //$NON-NLS-1$
-		ControlDecorationSupport.create(beanClassBinding, SWT.LEFT | SWT.TOP);
+		Binding targetRestAddressBinding = createBinding(targetRestAddressText, "targetRestServiceAddress", new TargetURLValidator()); //$NON-NLS-1$
+		ControlDecorationSupport.create(targetRestAddressBinding, SWT.LEFT | SWT.TOP);
 
 		// set initial values
 		initIfNotEmpty(javaPathTextControl, getOptionsFromWizard().getDestinationJava());
 		initIfNotEmpty(camelPathTextControl, getOptionsFromWizard().getDestinationCamel());
 		initIfNotEmpty(targetAddressText, getOptionsFromWizard().getTargetServiceAddress());
-		initIfNotEmpty(beanClassText, getOptionsFromWizard().getBeanClassName());
+		initIfNotEmpty(targetRestAddressText, getOptionsFromWizard().getTargetRestServiceAddress());
 
 		setControl(composite);
 		setPageComplete(isPageComplete());
