@@ -15,22 +15,28 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
 import java.net.URL;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.ISelectionService;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
+import org.fusesource.ide.camel.editor.utils.MavenUtils;
+import org.fusesource.ide.camel.model.service.core.catalog.Dependency;
 import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.wsdl2rest.ui.internal.UIMessages;
 import org.fusesource.ide.wsdl2rest.ui.internal.Wsdl2RestUIActivator;
@@ -48,6 +54,8 @@ public class Wsdl2RestWizard extends Wizard implements INewWizard {
 	 * Collection of settings used by the wsdl2rest utility.
 	 */
 	final Wsdl2RestOptions options;
+	
+	private IProject project;
 
 	/**
 	 * Constructor
@@ -107,7 +115,7 @@ public class Wsdl2RestWizard extends Wizard implements INewWizard {
 		super.addPages();
 
 		// page one
-		IProject project = getSelectedProjectFromSelectionService();
+		project = getSelectedProjectFromSelectionService();
 		Wsdl2RestWizardFirstPage pageOne = new Wsdl2RestWizardFirstPage("page1", UIMessages.wsdl2RestWizardPageOneTitle, null); //$NON-NLS-1$
 		if (project != null) {
 			options.setProjectName(project.getName());
@@ -119,6 +127,18 @@ public class Wsdl2RestWizard extends Wizard implements INewWizard {
 		addPage(pageTwo);
 	}
 
+	@SuppressWarnings("restriction")
+	private void updateDependencies() throws Exception {
+		List<Dependency> deps = new ArrayList<Dependency>();
+		Dependency one = new Dependency();
+		one.setArtifactId("jboss-jaxrs-api_2.0_spec");
+		one.setGroupId("org.jboss.spec.javax.ws.rs");
+		one.setVersion("1.0.0.Final-redhat-1");
+		deps.add(one);
+		new MavenUtils().updateMavenDependencies(deps, project);
+		project.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
+	}
+	
 	/**
 	 * Use the settings collected and call the wsdl2rest utility.
 	 * @throws Exception
@@ -180,6 +200,7 @@ public class Wsdl2RestWizard extends Wizard implements INewWizard {
 				ClassLoader loader = tool.getClass().getClassLoader();
 				Thread.currentThread().setContextClassLoader(loader);
 				tool.process();
+				updateDependencies();
 			} catch (Exception e) {
 				throw new InvocationTargetException(e);
 			} finally {
