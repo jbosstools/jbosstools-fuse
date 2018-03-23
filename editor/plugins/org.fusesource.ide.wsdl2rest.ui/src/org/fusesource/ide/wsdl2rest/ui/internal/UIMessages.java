@@ -1,5 +1,5 @@
 /******************************************************************************* 
- * Copyright (c) 2017 Red Hat, Inc. 
+ * Copyright (c) 2018 Red Hat, Inc. 
  * Distributed under license by Red Hat, Inc. All rights reserved. 
  * This program is made available under the terms of the 
  * Eclipse Public License v1.0 which accompanies this distribution, 
@@ -29,12 +29,13 @@ public class UIMessages extends NLS {
 	public static String wsdl2RestWizardFirstPageWSDLFileLabel;
 	public static String wsdl2RestWizardPageOneTitle;
 	public static String wsdl2RestWizardPageTwoTitle;
-	public static String wsdl2RestWizardSecondPageBeanClassLabel;
 	public static String wsdl2RestWizardSecondPageCamelFolderLabel;
 	public static String wsdl2RestWizardSecondPageContainerSelectionDialogMessage;
 	public static String wsdl2RestWizardSecondPageContainerSelectionDialogTitle;
 	public static String wsdl2RestWizardSecondPageJavaFolderLabel;
 	public static String wsdl2RestWizardSecondPagePageTwoDescription;
+	public static String wsdl2RestWizardSecondPageTargetRESTServiceAddressLabel;
+
 	public static String wsdl2RestWizardSecondPageTargetServiceAddressLabel;
 	public static String wsdl2RestWizardSecondPageValidatorJavaClassMustExist;
 	public static String wsdl2RestWizardSecondPageValidatorPathMustBeAccessible;

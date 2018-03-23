@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017 Red Hat, Inc. 
+ * Copyright (c) 2018 Red Hat, Inc. 
  * Distributed under license by Red Hat, Inc. All rights reserved. 
  * This program is made available under the terms of the 
  * Eclipse Public License v1.0 which accompanies this distribution, 
@@ -23,14 +23,12 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.ISelectionService;
 import org.eclipse.ui.IWorkbench;
@@ -131,9 +129,9 @@ public class Wsdl2RestWizard extends Wizard implements INewWizard {
 	private void updateDependencies() throws Exception {
 		List<Dependency> deps = new ArrayList<Dependency>();
 		Dependency one = new Dependency();
-		one.setArtifactId("jboss-jaxrs-api_2.0_spec");
-		one.setGroupId("org.jboss.spec.javax.ws.rs");
-		one.setVersion("1.0.0.Final-redhat-1");
+		one.setArtifactId("jboss-jaxrs-api_2.0_spec"); //$NON-NLS-1$
+		one.setGroupId("org.jboss.spec.javax.ws.rs"); //$NON-NLS-1$
+		one.setVersion("1.0.0.Final-redhat-1"); //$NON-NLS-1$
 		deps.add(one);
 		new MavenUtils().updateMavenDependencies(deps, project);
 		project.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
