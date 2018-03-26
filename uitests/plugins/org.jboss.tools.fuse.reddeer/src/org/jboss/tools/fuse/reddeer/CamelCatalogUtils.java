@@ -20,6 +20,7 @@ import java.util.regex.Pattern;
 
 import org.eclipse.reddeer.common.logging.Logger;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -33,30 +34,30 @@ public class CamelCatalogUtils {
 
 	public static final String ROOT_PATH = "/org/apache/camel/catalog/";
 
-	private static String COMPONENTS_PATH = ROOT_PATH + "components";
+	public static final String JSON_SUFFIX = ".json";
 
-	private static String COMPONENTS_LIST_PATH = ROOT_PATH + "components.properties";
+	private static String components_path = ROOT_PATH + "components";
 
-	private static String DATAFORMATS_PATH = ROOT_PATH + "dataformats";
+	private static String components_list_path = ROOT_PATH + "components.properties";
 
-	private static String DATAFORMATS_LIST_PATH = ROOT_PATH + "dataformats.properties";
+	private static String dataformats_path = ROOT_PATH + "dataformats";
 
-	private static String LANGUAGES_PATH = ROOT_PATH + "languages";
+	private static String dataformats_list_path = ROOT_PATH + "dataformats.properties";
 
-	private static String LANGUAGES_LIST_PATH = ROOT_PATH + "languages.properties";
+	private static String languages_path = ROOT_PATH + "languages";
 
-	private static String MODELS_PATH = ROOT_PATH + "models";
+	private static String languages_list_path = ROOT_PATH + "languages.properties";
 
-	private static String MODELS_LIST_PATH = ROOT_PATH + "models.properties";
+	private static String models_path = ROOT_PATH + "models";
 
-	private static final String JSON_SUFFIX = ".json";
+	private static String models_list_path = ROOT_PATH + "models.properties";
 
 	public enum CatalogType {
 
-		COMPONENT("component", COMPONENTS_PATH, COMPONENTS_LIST_PATH),
-		DATAFORMAT("dataformat", DATAFORMATS_PATH, DATAFORMATS_LIST_PATH),
-		LANGUAGE("language", LANGUAGES_PATH, LANGUAGES_LIST_PATH),
-		MODEL("model", MODELS_PATH, MODELS_LIST_PATH);
+		COMPONENT("component", components_path, components_list_path),
+		DATAFORMAT("dataformat", dataformats_path, dataformats_list_path),
+		LANGUAGE("language", languages_path, languages_list_path),
+		MODEL("model", models_path, models_list_path);
 
 		private String type;
 		private String path;
@@ -95,14 +96,14 @@ public class CamelCatalogUtils {
 	}
 
 	public CamelCatalogUtils(String path) {
-		COMPONENTS_PATH = path + COMPONENTS_PATH;
-		COMPONENTS_LIST_PATH = path + COMPONENTS_LIST_PATH;
-		DATAFORMATS_PATH = path + DATAFORMATS_PATH;
-		DATAFORMATS_LIST_PATH = path + DATAFORMATS_LIST_PATH;
-		LANGUAGES_PATH = path + LANGUAGES_PATH;
-		LANGUAGES_LIST_PATH = path + LANGUAGES_LIST_PATH;
-		MODELS_PATH = path + MODELS_PATH;
-		MODELS_LIST_PATH = path + MODELS_LIST_PATH;
+		components_path = path + components_path;
+		components_list_path = path + components_list_path;
+		dataformats_path = path + dataformats_path;
+		dataformats_list_path = path + dataformats_list_path;
+		languages_path = path + languages_path;
+		languages_list_path = path + languages_list_path;
+		models_path = path + models_path;
+		models_list_path = path + models_list_path;
 	}
 
 	/**
@@ -110,7 +111,7 @@ public class CamelCatalogUtils {
 	 * 
 	 * @return String
 	 */
-	public List<String> components() {
+	public List<String> getComponents() {
 		return getCatalogComponentsList(CatalogType.COMPONENT);
 	}
 
@@ -119,7 +120,7 @@ public class CamelCatalogUtils {
 	 *
 	 * @return String
 	 */
-	public List<String> dataFormats() {
+	public List<String> getDataFormats() {
 		return getCatalogComponentsList(CatalogType.DATAFORMAT);
 	}
 
@@ -128,7 +129,7 @@ public class CamelCatalogUtils {
 	 *
 	 * @return String
 	 */
-	public List<String> languages() {
+	public List<String> getLanguages() {
 		return getCatalogComponentsList(CatalogType.LANGUAGE);
 	}
 
@@ -137,7 +138,7 @@ public class CamelCatalogUtils {
 	 *
 	 * @return String
 	 */
-	public List<String> models() {
+	public List<String> getModels() {
 		return getCatalogComponentsList(CatalogType.MODEL);
 	}
 
@@ -185,6 +186,31 @@ public class CamelCatalogUtils {
 		return catalogNamePattern(name).matcher(readListFile(CatalogType.MODEL)).find();
 	}
 
+	public boolean isRequired(CatalogType type, String name, String label) {
+		try {
+			return getPropertyJSONObject(type, name, label).getBoolean("required");
+		} catch (JSONException e) {
+			return false;
+		}
+	}
+
+	private JSONObject getPropertyJSONObject(CatalogType type, String name, String label) {
+		JSONObject obj = null;
+		try {
+			obj = getComponentJSONObject(type, name).getJSONObject("properties").getJSONObject(label);
+		} catch (JSONException e) {
+			log.error("Trying to get missing property '" + label + "'");
+		}
+		if (obj == null && type == CatalogType.COMPONENT) {
+			try {
+				obj = getComponentJSONObject(type, name).getJSONObject("componentProperties").getJSONObject(label);
+			} catch (Exception e) {
+				log.error("Trying to get missing property '" + label + "'");
+			}
+		}
+		return obj;
+	}
+
 	/**
 	 * Returns property value for given component name
 	 * 
@@ -192,7 +218,7 @@ public class CamelCatalogUtils {
 	 */
 	public String getPropertytValue(CatalogType type, String name, String property) {
 		try {
-			return new JSONObject(getJsonFileContent(type, name)).getJSONObject(type.type).getString(property);
+			return getComponentJSONObject(type, name).getJSONObject(type.type).getString(property);
 		} catch (Exception e) {
 			log.error("Trying to get missing property '" + property + "'");
 		}

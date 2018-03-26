@@ -12,7 +12,7 @@ package org.jboss.tools.fuse.ui.bot.tests;
 
 import static org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardDeploymentType.STANDALONE;
 import static org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardRuntimeType.KARAF;
-import static org.junit.Assert.fail;
+import static org.hamcrest.CoreMatchers.equalTo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +36,9 @@ import org.jboss.tools.fuse.reddeer.utils.ProjectFactory;
 import org.jboss.tools.fuse.reddeer.view.PaletteViewExt;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ErrorCollector;
 import org.junit.runner.RunWith;
 
 /**
@@ -58,6 +60,9 @@ public class CamelCatalogDefaultTest {
 	private static CamelCatalogUtils catalog;
 
 	private List<String> skip = new ArrayList<>();
+	
+	@Rule
+	public ErrorCollector collector = new ErrorCollector();
 
 	@InjectRequirement
 	private static CamelCatalogRequirement catalogRequirement;
@@ -94,20 +99,8 @@ public class CamelCatalogDefaultTest {
 	public void testComponentPresence() {
 		new CamelEditor(CONTEXT).activate();
 		new PaletteView().open();
-		List<String> missing = new ArrayList<>();
 		for (String component : new PaletteViewExt().getGroupTools("Components")) {
-			if (!isExist(component)) {
-				missing.add(component);
-			}
-		}
-
-		if (!missing.isEmpty()) {
-			StringBuilder builder = new StringBuilder();
-			builder.append("List of missing components:");
-			for (String m : missing) {
-				builder.append("\n").append(m);
-			}
-			fail(builder.toString());
+			collector.checkThat(component, isExist(component), equalTo(true));
 		}
 	}
 

@@ -160,6 +160,8 @@ public class CamelEditor extends GEFEditor {
 		palette.activateTool(component);
 		Point r = getInEditorCoords(route);
 		addCamelComponent(component, r.x + 10, r.y + 50);
+		new WaitWhile(new JobIsRunning(), TimePeriod.LONG);
+		AbstractWait.sleep(TimePeriod.SHORT);
 	}
 
 	/**
