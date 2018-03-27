@@ -28,6 +28,7 @@ import org.eclipse.reddeer.core.matcher.WithTextMatcher;
 import org.eclipse.reddeer.eclipse.condition.ConsoleHasText;
 import org.eclipse.reddeer.eclipse.core.resources.Project;
 import org.eclipse.reddeer.eclipse.core.resources.ProjectItem;
+import org.eclipse.reddeer.eclipse.ui.console.ConsoleView;
 import org.eclipse.reddeer.eclipse.ui.navigator.resources.ProjectExplorer;
 import org.eclipse.reddeer.swt.condition.ShellIsAvailable;
 import org.eclipse.reddeer.swt.impl.button.CheckBox;
@@ -51,6 +52,7 @@ public class CamelProject {
 	public CamelProject(String name) {
 
 		project = new ProjectExplorer().getProject(name);
+		new ConsoleView().open();
 	}
 
 	public void selectProjectItem(String... path) {
