@@ -34,6 +34,9 @@
 		<rd.skipUnfixedIssues>true</rd.skipUnfixedIssues>
 		<skipUITests>true</skipUITests>
 		<skipRequirements>false</skipRequirements>
+		<fuseDeploymentType>OpenShift</fuseDeploymentType>
+		<fuseRuntimeType>SpringBoot</fuseRuntimeType>
+		<fuseCamelVersion>2.18.1.redhat-000021</fuseCamelVersion>	
 	</properties>
 
 	<build>
@@ -101,6 +104,9 @@
 						<maven.repository>${maven.repo}</maven.repository>
 						<staging.repositories>${staging.repos}</staging.repositories>
 						<rd.skipUnfixedIssues>${rd.skipUnfixedIssues}</rd.skipUnfixedIssues>
+						<fuseDeploymentType>${fuseDeploymentType}</fuseDeploymentType>
+						<fuseRuntimeType>${fuseRuntimeType}</fuseRuntimeType>
+						<fuseCamelVersion>${fuseCamelVersion}</fuseCamelVersion>
 					</systemProperties>
 					<dependencies combine.children="append">
 						<!-- Workaround for JBIDE-16161/Eclipse bug 424104 -->

@@ -10,6 +10,8 @@
  ******************************************************************************/
 package org.jboss.tools.fuse.ui.bot.tests.utils;
 
+import java.util.Arrays;
+
 import org.jboss.tools.fuse.reddeer.ProjectType;
 import org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardDeploymentType;
 import org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardRuntimeType;
@@ -76,4 +78,12 @@ public class FuseProjectDefinition {
 	public void setDsl(ProjectType dsl) {
 		this.dsl = dsl;
 	}
+
+	@Override
+	public String toString() {
+		return "FuseProjectDefinition [runtimeType=" + runtimeType + ", deploymentType=" + deploymentType
+				+ ", camelVersion=" + camelVersion + ", template=" + Arrays.toString(template) + "]";
+	}
+
+	
 }
