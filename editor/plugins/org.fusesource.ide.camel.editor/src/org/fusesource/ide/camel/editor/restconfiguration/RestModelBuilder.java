@@ -12,6 +12,7 @@ package org.fusesource.ide.camel.editor.restconfiguration;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -21,35 +22,38 @@ import org.eclipse.core.runtime.SubMonitor;
 import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelCatalogCacheManager;
 import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelModel;
 import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
+import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import org.fusesource.ide.camel.model.service.core.model.RestConfigurationElement;
+import org.fusesource.ide.camel.model.service.core.model.RestElement;
 
 public class RestModelBuilder {
 
 	public Map<String, List<Object>> build(CamelFile cf) {
 		Map<String, List<Object>> model = new HashMap<>();
-		model.put(RestConfigConstants.REST_CONFIGURATION_TAG, new ArrayList<>());
-		model.put(RestConfigConstants.REST_TAG, new ArrayList<>());
-		if (cf != null && cf.getRouteContainer() != null) {
-			Node node = cf.getRouteContainer().getXmlNode();
-			if (node instanceof Element) {
-				fillForTag(model, RestConfigConstants.REST_CONFIGURATION_TAG, (Element) node);
-				fillForTag(model, RestConfigConstants.REST_TAG, (Element) node);
+		model.put(RestConfigurationElement.REST_CONFIGURATION_TAG, new ArrayList<>());
+		model.put(RestElement.REST_TAG, new ArrayList<>());
+		CamelContextElement ctx = null;
+		if (cf.getRouteContainer() instanceof CamelContextElement) {
+			ctx = (CamelContextElement)cf.getRouteContainer();
+		}
+		if (ctx != null && !ctx.getRestConfigurations().isEmpty()) {
+			Iterator<AbstractCamelModelElement> rcIter = ctx.getRestConfigurations().values().iterator();
+			while (rcIter.hasNext()) {
+				AbstractCamelModelElement acme = rcIter.next();
+				model.get(RestConfigurationElement.REST_CONFIGURATION_TAG).add(acme);
+			}
+		}
+		if (ctx != null && !ctx.getRestElements().isEmpty()) {
+			Iterator<AbstractCamelModelElement> reIter = ctx.getRestElements().values().iterator();
+			while (reIter.hasNext()) {
+				AbstractCamelModelElement acme = reIter.next();
+				model.get(RestElement.REST_TAG).add(acme);
+				// then process operations
 			}
 		}
 		return model;
-	}
-
-	private void fillForTag(Map<String, List<Object>> model, String tag, Element element) {
-		NodeList configlist = element.getElementsByTagName(tag);
-		if (configlist != null) {
-			for (int i=0; i < configlist.getLength(); i++) {
-				Element config = (Element) configlist.item(i);
-				model.get(tag).add(config);
-			}
-		}
 	}
 
 	public static Map<String, Eip> getRestModelFromCatalog(IProject project, IProgressMonitor monitor) {
@@ -57,8 +61,8 @@ public class RestModelBuilder {
 		Map<String, Eip> restModel = new HashMap<>();
 		CamelModel catalogModel = CamelCatalogCacheManager.getInstance().getCamelModelForProject(project, subMon.split(1));
 		catalogModel.getEips().stream()
-			.filter( (Eip t) -> t.getTags().contains(RestConfigConstants.REST_CONFIGURATION_TAG) || 
-								t.getTags().contains(RestConfigConstants.REST_TAG) )
+			.filter( (Eip t) -> t.getTags().contains(RestConfigurationElement.REST_CONFIGURATION_TAG) || 
+								t.getTags().contains(RestElement.REST_TAG) )
 			.forEach( (Eip t) -> restModel.put(t.getName(), t) );
 		subMon.setWorkRemaining(0);
 		return restModel;

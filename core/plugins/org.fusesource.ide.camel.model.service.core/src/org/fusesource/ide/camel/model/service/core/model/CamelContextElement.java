@@ -1,5 +1,5 @@
 /******************************************************************************* 
- * Copyright (c) 2015 Red Hat, Inc. 
+ * Copyright (c) 2018 Red Hat, Inc. 
  * Distributed under license by Red Hat, Inc. All rights reserved. 
  * This program is made available under the terms of the 
  * Eclipse Public License v1.0 which accompanies this distribution, 
@@ -37,6 +37,16 @@ public class CamelContextElement extends CamelRouteContainerElement {
 	 * contains the dataformat definitions stored using their ID value
 	 */
 	private Map<String, AbstractCamelModelElement> dataformats = new HashMap<>();
+	
+	/**
+	 * Contains REST configuration elements
+	 */
+	private Map<String, AbstractCamelModelElement> restConfigurations = new HashMap<>();
+	
+	/**
+	 * Contains REST elements
+	 */
+	private Map<String, AbstractCamelModelElement> restElements = new HashMap<>();
 	
 	/**
 	 * 
@@ -275,9 +285,14 @@ public class CamelContextElement extends CamelRouteContainerElement {
 			CamelRouteElement cme = new CamelRouteElement(this, node);
 			cme.initialize();
 			addChildElement(cme);
-		} else if (REST_CONFIGURATION_NODE_NAME.equals(tagNameWithoutPrefix) ||
-				REST_NODE_NAME.equals(tagNameWithoutPrefix)) {
-			// these are handled differently on the REST page in the editor, so let them by
+		} else if (REST_CONFIGURATION_NODE_NAME.equals(tagNameWithoutPrefix)) {
+			RestConfigurationElement cme = new RestConfigurationElement(this, node);
+			cme.initialize();
+			this.restConfigurations.put(cme.getId(), cme);
+		} else if (REST_NODE_NAME.equals(tagNameWithoutPrefix)) {
+			RestElement cme = new RestElement(this, node);
+			cme.initialize();
+			this.restElements.put(cme.getId(), cme);
 		} else {
 			CamelModelServiceCoreActivator.pluginLog().logWarning("Unexpected child element of the context: " + tagNameWithoutPrefix);
 		}
@@ -291,6 +306,12 @@ public class CamelContextElement extends CamelRouteContainerElement {
 		}
 		if (getEndpointDefinitions().containsKey(nodeId)) {
 			result.add(getEndpointDefinitions().get(nodeId));
+		}
+		if (getRestConfigurations().containsKey(nodeId)) {
+			result.add(getRestConfigurations().get(nodeId));
+		}
+		if (getRestElements().containsKey(nodeId)) {
+			result.add(getRestElements().get(nodeId));
 		}
 		return result;
 	}
@@ -313,6 +334,12 @@ public class CamelContextElement extends CamelRouteContainerElement {
 		if (getEndpointDefinitions().containsKey(nodeId)) {
 			return getEndpointDefinitions().get(nodeId);
 		}
+		if (getRestConfigurations().containsKey(nodeId)) {
+			return getRestConfigurations().get(nodeId);
+		}
+		if (getRestElements().containsKey(nodeId)) {
+			return getRestElements().get(nodeId);
+		}
 		return null;
 	}
 
@@ -322,5 +349,145 @@ public class CamelContextElement extends CamelRouteContainerElement {
 	@Override
 	public CamelRouteContainerElement getRouteContainer() {
 		return this;
+	}
+
+	/**
+	 * @return the restConfigurations
+	 */
+	public Map<String, AbstractCamelModelElement> getRestConfigurations() {
+		return this.restConfigurations;
+	}
+	
+	/**
+	 * @param restConfigurations the restConfigurations to set
+	 */
+	public void setRestConfigurations(Map<String, AbstractCamelModelElement> restConfigurations) {
+		this.restConfigurations = restConfigurations;
+	}
+
+	/**
+	 * deletes all rest configuration definitions
+	 */
+	public void clearRestConfigurations() {
+		this.restConfigurations.clear();
+	}
+	
+	/**
+	 * adds a rest configuration
+	 * 
+	 * @param def
+	 */
+	public void addRestConfiguration(AbstractCamelModelElement def) {
+		if (restConfigurations.containsKey(def.getId())) {
+			return;
+		}
+		restConfigurations.put(def.getId(), def);
+		boolean childExists = false;
+		for (int i=0; i<getXmlNode().getChildNodes().getLength(); i++) {
+			if(def.getXmlNode() != null && getXmlNode().getChildNodes().item(i).isEqualNode(def.getXmlNode())) {
+				childExists = true;
+				break;
+			}
+		}
+		if (def.getXmlNode() == null) {
+			Node n = createElement(REST_CONFIGURATION_NODE_NAME, getXmlNode() != null ? getXmlNode().getPrefix() : null);
+			def.setXmlNode(n);
+			def.updateXMLNode();
+		}
+		if (!childExists) {
+			getXmlNode().insertBefore(def.getXmlNode(), getFirstChild(getXmlNode()));
+		}
+	}
+	
+	/**
+	 * removes the rest configuratino from the context
+	 * 
+	 * @param def
+	 */
+	public void removeRestConfiguration(AbstractCamelModelElement def) {
+		if (this.restConfigurations.containsKey(def.getId())) {
+			this.restConfigurations.remove(def.getId());
+			boolean childExists = false;
+			for (int i=0; i<getXmlNode().getChildNodes().getLength(); i++) {
+				if(getXmlNode().getChildNodes().item(i).isEqualNode(def.getXmlNode())) {
+					childExists = true;
+					break;
+				}
+			}
+			if (childExists) {
+				getXmlNode().removeChild(def.getXmlNode());
+			}
+			notifyAboutDeletion(def);
+		}
+	}
+	
+	/**
+	 * @return the restElements
+	 */
+	public Map<String, AbstractCamelModelElement> getRestElements() {
+		return this.restElements;
+	}
+
+	/**
+	 * deletes all rest element definitions
+	 */
+	public void clearRestElements() {
+		this.restElements.clear();
+	}
+	
+	/**
+	 * @param restElements the restElements to set
+	 */
+	public void setRestElements(Map<String, AbstractCamelModelElement> restElements) {
+		this.restElements = restElements;
+	}
+	
+	/**
+	 * adds a rest element
+	 * 
+	 * @param def
+	 */
+	public void addRestElement(AbstractCamelModelElement def) {
+		if (restElements.containsKey(def.getId())) {
+			return;
+		}
+		restElements.put(def.getId(), def);
+		boolean childExists = false;
+		for (int i=0; i<getXmlNode().getChildNodes().getLength(); i++) {
+			if(def.getXmlNode() != null && getXmlNode().getChildNodes().item(i).isEqualNode(def.getXmlNode())) {
+				childExists = true;
+				break;
+			}
+		}
+		if (def.getXmlNode() == null) {
+			Node n = createElement(REST_NODE_NAME, getXmlNode() != null ? getXmlNode().getPrefix() : null);
+			def.setXmlNode(n);
+			def.updateXMLNode();
+		}
+		if (!childExists) {
+			getXmlNode().insertBefore(def.getXmlNode(), getFirstChild(getXmlNode()));
+		}
+	}
+
+	/**
+	 * removes the rest element from the context
+	 * 
+	 * @param def
+	 */
+	public void removeRestElement(AbstractCamelModelElement def) {
+		if (this.restElements.containsKey(def.getId())) {
+			this.restElements.remove(def.getId());
+			boolean childExists = false;
+			for (int i=0; i<getXmlNode().getChildNodes().getLength(); i++) {
+				if(getXmlNode().getChildNodes().item(i).isEqualNode(def.getXmlNode())) {
+					childExists = true;
+					break;
+				}
+			}
+			if (childExists) {
+				getXmlNode().removeChild(def.getXmlNode());
+			}
+			notifyAboutDeletion(def);
+		}
 	}
 }
