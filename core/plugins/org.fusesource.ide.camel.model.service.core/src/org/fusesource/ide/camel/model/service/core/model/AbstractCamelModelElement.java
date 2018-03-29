@@ -1763,6 +1763,12 @@ public abstract class AbstractCamelModelElement {
 			if (ctx.getEndpointDefinitions().containsKey(nodeId)) {
 				return ctx.getEndpointDefinitions().get(nodeId);
 			}
+			if (ctx.getRestConfigurations().containsKey(nodeId)) {
+				return ctx.getRestConfigurations().get(nodeId);
+			}
+			if (ctx.getRestElements().containsKey(nodeId)) {
+				return ctx.getRestElements().get(nodeId);
+			}
 		}
 
 		if (getChildElements() != null) {

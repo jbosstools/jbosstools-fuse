@@ -10,7 +10,7 @@
  ******************************************************************************/
 package org.fusesource.ide.camel.editor.restconfiguration;
 
-import java.util.List;
+import java.util.Iterator;
 import java.util.Map;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -55,9 +55,15 @@ import org.fusesource.ide.camel.editor.CamelEditor;
 import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 import org.fusesource.ide.camel.editor.internal.UIMessages;
 import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
+import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.AbstractRestCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelBasicModelElement;
+import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.camel.model.service.core.model.ICamelModelListener;
+import org.fusesource.ide.camel.model.service.core.model.RestConfigurationElement;
+import org.fusesource.ide.camel.model.service.core.model.RestElement;
+import org.fusesource.ide.camel.model.service.core.model.RestVerbElement;
 import org.fusesource.ide.foundation.core.util.Strings;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -71,7 +77,6 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 	private Composite parent;
 	private ScrolledForm form;
 	private FormToolkit toolkit;
-	private Map<String, List<Object>> model;
 	private ImageRegistry mImageRegistry;	
 	private ListenerList<ISelectionChangedListener> listeners = new ListenerList<>();
 	private Object selection;
@@ -85,6 +90,8 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 	private ListViewer restList;
 	private RestEditorColorManager colorManager = new RestEditorColorManager();
 	private Map<String, Eip> restModel;
+	private CamelFile designEditorModel;
+	private CamelContextElement ctx;
 	
 	/**
 	 *
@@ -134,10 +141,20 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 		gl.horizontalSpacing = 10;
 
 		this.parent.setLayout(gl);
+
+		designEditorModel = parentEditor.getDesignEditor().getModel();
+		if (designEditorModel != null) {
+			designEditorModel.addModelListener(this);
+			
+			if (designEditorModel.getRouteContainer() != null && 
+					designEditorModel.getRouteContainer() instanceof CamelContextElement) {
+				ctx = (CamelContextElement)designEditorModel.getRouteContainer();
+			}		
+		}
+
 		createContents();
 
 		reload();
-		CamelFile designEditorModel = parentEditor.getDesignEditor().getModel();
 		if (designEditorModel != null) {
 			designEditorModel.addModelListener(this);
 		}
@@ -176,6 +193,8 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 
 		form.layout();
 		toolkit.decorateFormHeading(form.getForm());
+		getSite().setSelectionProvider(this);
+
 	}
 	
 	private String getTextForImage(String text) {
@@ -218,15 +237,13 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 	private Object getDataFromSelectedUIElement(Control control) {
 		Node data = null;
 		if (!control.isDisposed()) {
-			
-			for (String key : restModel.keySet()) {
-				Object oData = control.getData(key);
-				if (oData instanceof Node) {
-					data = (Node) oData;
-					break;
-				}
+			Object oData = control.getData(RestConfigConstants.REST_VERB_FLAG);
+			if (oData instanceof RestVerbElement) {
+				return oData;
 			}
-
+			if (oData instanceof Node) {
+				data = (Node) oData;
+			}
 			if (data != null) {
 				return new CamelBasicModelElement(null, data);
 			}
@@ -326,24 +343,20 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 		restList.setContentProvider(ArrayContentProvider.getInstance());
 		restList.setLabelProvider(new RestLabelProvider());
 		restList.addSelectionChangedListener(event -> {
-			if (event.getStructuredSelection().getFirstElement() instanceof Element) {
+			if (event.getStructuredSelection().getFirstElement() instanceof RestElement) {
 				clearUI();
 				
-				Element restElement = (Element) event.getStructuredSelection().getFirstElement();
-				// TODO call setSelection(new StructuredSelection(new CamelBasicModelElement(null, restElement)))
-				// in next iteration
-				
-				if (restElement.getChildNodes().getLength() > 0) {
-					for (int i = 0; i < restElement.getChildNodes().getLength(); i++) {
-						Node child = restElement.getChildNodes().item(i);
-						if (child instanceof Element) {
-							Element elChild = (Element) child;
-							String verbUri = elChild.getAttribute("uri"); //$NON-NLS-1$
-							Composite operation = createVerbComposite(restOpsSection, elChild.getTagName(), verbUri);
-							operation.setData(RestConfigConstants.REST_VERB_FLAG, elChild);
-						}
-					}
+				RestElement acme = (RestElement) event.getStructuredSelection().getFirstElement();
+				Iterator<AbstractCamelModelElement> iter = acme.getRestOperations().values().iterator();
+				while (iter.hasNext()) {
+					RestVerbElement rve = (RestVerbElement) iter.next();
+					Element elChild = (Element) rve.getXmlNode();
+					String verbUri = elChild.getAttribute("uri"); //$NON-NLS-1$
+					Composite operation = createVerbComposite(restOpsSection, elChild.getTagName(), verbUri);
+					operation.setData(RestConfigConstants.REST_VERB_FLAG, rve);
 				}
+
+				setSelection(new StructuredSelection(acme));
 				restOpsSection.layout();
 			}
 		});
@@ -378,8 +391,9 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 
 		@Override
 		public String getText(Object element) {
-			if (element instanceof Element) {
-				Element restElement = (Element) element;
+			if (element instanceof AbstractCamelModelElement) {
+				AbstractCamelModelElement acme = (AbstractCamelModelElement) element;
+				Element restElement = (Element) acme.getXmlNode();
 				if (getAttrValue(restElement, "path") != null) { //$NON-NLS-1$
 					return getAttrValue(restElement, "path"); //$NON-NLS-1$
 				}
@@ -447,11 +461,6 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 		return client;
 	}
 
-	private void buildModel() {
-		CamelFile cf = parentEditor.getDesignEditor().getModel();
-		model = new RestModelBuilder().build(cf);
-	}
-
 	private void clearUI() {
 		if (restOpsSection != null && !restOpsSection.isDisposed()) {
 			Control[] children = restOpsSection.getChildren();
@@ -480,8 +489,9 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 		contextPathText.setText("");
 		hostText.setText("");
 		
-		if (!getModel().get(RestConfigConstants.REST_CONFIGURATION_TAG).isEmpty()) {
-			Element restConfig = (Element) getModel().get(RestConfigConstants.REST_CONFIGURATION_TAG).get(0);
+		if (!ctx.getRestConfigurations().isEmpty()) {
+			RestConfigurationElement rce = (RestConfigurationElement) ctx.getRestConfigurations().values().iterator().next();
+			Element restConfig = (Element) rce.getXmlNode();
 			
 			String component = ""; //$NON-NLS-1$
 			if (getAttrValue(restConfig, "component") != null) { //$NON-NLS-1$
@@ -515,27 +525,19 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 	
 	private void refreshRestSection() {
 		restList.setInput(null);
-		if (!getModel().get(RestConfigConstants.REST_TAG).isEmpty()) {
-			restList.setInput(getModel().get(RestConfigConstants.REST_TAG));
+		if (!ctx.getRestElements().isEmpty()) {
+			restList.setInput(ctx.getRestElements().values());
 			restList.setSelection(new StructuredSelection(restList.getElementAt(0)), true);
 		}
 	}	
 	
 	public void reload() {
-		buildModel();
 		refreshRestConfigurationSection();
 		clearUI();
 		refreshRestSection();
 		form.layout(true);
 		toolkit.decorateFormHeading(form.getForm());
 		setSelection(StructuredSelection.EMPTY);
-	}
-
-	/**
-	 * @return the model
-	 */
-	public Map<String, List<Object>> getModel() {
-		return model;
 	}
 
 	@Override
@@ -545,8 +547,9 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 
 	@Override
 	public ISelection getSelection() {
-		// TODO return selection if not null return new StructuredSelection(selection)
-		// in next iteration
+		if (selection != null) {
+			return new StructuredSelection(selection);
+		}
 		return StructuredSelection.EMPTY;
 	}
 
@@ -571,13 +574,13 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 			selectedControl = newControl;
 			selection = getDataFromSelectedUIElement(newControl);
 			if (selection != null) {
-				// TODO call setSelection (new StructuredSelection(selection) ) in next iteration
+				setSelection(new StructuredSelection(selection));
 			}
 		}
 
 		private void updateSelectionDisplay(Control oldControl, Control newControl) {
 			if (oldControl != null && getDataFromSelectedUIElement(oldControl) != null) {
-				CamelBasicModelElement node = (CamelBasicModelElement) getDataFromSelectedUIElement(oldControl);
+				AbstractRestCamelModelElement node = (AbstractRestCamelModelElement) getDataFromSelectedUIElement(oldControl);
 				Color background = colorManager.getBackgroundColorForType(""); //$NON-NLS-1$
 				if (node != null && node.getXmlNode() != null) {
 					background = colorManager.getBackgroundColorForType(node.getXmlNode().getNodeName());

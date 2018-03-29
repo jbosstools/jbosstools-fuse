@@ -103,6 +103,18 @@
          <propertyTab
                afterTab="DefaultCamelPropertiesTab"
                category="FuseTooling"
+               id="AdvancedRestPropertiesTab"
+               indented="false"
+               label="REST"/> 
+         <propertyTab
+               afterTab="AdvancedRestPropertiesTab"
+               category="FuseTooling"
+               id="AdvancedRestVerbPropertiesTab"
+               indented="false"
+               label="REST Operation"/> 
+         <propertyTab
+               afterTab="DefaultCamelPropertiesTab"
+               category="FuseTooling"
                id="DocumentationTab"
                indented="false"
                label="%integration.properties.tab.documentation.title"/> 
@@ -130,6 +142,20 @@
                id="AdvancedBeanPropertiesSection"
                tab="AdvancedBeanPropertiesTab">
             <input type="org.fusesource.ide.camel.model.service.core.model.CamelBean"/>
+         </propertySection>
+         <propertySection
+               class="org.fusesource.ide.camel.editor.properties.rest.RestElementPropertiesSection"
+               filter="org.fusesource.ide.camel.editor.properties.rest.RestPropertiesFilter"
+               id="AdvancedRestPropertiesSection"
+               tab="AdvancedRestPropertiesTab">
+            <input type="org.fusesource.ide.camel.model.service.core.model.RestElement"/>
+         </propertySection>
+         <propertySection
+               class="org.fusesource.ide.camel.editor.properties.rest.RestVerbElementPropertiesSection"
+               filter="org.fusesource.ide.camel.editor.properties.rest.RestVerbPropertiesFilter"
+               id="AdvancedRestVerbPropertiesSection"
+               tab="AdvancedRestVerbPropertiesTab">
+            <input type="org.fusesource.ide.camel.model.service.core.model.RestVerbElement"/>
          </propertySection>
          <propertySection
                afterSection="DefaultEndpointPropertiesSection"

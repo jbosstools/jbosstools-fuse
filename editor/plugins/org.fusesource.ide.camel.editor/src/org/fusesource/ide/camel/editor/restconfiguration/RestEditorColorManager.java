@@ -16,6 +16,7 @@ import java.util.Map;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;
+import org.fusesource.ide.camel.model.service.core.model.RestVerbElement;
 
 public class RestEditorColorManager {
 	
@@ -35,15 +36,15 @@ public class RestEditorColorManager {
 		colorMap.put(RestConfigConstants.REST_COLOR_DARK_GREEN, new Color(display, 65, 205, 142));
 		colorMap.put(RestConfigConstants.REST_COLOR_DARK_RED, new Color(display, 252, 60, 55));
 		
-		verbToBackgroundColorMap.put(RestConfigConstants.GET_VERB,    RestConfigConstants.REST_COLOR_LIGHT_BLUE);
-		verbToBackgroundColorMap.put(RestConfigConstants.PUT_VERB,    RestConfigConstants.REST_COLOR_LIGHT_GREEN);
-		verbToBackgroundColorMap.put(RestConfigConstants.POST_VERB,   RestConfigConstants.REST_COLOR_LIGHT_ORANGE);
-		verbToBackgroundColorMap.put(RestConfigConstants.DELETE_VERB, RestConfigConstants.REST_COLOR_LIGHT_RED);
+		verbToBackgroundColorMap.put(RestVerbElement.GET_VERB,    RestConfigConstants.REST_COLOR_LIGHT_BLUE);
+		verbToBackgroundColorMap.put(RestVerbElement.PUT_VERB,    RestConfigConstants.REST_COLOR_LIGHT_GREEN);
+		verbToBackgroundColorMap.put(RestVerbElement.POST_VERB,   RestConfigConstants.REST_COLOR_LIGHT_ORANGE);
+		verbToBackgroundColorMap.put(RestVerbElement.DELETE_VERB, RestConfigConstants.REST_COLOR_LIGHT_RED);
 		
-		verbToImageColorMap.put(RestConfigConstants.GET_VERB,    RestConfigConstants.REST_COLOR_DARK_BLUE);
-		verbToImageColorMap.put(RestConfigConstants.PUT_VERB,    RestConfigConstants.REST_COLOR_DARK_GREEN);
-		verbToImageColorMap.put(RestConfigConstants.POST_VERB,   RestConfigConstants.REST_COLOR_DARK_ORANGE);
-		verbToImageColorMap.put(RestConfigConstants.DELETE_VERB, RestConfigConstants.REST_COLOR_DARK_RED);
+		verbToImageColorMap.put(RestVerbElement.GET_VERB,    RestConfigConstants.REST_COLOR_DARK_BLUE);
+		verbToImageColorMap.put(RestVerbElement.PUT_VERB,    RestConfigConstants.REST_COLOR_DARK_GREEN);
+		verbToImageColorMap.put(RestVerbElement.POST_VERB,   RestConfigConstants.REST_COLOR_DARK_ORANGE);
+		verbToImageColorMap.put(RestVerbElement.DELETE_VERB, RestConfigConstants.REST_COLOR_DARK_RED);
 		
 	}
 	
@@ -52,7 +53,7 @@ public class RestEditorColorManager {
 	}		
 
 	public Color getForegroundColorForType(String tag) {
-		if (RestConfigConstants.PUT_VERB.equals(tag)) {
+		if (RestVerbElement.PUT_VERB.equals(tag)) {
 			return Display.getCurrent().getSystemColor(SWT.COLOR_BLACK);
 		} else {
 			return  Display.getCurrent().getSystemColor(SWT.COLOR_WHITE);
