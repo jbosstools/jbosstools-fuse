@@ -439,7 +439,9 @@ public class SyndesisExtensionProjectWizardExtensionDetailsPage extends WizardPa
 		
 		private void updateSyndesisValidation(String syndesisVersion, SyndesisVersionChecker versionChecker) {
 			boolean valid = versionChecker.isValid();
-			if (!valid) {
+			if (versionChecker.isCanceled()) {
+				setErrorMessage(null);
+			} else if (!valid) {
 				setMessage(null);
 				setErrorMessage(NLS.bind(Messages.newProjectWizardExtensionDetailsPageErrorInvalidSyndesisVersion, syndesisVersion));
 			} else {

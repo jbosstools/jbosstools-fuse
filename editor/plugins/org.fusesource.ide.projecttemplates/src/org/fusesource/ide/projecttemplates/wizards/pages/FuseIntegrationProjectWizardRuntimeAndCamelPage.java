@@ -555,11 +555,13 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 				}
 			}
 			activeCamelVersionValidation = !versionChecker.isDone();
-			updateCamelValidation(camelVersion, versionChecker.isValid());
+			updateCamelValidation(camelVersion, versionChecker.isValid(), versionChecker.isCanceled());
 		}
 		
-		private void updateCamelValidation(String camelVersion, boolean valid) {
-			if (!valid) {
+		private void updateCamelValidation(String camelVersion, boolean valid, boolean canceled) {
+			if (canceled) {
+				setErrorMessage(null);
+			} else if (!valid) {
 				setMessage(null);
 				setErrorMessage(NLS.bind(Messages.newProjectWizardRuntimePageCamelVersionInvalidWarning, camelVersion));
 			} else {
