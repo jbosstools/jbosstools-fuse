@@ -52,3 +52,4 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-Vendor: %Bundle-Vendor
 Eclipse-RegisterBuddy: org.apache.log4j
 Eclipse-BundleShape: dir
+Automatic-Module-Name: org.jboss.tools.fuse.ui.bot.tests

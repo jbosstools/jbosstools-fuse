@@ -34,11 +34,11 @@ import org.jboss.tools.fuse.reddeer.editor.CamelEditor;
 import org.jboss.tools.fuse.reddeer.editor.DataTransformationEditor;
 import org.jboss.tools.fuse.reddeer.perspectives.FuseIntegrationPerspective;
 import org.jboss.tools.fuse.reddeer.projectexplorer.CamelProject;
+import org.jboss.tools.fuse.reddeer.utils.ProjectFactory;
 import org.jboss.tools.fuse.reddeer.wizard.NewFuseTransformationTestWizard;
 import org.jboss.tools.fuse.reddeer.wizard.NewFuseTransformationWizard;
 import org.jboss.tools.fuse.reddeer.wizard.NewFuseTransformationWizard.TransformationType;
 import org.jboss.tools.fuse.reddeer.wizard.NewFuseTransformationWizard.TypeDefinition;
-import org.jboss.tools.fuse.ui.bot.tests.utils.ProjectFactory;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 

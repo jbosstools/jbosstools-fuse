@@ -8,7 +8,7 @@
  * Contributors: 
  * Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
-package org.jboss.tools.fuse.ui.bot.tests.utils;
+package org.jboss.tools.fuse.reddeer.utils;
 
 import static org.junit.Assert.assertTrue;
 

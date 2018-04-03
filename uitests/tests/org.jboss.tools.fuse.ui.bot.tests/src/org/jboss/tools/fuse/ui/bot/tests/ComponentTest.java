@@ -36,7 +36,7 @@ import org.jboss.tools.fuse.reddeer.LogGrapper;
 import org.jboss.tools.fuse.reddeer.component.CamelComponent;
 import org.jboss.tools.fuse.reddeer.component.CamelComponents;
 import org.jboss.tools.fuse.reddeer.editor.CamelEditor;
-import org.jboss.tools.fuse.ui.bot.tests.utils.ProjectFactory;
+import org.jboss.tools.fuse.reddeer.utils.ProjectFactory;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;

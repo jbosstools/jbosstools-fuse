@@ -27,7 +27,7 @@ import org.eclipse.reddeer.workbench.handler.WorkbenchShellHandler;
 import org.eclipse.reddeer.workbench.impl.shell.WorkbenchShell;
 import org.jboss.tools.fuse.reddeer.preference.ConsolePreferenceUtil;
 import org.jboss.tools.fuse.reddeer.utils.FuseServerManipulator;
-import org.jboss.tools.fuse.ui.bot.tests.utils.ProjectFactory;
+import org.jboss.tools.fuse.reddeer.utils.ProjectFactory;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;

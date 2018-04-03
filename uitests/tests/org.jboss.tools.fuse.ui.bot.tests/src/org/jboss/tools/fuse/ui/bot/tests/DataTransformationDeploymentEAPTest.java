@@ -37,7 +37,7 @@ import org.jboss.tools.fuse.reddeer.requirement.FuseRequirement.Fuse;
 import org.jboss.tools.fuse.reddeer.runtime.ServerTypeMatcher;
 import org.jboss.tools.fuse.reddeer.runtime.impl.ServerEAP;
 import org.jboss.tools.fuse.reddeer.utils.FuseServerManipulator;
-import org.jboss.tools.fuse.ui.bot.tests.utils.ProjectFactory;
+import org.jboss.tools.fuse.reddeer.utils.ProjectFactory;
 import org.junit.AfterClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
