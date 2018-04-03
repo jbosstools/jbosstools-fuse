@@ -11,6 +11,7 @@
 package org.fusesource.ide.foundation.ui.io;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.Path;
@@ -29,10 +30,13 @@ public class CamelXMLEditorInputFactory implements IElementFactory {
 	public IAdaptable createElement(IMemento memento) {
 		// get file path
 		final String filePath = memento.getString(CamelXMLEditorInput.KEY_CONTEXT_FILE);
-		if (filePath == null) {
-			return null;
+		if (filePath != null) {
+			final String containerId = memento.getString(CamelXMLEditorInput.KEY_SELECTED_CONTAINER_ID);
+			IResource res = ResourcesPlugin.getWorkspace().getRoot().findMember(new Path(filePath));
+			if (res != null) {
+				return new CamelXMLEditorInput(res.getAdapter(IFile.class), containerId);
+			}
 		}
-		final String containerId = memento.getString(CamelXMLEditorInput.KEY_SELECTED_CONTAINER_ID);
-		return new CamelXMLEditorInput(ResourcesPlugin.getWorkspace().getRoot().findMember(new Path(filePath)).getAdapter(IFile.class), containerId);
+		return null;
 	}
 }

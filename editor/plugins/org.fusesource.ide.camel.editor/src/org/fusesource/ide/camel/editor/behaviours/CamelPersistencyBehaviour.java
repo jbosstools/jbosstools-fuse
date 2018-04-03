@@ -60,7 +60,7 @@ public class CamelPersistencyBehaviour  extends DefaultPersistencyBehavior {
         this.camelFile = editor.getModel();
         
         // name the editor tab correctly
-        this.editor.getParent().onFileLoading(camelFile.getResource().getName());
+        this.editor.getParent().onFileLoading();
         
         final CamelRouteContainerElement camelContext = camelFile.getRouteContainer();
 		if (camelContext != null) {
