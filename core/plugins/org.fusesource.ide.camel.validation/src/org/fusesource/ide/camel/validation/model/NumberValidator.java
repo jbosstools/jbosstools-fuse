@@ -18,6 +18,7 @@ import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.fusesource.ide.camel.model.service.core.util.CamelComponentUtils;
 import org.fusesource.ide.camel.model.service.core.util.PropertiesUtils;
 import org.fusesource.ide.camel.validation.l10n.Messages;
+import org.fusesource.ide.foundation.core.util.CamelPlaceHolderUtil;
 
 /**
  * @author Aurelien Pupier
@@ -37,7 +38,7 @@ public class NumberValidator implements IValidator {
 	@Override
 	public IStatus validate(Object value) {
 		if (isNonEmpty(value)
-				&& !isPlaceHolder(value)
+				&& !new CamelPlaceHolderUtil().isPlaceHolder(value)
 				&& (parameter == null || CamelComponentUtils.isNumberProperty(parameter))) {
 			try {
 				PropertiesUtils.validateDuration(value.toString());
@@ -45,17 +46,11 @@ public class NumberValidator implements IValidator {
 				if (parameter != null) {
 					return ValidationStatus.error(NLS.bind(Messages.NumberValidator_messageError, parameter.getName()), ex);
 				} else {
-					return ValidationStatus.error("Invalid numeric value");
+					return ValidationStatus.error(Messages.numberValidatorMessageErrorWithoutArgument);
 				}
 			}
 		}
 		return ValidationStatus.ok();
-	}
-
-	private boolean isPlaceHolder(Object value) {
-		return value != null && value instanceof String
-				&& ((String) value).startsWith("{{")
-				&& ((String) value).endsWith("}}");
 	}
 
 	protected boolean isNonEmpty(Object value) {
