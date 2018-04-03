@@ -8,7 +8,7 @@
  * Contributors: 
  * Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
-package org.jboss.tools.fuse.ui.bot.tests.utils;
+package org.jboss.tools.fuse.reddeer.utils;
 
 import static org.jboss.tools.fuse.reddeer.ProjectTemplate.SPRINGBOOT;
 import static org.jboss.tools.fuse.reddeer.ProjectType.BLUEPRINT;

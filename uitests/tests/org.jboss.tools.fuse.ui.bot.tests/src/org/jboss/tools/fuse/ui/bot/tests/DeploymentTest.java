@@ -39,7 +39,7 @@ import org.jboss.tools.fuse.reddeer.runtime.impl.ServerEAP;
 import org.jboss.tools.fuse.reddeer.runtime.impl.ServerFuse;
 import org.jboss.tools.fuse.reddeer.utils.FuseServerManipulator;
 import org.jboss.tools.fuse.reddeer.utils.FuseShellSSH;
-import org.jboss.tools.fuse.ui.bot.tests.utils.ProjectFactory;
+import org.jboss.tools.fuse.reddeer.utils.ProjectFactory;
 import org.junit.After;
 import org.junit.BeforeClass;
 import org.junit.Test;

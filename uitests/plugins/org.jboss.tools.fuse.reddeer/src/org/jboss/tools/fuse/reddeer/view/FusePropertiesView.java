@@ -17,7 +17,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.reddeer.common.condition.AbstractWaitCondition;
 import org.eclipse.reddeer.common.util.Display;
 import org.eclipse.reddeer.eclipse.ui.views.properties.PropertySheet;
 import org.eclipse.reddeer.eclipse.ui.views.properties.TabbedPropertyList;
@@ -353,33 +352,4 @@ public class FusePropertiesView extends PropertySheet {
 
 		return m;
 	}
-
-	private class AnotherTabsRendered extends AbstractWaitCondition {
-
-		private List<String> old;
-
-		public AnotherTabsRendered(List<String> old) {
-			this.old = old;
-		}
-
-		@Override
-		public boolean test() {
-			List<String> actual = new ArrayList<>();
-
-			try {
-				actual = new TabbedPropertyList().getTabs();
-			} catch (Exception ex) {
-				// probably not rendered yet
-			}
-
-			return !actual.equals(old);
-		}
-
-		@Override
-		public String description() {
-			return "Wait for tabs of focused element to be rendered";
-		}
-
-	}
-
 }

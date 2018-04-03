@@ -99,7 +99,7 @@ public class TransformationDragAndDropManager {
 		return new DefaultTableItem(name);
 	}
 
-	private Point getCoords(Widget item) {
+	private Point getCoords(Widget<?> item) {
 
 		if (item instanceof TreeItem) {
 			TreeItem temp = (TreeItem) item;
