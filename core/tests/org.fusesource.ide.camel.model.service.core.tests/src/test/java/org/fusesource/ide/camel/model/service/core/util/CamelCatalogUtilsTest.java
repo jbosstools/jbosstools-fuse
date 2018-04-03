@@ -36,6 +36,8 @@ public class CamelCatalogUtilsTest {
 		CamelCatalogUtils.CAMEL_VERSION_2_FUSE_FIS_BOM_MAPPING.put("specificFISCamelVersionForTest", "specificFISBomVersionForTest");
 		return Arrays.asList(new Object[][] {
 			{ "2.15.1.redhat-621186", FuseBomFilter.BOM_FUSE_6, "6.2.1.redhat-186" },
+			{ "2.15.1", FuseBomFilter.BOM_FUSE_6, CamelCatalogUtils.getLatest621BomVersion() },
+			{ "2.17.0", FuseBomFilter.BOM_FUSE_6, CamelCatalogUtils.getLatest630BomVersion() },
 			{ CamelForFuse6ToBomMapper.FUSE_63_R5_CAMEL_VERSION, FuseBomFilter.BOM_FUSE_6, CamelForFuse6ToBomMapper.FUSE_63_R5_BOM_VERSION },
 			{ CamelForFuse6ToBomMapper.FUSE_63_R4_CAMEL_VERSION, FuseBomFilter.BOM_FUSE_6, CamelForFuse6ToBomMapper.FUSE_63_R4_BOM_VERSION },
 			{ CamelForFIS20ToBomMapper.FIS_20_R3_CAMEL_VERSION, FuseBomFilter.BOM_FUSE_FIS, "2.2.170.redhat-000019" },
