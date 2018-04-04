@@ -1,0 +1,38 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>Ribbon Component</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><link rel="home" href="index.html" title="Red Hat Fuse Tooling for Eclipse"><link rel="up" href="IDU-Components.html" title="Part&nbsp;V.&nbsp;Apache Camel Component Reference"><link rel="prev" href="restlet-component.html" title="Restlet Component"><link rel="next" href="rmi-component.html" title="RMI Component"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h2 class="title"><a name="_ribbon_component"></a>Ribbon Component</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="_ribbon_component.html#_configuration_4">Configuration</a></span></dt><dt><span class="section"><a href="_ribbon_component.html#_see_also_109">See Also</a></span></dt></dl></div><p><span class="strong"><strong>Available as of Camel version 2.18</strong></span></p><p>The ribbon component provides use of Netflix Ribbon for client side load balancing.</p><p>Maven users will need to add the following dependency to their <code class="literal">pom.xml</code>
+for this component:</p><pre class="programlisting"><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;dependency&gt;</strong>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;groupId&gt;</strong>org.apache.camel<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/groupId&gt;</strong>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;artifactId&gt;</strong>camel-ribbon<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/artifactId&gt;</strong>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;version&gt;</strong>x.x.x<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/version&gt;</strong>
+    <em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">&lt;!-- use the same version as your Camel core version --&gt;</em>
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/dependency&gt;</strong></pre><p>This component helps applying load balancing feature at the client side when using <a class="link" href="http://camel.apache.org/servicecall-eip.html" target="_top">ServiceCall EIP</a>.</p><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_configuration_4"></a>Configuration</h2></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p class="simpara"><span class="strong"><strong>Programmatic</strong></span></p><pre class="programlisting">RibbonConfiguration configuration = <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">new</strong> RibbonConfiguration();
+configuration.addProperties(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"ServerListRefreshInterval"</em></strong>, <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"250"</em></strong>);
+
+RibbonLoadBalancer loadBalancer = <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">new</strong> RibbonLoadBalancer(configuration);
+
+from(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"direct:start"</em></strong>)
+    .serviceCall()
+        .name(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"myService"</em></strong>)
+        .loadBalancer(loadBalancer)
+        .consulServiceDiscovery()
+        .end()
+    .to(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"mock:result"</em></strong>);</pre></li><li class="listitem"><p class="simpara"><span class="strong"><strong>Spring Boot</strong></span></p><p><b>application.properties.&nbsp;</b>
+</p><pre class="programlisting">camel.cloud.ribbon.properties[ServerListRefreshInterval] = 250</pre><p>
+</p><p><b>routes.&nbsp;</b>
+</p><pre class="programlisting">from(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"direct:start"</em></strong>)
+    .serviceCall()
+        .name(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"myService"</em></strong>)
+        .ribbonLoadBalancer()
+        .consulServiceDiscovery()
+        .end()
+    .to(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"mock:result"</em></strong>);</pre><p>
+</p></li><li class="listitem"><p class="simpara"><span class="strong"><strong>XML</strong></span></p><pre class="programlisting"><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;route&gt;</strong>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;from</strong> <span xmlns="http://www.w3.org/1999/xhtml" class="hl-attribute" style="color: #F5844C">uri</span>=<span xmlns="http://www.w3.org/1999/xhtml" class="hl-value" style="color: #993300">"direct:start"</span><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">/&gt;</strong>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;serviceCall</strong> <span xmlns="http://www.w3.org/1999/xhtml" class="hl-attribute" style="color: #F5844C">name</span>=<span xmlns="http://www.w3.org/1999/xhtml" class="hl-value" style="color: #993300">"myService"</span><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&gt;</strong>
+        <em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">&lt;!-- enable ribbon load balancer --&gt;</em>
+        <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;ribbonLoadBalancer&gt;</strong>
+            <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;properties</strong> <span xmlns="http://www.w3.org/1999/xhtml" class="hl-attribute" style="color: #F5844C">key</span>=<span xmlns="http://www.w3.org/1999/xhtml" class="hl-value" style="color: #993300">"ServerListRefreshInterval"</span> <span xmlns="http://www.w3.org/1999/xhtml" class="hl-attribute" style="color: #F5844C">value</span>=<span xmlns="http://www.w3.org/1999/xhtml" class="hl-value" style="color: #993300">"250"</span><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">/&gt;</strong>
+        <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/ribbonLoadBalancer&gt;</strong>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/serviceCall&gt;</strong>
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/route&gt;</strong></pre></li></ul></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_see_also_109"></a>See Also</h2></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><a class="link" href="http://camel.apache.org/servicecall-eip.html" target="_top">ServiceCall EIP</a></li></ul></div></div></div></body></html>

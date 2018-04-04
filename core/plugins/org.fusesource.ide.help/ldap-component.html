@@ -1,0 +1,271 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>LDAP Component</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><link rel="home" href="index.html" title="Red Hat Fuse Tooling for Eclipse"><link rel="up" href="IDU-Components.html" title="Part&nbsp;V.&nbsp;Apache Camel Component Reference"><link rel="prev" href="language-component.html" title="Language Component"><link rel="next" href="linkedin-component.html" title="Linkedin Component"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h2 class="title"><a name="ldap-component"></a>LDAP Component</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="ldap-component.html#_uri_format_115">URI format</a></span></dt><dt><span class="section"><a href="ldap-component.html#_options_90">Options</a></span></dt><dt><span class="section"><a href="ldap-component.html#_result_3">Result</a></span></dt><dt><span class="section"><a href="ldap-component.html#_dircontext">DirContext</a></span></dt><dt><span class="section"><a href="ldap-component.html#_samples_25">Samples</a></span></dt><dt><span class="section"><a href="ldap-component.html#_configuring_ssl">Configuring SSL</a></span></dt><dt><span class="section"><a href="ldap-component.html#_see_also_74">See Also</a></span></dt><dt><span class="section"><a href="ldap-component.html#LevelDB-LevelDB">LevelDB</a></span></dt></dl></div><p><span class="strong"><strong>Available as of Camel version 1.5</strong></span></p><p>The <span class="strong"><strong>ldap</strong></span> component allows you to perform searches in LDAP servers
+using filters as the message payload.
+ This component uses standard JNDI (<code class="literal">javax.naming</code> package) to access
+the server.</p><p>Maven users will need to add the following dependency to their <code class="literal">pom.xml</code>
+for this component:</p><pre class="programlisting"><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;dependency&gt;</strong>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;groupId&gt;</strong>org.apache.camel<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/groupId&gt;</strong>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;artifactId&gt;</strong>camel-ldap<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/artifactId&gt;</strong>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;version&gt;</strong>x.x.x<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/version&gt;</strong>
+    <em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">&lt;!-- use the same version as your Camel core version --&gt;</em>
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/dependency&gt;</strong></pre><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_uri_format_115"></a>URI format</h2></div></div></div><pre class="programlisting">ldap:ldapServerBean[?options]</pre><p>The <span class="emphasis"><em>ldapServerBean</em></span> portion of the URI refers to a
+<a class="link" href="http://java.sun.com/j2se/1.4.2/docs/api/javax/naming/directory/DirContext.html" target="_top">DirContext</a>
+bean in the registry. The LDAP component only supports producer
+endpoints, which means that an <code class="literal">ldap</code> URI cannot appear in the <code class="literal">from</code> at
+the start of a route.</p><p>You can append query options to the URI in the following format,
+<code class="literal">?option=value&amp;option=value&amp;&#8230;&#8203;</code></p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_options_90"></a>Options</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="ldap-component.html#_path_parameters_1_parameters_117">Path Parameters (1 parameters):</a></span></dt><dt><span class="section"><a href="ldap-component.html#_query_parameters_5_parameters_11">Query Parameters (5 parameters):</a></span></dt></dl></div><p>The LDAP component has no options.</p><p>The LDAP endpoint is configured using URI syntax:</p><pre class="screen">ldap:dirContextName</pre><p>with the following path and query parameters:</p><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="_path_parameters_1_parameters_117"></a>Path Parameters (1 parameters):</h3></div></div></div><div class="informaltable"><table border="1" width="100%"><colgroup><col width="19%" class="col_1"><col width="51%" class="col_2"><col width="10%" class="col_3"><col width="20%" class="col_4"></colgroup><thead><tr><th align="left" valign="top">Name</th><th align="left" valign="top">Description</th><th align="center" valign="top">Default</th><th align="left" valign="top">Type</th></tr></thead><tbody><tr><td align="left" valign="top"><p><span class="strong"><strong>dirContextName</strong></span></p></td><td align="left" valign="top"><p><span class="strong"><strong>Required</strong></span> Name of either a javax.naming.directory.DirContext, or java.util.Hashtable, or Map bean to lookup in the registry. If the bean is either a Hashtable or Map then a new javax.naming.directory.DirContext instance is created for each use. If the bean is a javax.naming.directory.DirContext then the bean is used as given. The latter may not be possible in all situations where the javax.naming.directory.DirContext must not be shared, and in those situations it can be better to use java.util.Hashtable or Map instead.</p></td><td align="center" valign="top">&nbsp;</td><td align="left" valign="top"><p>String</p></td></tr></tbody></table></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="_query_parameters_5_parameters_11"></a>Query Parameters (5 parameters):</h3></div></div></div><div class="informaltable"><table border="1" width="100%"><colgroup><col width="19%" class="col_1"><col width="51%" class="col_2"><col width="10%" class="col_3"><col width="20%" class="col_4"></colgroup><thead><tr><th align="left" valign="top">Name</th><th align="left" valign="top">Description</th><th align="center" valign="top">Default</th><th align="left" valign="top">Type</th></tr></thead><tbody><tr><td align="left" valign="top"><p><span class="strong"><strong>base</strong></span> (producer)</p></td><td align="left" valign="top"><p>The base DN for searches.</p></td><td align="center" valign="top"><p>ou=system</p></td><td align="left" valign="top"><p>String</p></td></tr><tr><td align="left" valign="top"><p><span class="strong"><strong>pageSize</strong></span> (producer)</p></td><td align="left" valign="top"><p>When specified the ldap module uses paging to retrieve all results (most LDAP Servers throw an exception when trying to retrieve more than 1000 entries in one query). To be able to use this a LdapContext (subclass of DirContext) has to be passed in as ldapServerBean (otherwise an exception is thrown)</p></td><td align="center" valign="top">&nbsp;</td><td align="left" valign="top"><p>Integer</p></td></tr><tr><td align="left" valign="top"><p><span class="strong"><strong>returnedAttributes</strong></span> (producer)</p></td><td align="left" valign="top"><p>Comma-separated list of attributes that should be set in each entry of the result</p></td><td align="center" valign="top">&nbsp;</td><td align="left" valign="top"><p>String</p></td></tr><tr><td align="left" valign="top"><p><span class="strong"><strong>scope</strong></span> (producer)</p></td><td align="left" valign="top"><p>Specifies how deeply to search the tree of entries, starting at the base DN.</p></td><td align="center" valign="top"><p>subtree</p></td><td align="left" valign="top"><p>String</p></td></tr><tr><td align="left" valign="top"><p><span class="strong"><strong>synchronous</strong></span> (advanced)</p></td><td align="left" valign="top"><p>Sets whether synchronous processing should be strictly used, or Camel is allowed to use asynchronous processing (if supported).</p></td><td align="center" valign="top"><p>false</p></td><td align="left" valign="top"><p>boolean</p></td></tr></tbody></table></div></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_result_3"></a>Result</h2></div></div></div><p>The result is returned in the Out body as a
+<code class="literal">ArrayList&lt;javax.naming.directory.SearchResult&gt;</code> object.</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_dircontext"></a>DirContext</h2></div></div></div><p>The URI, <code class="literal">ldap:ldapserver</code>, references a Spring bean with the ID,
+<code class="literal">ldapserver</code>. The <code class="literal">ldapserver</code> bean may be defined as follows:</p><pre class="programlisting">&lt;bean id=<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"ldapserver"</em></strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">class</strong>=<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"javax.naming.directory.InitialDirContext"</em></strong> scope=<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"prototype"</em></strong>&gt;
+  &lt;constructor-arg&gt;
+    &lt;props&gt;
+      &lt;prop key=<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"java.naming.factory.initial"</em></strong>&gt;com.sun.jndi.ldap.LdapCtxFactory&lt;/prop&gt;
+      &lt;prop key=<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"java.naming.provider.url"</em></strong>&gt;ldap:<em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">//localhost:10389&lt;/prop&gt;</em>
+      &lt;prop key=<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"java.naming.security.authentication"</em></strong>&gt;none&lt;/prop&gt;
+    &lt;/props&gt;
+  &lt;/constructor-arg&gt;
+&lt;/bean&gt;</pre><p>The preceding example declares a regular Sun based LDAP <code class="literal">DirContext</code>
+that connects anonymously to a locally hosted LDAP server.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p><code class="literal">DirContext</code> objects are <span class="strong"><strong>not</strong></span> required to support concurrency by
+contract. It is therefore important that the directory context is
+declared with the setting, <code class="literal">scope="prototype"</code>, in the <code class="literal">bean</code> definition
+or that the context supports concurrency. In the Spring framework,
+<code class="literal">prototype</code> scoped objects are instantiated each time they are looked
+up.</p></td></tr></table></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_samples_25"></a>Samples</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="ldap-component.html#_binding_using_credentials">Binding using credentials</a></span></dt></dl></div><p>Following on from the Spring configuration above, the code sample below
+sends an LDAP request to filter search a group for a member. The Common
+Name is then extracted from the response.</p><pre class="programlisting">ProducerTemplate&lt;Exchange&gt; template = exchange
+  .getContext().createProducerTemplate();
+
+Collection&lt;?&gt; results = (Collection&lt;?&gt;) (template
+  .sendBody(
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"ldap:ldapserver?base=ou=mygroup,ou=groups,ou=system"</em></strong>,
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"(member=uid=huntc,ou=users,ou=system)"</em></strong>));
+
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">if</strong> (results.size() &gt; <span xmlns="http://www.w3.org/1999/xhtml" class="hl-number">0</span>) {
+  <em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// Extract what we need from the device's profile</em>
+
+  Iterator&lt;?&gt; resultIter = results.iterator();
+  SearchResult searchResult = (SearchResult) resultIter
+      .next();
+  Attributes attributes = searchResult
+      .getAttributes();
+  Attribute deviceCNAttr = attributes.get(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"cn"</em></strong>);
+  String deviceCN = (String) deviceCNAttr.get();
+
+  ...</pre><p>If no specific filter is required - for example, you just need to look
+up a single entry - specify a wildcard filter expression. For example,
+if the LDAP entry has a Common Name, use a filter expression like:</p><pre class="programlisting">(cn=*)</pre><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="_binding_using_credentials"></a>Binding using credentials</h3></div></div></div><p>A Camel end user donated this sample code he used to bind to the ldap
+server using credentials.</p><pre class="programlisting">Properties props = <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">new</strong> Properties();
+props.setProperty(Context.INITIAL_CONTEXT_FACTORY, <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"com.sun.jndi.ldap.LdapCtxFactory"</em></strong>);
+props.setProperty(Context.PROVIDER_URL, <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"ldap://localhost:389"</em></strong>);
+props.setProperty(Context.URL_PKG_PREFIXES, <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"com.sun.jndi.url"</em></strong>);
+props.setProperty(Context.REFERRAL, <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"ignore"</em></strong>);
+props.setProperty(Context.SECURITY_AUTHENTICATION, <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"simple"</em></strong>);
+props.setProperty(Context.SECURITY_PRINCIPAL, <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"cn=Manager"</em></strong>);
+props.setProperty(Context.SECURITY_CREDENTIALS, <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"secret"</em></strong>);
+
+SimpleRegistry reg = <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">new</strong> SimpleRegistry();
+reg.put(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"myldap"</em></strong>, <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">new</strong> InitialLdapContext(props, null));
+
+CamelContext context = <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">new</strong> DefaultCamelContext(reg);
+context.addRoutes(
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">new</strong> RouteBuilder() {
+        <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">void</strong> configure() <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">throws</strong> Exception {
+            from(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"direct:start"</em></strong>).to(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"ldap:myldap?base=ou=test"</em></strong>);
+        }
+    }
+);
+context.start();
+
+ProducerTemplate template = context.createProducerTemplate();
+
+Endpoint endpoint = context.getEndpoint(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"direct:start"</em></strong>);
+Exchange exchange = endpoint.createExchange();
+exchange.getIn().setBody(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"(uid=test)"</em></strong>);
+Exchange out = template.send(endpoint, exchange);
+
+Collection&lt;SearchResult&gt; data = out.getOut().getBody(Collection.<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">class</strong>);
+assert data != null;
+assert !data.isEmpty();
+
+System.out.println(out.getOut().getBody());
+
+context.stop();</pre></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_configuring_ssl"></a>Configuring SSL</h2></div></div></div><p>All required is to create a custom socket factory and reference it in
+the InitialDirContext bean - see below sample.</p><p><span class="strong"><strong>SSL Configuration</strong></span></p><pre class="programlisting"><span xmlns="http://www.w3.org/1999/xhtml" class="hl-directive" style="color: maroon">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;blueprint</strong> <span xmlns="http://www.w3.org/1999/xhtml" class="hl-attribute" style="color: #F5844C">xmlns</span>=<span xmlns="http://www.w3.org/1999/xhtml" class="hl-value" style="color: #993300">"http://www.osgi.org/xmlns/blueprint/v1.0.0"</span>
+           <span xmlns="http://www.w3.org/1999/xhtml" class="hl-attribute" style="color: #F5844C">xmlns:xsi</span>=<span xmlns="http://www.w3.org/1999/xhtml" class="hl-value" style="color: #993300">"http://www.w3.org/2001/XMLSchema-instance"</span>
+           <span xmlns="http://www.w3.org/1999/xhtml" class="hl-attribute" style="color: #F5844C">xsi:schemaLocation</span>=<span xmlns="http://www.w3.org/1999/xhtml" class="hl-value" style="color: #993300">"http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
+                 http://camel.apache.org/schema/blueprint http://camel.apache.org/schema/blueprint/camel-blueprint.xsd"</span><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&gt;</strong>
+
+
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;sslContextParameters</strong> <span xmlns="http://www.w3.org/1999/xhtml" class="hl-attribute" style="color: #F5844C">xmlns</span>=<span xmlns="http://www.w3.org/1999/xhtml" class="hl-value" style="color: #993300">"http://camel.apache.org/schema/blueprint"</span>
+                          <span xmlns="http://www.w3.org/1999/xhtml" class="hl-attribute" style="color: #F5844C">id</span>=<span xmlns="http://www.w3.org/1999/xhtml" class="hl-value" style="color: #993300">"sslContextParameters"</span><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&gt;</strong>
+        <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;keyManagers</strong>
+                <span xmlns="http://www.w3.org/1999/xhtml" class="hl-attribute" style="color: #F5844C">keyPassword</span>=<span xmlns="http://www.w3.org/1999/xhtml" class="hl-value" style="color: #993300">"{{keystore.pwd}}"</span><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&gt;</strong>
+            <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;keyStore</strong>
+                    <span xmlns="http://www.w3.org/1999/xhtml" class="hl-attribute" style="color: #F5844C">resource</span>=<span xmlns="http://www.w3.org/1999/xhtml" class="hl-value" style="color: #993300">"{{keystore.url}}"</span>
+                    <span xmlns="http://www.w3.org/1999/xhtml" class="hl-attribute" style="color: #F5844C">password</span>=<span xmlns="http://www.w3.org/1999/xhtml" class="hl-value" style="color: #993300">"{{keystore.pwd}}"</span><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">/&gt;</strong>
+        <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/keyManagers&gt;</strong>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/sslContextParameters&gt;</strong>
+
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;bean</strong> <span xmlns="http://www.w3.org/1999/xhtml" class="hl-attribute" style="color: #F5844C">id</span>=<span xmlns="http://www.w3.org/1999/xhtml" class="hl-value" style="color: #993300">"customSocketFactory"</span> <span xmlns="http://www.w3.org/1999/xhtml" class="hl-attribute" style="color: #F5844C">class</span>=<span xmlns="http://www.w3.org/1999/xhtml" class="hl-value" style="color: #993300">"zotix.co.util.CustomSocketFactory"</span><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&gt;</strong>
+        <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;argument</strong> <span xmlns="http://www.w3.org/1999/xhtml" class="hl-attribute" style="color: #F5844C">ref</span>=<span xmlns="http://www.w3.org/1999/xhtml" class="hl-value" style="color: #993300">"sslContextParameters"</span><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096"> /&gt;</strong>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/bean&gt;</strong>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;bean</strong> <span xmlns="http://www.w3.org/1999/xhtml" class="hl-attribute" style="color: #F5844C">id</span>=<span xmlns="http://www.w3.org/1999/xhtml" class="hl-value" style="color: #993300">"ldapserver"</span> <span xmlns="http://www.w3.org/1999/xhtml" class="hl-attribute" style="color: #F5844C">class</span>=<span xmlns="http://www.w3.org/1999/xhtml" class="hl-value" style="color: #993300">"javax.naming.directory.InitialDirContext"</span> <span xmlns="http://www.w3.org/1999/xhtml" class="hl-attribute" style="color: #F5844C">scope</span>=<span xmlns="http://www.w3.org/1999/xhtml" class="hl-value" style="color: #993300">"prototype"</span><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&gt;</strong>
+        <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;argument&gt;</strong>
+            <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;props&gt;</strong>
+                <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;prop</strong> <span xmlns="http://www.w3.org/1999/xhtml" class="hl-attribute" style="color: #F5844C">key</span>=<span xmlns="http://www.w3.org/1999/xhtml" class="hl-value" style="color: #993300">"java.naming.factory.initial"</span> <span xmlns="http://www.w3.org/1999/xhtml" class="hl-attribute" style="color: #F5844C">value</span>=<span xmlns="http://www.w3.org/1999/xhtml" class="hl-value" style="color: #993300">"com.sun.jndi.ldap.LdapCtxFactory"</span><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">/&gt;</strong>
+                <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;prop</strong> <span xmlns="http://www.w3.org/1999/xhtml" class="hl-attribute" style="color: #F5844C">key</span>=<span xmlns="http://www.w3.org/1999/xhtml" class="hl-value" style="color: #993300">"java.naming.provider.url"</span> <span xmlns="http://www.w3.org/1999/xhtml" class="hl-attribute" style="color: #F5844C">value</span>=<span xmlns="http://www.w3.org/1999/xhtml" class="hl-value" style="color: #993300">"ldaps://lab.zotix.co:636"</span><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">/&gt;</strong>
+                <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;prop</strong> <span xmlns="http://www.w3.org/1999/xhtml" class="hl-attribute" style="color: #F5844C">key</span>=<span xmlns="http://www.w3.org/1999/xhtml" class="hl-value" style="color: #993300">"java.naming.security.protocol"</span> <span xmlns="http://www.w3.org/1999/xhtml" class="hl-attribute" style="color: #F5844C">value</span>=<span xmlns="http://www.w3.org/1999/xhtml" class="hl-value" style="color: #993300">"ssl"</span><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">/&gt;</strong>
+                <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;prop</strong> <span xmlns="http://www.w3.org/1999/xhtml" class="hl-attribute" style="color: #F5844C">key</span>=<span xmlns="http://www.w3.org/1999/xhtml" class="hl-value" style="color: #993300">"java.naming.security.authentication"</span> <span xmlns="http://www.w3.org/1999/xhtml" class="hl-attribute" style="color: #F5844C">value</span>=<span xmlns="http://www.w3.org/1999/xhtml" class="hl-value" style="color: #993300">"simple"</span><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096"> /&gt;</strong>
+                <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;prop</strong> <span xmlns="http://www.w3.org/1999/xhtml" class="hl-attribute" style="color: #F5844C">key</span>=<span xmlns="http://www.w3.org/1999/xhtml" class="hl-value" style="color: #993300">"java.naming.security.principal"</span> <span xmlns="http://www.w3.org/1999/xhtml" class="hl-attribute" style="color: #F5844C">value</span>=<span xmlns="http://www.w3.org/1999/xhtml" class="hl-value" style="color: #993300">"cn=Manager,dc=example,dc=com"</span><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">/&gt;</strong>
+                <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;prop</strong> <span xmlns="http://www.w3.org/1999/xhtml" class="hl-attribute" style="color: #F5844C">key</span>=<span xmlns="http://www.w3.org/1999/xhtml" class="hl-value" style="color: #993300">"java.naming.security.credentials"</span> <span xmlns="http://www.w3.org/1999/xhtml" class="hl-attribute" style="color: #F5844C">value</span>=<span xmlns="http://www.w3.org/1999/xhtml" class="hl-value" style="color: #993300">"passw0rd"</span><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">/&gt;</strong>
+                <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;prop</strong> <span xmlns="http://www.w3.org/1999/xhtml" class="hl-attribute" style="color: #F5844C">key</span>=<span xmlns="http://www.w3.org/1999/xhtml" class="hl-value" style="color: #993300">"java.naming.ldap.factory.socket"</span>
+                      <span xmlns="http://www.w3.org/1999/xhtml" class="hl-attribute" style="color: #F5844C">value</span>=<span xmlns="http://www.w3.org/1999/xhtml" class="hl-value" style="color: #993300">"zotix.co.util.CustomSocketFactory"</span><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">/&gt;</strong>
+            <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/props&gt;</strong>
+        <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/argument&gt;</strong>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/bean&gt;</strong>
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/blueprint&gt;</strong></pre><p><span class="strong"><strong>Custom Socket Factory</strong></span></p><pre class="programlisting"><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">import</strong> org.apache.camel.util.jsse.SSLContextParameters;
+
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">import</strong> javax.net.SocketFactory;
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">import</strong> javax.net.ssl.SSLContext;
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">import</strong> javax.net.ssl.SSLSocketFactory;
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">import</strong> javax.net.ssl.TrustManagerFactory;
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">import</strong> java.io.IOException;
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">import</strong> java.net.InetAddress;
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">import</strong> java.net.Socket;
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">import</strong> java.security.KeyStore;
+
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: blue">/**
+ * The CustomSocketFactory. Loads the KeyStore and creates an instance of SSLSocketFactory
+ */</strong>
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">class</strong> CustomSocketFactory <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">extends</strong> SSLSocketFactory {
+
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">static</strong> SSLSocketFactory socketFactory;
+
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: blue">/**
+     * Called by the getDefault() method.
+     */</strong>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> CustomSocketFactory() {
+
+    }
+
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: blue">/**
+     * Called by Blueprint DI to initialise an instance of SocketFactory
+     *
+     * @param sslContextParameters
+     */</strong>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> CustomSocketFactory(SSLContextParameters sslContextParameters) {
+        <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">try</strong> {
+            KeyStore keyStore = sslContextParameters.getKeyManagers().getKeyStore().createKeyStore();
+            TrustManagerFactory tmf = TrustManagerFactory.getInstance(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"SunX509"</em></strong>);
+            tmf.init(keyStore);
+            SSLContext ctx = SSLContext.getInstance(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"TLS"</em></strong>);
+            ctx.init(null, tmf.getTrustManagers(), null);
+            socketFactory = ctx.getSocketFactory();
+        } <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">catch</strong> (Exception ex) {
+            ex.printStackTrace(System.err);  <em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">/* handle exception */</em>
+        }
+    }
+
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: blue">/**
+     * Getter for the SocketFactory
+     *
+     * @return
+     */</strong>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">static</strong> SocketFactory getDefault() {
+        <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">return</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">new</strong> CustomSocketFactory();
+    }
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@Override</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> String[] getDefaultCipherSuites() {
+        <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">return</strong> socketFactory.getDefaultCipherSuites();
+    }
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@Override</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> String[] getSupportedCipherSuites() {
+        <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">return</strong> socketFactory.getSupportedCipherSuites();
+    }
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@Override</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> Socket createSocket(Socket socket, String string, <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">int</strong> i, <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">boolean</strong> bln) <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">throws</strong> IOException {
+        <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">return</strong> socketFactory.createSocket(socket, string, i, bln);
+    }
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@Override</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> Socket createSocket(String string, <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">int</strong> i) <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">throws</strong> IOException {
+        <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">return</strong> socketFactory.createSocket(string, i);
+    }
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@Override</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> Socket createSocket(String string, <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">int</strong> i, InetAddress ia, <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">int</strong> i1) <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">throws</strong> IOException {
+        <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">return</strong> socketFactory.createSocket(string, i, ia, i1);
+    }
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@Override</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> Socket createSocket(InetAddress ia, <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">int</strong> i) <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">throws</strong> IOException {
+        <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">return</strong> socketFactory.createSocket(ia, i);
+    }
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@Override</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> Socket createSocket(InetAddress ia, <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">int</strong> i, InetAddress ia1, <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">int</strong> i1) <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">throws</strong> IOException {
+        <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">return</strong> socketFactory.createSocket(ia, i, ia1, i1);
+    }
+}</pre><p>&nbsp;</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_see_also_74"></a>See Also</h2></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">Configuring Camel</li><li class="listitem">Component</li><li class="listitem">Endpoint</li><li class="listitem">Getting Started</li></ul></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="LevelDB-LevelDB"></a>LevelDB</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="ldap-component.html#LevelDB-UsingLevelDBAggregationRepository">Using LevelDBAggregationRepository</a></span></dt><dt><span class="section"><a href="ldap-component.html#LevelDB-Whatispreservedwhenpersisting">What is preserved when persisting</a></span></dt><dt><span class="section"><a href="ldap-component.html#LevelDB-Recovery">Recovery</a></span></dt><dt><span class="section"><a href="ldap-component.html#LevelDB-Dependencies">Dependencies</a></span></dt><dt><span class="section"><a href="ldap-component.html#LevelDB-SeeAlso">See Also</a></span></dt></dl></div><p><span class="strong"><strong>Available as of Camel 2.10</strong></span></p><p><a class="link" href="https://code.google.com/p/leveldb/" target="_top">Leveldb</a> is a very lightweight and
+embedable key value database. It allows together with Camel to provide
+persistent support for various Camel features such as
+Aggregator.</p><p>Current features it provides:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">LevelDBAggregationRepository</li></ul></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="LevelDB-UsingLevelDBAggregationRepository"></a>Using LevelDBAggregationRepository</h3></div></div></div><p><code class="literal">LevelDBAggregationRepository</code> is an <code class="literal">AggregationRepository</code> which on
+the fly persists the aggregated messages. This ensures that you will not
+loose messages, as the default aggregator will use an in memory only
+<code class="literal">AggregationRepository</code>.</p><p>It has the following options:</p><div class="informaltable"><table border="1" width="100%"><colgroup><col width="10%" class="col_1"><col width="10%" class="col_2"><col width="80%" class="col_3"></colgroup><thead><tr><th align="left" valign="top">Option</th><th align="left" valign="top">Type</th><th align="left" valign="top">Description</th></tr></thead><tbody><tr><td align="left" valign="top"><p><code class="literal">repositoryName</code></p></td><td align="left" valign="top"><p>String</p></td><td align="left" valign="top"><p>A mandatory repository name. Allows you to use a shared <code class="literal">LevelDBFile</code>
+for multiple repositories.</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">persistentFileName</code></p></td><td align="left" valign="top"><p>String</p></td><td align="left" valign="top"><p>Filename for the persistent storage. If no file exists on startup a new
+file is created.</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">levelDBFile</code></p></td><td align="left" valign="top"><p>LevelDBFile</p></td><td align="left" valign="top"><p>Use an existing configured
+<code class="literal">org.apache.camel.component.leveldb.LevelDBFile</code> instance.</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">sync</code></p></td><td align="left" valign="top"><p>boolean</p></td><td align="left" valign="top"><p><span class="strong"><strong>Camel 2.12:</strong></span> Whether or not the LevelDBFile should sync on write or
+not. Default is false. By sync on write ensures that its always waiting
+for all writes to be spooled to disk and thus will not loose updates.
+See <a class="link" href="http://leveldb.googlecode.com/svn/trunk/doc/index.html" target="_top">LevelDB docs</a>
+for more details about async vs sync writes.</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">returnOldExchange</code></p></td><td align="left" valign="top"><p>boolean</p></td><td align="left" valign="top"><p>Whether the get operation should return the old existing Exchange if any
+existed. By default this option is <code class="literal">false</code> to optimize as we do not need
+the old exchange when aggregating.</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">useRecovery</code></p></td><td align="left" valign="top"><p>boolean</p></td><td align="left" valign="top"><p>Whether or not recovery is enabled. This option is by default <code class="literal">true</code>.
+When enabled the Camel Aggregator automatic
+recover failed aggregated exchange and have them resubmitted.</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">recoveryInterval</code></p></td><td align="left" valign="top"><p>long</p></td><td align="left" valign="top"><p>If recovery is enabled then a background task is run every x&#8217;th time to
+scan for failed exchanges to recover and resubmit. By default this
+interval is 5000 millis.</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">maximumRedeliveries</code></p></td><td align="left" valign="top"><p>int</p></td><td align="left" valign="top"><p>Allows you to limit the maximum number of redelivery attempts for a
+recovered exchange. If enabled then the Exchange will be moved to the
+dead letter channel if all redelivery attempts failed. By default this
+option is disabled. If this option is used then the <code class="literal">deadLetterUri</code>
+option must also be provided.</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">deadLetterUri</code></p></td><td align="left" valign="top"><p>String</p></td><td align="left" valign="top"><p>An endpoint uri for a Dead Letter Channel
+where exhausted recovered Exchanges will be moved. If this option is
+used then the <code class="literal">maximumRedeliveries</code> option must also be provided.</p></td></tr></tbody></table></div><p>The <code class="literal">repositoryName</code> option must be provided. Then either the
+<code class="literal">persistentFileName</code> or the <code class="literal">levelDBFile</code> must be provided.</p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="LevelDB-Whatispreservedwhenpersisting"></a>What is preserved when persisting</h3></div></div></div><p><code class="literal">LevelDBAggregationRepository</code> will only preserve any <code class="literal">Serializable</code>
+compatible message body data types. Message headers must be primitive /
+string / numbers / etc. If a data type is not such a type its dropped
+and a <code class="literal">WARN</code> is logged. And it only persists the <code class="literal">Message</code> body and the
+<code class="literal">Message</code> headers. The <code class="literal">Exchange</code> properties are <span class="strong"><strong>not</strong></span> persisted.</p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="LevelDB-Recovery"></a>Recovery</h3></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="ldap-component.html#LevelDB-UsingLevelDBAggregationRepositoryinJavaDSL">Using LevelDBAggregationRepository in Java DSL</a></span></dt><dt><span class="section"><a href="ldap-component.html#LevelDB-UsingLevelDBAggregationRepositoryinSpringXML">Using LevelDBAggregationRepository in Spring XML</a></span></dt></dl></div><p>The <code class="literal">LevelDBAggregationRepository</code> will by default recover any failed
+Exchange. It does this by having a background tasks
+that scans for failed Exchanges in the persistent
+store. You can use the <code class="literal">checkInterval</code> option to set how often this task
+runs. The recovery works as transactional which ensures that Camel will
+try to recover and redeliver the failed Exchange.
+Any Exchange which was found to be recovered will be
+restored from the persistent store and resubmitted and send out again.</p><p>The following headers is set when an Exchange is
+being recovered/redelivered:</p><div class="informaltable"><table border="1" width="100%"><colgroup><col width="10%" class="col_1"><col width="10%" class="col_2"><col width="80%" class="col_3"></colgroup><thead><tr><th align="left" valign="top">Header</th><th align="left" valign="top">Type</th><th align="left" valign="top">Description</th></tr></thead><tbody><tr><td align="left" valign="top"><p><code class="literal">Exchange.REDELIVERED</code></p></td><td align="left" valign="top"><p>Boolean</p></td><td align="left" valign="top"><p>Is set to true to indicate the Exchange is being
+redelivered.</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">Exchange.REDELIVERY_COUNTER</code></p></td><td align="left" valign="top"><p>Integer</p></td><td align="left" valign="top"><p>The redelivery attempt, starting from 1.</p></td></tr></tbody></table></div><p>Only when an Exchange has been successfully
+processed it will be marked as complete which happens when the <code class="literal">confirm</code>
+method is invoked on the <code class="literal">AggregationRepository</code>. This means if the same
+Exchange fails again it will be kept retried until
+it success.</p><p>You can use option <code class="literal">maximumRedeliveries</code> to limit the maximum number of
+redelivery attempts for a given recovered Exchange.
+You must also set the <code class="literal">deadLetterUri</code> option so Camel knows where to
+send the Exchange when the <code class="literal">maximumRedeliveries</code> was
+hit.</p><p>You can see some examples in the unit tests of camel-leveldb, for
+example
+<a class="link" href="https://svn.apache.org/repos/asf/camel/trunk/components/camel-leveldb/src/test/java/org/apache/camel/component/leveldb/LevelDBAggregateRecoverTest.java" target="_top">this
+test</a>.</p><div class="section"><div class="titlepage"><div><div><h4 class="title"><a name="LevelDB-UsingLevelDBAggregationRepositoryinJavaDSL"></a>Using LevelDBAggregationRepository in Java DSL</h4></div></div></div><p>In this example we want to persist aggregated messages in the
+<code class="literal">target/data/leveldb.dat</code> file.</p></div><div class="section"><div class="titlepage"><div><div><h4 class="title"><a name="LevelDB-UsingLevelDBAggregationRepositoryinSpringXML"></a>Using LevelDBAggregationRepository in Spring XML</h4></div></div></div><p>The same example but using Spring XML instead:</p></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="LevelDB-Dependencies"></a>Dependencies</h3></div></div></div><p>To use LevelDB in your camel routes you need to add
+the a dependency on <span class="strong"><strong>camel-leveldb</strong></span>.</p><p>If you use maven you could just add the following to your pom.xml,
+substituting the version number for the latest &amp; greatest release (see
+the download page for the latest versions).</p><pre class="programlisting"><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;dependency&gt;</strong>
+  <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;groupId&gt;</strong>org.apache.camel<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/groupId&gt;</strong>
+  <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;artifactId&gt;</strong>camel-leveldb<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/artifactId&gt;</strong>
+  <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;version&gt;</strong>2.10.0<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/version&gt;</strong>
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/dependency&gt;</strong></pre></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="LevelDB-SeeAlso"></a>See Also</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">Configuring Camel</li><li class="listitem">Component</li><li class="listitem">Endpoint</li><li class="listitem">Getting Started</li><li class="listitem">Aggregator</li><li class="listitem">HawtDB</li><li class="listitem">Components</li></ul></div></div></div></div></body></html>
