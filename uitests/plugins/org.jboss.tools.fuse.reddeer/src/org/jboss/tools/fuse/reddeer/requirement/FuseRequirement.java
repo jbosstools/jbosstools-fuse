@@ -28,7 +28,7 @@ import org.jboss.tools.fuse.reddeer.runtime.ServerBase;
  */
 public class FuseRequirement implements ConfigurableRequirement<FuseConfiguration, Fuse> {
 
-	private static final Logger LOGGER = Logger.getLogger(FuseRequirement.class);
+	public static final Logger LOGGER = Logger.getLogger(FuseRequirement.class);
 
 	private FuseConfiguration config;
 	private Fuse fuse;

@@ -20,7 +20,7 @@ import org.eclipse.reddeer.swt.impl.text.LabeledText;
  */
 public class CreateOpenShiftProjectWizard extends WizardDialog {
 
-	private static final String TITLE = "Create OpenShift Project";
+	public static final String TITLE = "Create OpenShift Project";
 
 	public CreateOpenShiftProjectWizard() {
 		super(TITLE);

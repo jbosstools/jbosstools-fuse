@@ -17,7 +17,7 @@ package org.jboss.tools.fuse.reddeer.view;
  */
 public class OpenShiftExplorerException extends RuntimeException {
 
-	private static final long serialVersionUID = 869290156893427929L;
+	public static final long serialVersionUID = 869290156893427929L;
 
 	public OpenShiftExplorerException(String message, Throwable cause) {
 		super(message, cause);

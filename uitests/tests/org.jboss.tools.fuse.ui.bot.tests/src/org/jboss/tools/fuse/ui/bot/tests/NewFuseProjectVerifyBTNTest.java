@@ -59,15 +59,15 @@ public class NewFuseProjectVerifyBTNTest {
 
 	protected Logger log = Logger.getLogger(NewFuseProjectVerifyBTNTest.class);
 	
-	private static final String PROJECT_NAME = "test";
+	public static final String PROJECT_NAME = "test";
 	
-	private static final String EXISTING_CAMEL_VERSION = SupportedCamelVersions.CAMEL_2_17_0_REDHAT_630187;
+	public static final String EXISTING_CAMEL_VERSION = SupportedCamelVersions.CAMEL_2_17_0_REDHAT_630187;
 	
-	private static final String NON_EXISTING_CAMEL_VERSION = "0.0.0";
+	public static final String NON_EXISTING_CAMEL_VERSION = "0.0.0";
 	
-	private static final String INTERRUPT_CAMEL_VERSION = "0.0.1";
+	public static final String INTERRUPT_CAMEL_VERSION = "0.0.1";
 	
-	private static final String COMMUNITY_CAMEL_VERSION = "2.20.2";
+	public static final String COMMUNITY_CAMEL_VERSION = "2.20.2";
 	
 	private NewFuseIntegrationProjectWizard wizard;
 	

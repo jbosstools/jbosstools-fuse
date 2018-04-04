@@ -44,8 +44,8 @@ public class XPathEvaluator {
 
 	public static final boolean DEFAULT_NAMESPACE_AWARE = false;
 
-	private static final DocumentBuilderFactory DOC_FACTORY = DocumentBuilderFactory.newInstance();
-	private static final XPath XPATH = XPathFactory.newInstance().newXPath();
+	public static final DocumentBuilderFactory DOC_FACTORY = DocumentBuilderFactory.newInstance();
+	public static final XPath XPATH = XPathFactory.newInstance().newXPath();
 
 	private Document doc;
 

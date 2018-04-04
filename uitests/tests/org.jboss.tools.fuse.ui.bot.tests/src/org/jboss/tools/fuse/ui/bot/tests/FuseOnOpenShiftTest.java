@@ -50,15 +50,15 @@ import org.junit.runner.RunWith;
 @OpenPerspective(FuseIntegrationPerspective.class)
 public class FuseOnOpenShiftTest {
 
-	private static final String BUILD_OK = "BUILD SUCCESS";
-	private static final String DEPLOYMENT_OK2 = "timer://foo] INFO  simple-route - >>>";
-	private static final String DEPLOYMENT_OK = "INFO  org.mycompany.Application - Started Application in";
-	private static final String OPENSHIFT_DEPLOYMENT = "camel-ose-springboot-xml";
-	private static final String OPENSHIFT_PROJECT_NAME = "test";
-	private static final String USERNAME = "developer";
-	private static final String PROJECT_NAME = "test-ose";
-	private static final String MAVEN_BUILD_CONF = "Deploy test-ose on OpenShift";
-	private static final String IP_MATCH_REGEX = "https:\\/\\/(?:[0-9]{1,3}.){4}:[0-9]{1,4}";
+	public static final String BUILD_OK = "BUILD SUCCESS";
+	public static final String DEPLOYMENT_OK2 = "timer://foo] INFO  simple-route - >>>";
+	public static final String DEPLOYMENT_OK = "INFO  org.mycompany.Application - Started Application in";
+	public static final String OPENSHIFT_DEPLOYMENT = "camel-ose-springboot-xml";
+	public static final String OPENSHIFT_PROJECT_NAME = "test";
+	public static final String USERNAME = "developer";
+	public static final String PROJECT_NAME = "test-ose";
+	public static final String MAVEN_BUILD_CONF = "Deploy test-ose on OpenShift";
+	public static final String IP_MATCH_REGEX = "https:\\/\\/(?:[0-9]{1,3}.){4}:[0-9]{1,4}";
 	private final String OPENSHIFT_URL = "https://" + openShift.getConfiguration().getHost() + ":"
 			+ openShift.getConfiguration().getPort();
 	private final String OPENSHIFT_CONNECTION = USERNAME + " " + OPENSHIFT_URL;

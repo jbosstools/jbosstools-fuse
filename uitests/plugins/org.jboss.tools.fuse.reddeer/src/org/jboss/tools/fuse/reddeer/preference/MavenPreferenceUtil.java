@@ -20,7 +20,7 @@ import org.eclipse.reddeer.direct.preferences.Preferences;
  */
 public class MavenPreferenceUtil {
 
-	private static final Logger log = Logger.getLogger(MavenPreferenceUtil.class);
+	public static final Logger log = Logger.getLogger(MavenPreferenceUtil.class);
 
 	public static final String MAVEN_PLUGIN = "org.eclipse.m2e.core";
 	public static final String MAVEN_GLOBAL_SETTINGS_KEY = "eclipse.m2.globalSettingsFile";

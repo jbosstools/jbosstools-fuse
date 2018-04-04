@@ -67,9 +67,9 @@ public class ConfigurationsEditorEndpointsTest extends DefaultTest {
 
 	protected Logger log = Logger.getLogger(ConfigurationsEditorEndpointsTest.class);
 
-	private static final String PROJECT_NAME = "cbr";
-	private static final String CONTEXT = "camel-context.xml";
-	private static final String TYPE = "Red Hat Fuse";
+	public static final String PROJECT_NAME = "cbr";
+	public static final String CONTEXT = "camel-context.xml";
+	public static final String TYPE = "Red Hat Fuse";
 
 	private String element;
 	private List<String> availableEndpoints = Arrays.asList(

@@ -17,7 +17,7 @@ package org.jboss.tools.fuse.reddeer.utils;
  */
 public class JarRunnerException extends RuntimeException {
 
-	private static final long serialVersionUID = 1L;
+	public static final long serialVersionUID = 1L;
 
 	public JarRunnerException(String message) {
 		super(message);

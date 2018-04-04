@@ -29,15 +29,15 @@ public class NewFuseIgniteExtensionProjectFirstPage extends WizardPage {
 	}
 
 	public PushButton getBrowseBTN() {
-		return new PushButton(new DefaultGroup("Location"),"Browse");
+		return new PushButton(new DefaultGroup(this, "Location"),"Browse");
 	}
 
 	public String getTextPath() {
-		return new LabeledText(new DefaultGroup("Location"),"Path").getText();
+		return new LabeledText(new DefaultGroup(this, "Location"),"Path").getText();
 	}
 
 	public LabeledText getPathTXT() {
-		return new LabeledText(new DefaultGroup("Location"),"Path");
+		return new LabeledText(new DefaultGroup(this, "Location"),"Path");
 	}
 
 	public String getTextProjectName() {
@@ -45,7 +45,7 @@ public class NewFuseIgniteExtensionProjectFirstPage extends WizardPage {
 	}
 
 	public void setTextPath(String str) {
-		new LabeledText(new DefaultGroup("Location"),"Path").setText(str);
+		new LabeledText(new DefaultGroup(this, "Location"),"Path").setText(str);
 	}
 
 	public void setTextProjectName(String str) {
@@ -53,14 +53,14 @@ public class NewFuseIgniteExtensionProjectFirstPage extends WizardPage {
 	}
 
 	public CheckBox getUseDefaultWorkspaceLocationCHBgroup() {
-		return new CheckBox(new DefaultGroup("Location"),"Use default workspace location");
+		return new CheckBox(new DefaultGroup(this, "Location"),"Use default workspace location");
 	}
 
 	public void toggleUseDefaultWorkspaceLocationGroup(boolean choice) {
-		new CheckBox(new DefaultGroup("Location"),"Use default workspace location").toggle(choice);
+		new CheckBox(new DefaultGroup(this, "Location"),"Use default workspace location").toggle(choice);
 	}
 
 	public void clickBrowse() {
-		new PushButton(new DefaultGroup("Location"),"Browse").click();
+		new PushButton(new DefaultGroup(this, "Location"),"Browse").click();
 	}
 }

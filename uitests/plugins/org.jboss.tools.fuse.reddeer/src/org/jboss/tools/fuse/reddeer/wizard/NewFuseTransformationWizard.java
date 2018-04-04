@@ -34,7 +34,7 @@ import org.jboss.tools.fuse.reddeer.condition.TableHasRow;
  */
 public class NewFuseTransformationWizard extends WizardDialog {
 
-	private static final String TITLE = "New Fuse Transformation";
+	public static final String TITLE = "New Fuse Transformation";
 	private Logger log = Logger.getLogger(NewFuseTransformationWizard.class);
 
 	public NewFuseTransformationWizard() {

@@ -42,18 +42,18 @@ import org.junit.runner.RunWith;
 @RunWith(RedDeerSuite.class)
 public class DownloadServerTest extends DefaultTest {
 
-	private static final String ADD_BUTTON = "Add...";
-	private static final String NEXT_BUTTON = "Next >";
-	private static final String BACK_BUTTON = "< Back";
-	private static final String CANCEL_BUTTON = "Cancel";
-	private static final String FINISH_BUTTON = "Finish";
-	private static final String NEW_WINDOW = "New Server Runtime Environment";
-	private static final String SERVER_SECTION = "Apache";
-	private static final String SERVER_TYPE = "Karaf 3.0";
-	private static final String DOWNLOAD_LINK = "Download and install runtime...";
-	private static final String DOWNLOAD_FOLDER = "Download folder:";
-	private static final String DOWNLOAD_TITLE = "Download Runtimes";
-	private static final String INSTALL_FOLDER = "Install folder:";
+	public static final String ADD_BUTTON = "Add...";
+	public static final String NEXT_BUTTON = "Next >";
+	public static final String BACK_BUTTON = "< Back";
+	public static final String CANCEL_BUTTON = "Cancel";
+	public static final String FINISH_BUTTON = "Finish";
+	public static final String NEW_WINDOW = "New Server Runtime Environment";
+	public static final String SERVER_SECTION = "Apache";
+	public static final String SERVER_TYPE = "Karaf 3.0";
+	public static final String DOWNLOAD_LINK = "Download and install runtime...";
+	public static final String DOWNLOAD_FOLDER = "Download folder:";
+	public static final String DOWNLOAD_TITLE = "Download Runtimes";
+	public static final String INSTALL_FOLDER = "Install folder:";
 
 	/**
 	 * <p>
