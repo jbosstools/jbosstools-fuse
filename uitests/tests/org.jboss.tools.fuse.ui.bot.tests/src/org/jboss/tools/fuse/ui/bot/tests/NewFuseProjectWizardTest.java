@@ -143,16 +143,6 @@ public class NewFuseProjectWizardTest {
 		}
 	}
 
-	private boolean hasErrors() {
-
-		new ProblemsView().open();
-		for (TreeItem item : new DefaultTree().getItems()) {
-			if (item.getText().toLowerCase().contains("error"))
-				return true;
-		}
-		return false;
-	}
-
 	/**
 	 * <p>
 	 * Verifies that all supported Camel versions are available in New Fuse Project Wizard
@@ -231,4 +221,13 @@ public class NewFuseProjectWizardTest {
 		LogChecker.assertNoFuseError();
 	}
 
+	private boolean hasErrors() {
+
+		new ProblemsView().open();
+		for (TreeItem item : new DefaultTree().getItems()) {
+			if (item.getText().toLowerCase().contains("error"))
+				return true;
+		}
+		return false;
+	}
 }
