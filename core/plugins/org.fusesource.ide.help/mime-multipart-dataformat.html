@@ -1,0 +1,87 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>MIME Multipart DataFormat</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><link rel="home" href="index.html" title="Red Hat Fuse Tooling for Eclipse"><link rel="up" href="IDU-Components.html" title="Part&nbsp;V.&nbsp;Apache Camel Component Reference"><link rel="prev" href="milo-server-component.html" title="OPC UA Server Component"><link rel="next" href="mina2-component.html" title="Mina2 Component"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h2 class="title"><a name="mime-multipart-dataformat"></a>MIME Multipart DataFormat</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="mime-multipart-dataformat.html#_options_100">Options</a></span></dt><dt><span class="section"><a href="mime-multipart-dataformat.html#_message_headers_marshal">Message Headers (marshal)</a></span></dt><dt><span class="section"><a href="mime-multipart-dataformat.html#_message_headers_unmarshal">Message Headers (unmarshal)</a></span></dt><dt><span class="section"><a href="mime-multipart-dataformat.html#_examples_20">Examples</a></span></dt><dt><span class="section"><a href="mime-multipart-dataformat.html#_dependencies_49">Dependencies</a></span></dt></dl></div><p><span class="strong"><strong>Available as of Camel version 2.17</strong></span></p><p>This data format that can convert a Camel message with attachments into
+a Camel message having a MIME-Multipart message as message body (and no
+attachments).</p><p>The use case for this is to enable the user to send attachments over
+endpoints that do not directly support attachments, either as special
+protocol implementation (e.g. send a MIME-multipart over an HTTP
+endpoint) or as a kind of tunneling solution (e.g. because camel-jms
+does not support attachments but by marshalling the message with
+attachments into a MIME-Multipart, sending that to a JMS queue,
+receiving the message from the JMS queue and unmarshalling it again
+(into a message body with attachments).</p><p>The marshal option of the mime-multipart data format will convert a
+message with attachments into a MIME-Multipart message. If the parameter
+"multipartWithoutAttachment" is set to true it will also marshal
+messages without attachments into a multipart message with a single
+part, if the parameter is set to false it will leave the message alone.</p><p>MIME headers of the mulitpart as "MIME-Version" and "Content-Type" are
+set as camel headers to the message. If the parameter "headersInline" is
+set to true it will also create a MIME multipart message in any case. 
+Furthermore the MIME headers of the multipart are written as part of the
+message body, not as camel headers.</p><p>The unmarshal option of the mime-multipart data format will convert a
+MIME-Multipart message into a camel message with attachments and leaves
+other messages alone. MIME-Headers of the MIME-Multipart message have to
+be set as Camel headers. The unmarshalling will only take place if the
+"Content-Type" header is set to a "multipart" type. If the option
+"headersInline" is set to true, the body is always parsed as a MIME
+message.As a consequence if the message body is a stream and stream
+caching is not enabled, a message body that is actually not a MIME
+message with MIME headers in the message body will be replaced by an
+empty message. Up to Camel version 2.17.1 this will happen all message
+bodies that do not contain a MIME multipart message regardless of body
+type and stream cache setting.</p><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_options_100"></a>Options</h2></div></div></div><p>The MIME Multipart dataformat supports 6 options which are listed below.</p><div class="informaltable"><table border="1" width="100%"><colgroup><col width="19%" class="col_1"><col width="11%" class="col_2"><col width="10%" class="col_3"><col width="60%" class="col_4"></colgroup><thead><tr><th align="left" valign="top">Name</th><th align="left" valign="top">Default</th><th align="left" valign="top">Java Type</th><th align="left" valign="top">Description</th></tr></thead><tbody><tr><td align="left" valign="top"><p><span class="strong"><strong>multipartSubType</strong></span></p></td><td align="left" valign="top"><p><code class="literal">mixed</code></p></td><td align="left" valign="top"><p><code class="literal">String</code></p></td><td align="left" valign="top"><p>Specify the subtype of the MIME Multipart. Default is mixed.</p></td></tr><tr><td align="left" valign="top"><p><span class="strong"><strong>multipartWithoutAttachment</strong></span></p></td><td align="left" valign="top"><p><code class="literal">false</code></p></td><td align="left" valign="top"><p><code class="literal">Boolean</code></p></td><td align="left" valign="top"><p>Defines whether a message without attachment is also marshaled into a MIME Multipart (with only one body part). Default is false.</p></td></tr><tr><td align="left" valign="top"><p><span class="strong"><strong>headersInline</strong></span></p></td><td align="left" valign="top"><p><code class="literal">false</code></p></td><td align="left" valign="top"><p><code class="literal">Boolean</code></p></td><td align="left" valign="top"><p>Defines whether the MIME-Multipart headers are part of the message body (true) or are set as Camel headers (false). Default is false.</p></td></tr><tr><td align="left" valign="top"><p><span class="strong"><strong>includeHeaders</strong></span></p></td><td align="left" valign="top">&nbsp;</td><td align="left" valign="top"><p><code class="literal">String</code></p></td><td align="left" valign="top"><p>A regex that defines which Camel headers are also included as MIME headers into the MIME multipart. This will only work if headersInline is set to true. Default is to include no headers</p></td></tr><tr><td align="left" valign="top"><p><span class="strong"><strong>binaryContent</strong></span></p></td><td align="left" valign="top"><p><code class="literal">false</code></p></td><td align="left" valign="top"><p><code class="literal">Boolean</code></p></td><td align="left" valign="top"><p>Defines whether the content of binary parts in the MIME multipart is binary (true) or Base-64 encoded (false) Default is false.</p></td></tr><tr><td align="left" valign="top"><p><span class="strong"><strong>contentTypeHeader</strong></span></p></td><td align="left" valign="top"><p><code class="literal">false</code></p></td><td align="left" valign="top"><p><code class="literal">Boolean</code></p></td><td align="left" valign="top"><p>Whether the data format should set the Content-Type header with the type from the data format if the data format is capable of doing so. For example application/xml for data formats marshalling to XML, or application/json for data formats marshalling to JSon etc.</p></td></tr></tbody></table></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_message_headers_marshal"></a>Message Headers (marshal)</h2></div></div></div><div class="informaltable"><table border="1" width="100%"><colgroup><col width="20%" class="col_1"><col width="20%" class="col_2"><col width="60%" class="col_3"></colgroup><thead><tr><th align="left" valign="top">Name</th><th align="left" valign="top">Type</th><th align="left" valign="top">Description</th></tr></thead><tbody><tr><td align="left" valign="top"><p>Message-Id</p></td><td align="left" valign="top"><p>String</p></td><td align="left" valign="top"><p>The marshal operation will set this parameter to the generated MIME
+message id if the "headersInline" parameter is set to false.</p></td></tr><tr><td align="left" valign="top"><p>MIME-Version</p></td><td align="left" valign="top"><p>String</p></td><td align="left" valign="top"><p>The marshal operation will set this parameter to the applied MIME
+version (1.0) if the "headersInline" parameter is set to false.</p></td></tr><tr><td align="left" valign="top"><p>Content-Type</p></td><td align="left" valign="top"><p>String</p></td><td align="left" valign="top"><p>The content of this header will be used as a content type for the
+message body part. If no content type is set, "application/octet-stream"
+is assumed. After the marshal operation the content type is set to
+"multipart/related" or empty if the "headersInline" parameter is set to
+true.</p></td></tr><tr><td align="left" valign="top"><p>Content-Encoding</p></td><td align="left" valign="top"><p>String</p></td><td align="left" valign="top"><p>If the incoming content type is "text/*" the content encoding will be
+set to the encoding parameter of the Content-Type MIME header of the
+body part. Furthermore the given charset is applied for text to binary
+conversions.</p></td></tr></tbody></table></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_message_headers_unmarshal"></a>Message Headers (unmarshal)</h2></div></div></div><div class="informaltable"><table border="1" width="100%"><colgroup><col width="20%" class="col_1"><col width="20%" class="col_2"><col width="60%" class="col_3"></colgroup><thead><tr><th align="left" valign="top">Name</th><th align="left" valign="top">Type</th><th align="left" valign="top">Description</th></tr></thead><tbody><tr><td align="left" valign="top"><p>Content-Type</p></td><td align="left" valign="top"><p>String</p></td><td align="left" valign="top"><p>If this header is not set to "multipart/*" the unmarshal operation will
+not do anything. In other cases the multipart will be parsed into a
+camel message with attachments and the header is set to the Content-Type
+header of the body part, except if this is application/octet-stream. In
+the latter case the header is removed.</p></td></tr><tr><td align="left" valign="top"><p>Content-Encoding</p></td><td align="left" valign="top"><p>String</p></td><td align="left" valign="top"><p>If the content-type of the body part contains an encoding parameter this
+header will be set to the value of this encoding parameter (converted
+from MIME endoding descriptor to Java encoding descriptor)</p></td></tr><tr><td align="left" valign="top"><p>MIME-Version</p></td><td align="left" valign="top"><p>String</p></td><td align="left" valign="top"><p>The unmarshal operation will read this header and use it for parsing the
+MIME multipart. The header is removed afterwards</p></td></tr></tbody></table></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_examples_20"></a>Examples</h2></div></div></div><pre class="programlisting">from(...).marshal().mimeMultipart()</pre><p>With a message where no Content-Type header is set, will create a
+Message with the following message Camel headers:</p><p><span class="strong"><strong>Camel Message Headers</strong></span></p><pre class="screen">Content-Type=multipart/mixed; \n boundary="----=_Part_0_14180567.1447658227051"
+Message-Id=&lt;...&gt;
+MIME-Version=1.0</pre><pre class="screen">The message body will be:</pre><p><span class="strong"><strong>Camel Message Body</strong></span></p><pre class="screen">------=_Part_0_14180567.1447658227051
+Content-Type: application/octet-stream
+Content-Transfer-Encoding: base64
+Qm9keSB0ZXh0
+------=_Part_0_14180567.1447658227051
+Content-Type: application/binary
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="Attachment File Name"
+AAECAwQFBgc=
+------=_Part_0_14180567.1447658227051--</pre><p>A message with the header Content-Type set to "text/plain" sent to the
+route</p><pre class="programlisting">from(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"..."</em></strong>).marshal().mimeMultipart(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"related"</em></strong>, true, true, <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"(included|x-.*)"</em></strong>, true);</pre><p>will create a message without any specific MIME headers set as Camel
+headers (the Content-Type header is removed from the Camel message) and
+the following message body that includes also all headers of the
+original message starting with "x-" and the header with name "included":</p><p><span class="strong"><strong>Camel Message Body</strong></span></p><pre class="screen">Message-ID: &lt;...&gt;
+MIME-Version: 1.0
+Content-Type: multipart/related;
+    boundary="----=_Part_0_1134128170.1447659361365"
+x-bar: also there
+included: must be included
+x-foo: any value
+&nbsp;
+------=_Part_0_1134128170.1447659361365
+Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
+
+Body text
+------=_Part_0_1134128170.1447659361365
+Content-Type: application/binary
+Content-Transfer-Encoding: binary
+Content-Disposition: attachment; filename="Attachment File Name"
+
+[binary content]
+------=_Part_0_1134128170.1447659361365</pre></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_dependencies_49"></a>Dependencies</h2></div></div></div><p>To use MIME-Multipart in your Camel routes you need to add a dependency
+on <span class="strong"><strong>camel-mail</strong></span> which implements this data format.</p><p>If you use Maven you can just add the following to your pom.xml:</p><pre class="programlisting"><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;dependency&gt;</strong>
+  <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;groupId&gt;</strong>org.apache.camel<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/groupId&gt;</strong>
+  <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;artifactId&gt;</strong>camel-mail<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/artifactId&gt;</strong>
+  <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;version&gt;</strong>x.x.x<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/version&gt;</strong> <em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">&lt;!-- use the same version as your Camel core version --&gt;</em>
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/dependency&gt;</strong></pre></div></div></body></html>

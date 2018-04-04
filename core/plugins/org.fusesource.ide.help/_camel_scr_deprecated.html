@@ -1,0 +1,386 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>Camel SCR (deprecated)</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><link rel="home" href="index.html" title="Red Hat Fuse Tooling for Eclipse"><link rel="up" href="IDU-Components.html" title="Part&nbsp;V.&nbsp;Apache Camel Component Reference"><link rel="prev" href="schematron-component.html" title="Schematron Component"><link rel="next" href="secureXML-dataformat.html" title="XML Security DataFormat"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h2 class="title"><a name="_camel_scr_deprecated"></a>Camel SCR (deprecated)</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="_camel_scr_deprecated.html#_camel_scr_support">Camel SCR support</a></span></dt><dt><span class="section"><a href="_camel_scr_deprecated.html#_abstractcamelrunner_s_lifecycle_in_scr">AbstractCamelRunner&#8217;s lifecycle in SCR</a></span></dt><dt><span class="section"><a href="_camel_scr_deprecated.html#_using_camel_archetype_scr">Using camel-archetype-scr</a></span></dt><dt><span class="section"><a href="_camel_scr_deprecated.html#_unit_testing_camel_routes">Unit testing Camel routes</a></span></dt><dt><span class="section"><a href="_camel_scr_deprecated.html#_running_the_bundle_in_apache_karaf">Running the bundle in Apache Karaf</a></span></dt><dt><span class="section"><a href="_camel_scr_deprecated.html#_notes_2">Notes</a></span></dt></dl></div><p><span class="strong"><strong>Available as of Camel 2.15</strong></span></p><p>SCR stands for Service Component Runtime and is an implementation of
+OSGi Declarative Services specification. SCR enables any plain old Java
+object to expose and use OSGi services with no boilerplate code.</p><p>OSGi framework knows your object by looking at SCR descriptor files in
+its bundle which are typically generated from Java annotations by a
+plugin such as <code class="literal">org.apache.felix:maven-scr-plugin</code>.</p><p>Running Camel in an SCR bundle is a great alternative for Spring DM and
+Blueprint based solutions having significantly fewer lines of code
+between you and the OSGi framework. Using SCR your bundle can remain
+completely in Java world; there is no need to edit XML or properties
+files. This offers you full control over everything and means your IDE
+of choice knows exactly what is going on in your project.</p><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_camel_scr_support"></a>Camel SCR support</h2></div></div></div><p>Camel-scr bundle is not included in Apache Camel versions prior 2.15.0,
+but the artifact itself can be used with any Camel version since 2.12.0.</p><p><code class="literal">org.apache.camel/camel-scr</code> bundle provides a base class,
+<code class="literal">AbstractCamelRunner</code>, which manages a Camel context for you and a
+helper class, <code class="literal">ScrHelper</code>, for using your SCR properties in unit tests.
+Camel-scr feature for Apache Karaf&nbsp;defines all features and bundles
+required for running Camel in SCR bundles.</p><p><code class="literal">AbstractCamelRunner</code>&nbsp;class ties CamelContext&#8217;s lifecycle to Service
+Component&#8217;s lifecycle and handles configuration with help of Camel&#8217;s
+PropertiesComponent. All you have to do to make a Service Component out
+of your java class is to extend it from <code class="literal">AbstractCamelRunner</code>&nbsp;and add
+the following <code class="literal">org.apache.felix.scr.annotations</code> on class level:</p><p><span class="strong"><strong>Add required annotations</strong></span></p><pre class="programlisting"><em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@Component</span></em>
+@References({
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@Reference(name = "camelComponent",referenceInterface = ComponentResolver.class,
+        cardinality = ReferenceCardinality.MANDATORY_MULTIPLE, policy = ReferencePolicy.DYNAMIC,
+        policyOption = ReferencePolicyOption.GREEDY, bind = "gotCamelComponent", unbind = "lostCamelComponent")</span></em>
+})</pre><p>Then implement <code class="literal">getRouteBuilders()</code> method which returns the Camel
+routes you want to run:</p><p><span class="strong"><strong>Implement getRouteBuilders()</strong></span></p><pre class="programlisting">    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@Override</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">protected</strong> List&lt;RoutesBuilder&gt; getRouteBuilders() {
+        List&lt;RoutesBuilder&gt; routesBuilders = <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">new</strong> ArrayList&lt;&gt;();
+        routesBuilders.add(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">new</strong> YourRouteBuilderHere(registry));
+        routesBuilders.add(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">new</strong> AnotherRouteBuilderHere(registry));
+        <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">return</strong> routesBuilders;
+    }</pre><p>And finally provide the default configuration with:</p><p><span class="strong"><strong>Default configuration in annotations</strong></span></p><pre class="programlisting">@Properties({
+   <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@Property(name = "camelContextId", value = "my-test"),</span></em>
+   <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@Property(name = "active", value = "true"),</span></em>
+   <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@Property(name = "...", value = "..."),</span></em>
+   ...
+})</pre><p>&nbsp;</p><p>That&#8217;s all. And if you used <code class="literal">camel-archetype-scr</code> to generate a project
+all this is already taken care of.</p><p>Below is an example of a complete Service Component class, generated by
+<code class="literal">camel-archetype-scr:</code></p><p><span class="strong"><strong>CamelScrExample.java</strong></span></p><pre class="programlisting"><em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// This file was generated from org.apache.camel.archetypes/camel-archetype-scr/2.15-SNAPSHOT</em>
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">package</strong> example;
+
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">import</strong> java.util.ArrayList;
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">import</strong> java.util.List;
+
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">import</strong> org.apache.camel.scr.AbstractCamelRunner;
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">import</strong> example.internal.CamelScrExampleRoute;
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">import</strong> org.apache.camel.RoutesBuilder;
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">import</strong> org.apache.camel.spi.ComponentResolver;
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">import</strong> org.apache.felix.scr.annotations.*;
+
+<em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@Component(label = CamelScrExample.COMPONENT_LABEL, description = CamelScrExample.COMPONENT_DESCRIPTION, immediate = true, metatype = true)</span></em>
+<em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@Properties({
+    @Property(name = "camelContextId", value = "camel-scr-example"),
+    @Property(name = "camelRouteId", value = "foo/timer-log"),
+    @Property(name = "active", value = "true"),
+    @Property(name = "from", value = "timer:foo?period=5000"),
+    @Property(name = "to", value = "log:foo?showHeaders=true"),
+    @Property(name = "messageOk", value = "Success: {{from}} -&gt; {{to}}"),
+    @Property(name = "messageError", value = "Failure: {{from}} -&gt; {{to}}"),
+    @Property(name = "maximumRedeliveries", value = "0"),
+    @Property(name = "redeliveryDelay", value = "5000"),
+    @Property(name = "backOffMultiplier", value = "2"),
+    @Property(name = "maximumRedeliveryDelay", value = "60000")
+})</span></em>
+<em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@References({
+    @Reference(name = "camelComponent",referenceInterface = ComponentResolver.class,
+        cardinality = ReferenceCardinality.MANDATORY_MULTIPLE, policy = ReferencePolicy.DYNAMIC,
+        policyOption = ReferencePolicyOption.GREEDY, bind = "gotCamelComponent", unbind = "lostCamelComponent")
+})</span></em>
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">class</strong> CamelScrExample <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">extends</strong> AbstractCamelRunner {
+
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">static</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">final</strong> String COMPONENT_LABEL = <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"example.CamelScrExample"</em></strong>;
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">static</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">final</strong> String COMPONENT_DESCRIPTION = <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"This is the description for camel-scr-example."</em></strong>;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@Override</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">protected</strong> List&lt;RoutesBuilder&gt; getRouteBuilders() {
+        List&lt;RoutesBuilder&gt; routesBuilders = <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">new</strong> ArrayList&lt;&gt;();
+        routesBuilders.add(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">new</strong> CamelScrExampleRoute(registry));
+        <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">return</strong> routesBuilders;
+    }
+}</pre><p>&nbsp;</p><p><code class="literal">CamelContextId</code>&nbsp;and <code class="literal">active</code>&nbsp;properties control the CamelContext&#8217;s name
+(defaults to "camel-runner-default") and whether it will be started or
+not (defaults to "false"), respectively. In addition to these you can
+add and use as many properties as you like. Camel&#8217;s PropertiesComponent
+handles recursive properties and prefixing with fallback without
+problem.</p><p><code class="literal">AbstractCamelRunner</code>&nbsp;will make these properties available to your
+RouteBuilders with help of Camel&#8217;s PropertiesComponent and it will also
+inject these values into your Service Component&#8217;s and RouteBuilder&#8217;s
+fields when their names match. The fields can be declared with any
+visibility level, and many types are supported (String, int, boolean,
+URL, &#8230;&#8203;).</p><p>Below is an example of a RouteBuilder class generated by
+<code class="literal">camel-archetype-scr</code>:</p><p>&nbsp;</p><p><span class="strong"><strong>CamelScrExampleRoute.java</strong></span></p><pre class="programlisting"><em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// This file was generated from org.apache.camel.archetypes/camel-archetype-scr/2.15-SNAPSHOT</em>
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">package</strong> example.internal;
+
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">import</strong> org.apache.camel.LoggingLevel;
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">import</strong> org.apache.camel.builder.RouteBuilder;
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">import</strong> org.apache.camel.impl.SimpleRegistry;
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">import</strong> org.apache.commons.lang.Validate;
+
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">class</strong> CamelScrExampleRoute <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">extends</strong> RouteBuilder {
+
+    SimpleRegistry registry;
+
+    <em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// Configured fields</em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String camelRouteId;
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> Integer maximumRedeliveries;
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> Long redeliveryDelay;
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> Double backOffMultiplier;
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> Long maximumRedeliveryDelay;
+
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> CamelScrExampleRoute(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">final</strong> SimpleRegistry registry) {
+        <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">this</strong>.registry = registry;
+    }
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@Override</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">void</strong> configure() <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">throws</strong> Exception {
+        checkProperties();
+
+        <em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// Add a bean to Camel context registry</em>
+        registry.put(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"test"</em></strong>, <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"bean"</em></strong>);
+
+        errorHandler(defaultErrorHandler()
+            .retryAttemptedLogLevel(LoggingLevel.WARN)
+            .maximumRedeliveries(maximumRedeliveries)
+            .redeliveryDelay(redeliveryDelay)
+            .backOffMultiplier(backOffMultiplier)
+            .maximumRedeliveryDelay(maximumRedeliveryDelay));
+
+        from(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"{{from}}"</em></strong>)
+            .startupOrder(<span xmlns="http://www.w3.org/1999/xhtml" class="hl-number">2</span>)
+            .routeId(camelRouteId)
+            .onCompletion()
+                .to(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"direct:processCompletion"</em></strong>)
+            .end()
+            .removeHeaders(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"CamelHttp*"</em></strong>)
+            .to(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"{{to}}"</em></strong>);
+
+
+        from(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"direct:processCompletion"</em></strong>)
+            .startupOrder(<span xmlns="http://www.w3.org/1999/xhtml" class="hl-number">1</span>)
+            .routeId(camelRouteId + <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">".completion"</em></strong>)
+            .choice()
+                .when(simple(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"${exception} == null"</em></strong>))
+                    .log(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"{{messageOk}}"</em></strong>)
+                .otherwise()
+                    .log(LoggingLevel.ERROR, <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"{{messageError}}"</em></strong>)
+            .end();
+        }
+    }
+
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">void</strong> checkProperties() {
+        Validate.notNull(camelRouteId, <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"camelRouteId property is not set"</em></strong>);
+        Validate.notNull(maximumRedeliveries, <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"maximumRedeliveries property is not set"</em></strong>);
+        Validate.notNull(redeliveryDelay, <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"redeliveryDelay property is not set"</em></strong>);
+        Validate.notNull(backOffMultiplier, <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"backOffMultiplier property is not set"</em></strong>);
+        Validate.notNull(maximumRedeliveryDelay, <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"maximumRedeliveryDelay property is not set"</em></strong>);
+    }
+}</pre><p>&nbsp;</p><p>Let&#8217;s take a look at <code class="literal">CamelScrExampleRoute</code> in more detail.</p><p>&nbsp;</p><pre class="programlisting">    <em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// Configured fields</em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String camelRouteId;
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> Integer maximumRedeliveries;
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> Long redeliveryDelay;
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> Double backOffMultiplier;
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> Long maximumRedeliveryDelay;</pre><p>The values of these fields are set with values from properties by
+matching their names.</p><p>&nbsp;</p><pre class="programlisting">        <em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// Add a bean to Camel context registry</em>
+        registry.put(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"test"</em></strong>, <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"bean"</em></strong>);</pre><p>If you need to add some beans to CamelContext&#8217;s registry for your
+routes, you can do it like this.</p><p>&nbsp;</p><pre class="programlisting">    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">void</strong> checkProperties() {
+        Validate.notNull(camelRouteId, <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"camelRouteId property is not set"</em></strong>);
+        Validate.notNull(maximumRedeliveries, <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"maximumRedeliveries property is not set"</em></strong>);
+        Validate.notNull(redeliveryDelay, <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"redeliveryDelay property is not set"</em></strong>);
+        Validate.notNull(backOffMultiplier, <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"backOffMultiplier property is not set"</em></strong>);
+        Validate.notNull(maximumRedeliveryDelay, <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"maximumRedeliveryDelay property is not set"</em></strong>);
+    }</pre><p>It is a good idea to check that required parameters are set and they
+have meaningful values before allowing the routes to start.</p><p>&nbsp;</p><pre class="programlisting">        from(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"{{from}}"</em></strong>)
+            .startupOrder(<span xmlns="http://www.w3.org/1999/xhtml" class="hl-number">2</span>)
+            .routeId(camelRouteId)
+            .onCompletion()
+                .to(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"direct:processCompletion"</em></strong>)
+            .end()
+            .removeHeaders(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"CamelHttp*"</em></strong>)
+            .to(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"{{to}}"</em></strong>);
+
+
+        from(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"direct:processCompletion"</em></strong>)
+            .startupOrder(<span xmlns="http://www.w3.org/1999/xhtml" class="hl-number">1</span>)
+            .routeId(camelRouteId + <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">".completion"</em></strong>)
+            .choice()
+                .when(simple(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"${exception} == null"</em></strong>))
+                    .log(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"{{messageOk}}"</em></strong>)
+                .otherwise()
+                    .log(LoggingLevel.ERROR, <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"{{messageError}}"</em></strong>)
+            .end();</pre><p>Note that pretty much everything in the route is configured with
+properties. This essentially makes your RouteBuilder a template. SCR
+allows you to create more instances of your routes just by providing
+alternative configurations. More on this in section <span class="emphasis"><em>Using Camel SCR
+bundle as a template</em></span>.</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_abstractcamelrunner_s_lifecycle_in_scr"></a>AbstractCamelRunner&#8217;s lifecycle in SCR</h2></div></div></div><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem">When component&#8217;s configuration policy and mandatory references are
+satisfied SCR calls <code class="literal">activate()</code>. This creates and sets up a
+CamelContext through the following call chain:
+<code class="literal">activate()</code>&nbsp;&#8594;&nbsp;<code class="literal">prepare()</code>&nbsp;&#8594;&nbsp;<code class="literal">createCamelContext()</code>
+&#8594;&nbsp;<code class="literal">setupPropertiesComponent()</code> &#8594;&nbsp;<code class="literal">configure()</code> &#8594;&nbsp;<code class="literal">setupCamelContext()</code>.
+Finally, the context is scheduled to start after a delay defined in
+<code class="literal">AbstractCamelRunner.START_DELAY</code>&nbsp;with <code class="literal">runWithDelay()</code>.</li><li class="listitem">When Camel components (<code class="literal">ComponentResolver</code> services, to be exact)
+are registered in OSGi, SCR calls <code class="literal">gotCamelComponent`</code>()` which
+reschedules/delays the CamelContext start further by the same
+<code class="literal">AbstractCamelRunner.START_DELAY</code>. This in effect makes CamelContext
+wait until all Camel components are loaded or there is a sufficient gap
+between them. The same logic will tell a failed-to-start CamelContext to
+try again whenever we add more Camel components.</li><li class="listitem">When Camel components are unregistered SCR calls
+<code class="literal">lostCamelComponent`</code>()`. This call does nothing.</li><li class="listitem">When one of the requirements that caused the call to <code class="literal">activate<code class="literal">()</code>
+is lost SCR will call <code class="literal">deactivate</code>()</code>. This will shutdown the
+CamelContext.</li></ol></div><p>In (non-OSGi) unit tests you should use <code class="literal">prepare()</code> &#8594;&nbsp;<code class="literal">run()</code> &#8594;&nbsp;<code class="literal">stop()</code>
+instead of <code class="literal">activate()</code> &#8594;&nbsp;<code class="literal">deactivate()</code> for more fine-grained control.
+Also, this allows us to avoid possible SCR specific operations in tests.</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_using_camel_archetype_scr"></a>Using camel-archetype-scr</h2></div></div></div><p>The easiest way to create an Camel SCR bundle project is to use
+<code class="literal">camel-archetype-scr</code>&nbsp;and Maven.</p><p>You can generate a project with the following steps:</p><p><span class="strong"><strong>Generating a project</strong></span></p><pre class="programlisting">$ mvn archetype:generate -Dfilter=org.apache.camel.archetypes:camel-archetype-scr
+&nbsp;
+Choose archetype:
+1: local -&gt; org.apache.camel.archetypes:camel-archetype-scr (Creates a new Camel SCR bundle project for Karaf)
+Choose a number or apply filter (format: [groupId:]artifactId, case sensitive contains): : 1
+Define value for property 'groupId': : example
+[INFO] Using property: groupId = example
+Define value for property 'artifactId': : camel-scr-example
+Define value for property 'version': 1.0-SNAPSHOT: :
+Define value for property 'package': example: :
+[INFO] Using property: archetypeArtifactId = camel-archetype-scr
+[INFO] Using property: archetypeGroupId = org.apache.camel.archetypes
+[INFO] Using property: archetypeVersion = 2.15-SNAPSHOT
+Define value for property 'className': : CamelScrExample
+Confirm properties configuration:
+groupId: example
+artifactId: camel-scr-example
+version: 1.0-SNAPSHOT
+package: example
+archetypeArtifactId: camel-archetype-scr
+archetypeGroupId: org.apache.camel.archetypes
+archetypeVersion: 2.15-SNAPSHOT
+className: CamelScrExample
+Y: :</pre><p>Done!</p><p>Now run:</p><pre class="programlisting">mvn install</pre><p>and the bundle is ready to be deployed.</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_unit_testing_camel_routes"></a>Unit testing Camel routes</h2></div></div></div><p>Service Component is a POJO and has no special requirements for
+(non-OSGi) unit testing. There are however some techniques that are
+specific to Camel SCR or just make testing easier.</p><p>Below is an example unit test, generated by <code class="literal">camel-archetype-scr</code>:</p><pre class="programlisting"><em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// This file was generated from org.apache.camel.archetypes/camel-archetype-scr/2.15-SNAPSHOT</em>
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">package</strong> example;
+
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">import</strong> java.util.List;
+
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">import</strong> org.apache.camel.scr.internal.ScrHelper;
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">import</strong> org.apache.camel.builder.AdviceWithRouteBuilder;
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">import</strong> org.apache.camel.component.mock.MockComponent;
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">import</strong> org.apache.camel.component.mock.MockEndpoint;
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">import</strong> org.apache.camel.model.ModelCamelContext;
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">import</strong> org.apache.camel.model.RouteDefinition;
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">import</strong> org.junit.After;
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">import</strong> org.junit.Before;
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">import</strong> org.junit.Rule;
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">import</strong> org.junit.Test;
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">import</strong> org.junit.rules.TestName;
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">import</strong> org.slf4j.Logger;
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">import</strong> org.slf4j.LoggerFactory;
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">import</strong> org.junit.runner.RunWith;
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">import</strong> org.junit.runners.JUnit4;
+
+<em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@RunWith(JUnit4.class)</span></em>
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">class</strong> CamelScrExampleTest {
+
+    Logger log = LoggerFactory.getLogger(getClass());
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@Rule</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> TestName testName = <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">new</strong> TestName();
+
+    CamelScrExample integration;
+    ModelCamelContext context;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@Before</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">void</strong> setUp() <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">throws</strong> Exception {
+        log.info(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"*******************************************************************"</em></strong>);
+        log.info(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"Test: "</em></strong> + testName.getMethodName());
+        log.info(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"*******************************************************************"</em></strong>);
+
+        <em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// Set property prefix for unit testing</em>
+        System.setProperty(CamelScrExample.PROPERTY_PREFIX, <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"unit"</em></strong>);
+
+        <em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// Prepare the integration</em>
+        integration = <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">new</strong> CamelScrExample();
+        integration.prepare(null, ScrHelper.getScrProperties(integration.getClass().getName()));
+        context = integration.getContext();
+
+        <em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// Disable JMX for test</em>
+        context.disableJMX();
+
+        <em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// Fake a component for test</em>
+        context.addComponent(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"amq"</em></strong>, <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">new</strong> MockComponent());
+    }
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@After</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">void</strong> tearDown() <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">throws</strong> Exception {
+        integration.stop();
+    }
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@Test</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">void</strong> testRoutes() <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">throws</strong> Exception {
+        <em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// Adjust routes</em>
+        List&lt;RouteDefinition&gt; routes = context.getRouteDefinitions();
+
+        routes.get(<span xmlns="http://www.w3.org/1999/xhtml" class="hl-number">0</span>).adviceWith(context, <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">new</strong> AdviceWithRouteBuilder() {
+            <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@Override</span></em>
+            <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">void</strong> configure() <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">throws</strong> Exception {
+                <em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// Replace "from" endpoint with direct:start</em>
+                replaceFromWith(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"direct:start"</em></strong>);
+                <em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// Mock and skip result endpoint</em>
+                mockEndpoints(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"log:*"</em></strong>);
+            }
+        });
+
+        MockEndpoint resultEndpoint = context.getEndpoint(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"mock:log:foo"</em></strong>, MockEndpoint.<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">class</strong>);
+        <em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// resultEndpoint.expectedMessageCount(1); // If you want to just check the number of messages</em>
+        resultEndpoint.expectedBodiesReceived(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"hello"</em></strong>); <em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// If you want to check the contents</em>
+
+        <em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// Start the integration</em>
+        integration.run();
+
+        <em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// Send the test message</em>
+        context.createProducerTemplate().sendBody(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"direct:start"</em></strong>, <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"hello"</em></strong>);
+
+        resultEndpoint.assertIsSatisfied();
+    }
+}</pre><p>&nbsp;</p><p>Now, let&#8217;s take a look at the interesting bits one by one.</p><p><span class="strong"><strong>Using property prefixing</strong></span></p><pre class="programlisting">        <em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// Set property prefix for unit testing</em>
+        System.setProperty(CamelScrExample.PROPERTY_PREFIX, <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"unit"</em></strong>);</pre><p>This allows you to override parts of the configuration by prefixing
+properties with "unit.". For example, <code class="literal">unit.from</code> overrides <code class="literal">from</code> for
+the unit test.</p><p>Prefixes can be used to handle the differences between the runtime
+environments where your routes might run. Moving the unchanged bundle
+through development, testing and production environments is a typical
+use case.</p><p>&nbsp;</p><p><span class="strong"><strong>Getting test configuration from annotations</strong></span></p><pre class="programlisting">        integration.prepare(null, ScrHelper.getScrProperties(integration.getClass().getName()));</pre><p>Here we configure the Service Component in test with the same properties
+that would be used in OSGi environment.</p><p>&nbsp;</p><p><span class="strong"><strong>Mocking components for test</strong></span></p><pre class="programlisting">        <em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// Fake a component for test</em>
+        context.addComponent(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"amq"</em></strong>, <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">new</strong> MockComponent());</pre><p>Components that are not available in test can be mocked like this to
+allow the route to start.</p><p>&nbsp;</p><p><span class="strong"><strong>Adjusting routes for test</strong></span></p><pre class="programlisting">        <em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// Adjust routes</em>
+        List&lt;RouteDefinition&gt; routes = context.getRouteDefinitions();
+
+        routes.get(<span xmlns="http://www.w3.org/1999/xhtml" class="hl-number">0</span>).adviceWith(context, <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">new</strong> AdviceWithRouteBuilder() {
+            <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@Override</span></em>
+            <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">void</strong> configure() <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">throws</strong> Exception {
+                <em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// Replace "from" endpoint with direct:start</em>
+                replaceFromWith(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"direct:start"</em></strong>);
+                <em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// Mock and skip result endpoint</em>
+                mockEndpoints(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"log:*"</em></strong>);
+            }
+        });</pre><p>Camel&#8217;s AdviceWith feature allows routes to be modified for test.</p><p>&nbsp;</p><p><span class="strong"><strong>Starting the routes</strong></span></p><pre class="programlisting">        <em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// Start the integration</em>
+        integration.run();</pre><p>Here we start the Service Component and along with it the routes.</p><p>&nbsp;</p><p><span class="strong"><strong>Sending a test message</strong></span></p><pre class="programlisting">        <em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// Send the test message</em>
+        context.createProducerTemplate().sendBody(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"direct:start"</em></strong>, <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"hello"</em></strong>);</pre><p>Here we send a message to a route in test.</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_running_the_bundle_in_apache_karaf"></a>Running the bundle in Apache Karaf</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="_camel_scr_deprecated.html#_overriding_the_default_configuration">Overriding the default configuration</a></span></dt><dt><span class="section"><a href="_camel_scr_deprecated.html#_using_camel_scr_bundle_as_a_template">Using Camel SCR bundle as a template</a></span></dt></dl></div><p>Once the bundle has been built with <code class="literal">mvn install</code> it&#8217;s ready to be
+deployed.&nbsp;To deploy the bundle on Apache Karaf perform the following
+steps on Karaf command line:</p><p><span class="strong"><strong>Deploying the bundle in Apache Karaf</strong></span></p><pre class="programlisting"># Add Camel feature repository
+karaf@root&gt; features:chooseurl camel 2.15-SNAPSHOT
+&nbsp;
+# Install camel-scr feature
+karaf@root&gt; features:install camel-scr
+&nbsp;
+# Install commons-lang, used in the example route to validate parameters
+karaf@root&gt; osgi:install mvn:commons-lang/commons-lang/2.6
+&nbsp;
+# Install and start your bundle
+karaf@root&gt; osgi:install -s mvn:example/camel-scr-example/1.0-SNAPSHOT
+&nbsp;
+# See how it's running
+karaf@root&gt; log:tail -n 10
+&nbsp;
+Press ctrl-c to stop watching the log.</pre><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="_overriding_the_default_configuration"></a>Overriding the default configuration</h3></div></div></div><p>By default, Service Component&#8217;s configuration PID equals the fully
+qualified name of its class. You can change the example bundle&#8217;s
+properties with Karaf&#8217;s&nbsp;<code class="literal">config:*</code> commands:</p><p><span class="strong"><strong>Override a property</strong></span></p><pre class="programlisting"># Override 'messageOk' property
+karaf@root&gt; config:propset -p example.CamelScrExample messageOk "This is better logging"</pre><p>Or you can change the configuration by editing property files in Karaf&#8217;s
+<code class="literal">etc</code> folder.</p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="_using_camel_scr_bundle_as_a_template"></a>Using Camel SCR bundle as a template</h3></div></div></div><p>Let&#8217;s say you have a Camel SCR bundle that implements an integration
+pattern that you use frequently, say, <span class="strong"><strong>from &#8594;&nbsp;to</strong></span>, with success/failure
+logging and redelivery which also happens to be the pattern our example
+route implements. You probably don&#8217;t want to create a separate bundle
+for every instance. No worries, SCR has you covered.</p><p>Create a configuration PID for your Service Component, but add a tail
+with a dash and SCR will use that configuration to create a new instance
+of your component.</p><p><span class="strong"><strong>Creating a new Service Component instance</strong></span></p><pre class="programlisting"># Create a PID with a tail
+karaf@root&gt; config:edit example.CamelScrExample-anotherone
+&nbsp;
+# Override some properties
+karaf@root&gt; config:propset camelContextId my-other-context
+karaf@root&gt; config:propset to "file://removeme?fileName=removemetoo.txt"
+&nbsp;
+# Save the PID
+karaf@root&gt; config:update</pre><p>This will start a new CamelContext with your overridden properties. How
+convenient.</p></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_notes_2"></a>Notes</h2></div></div></div><p>When designing a Service Component to be a template you typically don&#8217;t
+want it to start without a "tailed" configuration i.e. with the default
+configuration.</p><p>To prevent your Service Component from starting with the default
+configuration add <code class="literal">policy = ConfigurationPolicy.REQUIRE `to the class
+level `@Component</code> annotation.</p></div></div></body></html>

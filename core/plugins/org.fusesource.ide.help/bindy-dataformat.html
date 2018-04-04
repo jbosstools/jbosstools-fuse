@@ -1,0 +1,940 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>Bindy DataFormat</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><link rel="home" href="index.html" title="Red Hat Fuse Tooling for Eclipse"><link rel="up" href="IDU-Components.html" title="Part&nbsp;V.&nbsp;Apache Camel Component Reference"><link rel="prev" href="binding-component.html" title="Binding Component (deprecated)"><link rel="next" href="_using_osgi_blueprint_with_camel.html" title="Using OSGi blueprint with Camel"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h2 class="title"><a name="bindy-dataformat"></a>Bindy DataFormat</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="bindy-dataformat.html#_options_10">Options</a></span></dt><dt><span class="section"><a href="bindy-dataformat.html#_annotations">Annotations</a></span></dt><dt><span class="section"><a href="bindy-dataformat.html#_1_csvrecord">1. CsvRecord</a></span></dt><dt><span class="section"><a href="bindy-dataformat.html#_2_link">2. Link</a></span></dt><dt><span class="section"><a href="bindy-dataformat.html#_3_datafield">3. DataField</a></span></dt><dt><span class="section"><a href="bindy-dataformat.html#_4_fixedlengthrecord">4. FixedLengthRecord</a></span></dt><dt><span class="section"><a href="bindy-dataformat.html#_5_message">5. Message</a></span></dt><dt><span class="section"><a href="bindy-dataformat.html#_6_keyvaluepairfield">6. KeyValuePairField</a></span></dt><dt><span class="section"><a href="bindy-dataformat.html#_7_section">7. Section</a></span></dt><dt><span class="section"><a href="bindy-dataformat.html#_8_onetomany">8. OneToMany</a></span></dt><dt><span class="section"><a href="bindy-dataformat.html#_9_bindyconverter">9. BindyConverter</a></span></dt><dt><span class="section"><a href="bindy-dataformat.html#_10_formatfactories">10. FormatFactories</a></span></dt><dt><span class="section"><a href="bindy-dataformat.html#_supported_datatypes">Supported Datatypes</a></span></dt><dt><span class="section"><a href="bindy-dataformat.html#_using_the_java_dsl_2">Using the Java DSL</a></span></dt><dt><span class="section"><a href="bindy-dataformat.html#_using_spring_xml">Using Spring XML</a></span></dt><dt><span class="section"><a href="bindy-dataformat.html#_dependencies_20">Dependencies</a></span></dt></dl></div><p><span class="strong"><strong>Available as of Camel version 2.0</strong></span></p><p>The goal of this component is to allow the parsing/binding of
+non-structured data (or to be more precise non-XML data)
+ to/from Java Beans that have binding mappings defined with annotations.
+Using Bindy, you can bind data from sources such as :</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">CSV records,</li><li class="listitem">Fixed-length records,</li><li class="listitem">FIX messages,</li><li class="listitem">or almost any other non-structured data</li></ul></div><p>to one or many Plain Old Java Object (POJO). Bindy converts the data
+according to the type of the java property. POJOs can be linked together
+with one-to-many relationships available in some cases. Moreover, for
+data type like Date, Double, Float, Integer, Short, Long and BigDecimal,
+you can provide the pattern to apply during the formatting of the
+property.</p><p>For the BigDecimal numbers, you can also define the precision and the
+decimal or grouping separators.</p><div class="informaltable"><table border="1" width="100%"><colgroup><col width="10%" class="col_1"><col width="10%" class="col_2"><col width="10%" class="col_3"><col width="70%" class="col_4"></colgroup><thead><tr><th align="left" valign="top">Type</th><th align="left" valign="top">Format Type</th><th align="left" valign="top">Pattern example</th><th align="left" valign="top">Link</th></tr></thead><tbody><tr><td align="left" valign="top"><p>Date</p></td><td align="left" valign="top"><p>DateFormat</p></td><td align="left" valign="top"><p><code class="literal">dd-MM-yyyy</code></p></td><td align="left" valign="top"><p><a class="link" href="http://java.sun.com/j2se/1.5.0/docs/api/java/text/SimpleDateFormat.html" target="_top">http://java.sun.com/j2se/1.5.0/docs/api/java/text/SimpleDateFormat.html</a></p></td></tr><tr><td align="left" valign="top"><p>Decimal*</p></td><td align="left" valign="top"><p>Decimalformat</p></td><td align="left" valign="top"><p><code class="literal"><span class="marked">.</span><span class="marked">.</span>##</code></p></td><td align="left" valign="top"><p><a class="link" href="http://java.sun.com/j2se/1.5.0/docs/api/java/text/DecimalFormat.html" target="_top">http://java.sun.com/j2se/1.5.0/docs/api/java/text/DecimalFormat.html</a></p></td></tr></tbody></table></div><p>Decimal* = Double, Integer, Float, Short, Long</p><pre class="literallayout">*Format supported*</pre><p>This first release only support comma separated values fields and key
+value pair fields (e.g. : FIX messages).</p><p>To work with camel-bindy, you must first define your model in a package
+(e.g. com.acme.model) and for each model class (e.g. Order, Client,
+Instrument, &#8230;&#8203;) add the required annotations (described hereafter) to
+the Class or field.</p><pre class="literallayout">*Multiple models*</pre><p>If you use multiple models, each model has to be placed in it&#8217;s own
+package to prevent unpredictable results.</p><p>From <span class="strong"><strong>Camel 2.16</strong></span> onwards this is no longer the case, as you can safely
+have multiple models in the same package, as you configure bindy using
+class names instead of package names now.</p><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_options_10"></a>Options</h2></div></div></div><p>The Bindy dataformat supports 5 options which are listed below.</p><div class="informaltable"><table border="1" width="100%"><colgroup><col width="19%" class="col_1"><col width="11%" class="col_2"><col width="10%" class="col_3"><col width="60%" class="col_4"></colgroup><thead><tr><th align="left" valign="top">Name</th><th align="left" valign="top">Default</th><th align="left" valign="top">Java Type</th><th align="left" valign="top">Description</th></tr></thead><tbody><tr><td align="left" valign="top"><p><span class="strong"><strong>type</strong></span></p></td><td align="left" valign="top">&nbsp;</td><td align="left" valign="top"><p><code class="literal">BindyType</code></p></td><td align="left" valign="top"><p>Whether to use csv, fixed or key value pairs mode. The default value is either Csv or KeyValue depending on chosen dataformat.</p></td></tr><tr><td align="left" valign="top"><p><span class="strong"><strong>classType</strong></span></p></td><td align="left" valign="top">&nbsp;</td><td align="left" valign="top"><p><code class="literal">String</code></p></td><td align="left" valign="top"><p>Name of model class to use.</p></td></tr><tr><td align="left" valign="top"><p><span class="strong"><strong>locale</strong></span></p></td><td align="left" valign="top">&nbsp;</td><td align="left" valign="top"><p><code class="literal">String</code></p></td><td align="left" valign="top"><p>To configure a default locale to use, such as us for united states. To use the JVM platform default locale then use the name default</p></td></tr><tr><td align="left" valign="top"><p><span class="strong"><strong>unwrapSingleInstance</strong></span></p></td><td align="left" valign="top"><p><code class="literal">true</code></p></td><td align="left" valign="top"><p><code class="literal">Boolean</code></p></td><td align="left" valign="top"><p>When unmarshalling should a single instance be unwrapped and returned instead of wrapped in a java.util.List.</p></td></tr><tr><td align="left" valign="top"><p><span class="strong"><strong>contentTypeHeader</strong></span></p></td><td align="left" valign="top"><p><code class="literal">false</code></p></td><td align="left" valign="top"><p><code class="literal">Boolean</code></p></td><td align="left" valign="top"><p>Whether the data format should set the Content-Type header with the type from the data format if the data format is capable of doing so. For example application/xml for data formats marshalling to XML, or application/json for data formats marshalling to JSon etc.</p></td></tr></tbody></table></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_annotations"></a>Annotations</h2></div></div></div><p>The annotations created allow to map different concept of your model to
+the POJO like :</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">Type of record (csv, key value pair (e.g. FIX message), fixed length
+&#8230;&#8203;),</li><li class="listitem">Link (to link object in another object),</li><li class="listitem">DataField and their properties (int, type, &#8230;&#8203;),</li><li class="listitem">KeyValuePairField (for key = value format like we have in FIX
+financial messages),</li><li class="listitem">Section (to identify header, body and footer section),</li><li class="listitem">OneToMany,</li><li class="listitem">BindyConverter (since 2.18.0),</li><li class="listitem">FormatFactories (since 2.18.0)</li></ul></div><p>This section will describe them :</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_1_csvrecord"></a>1. CsvRecord</h2></div></div></div><p>The CsvRecord annotation is used to identified the root class of the
+model. It represents a record = a line of a CSV file and can be linked
+to several children model classes.</p><div class="informaltable"><table border="1" width="100%"><colgroup><col width="10%" class="col_1"><col width="10%" class="col_2"><col width="80%" class="col_3"></colgroup><thead><tr><th align="left" valign="top">Annotation name</th><th align="left" valign="top">Record type</th><th align="left" valign="top">Level</th></tr></thead><tbody><tr><td align="left" valign="top"><p><span class="strong"><strong>CsvRecord</strong></span></p></td><td align="left" valign="top"><p>csv</p></td><td align="left" valign="top"><p>Class</p></td></tr></tbody></table></div><div class="informaltable"><table border="1" width="100%"><colgroup><col width="10%" class="col_1"><col width="10%" class="col_2"><col width="80%" class="col_3"></colgroup><thead><tr><th align="left" valign="top">Parameter name</th><th align="left" valign="top">type</th><th align="left" valign="top">Info</th></tr></thead><tbody><tr><td align="left" valign="top"><p>separator</p></td><td align="left" valign="top"><p>string</p></td><td align="left" valign="top"><p>mandatory - can be ',' or ';' or 'anything'. This value is interpreted
+as a regular expression. If you want to use a sign which has a special
+meaning in regular expressions, e.g. the '|' sign, than you have to mask
+it, like '|'</p></td></tr><tr><td align="left" valign="top"><p>skipFirstLine</p></td><td align="left" valign="top"><p>boolean</p></td><td align="left" valign="top"><p>optional - default value = false - allow to skip the first line of the
+CSV file</p></td></tr><tr><td align="left" valign="top"><p>crlf</p></td><td align="left" valign="top"><p>string</p></td><td align="left" valign="top"><p>optional - possible values = WINDOWS,UNIX,MAC, or custom; default value.
+WINDOWS - allow to define the carriage return character to use. If you
+specify a value other than the three listed before, the value you enter
+(custom) will be used as the CRLF character(s)</p></td></tr><tr><td align="left" valign="top"><p>generateHeaderColumns</p></td><td align="left" valign="top"><p>boolean</p></td><td align="left" valign="top"><p>optional - default value = false - uses to generate the header columns
+of the CSV generates</p></td></tr><tr><td align="left" valign="top"><p>autospanLine</p></td><td align="left" valign="top"><p>boolean</p></td><td align="left" valign="top"><p><span class="strong"><strong>Camel 2.13/2.12.2:</strong></span> optional - default value = false - if enabled then
+the last column is auto spanned to end of line, for example if its a
+comment, etc this allows the line to contain all characters, also the
+delimiter char.</p></td></tr><tr><td align="left" valign="top"><p>isOrdered</p></td><td align="left" valign="top"><p>boolean</p></td><td align="left" valign="top"><p>optional - default value = false - allow to change the order of the
+fields when CSV is generated</p></td></tr><tr><td align="left" valign="top"><p>quote</p></td><td align="left" valign="top"><p>String</p></td><td align="left" valign="top"><p><span class="strong"><strong>Camel 2.8.3/2.9:</strong></span> option - allow to specify a quote character of the
+fields when CSV is generated. This annotation is associated to the root class of the model and must be
+declared one time.</p></td></tr><tr><td align="left" valign="top"><p>quoting</p></td><td align="left" valign="top"><p>boolean</p></td><td align="left" valign="top"><p>*Camel 2.11:*optional - default value = false -&nbsp;Indicate if the values (and headers)
+must be quoted when marshaling when CSV is generated.</p></td></tr><tr><td align="left" valign="top"><p>endWithLineBreak</p></td><td align="left" valign="top"><p>boolean</p></td><td align="left" valign="top"><p><span class="strong"><strong>Camel 2.21:</strong></span> optional - default value = true - Indicate if the CSV generated file
+should end with a line break.</p></td></tr></tbody></table></div><p><span class="strong"><strong>case 1 : separator = ','</strong></span></p><p>The separator used to segregate the fields in the CSV record is ',' :</p><pre class="screen">10, J, Pauline, M, XD12345678, Fortis Dynamic 15/15, 2500,
+USD,08-01-2009</pre><pre class="programlisting"><em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@CsvRecord( separator = "," )</span></em>
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> Class Order {
+
+}</pre><p><span class="strong"><strong>case 2 : separator = ';'</strong></span></p><p>Compare to the previous case, the separator here is ';' instead of ',' :</p><p>10; J; Pauline; M; XD12345678; Fortis Dynamic 15/15; 2500; USD;
+08-01-2009</p><pre class="programlisting"><em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@CsvRecord( separator = ";" )</span></em>
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> Class Order {
+
+}</pre><p><span class="strong"><strong>case 3 : separator = '|'</strong></span></p><p>Compare to the previous case, the separator here is '|' instead of ';' :</p><pre class="screen">10| J| Pauline| M| XD12345678| Fortis Dynamic 15/15| 2500| USD|
+08-01-2009</pre><pre class="programlisting"><em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@CsvRecord( separator = "\\|" )</span></em>
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> Class Order {
+
+}</pre><p><span class="strong"><strong>case 4 : separator = '\",\"'</strong></span></p><p><span class="strong"><strong>Applies for Camel 2.8.2 or older</strong></span></p><p>When the field to be parsed of the CSV record contains ',' or ';' which
+is also used as separator, we whould find another strategy
+ to tell camel bindy how to handle this case. To define the field
+containing the data with a comma, you will use simple or double quotes
+ as delimiter (e.g : '10', 'Street 10, NY', 'USA' or "10", "Street 10,
+NY", "USA").
+ Remark : In this case, the first and last character of the line which
+are a simple or double quotes will removed by bindy</p><pre class="screen">"10","J","Pauline"," M","XD12345678","Fortis Dynamic 15,15"
+2500","USD","08-01-2009"</pre><pre class="programlisting"><em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@CsvRecord( separator = "\",\"" )</span></em>
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> Class Order {
+
+}</pre><p>From <span class="strong"><strong>Camel 2.8.3/2.9 or never</strong></span> bindy will automatic detect if the
+record is enclosed with either single or double quotes and automatic
+remove those quotes when unmarshalling from CSV to Object. Therefore do
+<span class="strong"><strong>not</strong></span> include the quotes in the separator, but simple do as below:</p><pre class="screen">"10","J","Pauline"," M","XD12345678","Fortis Dynamic 15,15"
+2500","USD","08-01-2009"</pre><pre class="programlisting"><em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@CsvRecord( separator = "," )</span></em>
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> Class Order {
+
+}</pre><p>Notice that if you want to marshal from Object to CSV and use quotes,
+then you need to specify which quote character to use, using the <code class="literal">quote</code>
+attribute on the @CsvRecord as shown below:</p><pre class="programlisting"><em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@CsvRecord( separator = ",", quote = "\"" )</span></em>
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> Class Order {
+
+}</pre><p><span class="strong"><strong>case 5 : separator &amp; skipfirstline</strong></span></p><p>The feature is interesting when the client wants to have in the first
+line of the file, the name of the data fields :</p><p>order id, client id, first name, last name, isin code, instrument name,
+quantity, currency, date</p><p>To inform bindy that this first line must be skipped during the parsing
+process, then we use the attribute :</p><pre class="programlisting"><em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@CsvRecord(separator = ",", skipFirstLine = true)</span></em>
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> Class Order {
+
+}</pre><p><span class="strong"><strong>case 6 : generateHeaderColumns</strong></span></p><p>To add at the first line of the CSV generated, the attribute
+generateHeaderColumns must be set to true in the annotation like this :</p><pre class="programlisting"><em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@CsvRecord( generateHeaderColumns = true )</span></em>
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> Class Order {
+
+}</pre><p>As a result, Bindy during the unmarshaling process will generate CSV
+like this :</p><p>order id, client id, first name, last name, isin code, instrument name,
+quantity, currency, date</p><pre class="screen">10, J, Pauline, M, XD12345678, Fortis Dynamic 15/15, 2500, USD,08-01-2009</pre><p><span class="strong"><strong>case 7 : carriage return</strong></span></p><p>If the platform where camel-bindy will run is not Windows but Macintosh
+or Unix, than you can change the crlf property like this. Three values
+are available : WINDOWS, UNIX or MAC</p><pre class="programlisting"><em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@CsvRecord(separator = ",", crlf="MAC")</span></em>
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> Class Order {
+
+}</pre><p>Additionally, if for some reason you need to add a different line ending
+character, you can opt to specify it using the crlf parameter. In the
+following example, we can end the line with a comma followed by the
+newline character:</p><pre class="programlisting"><em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@CsvRecord(separator = ",", crlf=",\n")</span></em>
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> Class Order {
+
+}</pre><p><span class="strong"><strong>case 8 : isOrdered</strong></span></p><p>Sometimes, the order to follow during the creation of the CSV record
+from the model is different from the order used during the parsing.
+Then, in this case, we can use the attribute isOrdered = true to
+indicate this in combination with attribute 'position' of the DataField
+annotation.</p><pre class="programlisting"><em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@CsvRecord(isOrdered = true)</span></em>
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> Class Order {
+
+   <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 1, position = 11)</span></em>
+   <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">int</strong> orderNr;
+
+   <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 2, position = 10)</span></em>
+   <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String clientNr;
+
+}</pre><p>Remark : pos is used to parse the file, stream while positions is used
+to generate the CSV</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_2_link"></a>2. Link</h2></div></div></div><p>The link annotation will allow to link objects together.</p><div class="informaltable"><table border="1" width="100%"><colgroup><col width="10%" class="col_1"><col width="10%" class="col_2"><col width="80%" class="col_3"></colgroup><thead><tr><th align="left" valign="top">Annotation name</th><th align="left" valign="top">Record type</th><th align="left" valign="top">Level</th></tr></thead><tbody><tr><td align="left" valign="top"><p><span class="strong"><strong>Link</strong></span></p></td><td align="left" valign="top"><p>all</p></td><td align="left" valign="top"><p>Class &amp; Property</p></td></tr></tbody></table></div><div class="informaltable"><table border="1" width="100%"><colgroup><col width="10%" class="col_1"><col width="10%" class="col_2"><col width="80%" class="col_3"></colgroup><thead><tr><th align="left" valign="top">Parameter name</th><th align="left" valign="top">type</th><th align="left" valign="top">Info</th></tr></thead><tbody><tr><td align="left" valign="top"><p>linkType</p></td><td align="left" valign="top"><p>LinkType</p></td><td align="left" valign="top"><p>optional - by default the value is LinkType.oneToOne - so you are not
+obliged to mention it</p></td></tr></tbody></table></div><p>Only one-to-one relation is allowed.</p><p>e.g : If the model Class Client is linked to the Order class, then use
+annotation Link in the Order class like this :</p><p><span class="strong"><strong>Property Link</strong></span></p><pre class="programlisting"><em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@CsvRecord(separator = ",")</span></em>
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">class</strong> Order {
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 1)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">int</strong> orderNr;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@Link</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> Client client;
+}</pre><p>AND for the class Client :</p><p><span class="strong"><strong>Class Link</strong></span></p><pre class="programlisting"><em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@Link</span></em>
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">class</strong> Client {
+
+}</pre></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_3_datafield"></a>3. DataField</h2></div></div></div><p>The DataField annotation defines the property of the field. Each
+datafield is identified by its position in the record, a type (string,
+int, date, &#8230;&#8203;) and optionally of a pattern</p><div class="informaltable"><table border="1" width="100%"><colgroup><col width="10%" class="col_1"><col width="10%" class="col_2"><col width="80%" class="col_3"></colgroup><thead><tr><th align="left" valign="top">Annotation name</th><th align="left" valign="top">Record type</th><th align="left" valign="top">Level</th></tr></thead><tbody><tr><td align="left" valign="top"><p><span class="strong"><strong>DataField</strong></span></p></td><td align="left" valign="top"><p>all</p></td><td align="left" valign="top"><p>Property</p></td></tr></tbody></table></div><div class="informaltable"><table border="1" width="100%"><colgroup><col width="10%" class="col_1"><col width="10%" class="col_2"><col width="80%" class="col_3"></colgroup><thead><tr><th align="left" valign="top">Parameter name</th><th align="left" valign="top">type</th><th align="left" valign="top">Info</th></tr></thead><tbody><tr><td align="left" valign="top"><p>pos</p></td><td align="left" valign="top"><p>int</p></td><td align="left" valign="top"><p>mandatory - The <span class="strong"><strong>input</strong></span> position of the field. digit number starting
+from 1 to &#8230;&#8203; - See the position parameter.</p></td></tr><tr><td align="left" valign="top"><p>pattern</p></td><td align="left" valign="top"><p>string</p></td><td align="left" valign="top"><p>optional - default value = "" - will be used to format Decimal, Date,</p></td></tr><tr><td align="left" valign="top"><p>length</p></td><td align="left" valign="top"><p>int</p></td><td align="left" valign="top"><p>optional - represents the length of the field for fixed length format</p></td></tr><tr><td align="left" valign="top"><p>precision</p></td><td align="left" valign="top"><p>int</p></td><td align="left" valign="top"><p>optional - represents the precision to be used when the Decimal number
+will be formatted/parsed</p></td></tr><tr><td align="left" valign="top"><p>pattern</p></td><td align="left" valign="top"><p>string</p></td><td align="left" valign="top"><p>optional - default value = "" - is used by the Java formatter
+(SimpleDateFormat by example) to format/validate data. If using pattern,
+then setting locale on bindy data format is recommended. Either set to a
+known locale such as "us" or use "default" to use platform default
+locale. Notice that "default" requires Camel 2.14/2.13.3/2.12.5.</p></td></tr><tr><td align="left" valign="top"><p>position</p></td><td align="left" valign="top"><p>int</p></td><td align="left" valign="top"><p>optional - must be used when the position of the field in the CSV
+generated (output message) must be different compare to input position
+(pos). See the pos parameter.</p></td></tr><tr><td align="left" valign="top"><p>required</p></td><td align="left" valign="top"><p>boolean</p></td><td align="left" valign="top"><p>optional - default value = "false"</p></td></tr><tr><td align="left" valign="top"><p>trim</p></td><td align="left" valign="top"><p>boolean</p></td><td align="left" valign="top"><p>optional - default value = "false"</p></td></tr><tr><td align="left" valign="top"><p>defaultValue</p></td><td align="left" valign="top"><p>string</p></td><td align="left" valign="top"><p><span class="strong"><strong>Camel 2.10:</strong></span> optional - default value = "" - defines the field&#8217;s
+default value when the respective CSV field is empty/not available</p></td></tr><tr><td align="left" valign="top"><p>impliedDecimalSeparator</p></td><td align="left" valign="top"><p>boolean</p></td><td align="left" valign="top"><p><span class="strong"><strong>Camel 2.11:</strong></span> optional - default value = "false" - Indicates if there is
+a decimal point implied at a specified location</p></td></tr><tr><td align="left" valign="top"><p>lengthPos</p></td><td align="left" valign="top"><p>int</p></td><td align="left" valign="top"><p><span class="strong"><strong>Camel 2.11</strong></span>: optional - can be used to identify&nbsp;a data field in a
+fixed-length record that defines the fixed length for this field</p></td></tr><tr><td align="left" valign="top"><p>align</p></td><td align="left" valign="top"><p>string</p></td><td align="left" valign="top"><p>optional - default value = "R" - Align the text to the right or left within a fixed-length field.
+Use values 'R' or 'L'</p></td></tr><tr><td align="left" valign="top"><p>delimiter</p></td><td align="left" valign="top"><p>string</p></td><td align="left" valign="top"><p><span class="strong"><strong>Camel 2.11:</strong></span> optional - can be used to demarcate the end of a variable-length field within a fixed-length record</p></td></tr></tbody></table></div><p><span class="strong"><strong>case 1 : pos</strong></span></p><p>This parameter/attribute represents the position of the field in the csv
+record</p><p><span class="strong"><strong>Position</strong></span></p><pre class="programlisting"><em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@CsvRecord(separator = ",")</span></em>
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">class</strong> Order {
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 1)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">int</strong> orderNr;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 5)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String isinCode;
+
+}</pre><p>As you can see in this example the position starts at '1' but continues
+at '5' in the class Order. The numbers from '2' to '4' are defined in
+the class Client (see here after).</p><p><span class="strong"><strong>Position continues in another model class</strong></span></p><pre class="programlisting"><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">class</strong> Client {
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 2)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String clientNr;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 3)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String firstName;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 4)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String lastName;
+}</pre><p><span class="strong"><strong>case 2 : pattern</strong></span></p><p>The pattern allows to enrich or validates the format of your data</p><p><span class="strong"><strong>Pattern</strong></span></p><pre class="programlisting"><em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@CsvRecord(separator = ",")</span></em>
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">class</strong> Order {
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 1)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">int</strong> orderNr;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 5)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String isinCode;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(name = "Name", pos = 6)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String instrumentName;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 7, precision = 2)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> BigDecimal amount;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 8)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String currency;
+
+    <em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// pattern used during parsing or when the date is created</em>
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 9, pattern = "dd-MM-yyyy")</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> Date orderDate;
+}</pre><p><span class="strong"><strong>case 3 : precision</strong></span></p><p>The precision is helpful when you want to define the decimal part of
+your number</p><p><span class="strong"><strong>Precision</strong></span></p><pre class="programlisting"><em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@CsvRecord(separator = ",")</span></em>
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">class</strong> Order {
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 1)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">int</strong> orderNr;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@Link</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> Client client;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 5)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String isinCode;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(name = "Name", pos = 6)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String instrumentName;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 7, precision = 2)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> BigDecimal amount;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 8)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String currency;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 9, pattern = "dd-MM-yyyy")</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> Date orderDate;
+}</pre><p><span class="strong"><strong>case 4 : Position is different in output</strong></span></p><p>The position attribute will inform bindy how to place the field in the
+CSV record generated. By default, the position used corresponds to the
+position defined with the attribute 'pos'. If the position is different
+(that means that we have an asymetric processus comparing marshaling
+from unmarshaling) than we can use 'position' to indicate this.</p><p>Here is an example</p><p><span class="strong"><strong>Position is different in output</strong></span></p><pre class="programlisting"><em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@CsvRecord(separator = ",", isOrdered = true)</span></em>
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">class</strong> Order {
+
+    <em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// Positions of the fields start from 1 and not from 0</em>
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 1, position = 11)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">int</strong> orderNr;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 2, position = 10)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String clientNr;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 3, position = 9)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String firstName;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 4, position = 8)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String lastName;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 5, position = 7)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String instrumentCode;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 6, position = 6)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String instrumentNumber;
+}</pre><p>This attribute of the annotation @DataField must be used in combination
+with attribute isOrdered = true of the annotation @CsvRecord</p><p><span class="strong"><strong>case 5 : required</strong></span></p><p>If a field is mandatory, simply use the attribute 'required' setted to
+true</p><p><span class="strong"><strong>Required</strong></span></p><pre class="programlisting"><em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@CsvRecord(separator = ",")</span></em>
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">class</strong> Order {
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 1)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">int</strong> orderNr;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 2, required = true)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String clientNr;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 3, required = true)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String firstName;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 4, required = true)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String lastName;
+}</pre><p>If this field is not present in the record, than an error will be raised
+by the parser with the following information :</p><p>Some fields are missing (optional or mandatory), line :</p><p><span class="strong"><strong>case 6 : trim</strong></span></p><p>If a field has leading and/or trailing spaces which should be removed
+before they are processed, simply use the attribute 'trim' setted to
+true</p><p><span class="strong"><strong>Trim</strong></span></p><pre class="programlisting"><em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@CsvRecord(separator = ",")</span></em>
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">class</strong> Order {
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 1, trim = true)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">int</strong> orderNr;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 2, trim = true)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> Integer clientNr;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 3, required = true)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String firstName;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 4)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String lastName;
+}</pre><p><span class="strong"><strong>case 7 : defaultValue</strong></span></p><p>If a field is not defined then uses the value indicated by the
+defaultValue attribute</p><p><span class="strong"><strong>Default value</strong></span></p><pre class="programlisting"><em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@CsvRecord(separator = ",")</span></em>
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">class</strong> Order {
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 1)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">int</strong> orderNr;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 2)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> Integer clientNr;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 3, required = true)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String firstName;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 4, defaultValue = "Barin")</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String lastName;
+}</pre><p>This attribute is only applicable to optional fields.</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_4_fixedlengthrecord"></a>4. FixedLengthRecord</h2></div></div></div><p>The FixedLengthRecord annotation is used to identified the root class of
+the model. It represents a record = a line of a file/message containing
+data fixed length formatted and can be linked to several children model
+classes. This format is a bit particular beause data of a field can be
+aligned to the right or to the left.
+ When the size of the data does not fill completely the length of the
+field, we can then add 'padd' characters.</p><div class="informaltable"><table border="1" width="100%"><colgroup><col width="10%" class="col_1"><col width="10%" class="col_2"><col width="80%" class="col_3"></colgroup><thead><tr><th align="left" valign="top">Annotation name</th><th align="left" valign="top">Record type</th><th align="left" valign="top">Level</th></tr></thead><tbody><tr><td align="left" valign="top"><p><span class="strong"><strong>FixedLengthRecord</strong></span></p></td><td align="left" valign="top"><p>fixed</p></td><td align="left" valign="top"><p>Class</p></td></tr></tbody></table></div><div class="informaltable"><table border="1" width="100%"><colgroup><col width="10%" class="col_1"><col width="10%" class="col_2"><col width="80%" class="col_3"></colgroup><thead><tr><th align="left" valign="top">Parameter name</th><th align="left" valign="top">type</th><th align="left" valign="top">Info</th></tr></thead><tbody><tr><td align="left" valign="top"><p>crlf</p></td><td align="left" valign="top"><p>string</p></td><td align="left" valign="top"><p>optional - possible values = WINDOWS,UNIX,MAC, or custom; default value.
+WINDOWS - allow to define the carriage return character to use. If you
+specify a value other than the three listed before, the value you enter
+(custom) will be used as the CRLF character(s). This option is used only during marshalling,
+whereas unmarshalling uses system default JDK provided line delimiter unless eol is customized</p></td></tr><tr><td align="left" valign="top"><p>eol</p></td><td align="left" valign="top"><p>string</p></td><td align="left" valign="top"><p>optional - default="" which is empty string. Character to be used to process
+considering end of line after each record while unmarshalling (optional - default = ""
+which help default JDK provided line delimiter to be used unless any other line delimiter
+provided). This option is used only during unmarshalling, where marshalling uses system default
+provided line delimiter as "WINDOWS" unless any other value is provided</p></td></tr><tr><td align="left" valign="top"><p>paddingChar</p></td><td align="left" valign="top"><p>char</p></td><td align="left" valign="top"><p>mandatory - default value = ' '</p></td></tr><tr><td align="left" valign="top"><p>length</p></td><td align="left" valign="top"><p>int</p></td><td align="left" valign="top"><p>mandatory = size of the fixed length record</p></td></tr><tr><td align="left" valign="top"><p>hasHeader</p></td><td align="left" valign="top"><p>boolean</p></td><td align="left" valign="top"><p><span class="strong"><strong>Camel 2.11</strong></span> - optional - Indicates that the record(s) of this type may
+be preceded by a single header record at the beginning of the file /
+stream</p></td></tr><tr><td align="left" valign="top"><p>hasFooter</p></td><td align="left" valign="top"><p>boolean</p></td><td align="left" valign="top"><p><span class="strong"><strong>Camel 2.11</strong></span> - optional - Indicates that the record(s) of this type may
+be followed by a single footer record at the end of the file / stream</p></td></tr><tr><td align="left" valign="top"><p>skipHeader</p></td><td align="left" valign="top"><p>boolean</p></td><td align="left" valign="top"><p><span class="strong"><strong>Camel 2.11</strong></span> - optional - Configures the data format to skip marshalling
+/ unmarshalling of the header record. Configure this parameter on the
+primary record (e.g., not the header or footer).</p></td></tr><tr><td align="left" valign="top"><p>skipFooter</p></td><td align="left" valign="top"><p>boolean</p></td><td align="left" valign="top"><p><span class="strong"><strong>Camel 2.11</strong></span> - optional - Configures the data format to skip marshalling
+/ unmarshalling of the footer record Configure this parameter on the
+primary record (e.g., not the header or footer)..</p></td></tr><tr><td align="left" valign="top"><p>isHeader</p></td><td align="left" valign="top"><p>boolean</p></td><td align="left" valign="top"><p><span class="strong"><strong>Camel 2.11</strong></span> - optional - Identifies this FixedLengthRecord as a header
+record</p></td></tr><tr><td align="left" valign="top"><p>isFooter</p></td><td align="left" valign="top"><p>boolean</p></td><td align="left" valign="top"><p><span class="strong"><strong>Camel 2.11</strong></span> - optional - Identifies this FixedLengthRecords as a footer
+record</p></td></tr><tr><td align="left" valign="top"><p>ignoreTrailingChars</p></td><td align="left" valign="top"><p>boolean</p></td><td align="left" valign="top"><p><span class="strong"><strong>Camel 2.11.1</strong></span> - optional - Indicates that characters beyond the last
+mapped filed can be ignored when unmarshalling / parsing.&nbsp;This annotation is associated to the root class of the model and must be
+declared one time.</p></td></tr></tbody></table></div><p>The hasHeader/hasFooter parameters are mutually exclusive with
+isHeader/isFooter. A record may not be both a header/footer and a
+primary fixed-length record.</p><p><span class="strong"><strong>case 1 : Simple fixed length record</strong></span></p><p>This simple example shows how to design the model to parse/format a
+fixed message</p><pre class="screen">10A9PaulineMISINXD12345678BUYShare2500.45USD01-08-2009</pre><p><span class="strong"><strong>Fixed-simple</strong></span></p><pre class="programlisting"><em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@FixedLengthRecord(length=54, paddingChar=' ')</span></em>
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">static</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">class</strong> Order {
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 1, length=2)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">int</strong> orderNr;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 3, length=2)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String clientNr;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 5, length=7)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String firstName;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 12, length=1, align="L")</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String lastName;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 13, length=4)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String instrumentCode;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 17, length=10)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String instrumentNumber;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 27, length=3)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String orderType;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 30, length=5)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String instrumentType;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 35, precision = 2, length=7)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> BigDecimal amount;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 42, length=3)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String currency;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 45, length=10, pattern = "dd-MM-yyyy")</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> Date orderDate;
+}</pre><p><span class="strong"><strong>case 2 : Fixed length record with alignment and padding</strong></span></p><p>This more elaborated example show how to define the alignment for a
+field and how to assign a padding character which is ' ' here''</p><pre class="screen">10A9 PaulineM ISINXD12345678BUYShare2500.45USD01-08-2009</pre><p><span class="strong"><strong>Fixed-padding-align</strong></span></p><pre class="programlisting"><em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@FixedLengthRecord(length=60, paddingChar=' ')</span></em>
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">static</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">class</strong> Order {
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 1, length=2)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">int</strong> orderNr;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 3, length=2)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String clientNr;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 5, length=9)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String firstName;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 14, length=5, align="L")</span></em>   <em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// align text to the LEFT zone of the block</em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String lastName;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 19, length=4)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String instrumentCode;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 23, length=10)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String instrumentNumber;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 33, length=3)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String orderType;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 36, length=5)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String instrumentType;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 41, precision = 2, length=7)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> BigDecimal amount;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 48, length=3)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String currency;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 51, length=10, pattern = "dd-MM-yyyy")</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> Date orderDate;
+}</pre><p><span class="strong"><strong>case 3 : Field padding</strong></span></p><p>Sometimes, the default padding defined for record cannnot be applied to
+the field as we have a number format where we would like to padd with
+'0' instead of ' '. In this case, you can use in the model the attribute
+paddingField to set this value.</p><pre class="screen">10A9 PaulineM ISINXD12345678BUYShare000002500.45USD01-08-2009</pre><p><span class="strong"><strong>Fixed-padding-field</strong></span></p><pre class="programlisting"><em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@FixedLengthRecord(length = 65, paddingChar = ' ')</span></em>
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">static</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">class</strong> Order {
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 1, length = 2)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">int</strong> orderNr;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 3, length = 2)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String clientNr;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 5, length = 9)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String firstName;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 14, length = 5, align = "L")</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String lastName;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 19, length = 4)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String instrumentCode;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 23, length = 10)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String instrumentNumber;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 33, length = 3)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String orderType;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 36, length = 5)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String instrumentType;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 41, precision = 2, length = 12, paddingChar = '0')</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> BigDecimal amount;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 53, length = 3)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String currency;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 56, length = 10, pattern = "dd-MM-yyyy")</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> Date orderDate;
+}</pre><p><span class="strong"><strong>case 4: Fixed length record with delimiter</strong></span></p><p>Fixed-length records sometimes have delimited content within the record.
+The firstName and lastName fields are delimited with the '^' character
+in the following example:</p><pre class="screen">10A9Pauline^M^ISINXD12345678BUYShare000002500.45USD01-08-2009</pre><p><span class="strong"><strong>Fixed-delimited</strong></span></p><pre class="programlisting"><em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@FixedLengthRecord()</span></em>
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">static</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">class</strong> Order {
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 1, length = 2)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">int</strong> orderNr;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 2, length = 2)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String clientNr;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 3, delimiter = "^")</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String firstName;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 4, delimiter = "^")</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String lastName;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 5, length = 4)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String instrumentCode;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 6, length = 10)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String instrumentNumber;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 7, length = 3)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String orderType;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 8, length = 5)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String instrumentType;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 9, precision = 2, length = 12, paddingChar = '0')</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> BigDecimal amount;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 10, length = 3)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String currency;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 11, length = 10, pattern = "dd-MM-yyyy")</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> Date orderDate;
+}</pre><p>As of <span class="strong"><strong>Camel 2.11</strong></span> the 'pos' value(s) in a fixed-length record may
+optionally be defined using ordinal, sequential values instead of
+precise column numbers.</p><p><span class="strong"><strong>case 5 : Fixed length record with record-defined field length</strong></span></p><p>Occasionally a fixed-length record may contain a field that define the
+expected length of another field within the same record. In the
+following example the length of the instrumentNumber field value is
+defined by the value of instrumentNumberLen field in the record.</p><pre class="screen">10A9Pauline^M^ISIN10XD12345678BUYShare000002500.45USD01-08-2009</pre><p><span class="strong"><strong>Fixed-delimited</strong></span></p><pre class="programlisting"><em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@FixedLengthRecord()</span></em>
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">static</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">class</strong> Order {
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 1, length = 2)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">int</strong> orderNr;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 2, length = 2)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String clientNr;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 3, delimiter = "^")</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String firstName;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 4, delimiter = "^")</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String lastName;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 5, length = 4)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String instrumentCode;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 6, length = 2, align = "R", paddingChar = '0')</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">int</strong> instrumentNumberLen;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 7, lengthPos=6)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String instrumentNumber;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 8, length = 3)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String orderType;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 9, length = 5)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String instrumentType;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 10, precision = 2, length = 12, paddingChar = '0')</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> BigDecimal amount;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 11, length = 3)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String currency;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 12, length = 10, pattern = "dd-MM-yyyy")</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> Date orderDate;
+}</pre><p><span class="strong"><strong>case 6 : Fixed length record with header and footer</strong></span></p><p>Bindy will discover fixed-length header and footer records that are
+configured as part of the model &#8211; provided that the annotated classes
+exist either in the same package as the primary @FixedLengthRecord
+class, or within one of the configured scan packages. The following text
+illustrates two fixed-length records that are bracketed by a header
+record and footer record.</p><pre class="screen">101-08-2009
+10A9 PaulineM ISINXD12345678BUYShare000002500.45USD01-08-2009
+10A9 RichN ISINXD12345678BUYShare000002700.45USD01-08-2009
+9000000002</pre><p><span class="strong"><strong>Fixed-header-and-footer-main-class</strong></span></p><pre class="programlisting"><em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@FixedLengthRecord(hasHeader = true, hasFooter = true)</span></em>
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">class</strong> Order {
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 1, length = 2)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">int</strong> orderNr;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 2, length = 2)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String clientNr;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 3, length = 9)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String firstName;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 4, length = 5, align = "L")</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String lastName;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 5, length = 4)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String instrumentCode;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 6, length = 10)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String instrumentNumber;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 7, length = 3)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String orderType;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 8, length = 5)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String instrumentType;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 9, precision = 2, length = 12, paddingChar = '0')</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> BigDecimal amount;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 10, length = 3)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String currency;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 11, length = 10, pattern = "dd-MM-yyyy")</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> Date orderDate;
+}
+
+<em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@FixedLengthRecord(isHeader = true)</span></em>
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong>  <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">class</strong> OrderHeader {
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 1, length = 1)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">int</strong> recordType = <span xmlns="http://www.w3.org/1999/xhtml" class="hl-number">1</span>;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 2, length = 10, pattern = "dd-MM-yyyy")</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> Date recordDate;
+}
+
+<em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@FixedLengthRecord(isFooter = true)</span></em>
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">class</strong> OrderFooter {
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 1, length = 1)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">int</strong> recordType = <span xmlns="http://www.w3.org/1999/xhtml" class="hl-number">9</span>;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 2, length = 9, align = "R", paddingChar = '0')</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">int</strong> numberOfRecordsInTheFile;
+}</pre><p><span class="strong"><strong>case 7 : Skipping content when parsing a fixed length record. (Camel
+2.11.1)</strong></span></p><p>It is common to integrate with systems that provide fixed-length records
+containing more information than needed for the target use case. It is
+useful in this situation to skip the declaration and parsing of those
+fields that we do not need. To accomodate this, Bindy will skip forward
+to the next mapped field within a record if the 'pos' value of the next
+declared field is beyond the cursor position of the last parsed field.
+Using absolute 'pos' locations for the fields of interest (instead of
+ordinal values) causes Bindy to skip content between two fields.</p><p>Similarly, it is possible that none of the content beyond some field is
+of interest. In this case, you can tell Bindy to skip parsing of
+everything beyond the last mapped field by setting the
+<span class="strong"><strong>ignoreTrailingChars</strong></span> property on the @FixedLengthRecord declaration.</p><pre class="programlisting"><em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@FixedLengthRecord(ignoreTrailingChars = true)</span></em>
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">static</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">class</strong> Order {
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 1, length = 2)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">int</strong> orderNr;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 3, length = 2)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String clientNr;
+
+    <em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// any characters that appear beyond the last mapped field will be ignored</em>
+
+}</pre></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_5_message"></a>5. Message</h2></div></div></div><p>The Message annotation is used to identified the class of your model who
+will contain key value pairs fields. This kind of format is used mainly
+in Financial Exchange Protocol Messages (FIX). Nevertheless, this
+annotation can be used for any other format where data are identified by
+keys. The key pair values are separated each other by a separator which
+can be a special character like a tab delimitor (unicode representation
+: \u0009) or a start of heading (unicode representation : \u0001)</p><pre class="literallayout">*"FIX information"*</pre><p>More information about FIX can be found on this web site :
+<a class="link" href="http://www.fixprotocol.org/" target="_top">http://www.fixprotocol.org/</a>. To work with
+FIX messages, the model must contain a Header and Trailer classes linked
+to the root message class which could be a Order class. This is not
+mandatory but will be very helpful when you will use camel-bindy in
+combination with camel-fix which is a Fix gateway based on quickFix
+project <a class="link" href="http://www.quickfixj.org/" target="_top">http://www.quickfixj.org/</a>.</p><div class="informaltable"><table border="1" width="100%"><colgroup><col width="10%" class="col_1"><col width="10%" class="col_2"><col width="80%" class="col_3"></colgroup><thead><tr><th align="left" valign="top">Annotation name</th><th align="left" valign="top">Record type</th><th align="left" valign="top">Level</th></tr></thead><tbody><tr><td align="left" valign="top"><p><span class="strong"><strong>Message</strong></span></p></td><td align="left" valign="top"><p>key value pair</p></td><td align="left" valign="top"><p>Class</p></td></tr></tbody></table></div><div class="informaltable"><table border="1" width="100%"><colgroup><col width="10%" class="col_1"><col width="10%" class="col_2"><col width="80%" class="col_3"></colgroup><thead><tr><th align="left" valign="top">Parameter name</th><th align="left" valign="top">type</th><th align="left" valign="top">Info</th></tr></thead><tbody><tr><td align="left" valign="top"><p>pairSeparator</p></td><td align="left" valign="top"><p>string</p></td><td align="left" valign="top"><p>mandatory - can be '=' or ';' or 'anything'</p></td></tr><tr><td align="left" valign="top"><p>keyValuePairSeparair</p></td><td align="left" valign="top"><p>string</p></td><td align="left" valign="top"><p>mandatory - can be '\u0001', '\u0009', '#' or 'anything'</p></td></tr><tr><td align="left" valign="top"><p>crlf</p></td><td align="left" valign="top"><p>string</p></td><td align="left" valign="top"><p>optional - possible values = WINDOWS,UNIX,MAC, or custom; default value
+= WINDOWS - allow to define the carriage return character to use. If you
+specify a value other than the three listed before, the value you enter
+(custom) will be used as the CRLF character(s)</p></td></tr><tr><td align="left" valign="top"><p>type</p></td><td align="left" valign="top"><p>string</p></td><td align="left" valign="top"><p>optional - define the type of message (e.g. FIX, EMX, &#8230;&#8203;)</p></td></tr><tr><td align="left" valign="top"><p>version</p></td><td align="left" valign="top"><p>string</p></td><td align="left" valign="top"><p>optional - version of the message (e.g. 4.1)</p></td></tr><tr><td align="left" valign="top"><p>isOrdered</p></td><td align="left" valign="top"><p>boolean</p></td><td align="left" valign="top"><p>optional - default value = false - allow to change the order of the
+fields when FIX message is generated. This annotation is associated to the message class of the model and must
+be declared one time.</p></td></tr></tbody></table></div><p><span class="strong"><strong>case 1 : separator = 'u0001'</strong></span></p><p>The separator used to segregate the key value pair fields in a FIX
+message is the ASCII '01' character or in unicode format '\u0001'. This
+character must be escaped a second time to avoid a java runtime error.
+Here is an example :</p><pre class="screen">8=FIX.4.1 9=20 34=1 35=0 49=INVMGR 56=BRKR 1=BE.CHM.001 11=CHM0001-01
+22=4 ...</pre><p>and how to use the annotation</p><p><span class="strong"><strong>FIX - message</strong></span></p><pre class="programlisting"><em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@Message(keyValuePairSeparator = "=", pairSeparator = "\u0001", type="FIX", version="4.1")</span></em>
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">class</strong> Order {
+
+}</pre><pre class="literallayout">*Look at test cases*</pre><p>The ASCII character like tab, &#8230;&#8203; cannot be displayed in WIKI page. So,
+have a look to the test case of camel-bindy to see exactly how the FIX
+message looks like (src\test\data\fix\fix.txt) and the Order, Trailer,
+Header classes
+(src\test\java\org\apache\camel\dataformat\bindy\model\fix\simple\Order.java)</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_6_keyvaluepairfield"></a>6. KeyValuePairField</h2></div></div></div><p>The KeyValuePairField annotation defines the property of a key value
+pair field. Each KeyValuePairField is identified by a tag (= key) and
+its value associated, a type (string, int, date, &#8230;&#8203;), optionaly a
+pattern and if the field is required</p><div class="informaltable"><table border="1" width="100%"><colgroup><col width="10%" class="col_1"><col width="10%" class="col_2"><col width="80%" class="col_3"></colgroup><thead><tr><th align="left" valign="top">Annotation name</th><th align="left" valign="top">Record type</th><th align="left" valign="top">Level</th></tr></thead><tbody><tr><td align="left" valign="top"><p><span class="strong"><strong>KeyValuePairField</strong></span></p></td><td align="left" valign="top"><p>Key Value Pair - FIX</p></td><td align="left" valign="top"><p>Property</p></td></tr></tbody></table></div><div class="informaltable"><table border="1" width="100%"><colgroup><col width="10%" class="col_1"><col width="10%" class="col_2"><col width="80%" class="col_3"></colgroup><thead><tr><th align="left" valign="top">Parameter name</th><th align="left" valign="top">type</th><th align="left" valign="top">Info</th></tr></thead><tbody><tr><td align="left" valign="top"><p>tag</p></td><td align="left" valign="top"><p>int</p></td><td align="left" valign="top"><p>mandatory - digit number identifying the field in the message - must be
+unique</p></td></tr><tr><td align="left" valign="top"><p>pattern</p></td><td align="left" valign="top"><p>string</p></td><td align="left" valign="top"><p>optional - default value = "" - will be used to format Decimal, Date,
+&#8230;&#8203;</p></td></tr><tr><td align="left" valign="top"><p>precision</p></td><td align="left" valign="top"><p>int</p></td><td align="left" valign="top"><p>optional - digit number - represents the precision to be used when the
+Decimal number will be formatted/parsed</p></td></tr><tr><td align="left" valign="top"><p>position</p></td><td align="left" valign="top"><p>int</p></td><td align="left" valign="top"><p>optional - must be used when the position of the key/tag in the FIX
+message must be different</p></td></tr><tr><td align="left" valign="top"><p>required</p></td><td align="left" valign="top"><p>boolean</p></td><td align="left" valign="top"><p>optional - default value = "false"</p></td></tr><tr><td align="left" valign="top"><p>impliedDecimalSeparator</p></td><td align="left" valign="top"><p>boolean</p></td><td align="left" valign="top"><p><span class="strong"><strong>Camel 2.11:</strong></span> optional - default value = "false" - Indicates if there is
+a decimal point implied at a specified location</p></td></tr></tbody></table></div><p><span class="strong"><strong>case 1 : tag</strong></span></p><p>This parameter represents the key of the field in the message</p><p><span class="strong"><strong>FIX message - Tag</strong></span></p><pre class="programlisting"><em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@Message(keyValuePairSeparator = "=", pairSeparator = "\u0001", type="FIX", version="4.1")</span></em>
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">class</strong> Order {
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@Link</span></em> Header header;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@Link</span></em> Trailer trailer;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@KeyValuePairField(tag = 1)</span></em> <em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// Client reference</em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String Account;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@KeyValuePairField(tag = 11)</span></em> <em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// Order reference</em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String ClOrdId;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@KeyValuePairField(tag = 22)</span></em> <em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// Fund ID type (Sedol, ISIN, ...)</em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String IDSource;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@KeyValuePairField(tag = 48)</span></em> <em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// Fund code</em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String SecurityId;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@KeyValuePairField(tag = 54)</span></em> <em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// Movement type ( 1 = Buy, 2 = sell)</em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String Side;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@KeyValuePairField(tag = 58)</span></em> <em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// Free text</em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String Text;
+}</pre><p><span class="strong"><strong>case 2 : Different position in output</strong></span></p><p>If the tags/keys that we will put in the FIX message must be sorted
+according to a predefine order, then use the attribute 'position' of the
+annotation @KeyValuePairField</p><p><span class="strong"><strong>FIX message - Tag - sort</strong></span></p><pre class="programlisting"><em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@Message(keyValuePairSeparator = "=", pairSeparator = "\\u0001", type = "FIX", version = "4.1", isOrdered = true)</span></em>
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">class</strong> Order {
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@Link</span></em> Header header;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@Link</span></em> Trailer trailer;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@KeyValuePairField(tag = 1, position = 1)</span></em> <em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// Client reference</em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String account;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@KeyValuePairField(tag = 11, position = 3)</span></em> <em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// Order reference</em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String clOrdId;
+}</pre></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_7_section"></a>7. Section</h2></div></div></div><p>In FIX message of fixed length records, it is common to have different
+sections in the representation of the information : header, body and
+section. The purpose of the annotation @Section is to inform bindy about
+which class of the model represents the header (= section 1), body (=
+section 2) and footer (= section 3)</p><p>Only one attribute/parameter exists for this annotation.</p><div class="informaltable"><table border="1" width="100%"><colgroup><col width="10%" class="col_1"><col width="10%" class="col_2"><col width="80%" class="col_3"></colgroup><thead><tr><th align="left" valign="top">Annotation name</th><th align="left" valign="top">Record type</th><th align="left" valign="top">Level</th></tr></thead><tbody><tr><td align="left" valign="top"><p><span class="strong"><strong>Section</strong></span></p></td><td align="left" valign="top"><p>FIX</p></td><td align="left" valign="top"><p>Class</p></td></tr></tbody></table></div><div class="informaltable"><table border="1" width="100%"><colgroup><col width="10%" class="col_1"><col width="10%" class="col_2"><col width="80%" class="col_3"></colgroup><thead><tr><th align="left" valign="top">Parameter name</th><th align="left" valign="top">type</th><th align="left" valign="top">Info</th></tr></thead><tbody><tr><td align="left" valign="top"><p>number</p></td><td align="left" valign="top"><p>int</p></td><td align="left" valign="top"><p>digit number identifying the section position</p></td></tr></tbody></table></div><p><span class="strong"><strong>case 1 : Section</strong></span></p><p>Definition of the header section</p><p><span class="strong"><strong>FIX message - Section - Header</strong></span></p><pre class="programlisting"><em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@Section(number = 1)</span></em>
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">class</strong> Header {
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@KeyValuePairField(tag = 8, position = 1)</span></em> <em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// Message Header</em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String beginString;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@KeyValuePairField(tag = 9, position = 2)</span></em> <em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// Checksum</em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">int</strong> bodyLength;
+}</pre><p>Definition of the body section</p><p><span class="strong"><strong>FIX message - Section - Body</strong></span></p><pre class="programlisting"><em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@Section(number = 2)</span></em>
+<em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@Message(keyValuePairSeparator = "=", pairSeparator = "\\u0001", type = "FIX", version = "4.1", isOrdered = true)</span></em>
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">class</strong> Order {
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@Link</span></em> Header header;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@Link</span></em> Trailer trailer;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@KeyValuePairField(tag = 1, position = 1)</span></em> <em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// Client reference</em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String account;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@KeyValuePairField(tag = 11, position = 3)</span></em> <em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// Order reference</em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String clOrdId;</pre><p>Definition of the footer section</p><p><span class="strong"><strong>FIX message - Section - Footer</strong></span></p><pre class="programlisting"><em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@Section(number = 3)</span></em>
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">class</strong> Trailer {
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@KeyValuePairField(tag = 10, position = 1)</span></em>
+    <em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// CheckSum</em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">int</strong> checkSum;
+
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">int</strong> getCheckSum() {
+        <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">return</strong> checkSum;
+    }</pre></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_8_onetomany"></a>8. OneToMany</h2></div></div></div><p>The purpose of the annotation @OneToMany is to allow to work with a
+<code class="literal">List&lt;?&gt;</code> field defined a POJO class or from a record containing
+repetitive groups.</p><pre class="literallayout">*Restrictions OneToMany*</pre><p>Be careful, the one to many of bindy does not allow to handle
+repetitions defined on several levels of the hierarchy</p><p>The relation OneToMany ONLY WORKS in the following cases :</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">Reading a FIX message containing repetitive groups (= group of
+tags/keys)</li><li class="listitem">Generating a CSV with repetitive data</li></ul></div><div class="informaltable"><table border="1" width="100%"><colgroup><col width="10%" class="col_1"><col width="10%" class="col_2"><col width="80%" class="col_3"></colgroup><thead><tr><th align="left" valign="top">Annotation name</th><th align="left" valign="top">Record type</th><th align="left" valign="top">Level</th></tr></thead><tbody><tr><td align="left" valign="top"><p><span class="strong"><strong>OneToMany</strong></span></p></td><td align="left" valign="top"><p>all</p></td><td align="left" valign="top"><p>property</p></td></tr></tbody></table></div><div class="informaltable"><table border="1" width="100%"><colgroup><col width="10%" class="col_1"><col width="10%" class="col_2"><col width="80%" class="col_3"></colgroup><thead><tr><th align="left" valign="top">Parameter name</th><th align="left" valign="top">type</th><th align="left" valign="top">Info</th></tr></thead><tbody><tr><td align="left" valign="top"><p>mappedTo</p></td><td align="left" valign="top"><p>string</p></td><td align="left" valign="top"><p>optional - string - class name associated to the type of the List&lt;Type
+of the Class&gt;</p></td></tr></tbody></table></div><p><span class="strong"><strong>case 1 : Generating CSV with repetitive data</strong></span></p><p>Here is the CSV output that we want :</p><pre class="screen">Claus,Ibsen,Camel in Action 1,2010,35
+Claus,Ibsen,Camel in Action 2,2012,35
+Claus,Ibsen,Camel in Action 3,2013,35
+Claus,Ibsen,Camel in Action 4,2014,35</pre><p>Remark : the repetitive data concern the title of the book and its
+publication date while first, last name and age are common</p><p>and the classes used to modeling this. The Author class contains a List
+of Book.</p><p><span class="strong"><strong>Generate CSV with repetitive data</strong></span></p><pre class="programlisting"><em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@CsvRecord(separator=",")</span></em>
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">class</strong> Author {
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 1)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String firstName;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 2)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String lastName;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@OneToMany</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> List&lt;Book&gt; books;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 5)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String Age;
+}
+
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">class</strong> Book {
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 3)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String title;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 4)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String year;
+}</pre><p>Very simple isn&#8217;t it !!!</p><p><span class="strong"><strong>case 2 : Reading FIX message containing group of tags/keys</strong></span></p><p>Here is the message that we would like to process in our model :</p><pre class="screen">8=FIX 4.19=2034=135=049=INVMGR56=BRKR
+1=BE.CHM.00111=CHM0001-0158=this is a camel - bindy test
+22=448=BE000124567854=1
+22=548=BE000987654354=2
+22=648=BE000999999954=3
+10=220</pre><p>tags 22, 48 and 54 are repeated</p><p>and the code</p><p><span class="strong"><strong>Reading FIX message containing group of tags/keys</strong></span></p><pre class="programlisting"><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">class</strong> Order {
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@Link</span></em> Header header;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@Link</span></em> Trailer trailer;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@KeyValuePairField(tag = 1)</span></em> <em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// Client reference</em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String account;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@KeyValuePairField(tag = 11)</span></em> <em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// Order reference</em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String clOrdId;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@KeyValuePairField(tag = 58)</span></em> <em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// Free text</em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String text;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@OneToMany(mappedTo = "org.apache.camel.dataformat.bindy.model.fix.complex.onetomany.Security")</span></em>
+    List&lt;Security&gt; securities;
+}
+
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">class</strong> Security {
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@KeyValuePairField(tag = 22)</span></em> <em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// Fund ID type (Sedol, ISIN, ...)</em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String idSource;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@KeyValuePairField(tag = 48)</span></em> <em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// Fund code</em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String securityCode;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@KeyValuePairField(tag = 54)</span></em> <em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// Movement type ( 1 = Buy, 2 = sell)</em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String side;
+}</pre></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_9_bindyconverter"></a>9. BindyConverter</h2></div></div></div><p>The purpose of the annotation @BindyConverter is define a converter
+to be used on field level. The provided class must implement the
+Format interface.</p><pre class="programlisting"><em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@FixedLengthRecord(length = 10, paddingChar = ' ')</span></em>
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">static</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">class</strong> DataModel {
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos =  1, length = 10, trim = true)</span></em>
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@BindyConverter(CustomConverter.class)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> String field1;
+}
+
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">static</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">class</strong> CustomConverter <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">implements</strong> Format&lt;String&gt; {
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@Override</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> String format(String object) <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">throws</strong> Exception {
+        <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">return</strong> (<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">new</strong> StringBuilder(object)).reverse().toString();
+    }
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@Override</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> String parse(String string) <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">throws</strong> Exception {
+        <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">return</strong> (<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">new</strong> StringBuilder(string)).reverse().toString();
+    }
+}</pre></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_10_formatfactories"></a>10. FormatFactories</h2></div></div></div><p>The purpose of the annotation @FormatFactories is to define a set of converters
+at record-level. The provided classes must implement the FormatFactoryInterface interface.</p><pre class="programlisting"><em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@CsvRecord(separator = ",")</span></em>
+<em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@FormatFactories({OrderNumberFormatFactory.class})</span></em>
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">static</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">class</strong> Order {
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 1)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> OrderNumber orderNr;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@DataField(pos = 2)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> String firstName;
+}
+
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">static</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">class</strong> OrderNumber {
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">int</strong> orderNr;
+
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">static</strong> OrderNumber ofString(String orderNumber) {
+        OrderNumber result = <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">new</strong> OrderNumber();
+        result.orderNr = Integer.valueOf(orderNumber);
+        <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">return</strong> result;
+    }
+}
+
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">static</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">class</strong> OrderNumberFormatFactory <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">extends</strong> AbstractFormatFactory {
+
+    {
+        supportedClasses.add(OrderNumber.<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">class</strong>);
+    }
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@Override</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> Format&lt;?&gt; build(FormattingOptions formattingOptions) {
+        <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">return</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">new</strong> Format&lt;OrderNumber&gt;() {
+            <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@Override</span></em>
+            <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> String format(OrderNumber object) <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">throws</strong> Exception {
+                <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">return</strong> String.valueOf(object.orderNr);
+            }
+
+            <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@Override</span></em>
+            <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> OrderNumber parse(String string) <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">throws</strong> Exception {
+                <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">return</strong> OrderNumber.ofString(string);
+            }
+        };
+    }
+}</pre></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_supported_datatypes"></a>Supported Datatypes</h2></div></div></div><p>The DefaultFormatFactory makes formatting of the following datatype available by
+returning an instance of the interface FormatFactoryInterface based on the provided
+FormattingOptions:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">BigDecimal</li><li class="listitem">BigInteger</li><li class="listitem">Boolean</li><li class="listitem">Byte</li><li class="listitem">Character</li><li class="listitem">Date</li><li class="listitem">Double</li><li class="listitem">Enums</li><li class="listitem">Float</li><li class="listitem">Integer</li><li class="listitem">LocalDate (java 8, since 2.18.0)</li><li class="listitem">LocalDateTime (java 8, since 2.18.0)</li><li class="listitem">LocalTime (java 8, since 2.18.0)</li><li class="listitem">Long</li><li class="listitem">Short</li><li class="listitem">String</li></ul></div><p>The DefaultFormatFactory can be overridden by providing an instance of
+FactoryRegistry in the registry in use (e.g. spring or JNDI).</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_using_the_java_dsl_2"></a>Using the Java DSL</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="bindy-dataformat.html#_setting_locale">Setting locale</a></span></dt><dt><span class="section"><a href="bindy-dataformat.html#_unmarshaling">Unmarshaling</a></span></dt><dt><span class="section"><a href="bindy-dataformat.html#_marshaling">Marshaling</a></span></dt></dl></div><p>The next step consists in instantiating the DataFormat <span class="emphasis"><em>bindy</em></span> class
+associated with this record type and providing Java package name(s) as
+parameter.</p><p>For example the following uses the class <code class="literal">BindyCsvDataFormat</code> (who
+correspond to the class associated with the CSV record type) which is
+configured with <code class="literal">com.acme.model</code> package name to initialize the model objects
+configured in this package.</p><pre class="programlisting"><em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// Camel 2.15 or older (configure by package name)</em>
+DataFormat bindy = <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">new</strong> BindyCsvDataFormat(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"com.acme.model"</em></strong>);
+
+&nbsp;
+<em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// Camel 2.16 onwards (configure by class name)</em>
+DataFormat bindy = <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">new</strong> BindyCsvDataFormat(com.acme.model.MyModel.<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">class</strong>);</pre><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="_setting_locale"></a>Setting locale</h3></div></div></div><p>Bindy supports configuring the locale on the dataformat, such as&nbsp;</p><pre class="programlisting"><em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// Camel 2.15 or older (configure by package name)</em>
+BindyCsvDataFormat bindy = <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">new</strong> BindyCsvDataFormat(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"com.acme.model"</em></strong>);
+<em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// Camel 2.16 onwards (configure by class name)</em>
+BindyCsvDataFormat bindy = <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">new</strong> BindyCsvDataFormat(com.acme.model.MyModel.<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">class</strong>);
+
+bindy.setLocale(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"us"</em></strong>);</pre><p>Or to use the platform default locale then use "default" as the locale
+name. Notice this requires Camel 2.14/2.13.3/2.12.5.</p><pre class="programlisting"><em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// Camel 2.15 or older (configure by package name)</em>
+BindyCsvDataFormat bindy = <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">new</strong> BindyCsvDataFormat(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"com.acme.model"</em></strong>);
+<em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// Camel 2.16 onwards (configure by class name)</em>
+BindyCsvDataFormat bindy = <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">new</strong> BindyCsvDataFormat(com.acme.model.MyModel.<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">class</strong>);
+
+bindy.setLocale(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"default"</em></strong>);</pre><p>for older releases you can set it using Java code as shown</p><pre class="programlisting"><em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// Camel 2.15 or older (configure by package name)</em>
+BindyCsvDataFormat bindy = <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">new</strong> BindyCsvDataFormat(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"com.acme.model"</em></strong>);
+<em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// Camel 2.16 onwards (configure by class name)</em>
+BindyCsvDataFormat bindy = <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">new</strong> BindyCsvDataFormat(com.acme.model.MyModel.<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">class</strong>);
+
+bindy.setLocale(Locale.getDefault().getISO3Country());</pre></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="_unmarshaling"></a>Unmarshaling</h3></div></div></div><pre class="programlisting">from(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"file://inbox"</em></strong>)
+  .unmarshal(bindy)
+  .to(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"direct:handleOrders"</em></strong>);</pre><p>Alternatively, you can use a named reference to a data format which can
+then be defined in your Registry e.g. your
+Spring XML file:</p><pre class="programlisting">from(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"file://inbox"</em></strong>)
+  .unmarshal(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"myBindyDataFormat"</em></strong>)
+  .to(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"direct:handleOrders"</em></strong>);</pre><p>The Camel route will pick-up files in the inbox directory, unmarshall
+CSV records into a collection of model objects and send the collection
+ to the route referenced by 'handleOrders'.</p><p>The collection returned is a <span class="strong"><strong>List of Map</strong></span> objects. Each Map within the
+list contains the model objects that were marshalled out of each line of
+the CSV. The reason behind this is that <span class="emphasis"><em>each line can correspond to
+more than one object</em></span>. This can be confusing when you simply expect one
+object to be returned per line.</p><p>Each object can be retrieve using its class name.</p><pre class="programlisting">List&lt;Map&lt;String, Object&gt;&gt; unmarshaledModels = (List&lt;Map&lt;String, Object&gt;&gt;) exchange.getIn().getBody();
+
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">int</strong> modelCount = <span xmlns="http://www.w3.org/1999/xhtml" class="hl-number">0</span>;
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">for</strong> (Map&lt;String, Object&gt; model : unmarshaledModels) {
+  <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">for</strong> (String className : model.keySet()) {
+     Object obj = model.get(className);
+     LOG.info(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"Count : "</em></strong> + modelCount + <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">", "</em></strong> + obj.toString());
+  }
+ modelCount++;
+}
+
+LOG.info(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"Total CSV records received by the csv bean : "</em></strong> + modelCount);</pre><p>Assuming that you want to extract a single Order object from this map
+for processing in a route, you could use a combination of a
+Splitter and a Processor as per
+the following:</p><pre class="programlisting">from(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"file://inbox"</em></strong>)
+    .unmarshal(bindy)
+    .split(body())
+        .process(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">new</strong> Processor() {
+            <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">void</strong> process(Exchange exchange) <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">throws</strong> Exception {
+                Message in = exchange.getIn();
+                Map&lt;String, Object&gt; modelMap = (Map&lt;String, Object&gt;) in.getBody();
+                in.setBody(modelMap.get(Order.<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">class</strong>.getCanonicalName()));
+            }
+        })
+        .to(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"direct:handleSingleOrder"</em></strong>)
+    .end();</pre><p>Take care of the fact that Bindy uses CHARSET_NAME property or the CHARSET_NAME header as define in the
+Exchange interface to do a characterset conversion of the inputstream received for unmarshalling.
+In some producers (e.g. file-endpoint) you can define a characterset. The characterset conversion
+can already been done by this producer. Sometimes you need to remove this property or header from the
+exchange before sending it to the unmarshal. If you don&#8217;t remove it the conversion might be done twice
+which might lead to unwanted results.</p><pre class="programlisting">from(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"file://inbox?charset=Cp922"</em></strong>)
+  .removeProperty(Exchange.CHARSET_NAME)
+  .unmarshal(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"myBindyDataFormat"</em></strong>)
+  .to(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"direct:handleOrders"</em></strong>);</pre></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="_marshaling"></a>Marshaling</h3></div></div></div><p>To generate CSV records from a collection of model objects, you create
+the following route :</p><pre class="programlisting">from(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"direct:handleOrders"</em></strong>)
+   .marshal(bindy)
+   .to(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"file://outbox"</em></strong>)</pre></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_using_spring_xml"></a>Using Spring XML</h2></div></div></div><p>This is really easy to use Spring as your favorite DSL language to
+declare the routes to be used for camel-bindy. The following example
+shows two routes where the first will pick-up records from files,
+unmarshal the content and bind it to their model. The result is then
+send to a pojo (doing nothing special) and place them into a queue.</p><p>The second route will extract the pojos from the queue and marshal the
+content to generate a file containing the csv record. The example above
+is for using Camel 2.16 onwards.</p><p><span class="strong"><strong>spring dsl</strong></span></p><pre class="programlisting"><span xmlns="http://www.w3.org/1999/xhtml" class="hl-directive" style="color: maroon">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;beans</strong> <span xmlns="http://www.w3.org/1999/xhtml" class="hl-attribute" style="color: #F5844C">xmlns</span>=<span xmlns="http://www.w3.org/1999/xhtml" class="hl-value" style="color: #993300">"http://www.springframework.org/schema/beans"</span>
+    <span xmlns="http://www.w3.org/1999/xhtml" class="hl-attribute" style="color: #F5844C">xmlns:xsi</span>=<span xmlns="http://www.w3.org/1999/xhtml" class="hl-value" style="color: #993300">"http://www.w3.org/2001/XMLSchema-instance"</span>
+    <span xmlns="http://www.w3.org/1999/xhtml" class="hl-attribute" style="color: #F5844C">xsi:schemaLocation</span>=<span xmlns="http://www.w3.org/1999/xhtml" class="hl-value" style="color: #993300">"
+       http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://camel.apache.org/schema/spring
+       http://camel.apache.org/schema/spring/camel-spring.xsd"</span><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&gt;</strong>
+
+    <em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">&lt;!-- Queuing engine - ActiveMq - work locally in mode virtual memory --&gt;</em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;bean</strong> <span xmlns="http://www.w3.org/1999/xhtml" class="hl-attribute" style="color: #F5844C">id</span>=<span xmlns="http://www.w3.org/1999/xhtml" class="hl-value" style="color: #993300">"activemq"</span> <span xmlns="http://www.w3.org/1999/xhtml" class="hl-attribute" style="color: #F5844C">class</span>=<span xmlns="http://www.w3.org/1999/xhtml" class="hl-value" style="color: #993300">"org.apache.activemq.camel.component.ActiveMQComponent"</span><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&gt;</strong>
+        <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;property</strong> <span xmlns="http://www.w3.org/1999/xhtml" class="hl-attribute" style="color: #F5844C">name</span>=<span xmlns="http://www.w3.org/1999/xhtml" class="hl-value" style="color: #993300">"brokerURL"</span> <span xmlns="http://www.w3.org/1999/xhtml" class="hl-attribute" style="color: #F5844C">value</span>=<span xmlns="http://www.w3.org/1999/xhtml" class="hl-value" style="color: #993300">"vm://localhost:61616"</span><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">/&gt;</strong>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/bean&gt;</strong>
+
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;camelContext</strong> <span xmlns="http://www.w3.org/1999/xhtml" class="hl-attribute" style="color: #F5844C">xmlns</span>=<span xmlns="http://www.w3.org/1999/xhtml" class="hl-value" style="color: #993300">"http://camel.apache.org/schema/spring"</span><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&gt;</strong>
+        <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;dataFormats&gt;</strong>
+          <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;bindy</strong> <span xmlns="http://www.w3.org/1999/xhtml" class="hl-attribute" style="color: #F5844C">id</span>=<span xmlns="http://www.w3.org/1999/xhtml" class="hl-value" style="color: #993300">"bindyDataformat"</span> <span xmlns="http://www.w3.org/1999/xhtml" class="hl-attribute" style="color: #F5844C">type</span>=<span xmlns="http://www.w3.org/1999/xhtml" class="hl-value" style="color: #993300">"Csv"</span> <span xmlns="http://www.w3.org/1999/xhtml" class="hl-attribute" style="color: #F5844C">classType</span>=<span xmlns="http://www.w3.org/1999/xhtml" class="hl-value" style="color: #993300">"org.apache.camel.bindy.model.Order"</span><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">/&gt;</strong>
+        <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/dataFormats&gt;</strong>
+
+        <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;route&gt;</strong>
+            <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;from</strong> <span xmlns="http://www.w3.org/1999/xhtml" class="hl-attribute" style="color: #F5844C">uri</span>=<span xmlns="http://www.w3.org/1999/xhtml" class="hl-value" style="color: #993300">"file://src/data/csv/?noop=true"</span><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096"> /&gt;</strong>
+            <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;unmarshal</strong> <span xmlns="http://www.w3.org/1999/xhtml" class="hl-attribute" style="color: #F5844C">ref</span>=<span xmlns="http://www.w3.org/1999/xhtml" class="hl-value" style="color: #993300">"bindyDataformat"</span><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096"> /&gt;</strong>
+            <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;to</strong> <span xmlns="http://www.w3.org/1999/xhtml" class="hl-attribute" style="color: #F5844C">uri</span>=<span xmlns="http://www.w3.org/1999/xhtml" class="hl-value" style="color: #993300">"bean:csv"</span><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096"> /&gt;</strong>
+            <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;to</strong> <span xmlns="http://www.w3.org/1999/xhtml" class="hl-attribute" style="color: #F5844C">uri</span>=<span xmlns="http://www.w3.org/1999/xhtml" class="hl-value" style="color: #993300">"activemq:queue:in"</span><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096"> /&gt;</strong>
+        <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/route&gt;</strong>
+
+        <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;route&gt;</strong>
+            <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;from</strong> <span xmlns="http://www.w3.org/1999/xhtml" class="hl-attribute" style="color: #F5844C">uri</span>=<span xmlns="http://www.w3.org/1999/xhtml" class="hl-value" style="color: #993300">"activemq:queue:in"</span><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096"> /&gt;</strong>
+            <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;marshal</strong> <span xmlns="http://www.w3.org/1999/xhtml" class="hl-attribute" style="color: #F5844C">ref</span>=<span xmlns="http://www.w3.org/1999/xhtml" class="hl-value" style="color: #993300">"bindyDataformat"</span><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096"> /&gt;</strong>
+            <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;to</strong> <span xmlns="http://www.w3.org/1999/xhtml" class="hl-attribute" style="color: #F5844C">uri</span>=<span xmlns="http://www.w3.org/1999/xhtml" class="hl-value" style="color: #993300">"file://src/data/csv/out/"</span><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096"> /&gt;</strong>
+        <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/route&gt;</strong>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/camelContext&gt;</strong>
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/beans&gt;</strong></pre><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>Please verify that your model classes implements serializable otherwise
+the queue manager will raise an error</p></td></tr></table></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_dependencies_20"></a>Dependencies</h2></div></div></div><p>To use Bindy in your camel routes you need to add the a dependency on
+<span class="strong"><strong>camel-bindy</strong></span> which implements this data format.</p><p>If you use maven you could just add the following to your pom.xml,
+substituting the version number for the latest &amp; greatest release (see
+the download page for the latest versions).</p><pre class="programlisting">&lt;dependency&gt;
+  &lt;groupId&gt;org.apache.camel&lt;/groupId&gt;
+  &lt;artifactId&gt;camel-bindy&lt;/artifactId&gt;
+  &lt;version&gt;x.x.x&lt;/version&gt;
+&lt;/dependency&gt;</pre></div></div></body></html>
