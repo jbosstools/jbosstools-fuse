@@ -20,7 +20,7 @@ import org.eclipse.reddeer.direct.preferences.Preferences;
  */
 public class StagingRepositoriesPreferenceUtil {
 
-	private static final Logger log = Logger.getLogger(StagingRepositoriesPreferenceUtil.class);
+	public static final Logger log = Logger.getLogger(StagingRepositoriesPreferenceUtil.class);
 
 	public static final String STAGING_REPO_PLUGIN = "org.fusesource.ide.projecttemplates";
 	public static final String STAGING_REPO_ENABLE_KEY = "enableStagingRepositories";

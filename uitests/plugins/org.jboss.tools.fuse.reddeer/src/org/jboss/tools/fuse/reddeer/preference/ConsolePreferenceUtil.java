@@ -20,7 +20,7 @@ import org.eclipse.reddeer.direct.preferences.Preferences;
  */
 public class ConsolePreferenceUtil {
 
-	private static final Logger log = Logger.getLogger(ConsolePreferenceUtil.class);
+	public static final Logger log = Logger.getLogger(ConsolePreferenceUtil.class);
 
 	public static final String CONSOLE_PLUGIN = "org.eclipse.debug.ui";
 	public static final String CONSOLE_OPEN_ON_ERR_KEY = "DEBUG.consoleOpenOnErr";

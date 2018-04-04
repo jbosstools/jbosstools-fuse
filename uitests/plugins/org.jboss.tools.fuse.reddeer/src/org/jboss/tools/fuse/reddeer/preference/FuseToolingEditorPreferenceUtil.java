@@ -20,7 +20,7 @@ import org.eclipse.reddeer.direct.preferences.Preferences;
  */
 public class FuseToolingEditorPreferenceUtil {
 
-	private static final Logger log = Logger.getLogger(FuseToolingEditorPreferenceUtil.class);
+	public static final Logger log = Logger.getLogger(FuseToolingEditorPreferenceUtil.class);
 
 	public static final String FUSE_EDITOR_PLUGIN = "org.fusesource.ide.preferences";
 	public static final String FUSE_EDITOR_ID_PREFERRED_KEY = "preferIdAsLabelPreference";

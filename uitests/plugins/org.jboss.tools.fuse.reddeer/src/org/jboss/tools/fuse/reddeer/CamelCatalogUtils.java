@@ -30,7 +30,7 @@ public class CamelCatalogUtils {
 
 	private static Logger log = Logger.getLogger(CamelCatalogUtils.class);
 
-	private static final String ROOT_PATH = "/org/apache/camel/catalog/";
+	public static final String ROOT_PATH = "/org/apache/camel/catalog/";
 
 	private static String COMPONENTS_PATH = ROOT_PATH + "components";
 

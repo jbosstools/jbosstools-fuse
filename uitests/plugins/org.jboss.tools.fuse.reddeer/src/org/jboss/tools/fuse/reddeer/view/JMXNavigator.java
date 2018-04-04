@@ -34,7 +34,7 @@ public class JMXNavigator extends WorkbenchView {
 	public static final String TITLE = "JMX Navigator";
 	public static final String CONNECT_CONTEXT_MENU = "Connect...";
 
-	private static final Logger log = Logger.getLogger(JMXNavigator.class);
+	public static final Logger log = Logger.getLogger(JMXNavigator.class);
 
 	private boolean shouldCollapseLocalProcesses = true;
 

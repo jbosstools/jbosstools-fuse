@@ -17,9 +17,9 @@ package org.jboss.tools.fuse.reddeer.runtime.impl;
  */
 public class ServerFuse extends ServerKaraf {
 
-	private static final String CATEGORY = "Red Hat JBoss Middleware";
-	private static final String LABEL_6 = "Red Hat JBoss Fuse";
-	private static final String LABEL_7 = "Red Hat Fuse";
+	public static final String CATEGORY = "Red Hat JBoss Middleware";
+	public static final String LABEL_6 = "Red Hat JBoss Fuse";
+	public static final String LABEL_7 = "Red Hat Fuse";
 
 	public ServerFuse() {
 		setType("Fuse");

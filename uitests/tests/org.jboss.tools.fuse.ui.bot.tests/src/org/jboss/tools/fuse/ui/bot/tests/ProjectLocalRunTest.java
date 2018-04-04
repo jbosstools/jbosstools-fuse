@@ -49,8 +49,8 @@ import org.junit.runner.RunWith;
 @RunWith(RedDeerSuite.class)
 public class ProjectLocalRunTest extends DefaultTest {
 
-	private static final String PROJECT_NAME = "cbr @1";
-	private static final String PROJECT_CAMEL_CONTEXT = "camel-context.xml";
+	public static final String PROJECT_NAME = "cbr @1";
+	public static final String PROJECT_CAMEL_CONTEXT = "camel-context.xml";
 
 	private static Logger log = Logger.getLogger(ProjectLocalRunTest.class);
 

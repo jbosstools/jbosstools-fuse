@@ -26,7 +26,7 @@ import org.eclipse.reddeer.swt.impl.toolbar.DefaultToolItem;
  */
 public class FuseJMXNavigator extends JMXNavigator {
 
-	private static final Logger log = Logger.getLogger(FuseJMXNavigator.class);
+	public static final Logger log = Logger.getLogger(FuseJMXNavigator.class);
 
 	/**
 	 * Tries to suspend Local Camel Context

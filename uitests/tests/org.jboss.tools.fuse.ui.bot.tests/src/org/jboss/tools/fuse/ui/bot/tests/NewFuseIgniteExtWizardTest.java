@@ -43,8 +43,8 @@ import org.junit.runner.RunWith;
 @RunWith(RedDeerSuite.class)
 public class NewFuseIgniteExtWizardTest {
 
-	private static final String CAMEL_VERSION_ERROR_MSG = "seems to be unavailable";
-	private static final String CAMEL_VERSION_OK_MSG = "The specified Apache Camel version is valid.";
+	public static final String CAMEL_VERSION_ERROR_MSG = "seems to be unavailable";
+	public static final String CAMEL_VERSION_OK_MSG = "The specified Apache Camel version is valid.";
 
 	private NewFuseIgniteExtensionProjectWizard wizard;
 

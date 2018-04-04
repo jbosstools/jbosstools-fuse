@@ -38,8 +38,8 @@ import org.eclipse.reddeer.workbench.core.condition.JobIsRunning;
  */
 public class NewOpenShiftConnectionWizard extends WizardDialog {
 
-	private static final String SSL_CERT = "Untrusted SSL Certificate";
-	private static final String TITLE = "New OpenShift Connection";
+	public static final String SSL_CERT = "Untrusted SSL Certificate";
+	public static final String TITLE = "New OpenShift Connection";
 
 	public NewOpenShiftConnectionWizard() {
 		super(TITLE);
@@ -153,61 +153,61 @@ public class NewOpenShiftConnectionWizard extends WizardDialog {
 	}
 
 	public CheckBox getSaveTokenCouldTriggerSecureStorageLoginCHBgroup() {
-		return new CheckBox(new DefaultGroup("Authentication"), "Save token (could trigger secure storage login)");
+		return new CheckBox(new DefaultGroup(this, "Authentication"), "Save token (could trigger secure storage login)");
 	}
 
 	public String getTextSaveTokenCouldTriggerSecureStorageLogin() {
-		return new CheckBox(new DefaultGroup("Authentication"), "Save token (could trigger secure storage login)")
+		return new CheckBox(new DefaultGroup(this, "Authentication"), "Save token (could trigger secure storage login)")
 				.getText();
 	}
 
 	public LabeledText getTokenTXT() {
-		return new LabeledText(new DefaultGroup("Authentication"), "Token");
+		return new LabeledText(new DefaultGroup(this, "Authentication"), "Token");
 	}
 
 	public String getTextToken() {
-		return new LabeledText(new DefaultGroup("Authentication"), "Token").getText();
+		return new LabeledText(new DefaultGroup(this, "Authentication"), "Token").getText();
 	}
 
 	public CheckBox getSavePasswordCouldTriggerSecureStorageLoginCHBgroup() {
-		return new CheckBox(new DefaultGroup("Authentication"), "Save password (could trigger secure storage login)");
+		return new CheckBox(new DefaultGroup(this, "Authentication"), "Save password (could trigger secure storage login)");
 	}
 
 	public String getTextSavePasswordCouldTriggerSecureStorageLogin() {
-		return new CheckBox(new DefaultGroup("Authentication"), "Save password (could trigger secure storage login)")
+		return new CheckBox(new DefaultGroup(this, "Authentication"), "Save password (could trigger secure storage login)")
 				.getText();
 	}
 
 	public LabeledText getPasswordTXT() {
-		return new LabeledText(new DefaultGroup("Authentication"), "Password:");
+		return new LabeledText(new DefaultGroup(this, "Authentication"), "Password:");
 	}
 
 	public String getTextPassword() {
-		return new LabeledText(new DefaultGroup("Authentication"), "Password:").getText();
+		return new LabeledText(new DefaultGroup(this, "Authentication"), "Password:").getText();
 	}
 
 	public LabeledText getUsernameTXT() {
-		return new LabeledText(new DefaultGroup("Authentication"), "Username:");
+		return new LabeledText(new DefaultGroup(this, "Authentication"), "Username:");
 	}
 
 	public String getTextUsername() {
-		return new LabeledText(new DefaultGroup("Authentication"), "Username:").getText();
+		return new LabeledText(new DefaultGroup(this, "Authentication"), "Username:").getText();
 	}
 
 	public LabeledCombo getProtocolCMB() {
-		return new LabeledCombo(new DefaultGroup("Authentication"), "Protocol:");
+		return new LabeledCombo(new DefaultGroup(this, "Authentication"), "Protocol:");
 	}
 
 	public String getTextProtocol() {
-		return new LabeledCombo(new DefaultGroup("Authentication"), "Protocol:").getText();
+		return new LabeledCombo(new DefaultGroup(this, "Authentication"), "Protocol:").getText();
 	}
 
 	public String getSelectionProtocol() {
-		return new LabeledCombo(new DefaultGroup("Authentication"), "Protocol:").getSelection();
+		return new LabeledCombo(new DefaultGroup(this, "Authentication"), "Protocol:").getSelection();
 	}
 
 	public List<String> getItemsProtocol() {
-		return new LabeledCombo(new DefaultGroup("Authentication"), "Protocol:").getItems();
+		return new LabeledCombo(new DefaultGroup(this, "Authentication"), "Protocol:").getItems();
 	}
 
 	public LabeledCombo getServerTypeCMB() {
@@ -255,12 +255,12 @@ public class NewOpenShiftConnectionWizard extends WizardDialog {
 	}
 
 	public boolean isCheckedSaveTokenCouldTriggerSecureStorageLoginGroup() {
-		return new CheckBox(new DefaultGroup("Authentication"), "Save token (could trigger secure storage login)")
+		return new CheckBox(new DefaultGroup(this, "Authentication"), "Save token (could trigger secure storage login)")
 				.isChecked();
 	}
 
 	public boolean isCheckedSavePasswordCouldTriggerSecureStorageLoginGroup() {
-		return new CheckBox(new DefaultGroup("Authentication"), "Save password (could trigger secure storage login)")
+		return new CheckBox(new DefaultGroup(this, "Authentication"), "Save password (could trigger secure storage login)")
 				.isChecked();
 	}
 
@@ -277,19 +277,19 @@ public class NewOpenShiftConnectionWizard extends WizardDialog {
 	}
 
 	public void setTextToken(String str) {
-		new LabeledText(new DefaultGroup("Authentication"), "Token").setText(str);
+		new LabeledText(new DefaultGroup(this, "Authentication"), "Token").setText(str);
 	}
 
 	public void setTextPassword(String str) {
-		new LabeledText(new DefaultGroup("Authentication"), "Password:").setText(str);
+		new LabeledText(new DefaultGroup(this, "Authentication"), "Password:").setText(str);
 	}
 
 	public void setTextUsername(String str) {
-		new LabeledText(new DefaultGroup("Authentication"), "Username:").setText(str);
+		new LabeledText(new DefaultGroup(this, "Authentication"), "Username:").setText(str);
 	}
 
 	public void setSelectionProtocol(String str) {
-		new LabeledCombo(new DefaultGroup("Authentication"), "Protocol:").setSelection(str);
+		new LabeledCombo(new DefaultGroup(this, "Authentication"), "Protocol:").setSelection(str);
 	}
 
 	public void setSelectionServerType(String str) {
@@ -309,12 +309,12 @@ public class NewOpenShiftConnectionWizard extends WizardDialog {
 	}
 
 	public void toggleSaveTokenCouldTriggerSecureStorageLoginGroup(boolean choice) {
-		new CheckBox(new DefaultGroup("Authentication"), "Save token (could trigger secure storage login)")
+		new CheckBox(new DefaultGroup(this, "Authentication"), "Save token (could trigger secure storage login)")
 				.toggle(choice);
 	}
 
 	public void toggleSavePasswordCouldTriggerSecureStorageLoginGroup(boolean choice) {
-		new CheckBox(new DefaultGroup("Authentication"), "Save password (could trigger secure storage login)")
+		new CheckBox(new DefaultGroup(this, "Authentication"), "Save password (could trigger secure storage login)")
 				.toggle(choice);
 	}
 }

@@ -65,7 +65,7 @@ import org.junit.runner.RunWith;
 @Fuse(state = RUNNING)
 public class JMXNavigatorServerTest {
 
-	private static final String PROJECT_NAME = "cbr-blueprint";
+	public static final String PROJECT_NAME = "cbr-blueprint";
 
 	private static String serverName;
 	private static boolean setupIsDone = false;

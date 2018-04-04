@@ -19,9 +19,9 @@ import org.eclipse.reddeer.eclipse.selectionwizard.NewMenuWizard;
  */
 public class NewFuseIntegrationProjectWizard extends NewMenuWizard {
 
-	private static final String SHELL_NAME = "New Fuse Integration Project";
-	private static final String WIZARD_CATEGORY = "Red Hat Fuse";
-	private static final String WIZARD_NAME = "Fuse Integration Project";
+	public static final String SHELL_NAME = "New Fuse Integration Project";
+	public static final String WIZARD_CATEGORY = "Red Hat Fuse";
+	public static final String WIZARD_NAME = "Fuse Integration Project";
 
 	public NewFuseIntegrationProjectWizard() {
 		super(SHELL_NAME, WIZARD_CATEGORY, WIZARD_NAME);

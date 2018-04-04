@@ -20,7 +20,7 @@ import org.eclipse.reddeer.direct.preferences.Preferences;
  */
 public class SSH2PreferenceUtil {
 
-	private static final Logger log = Logger.getLogger(SSH2PreferenceUtil.class);
+	public static final Logger log = Logger.getLogger(SSH2PreferenceUtil.class);
 
 	public static final String SSH2_PLUGIN = "org.eclipse.jsch.core";
 	public static final String SSH2_HOME_KEY = "SSH2HOME";

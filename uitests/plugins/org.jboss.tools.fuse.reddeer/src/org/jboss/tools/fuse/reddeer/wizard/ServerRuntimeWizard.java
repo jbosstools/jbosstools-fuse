@@ -48,21 +48,21 @@ public class ServerRuntimeWizard extends WizardDialog {
 		if (jreName == null) {
 			return;
 		}
-		new RadioButton(new DefaultGroup("Runtime JRE"), "Alternate JRE: ").click();
-		new DefaultCombo(new DefaultGroup("Runtime JRE"), 1).setSelection(jreName);
+		new RadioButton(new DefaultGroup(this, "Runtime JRE"), "Alternate JRE: ").click();
+		new DefaultCombo(new DefaultGroup(this, "Runtime JRE"), 1).setSelection(jreName);
 	}
 
 	public String getExecutionEnvironment() {
-		return new DefaultCombo(new DefaultGroup("Runtime JRE"), 0).getSelection();
+		return new DefaultCombo(new DefaultGroup(this, "Runtime JRE"), 0).getSelection();
 	}
 
 	public List<String> getExecutionEnvironments() {
-		return new DefaultCombo(new DefaultGroup("Runtime JRE"), 0).getItems();
+		return new DefaultCombo(new DefaultGroup(this, "Runtime JRE"), 0).getItems();
 	}
 
 	public void selectExecutionEnvironment(String temp) {
 		if (temp == null) return;
-		new DefaultCombo(new DefaultGroup("Runtime JRE"), 0).setSelection(temp);
+		new DefaultCombo(new DefaultGroup(this, "Runtime JRE"), 0).setSelection(temp);
 	}
 
 	/*
