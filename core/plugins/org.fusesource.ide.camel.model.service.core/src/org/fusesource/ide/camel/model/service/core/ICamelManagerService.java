@@ -62,62 +62,6 @@ public interface ICamelManagerService {
 	Map<String, String> getEndpointProperties(String uri, CamelCatalogCoordinates coords) throws URISyntaxException;
 	
 	/**
-	 * returns the scheme used in the endpoint uri
-	 * 
-	 * @param uri
-	 * @param coords
-	 * @return
-	 */
-	String getEndpointScheme(String uri, CamelCatalogCoordinates coords);
-	
-	/**
-	 * creates an endpoint uri from the given scheme and properties
-	 * 
-	 * @param scheme
-	 * @param properties
-	 * @param coords
-	 * @pa
-	 * @return
-	 * @throws URISyntaxException
-	 */
-	String createEndpointUri(String scheme, Map<String, String> properties, CamelCatalogCoordinates coords) throws URISyntaxException;
-	
-	/**
-	 * creates an endpoint uri from the given scheme and properties
-	 * 
-	 * @param scheme
-	 * @param properties
-	 * @param encode
-	 * @param coords
-	 * @return
-	 * @throws URISyntaxException
-	 */
-	String createEndpointUri(String scheme, Map<String, String> properties, boolean encode, CamelCatalogCoordinates coords) throws URISyntaxException;
-	
-	/**
-	 * creates the endpoint xml representation for the given scheme and properties
-	 * 
-	 * @param scheme
-	 * @param properties
-	 * @param coords
-	 * @return
-	 * @throws URISyntaxException
-	 */
-	String createEndpointXml(String scheme, Map<String, String> properties, CamelCatalogCoordinates coords) throws URISyntaxException;
-	
-	/**
-	 * creates the endpoint xml representation for the given scheme and properties
-	 * 
-	 * @param scheme
-	 * @param properties
-	 * @param encode
-	 * @param coords
-	 * @return
-	 * @throws URISyntaxException
-	 */
-	String createEndpointXml(String scheme, Map<String, String> properties, boolean encode, CamelCatalogCoordinates coords) throws URISyntaxException;
-	
-	/**
 	 * tests an expression in a default camel context ran locally
 	 * 
 	 * @param language
