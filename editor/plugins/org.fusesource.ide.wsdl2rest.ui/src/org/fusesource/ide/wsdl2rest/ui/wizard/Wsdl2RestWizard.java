@@ -23,6 +23,7 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -136,7 +137,15 @@ public class Wsdl2RestWizard extends Wizard implements INewWizard {
 		new MavenUtils().updateMavenDependencies(deps, project);
 		project.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
 	}
-	
+
+	private void prepare(IFolder folder) throws CoreException {
+	    if (!folder.exists()) {
+	    	if (folder.getParent() instanceof IFolder) {
+	    		prepare((IFolder) folder.getParent());
+	    		folder.create(false, false, null);
+	    	}
+	    }
+	}	
 	/**
 	 * Use the settings collected and call the wsdl2rest utility.
 	 * @throws Exception
@@ -145,6 +154,17 @@ public class Wsdl2RestWizard extends Wizard implements INewWizard {
 		URL wsdlLocation = new URL(options.getWsdlURL());
 		IPath javaPath = new org.eclipse.core.runtime.Path(options.getDestinationJava());
 		IResource resource = ResourcesPlugin.getWorkspace().getRoot().findMember(javaPath);
+		if (resource == null) {
+			resource = ResourcesPlugin.getWorkspace().getRoot().findMember(options.getProjectName());
+			if (resource instanceof IProject) {
+				IProject project = (IProject) resource;
+				IFolder folder = project.getFolder(javaPath.removeFirstSegments(1));
+				if (!folder.exists()) {
+					prepare(folder);
+					resource = folder;
+				}
+			}
+		}
 		File javaFile = null;
 		if (resource instanceof IFolder) {
 			IFolder destFolder = (IFolder) resource;
