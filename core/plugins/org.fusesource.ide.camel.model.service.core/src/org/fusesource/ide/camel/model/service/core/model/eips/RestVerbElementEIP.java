@@ -40,6 +40,7 @@ public class RestVerbElementEIP extends Eip {
 	public static final String PROP_VALUE = "value"; //$NON-NLS-1$
 	public static final String TAG_PROPERTY = "property"; //$NON-NLS-1$
 	public static final String TAG_ARGUMENT = "argument"; //$NON-NLS-1$
+	public static final String PROP_TO_URI = "toURI"; //$NON-NLS-1$
 	
 	private Map<String, Parameter> parameters = new HashMap<>();
 	
@@ -62,6 +63,7 @@ public class RestVerbElementEIP extends Eip {
 		createParameter(PROP_OUTTYPE, String.class.getName());
 		createParameter(PROP_ROUTEID, String.class.getName());
 		createParameter(PROP_APIDOCS, Boolean.class.getName());
+		createParameter(PROP_TO_URI, String.class.getName());
 		setProperties(parameters);
 	}
 	
