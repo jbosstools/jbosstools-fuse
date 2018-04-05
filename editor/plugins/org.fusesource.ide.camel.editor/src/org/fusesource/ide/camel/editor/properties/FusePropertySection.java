@@ -274,11 +274,6 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 
 	protected String computePropertyDisplayName(Parameter parameter) {
 		String s = Strings.humanize(parameter.getName());
-		// if the parameter is of kind expression we want to display "Language"
-		// as the parameter label instead of Expression as this is misleading
-		if (CamelComponentUtils.isExpressionProperty(parameter)) {
-			s = "Language";
-		}
 		if (PropertiesUtils.isRequired(parameter)) {
 			s += " *";
 		}
