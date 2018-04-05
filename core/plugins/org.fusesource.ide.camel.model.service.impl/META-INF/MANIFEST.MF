@@ -30,4 +30,5 @@ Bundle-ClassPath: .,
  libs/slf4j-simple-1.7.22.jar,
  libs/groovy-2.4.12.jar,
  libs/ivy-2.4.0.jar
-Export-Package: org.fusesource.ide.camel.model.service.internal;x-friends:="org.fusesource.ide.camel.tests.util,org.fusesource.ide.camel.model.service.impl.tests.integration"
+Export-Package: org.fusesource.ide.camel.model.service.impl,
+ org.fusesource.ide.camel.model.service.internal;x-friends:="org.fusesource.ide.camel.tests.util,org.fusesource.ide.camel.model.service.impl.tests.integration"

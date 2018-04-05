@@ -15,12 +15,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.camel.catalog.CamelCatalog;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelModel;
 import org.fusesource.ide.camel.model.service.core.catalog.components.Component;
 import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
+import org.fusesource.ide.camel.model.service.impl.ICamelCatalogWrapper;
 
 /**
  * this class is used to fix broken catalogs of earlier camel versions
@@ -35,7 +35,7 @@ public class CamelModelPatcher {
 		// util class
 	}
 
-	public static void applyVersionSpecificCatalogFixes(CamelCatalog catalog, CamelModel loadedModel) {
+	public static void applyVersionSpecificCatalogFixes(ICamelCatalogWrapper catalog, CamelModel loadedModel) {
 		String camelVersion = catalog.getLoadedVersion();
 		if (camelVersion == null) {
 			// can't work with a null value here - thats usually caused by a non existing catalog
