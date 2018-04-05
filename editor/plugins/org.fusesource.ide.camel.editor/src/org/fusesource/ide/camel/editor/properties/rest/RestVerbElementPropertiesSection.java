@@ -16,9 +16,13 @@ import java.util.Map;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
@@ -118,6 +122,8 @@ public class RestVerbElementPropertiesSection extends FusePropertySection {
 				createParameter(RestVerbElementEIP.PROP_ROUTEID, String.class.getName()));
 		parameterList.put(RestVerbElementEIP.PROP_APIDOCS,
 				createParameter(RestVerbElementEIP.PROP_APIDOCS, Boolean.class.getName()));
+		parameterList.put(RestVerbElementEIP.PROP_TO_URI,
+				createParameter(RestVerbElementEIP.PROP_TO_URI, Boolean.class.getName()));
 	}
 
 	public Parameter createParameter(String name, String jType) {
@@ -127,15 +133,35 @@ public class RestVerbElementPropertiesSection extends FusePropertySection {
 		return outParm;
 	}
 	
+	// we are comparing the name of a String with the type name of the parameter, so this is 
+	// a false positive
+	@SuppressWarnings("squid:S1872")
 	private AbstractParameterPropertyUICreator createPropertyFieldEditor(final Composite page, Parameter p) {
 		String propName = p.getName();
-		if (p.getJavaType().equals(String.class.getName())) {
+		if (RestVerbElementEIP.PROP_TO_URI.equals(propName)) {
+			// do something special for TO
+			AbstractParameterPropertyUICreator creator = new RouteRefAttributeComboFieldPropertyUICreator(dbc, modelMap, eip, selectedEP, p, page, getWidgetFactory());
+			creator.create();
+			Combo comboField = (Combo) creator.getControl();
+			comboField.addSelectionListener(new SelectionListener() {
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					Combo txt = (Combo) e.getSource();
+					selectedEP.setParameter(p.getName(), txt.getText());
+				}
+
+				@Override
+				public void widgetDefaultSelected(SelectionEvent e) {
+					widgetSelected(e);
+				}
+			});
+			return creator;
+		} else if (String.class.getName().equals(p.getJavaType())) {
 			AbstractTextFieldParameterPropertyUICreator txtFieldCreator = new TextParameterPropertyUICreator(dbc, modelMap, eip, selectedEP, p, getValidatorForField(p), page, getWidgetFactory());
 			txtFieldCreator.create();
 			return txtFieldCreator;
-		} else if (p.getJavaType().equals(Boolean.class.getName())) {
-			AbstractParameterPropertyUICreator creator = new BooleanParameterPropertyUICreatorForAdvanced(
-					dbc, modelMap, eip, selectedEP, p, page, getWidgetFactory());
+		} else if (Boolean.class.getName().equals(p.getJavaType())) {
+			AbstractParameterPropertyUICreator creator = new BooleanParameterPropertyUICreatorForAdvanced(dbc, modelMap, eip, selectedEP, p, page, getWidgetFactory());
 			creator.create();
 			return creator;
 		} else if (CamelComponentUtils.isUnsupportedProperty(p)) { 
@@ -177,5 +203,4 @@ public class RestVerbElementPropertiesSection extends FusePropertySection {
 		}
 		
 	}
-	
 }

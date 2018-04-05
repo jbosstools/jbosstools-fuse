@@ -14,7 +14,10 @@ import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
 import org.fusesource.ide.camel.model.service.core.internal.CamelModelServiceCoreActivator;
 import org.fusesource.ide.camel.model.service.core.model.eips.RestVerbElementEIP;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
  * @author bfitzpat
@@ -31,6 +34,8 @@ public class RestVerbElement extends AbstractRestCamelModelElement {
 	public static final String CONNECT_VERB = "connect"; //$NON-NLS-1$
 	public static final String OPTIONS_VERB = "options"; //$NON-NLS-1$
 	
+	private static final String TO_ELEMENT_TAG = "to"; //$NON-NLS-1$
+	
 	/**
 	 * @param parent
 	 * @param underlyingNode
@@ -38,11 +43,6 @@ public class RestVerbElement extends AbstractRestCamelModelElement {
 	public RestVerbElement(AbstractCamelModelElement parent, Node underlyingNode) {
 		super(parent, underlyingNode);
 		setUnderlyingMetaModelObject(new RestVerbElementEIP(getNodeTypeId()));
-	}
-	
-	public RestVerbElement(String name) {
-		super(null, null);
-		setUnderlyingMetaModelObject(new RestVerbElementEIP());
 	}
 	
 	/* (non-Javadoc)
@@ -93,4 +93,69 @@ public class RestVerbElement extends AbstractRestCamelModelElement {
 		// we do want to parse REST Verb contents
 		return true;
 	}
+
+	public String getToUri() {
+		NodeList list = getXmlNode().getChildNodes();
+		if (list != null && list.getLength() > 0) {
+			for (int i = 0; i < list.getLength(); i++) {
+				Node tmp = list.item(i);
+				if (tmp instanceof Element && ((Element) tmp).getTagName().contentEquals("to")) {
+					Node attr = tmp.getAttributes().getNamedItem(URI_PARAMETER_KEY);
+					if (attr != null) {
+						return attr.getNodeValue();
+					}
+				}
+			}
+		}
+		return null;
+	}
+
+	public void setToUri(String value) {
+		NodeList list = getXmlNode().getChildNodes();
+		boolean foundTo = false;
+		if (list != null && list.getLength() > 0) {
+			for (int i = 0; i < list.getLength(); i++) {
+				Node tmp = list.item(i);
+				if (tmp instanceof Element && ((Element) tmp).getTagName().contentEquals(TO_ELEMENT_TAG)) {
+					Node attr = tmp.getAttributes().getNamedItem(URI_PARAMETER_KEY);
+					if (attr != null) {
+						if (value == null || value.isEmpty()) {
+							// remove from parent?
+							getXmlNode().removeChild(tmp);
+							notifyAboutDeletion(this);
+						} else {
+							attr.setNodeValue(value);
+						}
+						foundTo = true;
+						break;
+					}
+				}
+			}
+		}
+		if (!foundTo) {
+			Document xmlDoc = getXmlNode().getOwnerDocument();
+			Element toElement = xmlDoc.createElement(TO_ELEMENT_TAG);
+			toElement.setAttribute(URI_PARAMETER_KEY, value);
+			getXmlNode().appendChild(toElement);
+		}
+	}
+
+	@Override
+	public void setParameter(String name, Object value) {
+		if (RestVerbElementEIP.PROP_TO_URI.equals(name)) {
+			setToUri((String) value);
+		} else {
+			setParameter(name, value, false);
+		}
+	}
+	
+	@Override
+	public Object getParameter(String name) {
+		if (RestVerbElementEIP.PROP_TO_URI.equals(name)) {
+			return getToUri();
+		} else {
+			return super.getParameter(name);
+		}
+	}
+
 }
