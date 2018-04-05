@@ -57,8 +57,10 @@ import org.junit.runner.RunWith;
 public class DeploymentTest extends DefaultTest {
 
 	public static final String PROJECT_NAME = "project";
-	public static final String PROJECT_IS_DEPLOYED = "Route: cbr-route started and consuming from: Endpoint[file://work/cbr/input]";
-	public static final String PROJECT_IS_UNDEPLOYED = "Route: cbr-route shutdown complete, was consuming from: Endpoint[file://work/cbr/input]";
+	public static final String PROJECT_IS_DEPLOYED_OLD = "Route: cbr-route started and consuming from: Endpoint[file://work/cbr/input]";
+	public static final String PROJECT_IS_UNDEPLOYED_OLD = "Route: cbr-route shutdown complete, was consuming from: Endpoint[file://work/cbr/input]";
+	public static final String PROJECT_IS_DEPLOYED = "Route: cbr-route started and consuming from: file://work/cbr/input";
+	public static final String PROJECT_IS_UNDEPLOYED = "Route: cbr-route shutdown complete, was consuming from: file://work/cbr/input";
 	public static final String PROJECT_EAP_IS_DEPLOYED = "(CamelContext: spring-context) started";
 	public static final String PROJECT_EAP_IS_UNDEPLOYED = "(CamelContext: spring-context) is shutdown";
 	public static final String BROWSER_URL = "http://localhost:8080/camel-test-spring";
@@ -155,7 +157,13 @@ public class DeploymentTest extends DefaultTest {
 			browser.openPageURL(BROWSER_URL);
 			assertTrue(browser.getText().contains(BROWSER_CONTENT_DEPLOYED));
 		} else {
-			assertTrue("The project was not properly deployed!", new FuseShellSSH().containsLog(PROJECT_IS_DEPLOYED));
+			if (serverRequirement.getConfiguration().getServer().getVersion().startsWith("7")) {
+				assertTrue("The project was not properly deployed!",
+						new FuseShellSSH().containsLog(PROJECT_IS_DEPLOYED));
+			} else {
+				assertTrue("The project was not properly deployed!",
+						new FuseShellSSH().containsLog(PROJECT_IS_DEPLOYED_OLD));
+			}
 		}
 
 		// remove module
@@ -173,7 +181,10 @@ public class DeploymentTest extends DefaultTest {
 			assertTrue(browser.getText().contains(BROWSER_CONTENT_UNDEPLOYED));
 		} else {
 			assertTrue("The project was not properly undeployed!",
-					new FuseShellSSH().containsLog(PROJECT_IS_UNDEPLOYED));
+					new FuseShellSSH()
+							.containsLog(serverRequirement.getConfiguration().getServer().getVersion().startsWith("7")
+									? PROJECT_IS_UNDEPLOYED
+									: PROJECT_IS_UNDEPLOYED_OLD));
 		}
 	}
 }
