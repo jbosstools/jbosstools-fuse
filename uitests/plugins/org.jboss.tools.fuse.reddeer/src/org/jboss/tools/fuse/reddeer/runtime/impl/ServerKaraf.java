@@ -165,11 +165,11 @@ public class ServerKaraf extends ServerBase {
 		serverWizard.finish();
 
 		// Set ssh home
-		Preferences.set("org.eclipse.jsch.core", "SSH2HOME", Activator.getResources(".ssh").getAbsolutePath());
+		Preferences.set("org.eclipse.jsch.core", "SSH2HOME", Activator.getResources(getVersion().startsWith("7") ? ".ssh7" : ".ssh").getAbsolutePath());
 
 		// Copy host.key
 		try {
-			Files.copy(this.getClass().getResourceAsStream("/resources/host.key"),
+			Files.copy(this.getClass().getResourceAsStream(getVersion().startsWith("7") ? "/resources/hostkey_new/host.key" : "/resources/hostkey_old/host.key"),
 					Paths.get(getHome() + "/etc/host.key"), StandardCopyOption.REPLACE_EXISTING);
 		} catch (IOException e) {
 			throw new RuntimeException("Can't copy 'host.key' file!", e);
