@@ -37,4 +37,8 @@ Require-Bundle: org.junit;bundle-version="4.12.0",
  org.jboss.tools.foundation.core,
  org.eclipse.wst.server.core,
  org.eclipse.swt,
- org.apache.xerces
+ org.apache.xerces,
+ org.fusesource.ide.camel.model.service.impl.v2151redhat621216;bundle-version="10.3.0",
+ org.fusesource.ide.camel.model.service.impl.v2170redhat630310;bundle-version="10.3.0",
+ org.fusesource.ide.camel.model.service.impl.v2181redhat000021;bundle-version="10.3.0",
+ org.fusesource.ide.camel.model.service.impl.v2203;bundle-version="10.3.0"
