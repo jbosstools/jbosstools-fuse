@@ -19,6 +19,7 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.m2e.actions.MavenLaunchConstants;
+import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
 import org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType;
 import org.fusesource.ide.projecttemplates.impl.simple.CBRTemplateForFuse6;
 import org.fusesource.ide.projecttemplates.tests.integration.ProjectTemplatesIntegrationTestsActivator;
@@ -31,7 +32,7 @@ public class LaunchFromCamelContextFileIT extends FuseIntegrationProjectCreatorR
 	@Override
 	@Before
 	public void setup() throws Exception{
-		camelVersion = "2.17.0.redhat-630187";
+		camelVersion = CamelCatalogUtils.CAMEL_VERSION_LATEST_PRODUCTIZED_63;
 		super.setup();
 	}
 	

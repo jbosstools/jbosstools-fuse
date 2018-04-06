@@ -44,7 +44,7 @@ public class FuseIntegrationProjectCreatorRunnableCheckForBomVersionIT extends F
 	@Override
 	@Before
 	public void setup() throws Exception {
-		camelVersion = "2.17.0.redhat-630187";
+		camelVersion = CamelCatalogUtils.CAMEL_VERSION_LATEST_PRODUCTIZED_63;
 		super.setup();
 	}
 	
