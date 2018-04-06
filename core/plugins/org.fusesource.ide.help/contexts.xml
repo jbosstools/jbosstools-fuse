@@ -234,22 +234,13 @@
         <description>ActiveMQ Component Options</description>
         <topic href="IDU-ActiveMQ.html" label="ActiveMQ"/>
     </context>
-    <!-- Not supported -->
-    <!--context id="activemq.journal">
-        <description>ActiveMQ Journal Options</description>
-        <topic href="activemqj.html" label="ActiveMQ Journal"/>
-    </context-->
     <context id="ahc">
         <description>AHC Component Options</description>
         <topic href="ahc-component.html" label="AHC"/>
     </context>
     <context id="ahc-ws">
-        <description>AHC-WS Component Options</description>
-        <topic href="ahc-ws-component.html" label="AHC-WS"/>
-    </context>
-    <context id="ahc-wss">
-        <description>AHC-WSS Component Options</description>
-        <topic href="IDU-AHC-WS.html" label="AHC-WSS"/>
+        <description>AHC Websocket Component Options</description>
+        <topic href="ahc-ws-component.html" label="AHC Websocket"/>
     </context>
     <context id="amqp">
         <description>AMQP Component Options</description>
@@ -259,90 +250,165 @@
         <description>APNS Component Options</description>
         <topic href="apns-component.html" label="APNS"/>
     </context>
+    <context id="asterisk">
+        <description>Asterisk Component Options</description>
+        <topic href="asterisk-component.html" label="Asterisk"/>
+    </context>
+    <context id="atmos">
+        <description>Atmos Component Options</description>
+        <topic href="atmos-component.html" label="Atmos"/>
+    </context>
     <context id="atmosphere-websocket">
-        <description>Atmosphere-Websocket Component Options</description>
-        <topic href="atmosphere-websocket-component.html" label="Atmosphere-Websocket"/>
+        <description>Atmosphere Websocket Component Options</description>
+        <topic href="atmosphere-websocket-component.html" label="Atmosphere Websocket"/>
     </context>
     <context id="atom">
         <description>Atom Component Options</description>
         <topic href="atom-component.html" label="Atom"/>
+    </context>
+    <context id="atomix-map">
+        <description>Atomix Map Component Options</description>
+        <topic href="atomix-map-component.html" label="Atomix Map"/>
+    </context>
+    <context id="atomix-messaging">
+        <description>Atomix Messaging Component Options</description>
+        <topic href="atomix-messaging-component.html" label="Atomix Messaging"/>
+    </context>
+    <context id="atomix-multimap">
+        <description>Atomix MultiMap Component Options</description>
+        <topic href="atomix-multimap-component.html" label="Atomix MultiMap"/>
+    </context>
+    <context id="atomix-queue">
+        <description>Atomix Queue Component Options</description>
+        <topic href="atomix-queue-component.html" label="Atomix Queue"/>
+    </context>
+    <context id="atomix-set">
+        <description>Atomix Set Component Options</description>
+        <topic href="atomix-set-component.html" label="Atomix Set"/>
+    </context>
+    <context id="atomix-value">
+        <description>Atomix Value Component Options</description>
+        <topic href="atomix-value-component.html" label="Atomix Value"/>
     </context>
     <context id="avro">
         <description>Avro Component Options</description>
         <topic href="avro-component.html" label="Avro"/>
     </context>
     <context id="aws-cw">
-        <description>AWS-CW Component Options</description>
-        <topic href="aws-cw-component.html" label="AWS-CW"/>
+        <description>AWS CloudWatch Component Options</description>
+        <topic href="aws-cw-component.html" label="AWS CloudWatch"/>
     </context>
     <context id="aws-ddb">
-        <description>AWS-DDB Component Options</description>
-        <topic href="aws-ddb-component.html" label="AWS-DDB"/>
+        <description>AWS DynamoDB Component Options</description>
+        <topic href="aws-ddb-component.html" label="AWS DynamoDB"/>
     </context>
     <context id="aws-ddbstream">
-        <description>AWS-DDBSTREAM Component Options</description>
-        <topic href="aws-ddbstream-component.html" label="AWS-DDBSTREAM"/>
+        <description>AWS DynamoDB Streams Component Options</description>
+        <topic href="aws-ddbstream-component.html" label="AWS DynamoDB Streams"/>
     </context>
     <context id="aws-ec2">
-        <description>AWS-EC2 Component Options</description>
-        <topic href="aws-ec2-component.html" label="AWS-EC2"/>
+        <description>AWS EC2 Component Options</description>
+        <topic href="aws-ec2-component.html" label="AWS EC2"/>
     </context>
     <context id="aws-kinesis">
-        <description>AWS-Kinesis Component Options</description>
-        <topic href="aws-kinesis-component.html" label="AWS-Kinesis"/>
+        <description>AWS Kinesis Component Options</description>
+        <topic href="aws-kinesis-component.html" label="AWS Kinesis"/>
     </context>
-    
+    <context id="aws-kinesis-firehose">
+        <description>AWS Kinesis Firehose Component Options</description>
+        <topic href="aws-kinesis-firehose-component.html" label="AWS Kinesis Firehose"/>
+    </context>
+    <context id="aws-kms">
+        <description>AWS KMS Component Options</description>
+        <topic href="aws-kms-component.html" label="AWS KMS"/>
+    </context>
+    <context id="aws-lambda">
+        <description>AWS Lambda Component Options</description>
+        <topic href="aws-lambda-component.html" label="AWS Lambda"/>
+    </context>
+    <context id="aws-mq">
+        <description>AWS MQ Component Options</description>
+        <topic href="aws-mq-component.html" label="AWS MQ"/>
+    </context>
     <context id="aws-s3">
-        <description>AWS-S3 Component Options</description>
-        <topic href="aws-s3-component.html" label="AWS-S3"/>
+        <description>AWS S3 Storage Service Component Options</description>
+        <topic href="aws-s3-component.html" label="AWS S3 Storage Service"/>
     </context>
     <context id="aws-sdb">
-        <description>AWS-SDB Component Options</description>
-        <topic href="aws-sdb-component.html" label="AWS-SDB"/>
+        <description>AWS SimpleDB Component Options</description>
+        <topic href="aws-sdb-component.html" label="AWS SimpleDB"/>
     </context>
     <context id="aws-ses">
-        <description>AWS-SES Component Options</description>
-        <topic href="aws-ses-component.html" label="AWS-SES"/>
+        <description>AWS Simple Email Service Component Options</description>
+        <topic href="aws-ses-component.html" label="AWS Simple Email Service"/>
     </context>
     <context id="aws-sns">
-        <description>AWS-SNS Component Options</description>
-        <topic href="aws-sns-component.html" label="AWS-SNS"/>
+        <description>AWS Simple Notification System Component Options</description>
+        <topic href="aws-sns-component.html" label="AWS Simple Notification System"/>
     </context>
     <context id="aws-sqs">
-        <description>AWS-SQS Component Options</description>
-        <topic href="aws-sqs-component.html" label="AWS-SQS"/>
+        <description>AWS Simple Queue Service Component Options</description>
+        <topic href="aws-sqs-component.html" label="AWS Simple Queue Service"/>
     </context>
     <context id="aws-swf">
-        <description>AWS-SWF Component Options</description>
-        <topic href="aws-swf-component.html" label="AWS-SWF"/>
+        <description>AWS Simple Workflow Component Options</description>
+        <topic href="aws-swf-component.html" label="AWS Simple Workflow"/>
     </context>
-    <context id="beanEIP">
+    <context id="azure-blob">
+        <description>Azure Storage Blob Service Component Options</description>
+        <topic href="azure-blob-component.html" label="Azure Storage Blob Service"/>
+    </context>
+    <context id="azure-queue">
+        <description>Azure Storage Queue Service Component Options</description>
+        <topic href="azure-queue-component.html" label="Azure Storage Queue Service"/>
+    </context>
+    <context id="bean">
         <description>Bean Component Options</description>
         <topic href="bean-component.html" label="Bean"/>
+    </context>
+    <context id="bean-validator">
+        <description>Bean Validator Component Options</description>
+        <topic href="bean-validator-component.html" label="Bean Validator"/>
     </context>
     <context id="beanstalk">
         <description>Beanstalk Component Options</description>
         <topic href="beanstalk-component.html" label="Beanstalk"/>
     </context>
-    <context id="bean-validator">
-        <description>Bean Validator Component Options</description>
-        <topic href="bean-validator-component.html" label="Bean Validation"/>
+    <context id="binding">
+        <description>Binding Component (deprecated) Options</description>
+        <topic href="binding-component.html" label="Binding"/>
     </context>
-    <context id="braintree">
-        <description>Braintree Component Options</description>
-        <topic href="braintree-component.html" label="Braintree"/>
+    <context id="bonita">
+        <description>Bonita Component Options</description>
+        <topic href="bonita-component.html" label="Bonita"/>
     </context>
     <context id="box">
         <description>Box Component Options</description>
         <topic href="box-component.html" label="Box"/>
+    </context>
+    <context id="braintree">
+        <description>Braintree Component Options</description>
+        <topic href="braintree-component.html" label="Braintree"/>
     </context>
     <context id="browse">
         <description>Browse Component Options</description>
         <topic href="browse-component.html" label="Browse"/>
     </context>
     <context id="cache">
-        <description>Cache Component Options</description>
-        <topic href="cache-component.html" label="Cache"/>
+        <description>EHCache Component (deprecated) Options</description>
+        <topic href="cache-component.html" label="EHCache"/>
+    </context>
+    <context id="caffeine-cache">
+        <description>Caffeine Cache Component Options</description>
+        <topic href="caffeine-cache-component.html" label="Caffeine Cache"/>
+    </context>
+    <context id="caffeine-loadcache">
+        <description>Caffeine LoadCache Component Options</description>
+        <topic href="caffeine-loadcache-component.html" label="Caffeine LoadCache"/>
+    </context>
+    <context id="chronicle-engine">
+        <description>Chronicle Engine Component Options</description>
+        <topic href="chronicle-engine-component.html" label="Chronicle Engine"/>
     </context>
     <context id="chunk">
         <description>Chunk Component Options</description>
@@ -350,76 +416,87 @@
     </context>
     <context id="class">
         <description>Class Component Options</description>
-        <topic href="class-component.html" label="Cache"/>
+        <topic href="class-component.html" label="Class"/>
+    </context>
+    <context id="cm-sms">
+        <description>CM SMS Gateway Component Options</description>
+        <topic href="cm-sms-component.html" label="CM SMS Gateway"/>
     </context>
     <context id="cmis">
         <description>CMIS Component Options</description>
         <topic href="cmis-component.html" label="CMIS"/>
     </context>
+    <context id="coap">
+        <description>CoAP Component Options</description>
+        <topic href="coap-component.html" label="CoAP"/>
+    </context>
     <context id="cometd">
-        <description>Cometd Component Options</description>
-        <topic href="cometd-component.html" label="Cometd"/>
+        <description>CometD Component Options</description>
+        <topic href="cometd-component.html" label="CometD"/>
+    </context>
+    <context id="consul">
+        <description>Consul Component Options</description>
+        <topic href="consul-component.html" label="Consul"/>
     </context>
     <context id="context">
-        <description>Context Component Options</description>
-        <topic href="context-component.html" label="Context"/>
+        <description>Camel Context Component (deprecated) Options</description>
+        <topic href="context-component.html" label="Camel Context"/>
     </context>
     <context id="controlbus">
-        <description>ControlBus Component Options</description>
-        <topic href="controlbus-component.html" label="ControlBus"/>
+        <description>Control Bus Component Options</description>
+        <topic href="controlbus-component.html" label="Control Bus"/>
+    </context>
+    <context id="couchbase">
+        <description>Couchbase Component Options</description>
+        <topic href="couchbase-component.html" label="Couchbase"/>
     </context>
     <context id="couchdb">
         <description>CouchDB Component Options</description>
         <topic href="couchdb-component.html" label="CouchDB"/>
     </context>
     <context id="cql">
-        <description>Cassandra Component Options</description>
-        <topic href="Cassandra-CamelCassandraComponent.html" label="Cassandra"/>
+        <description>Cassandra CQL Component Options</description>
+        <topic href="cql-component.html" label="Cassandra CQL"/>
     </context>
     <context id="crypto">
-        <description>Crypto Component Options</description>
-        <topic href="crypto-component.html" label="Crypto"/>
+        <description>Crypto (JCE) Component Options</description>
+        <topic href="crypto-component.html" label="Crypto (JCE)"/>
+    </context>
+    <context id="crypto-cms">
+        <description>Crypto CMS Component Options</description>
+        <topic href="crypto-cms-component.html" label="Crypto CMS"/>
     </context>
     <context id="cxf">
         <description>CXF Component Options</description>
         <topic href="cxf-component.html" label="CXF"/>
     </context>
-    <context id="cxfbean">
-        <description>CXF Bean Component Options</description>
-        <topic href="cxf-component.html" label="CXF Bean"/>
-    </context>
     <context id="cxfrs">
-        <description>CXF REST Component Options</description>
-        <topic href="cxfrs-component.html" label="CXFRS"/>
+        <description>CXF-RS Component Options</description>
+        <topic href="cxfrs-component.html" label="CXF-RS"/>
     </context>
     <context id="dataformat">
-        <description>DataFormat Component Options</description>
-        <topic href="dataformat-component.html" label="DataFormat"/>
+        <description>Data Format Component Options</description>
+        <topic href="dataformat-component.html" label="Data Format"/>
     </context>
     <context id="dataset">
-        <description>DataSet Component Options</description>
-        <topic href="dataset-component.html" label="DataSet"/>
+        <description>Dataset Component Options</description>
+        <topic href="dataset-component.html" label="Dataset"/>
     </context>
-    <!-- Not supported -->
-    <!--context id="db40">
-        <description>Db40 Options</description>
-        <topic href="db40.html" label="DataSet"/>
-    </context-->
+    <context id="digitalocean">
+        <description>DigitalOcean Component Options</description>
+        <topic href="digitalocean-component.html" label="DigitalOcean"/>
+    </context>
     <context id="direct">
         <description>Direct Component Options</description>
         <topic href="direct-component.html" label="Direct"/>
     </context>
     <context id="direct-vm">
-        <description>Direct-VM Component Options</description>
-        <topic href="direct-vm-component.html" label="Direct-VM"/>
+        <description>Direct VM Component Options</description>
+        <topic href="direct-vm-component.html" label="Direct VM"/>
     </context>
     <context id="disruptor">
         <description>Disruptor Component Options</description>
         <topic href="disruptor-component.html" label="Disruptor"/>
-    </context>
-    <context id="disruptor-vm">
-        <description>Disruptor Component Options</description>
-        <topic href="disruptor-component.html" label="Disruptor-VM"/>
     </context>
     <context id="dns">
         <description>DNS Component Options</description>
@@ -433,37 +510,45 @@
         <description>Dozer Component Options</description>
         <topic href="dozer-component.html" label="Dozer"/>
     </context>
+    <context id="drill">
+        <description>Drill Component Options</description>
+        <topic href="drill-component.html" label="Drill"/>
+    </context>
     <context id="dropbox">
         <description>Dropbox Component Options</description>
         <topic href="dropbox-component.html" label="Dropbox"/>
     </context>
+    <context id="ehcache">
+        <description>Ehcache Component Options</description>
+        <topic href="ehcache-component.html" label="Ehcache"/>
+    </context>
     <context id="ejb">
-        <description>Enterprise Java Bean</description>
+        <description>EJB Component Options</description>
         <topic href="ejb-component.html" label="EJB"/>
     </context>
     <context id="elasticsearch">
-        <description>ElasticSearch Component Options</description>
-        <topic href="elasticsearch-component.html" label="ElasticSearch"/>
+        <description>Elasticsearch Component (deprecated) Options</description>
+        <topic href="elasticsearch-component.html" label="Elasticsearch"/>
+    </context>
+    <!-- context id="elasticsearch-rest">
+        <description>Elastichsearch Rest Component Options</description>
+        <topic href="elasticsearch-rest-component.html" label="Elastichsearch Rest"/>
+    </context -->
+    <context id="elasticsearch5">
+        <description>Elasticsearch5 Component (deprecated) Options</description>
+        <topic href="elasticsearch5-component.html" label="Elasticsearch5"/>
     </context>
     <context id="elsql">
-        <description>ElSql Component Options</description>
-        <topic href="elsql-component.html" label="ElSql"/>
-    </context>
-    <context id="esper">
-        <description>Esper Component Options</description>
-        <topic href="esper.html" label="Esper"/>
+        <description>ElSQL Component Options</description>
+        <topic href="elsql-component.html" label="ElSQL"/>
     </context>
     <context id="etcd">
-        <description>Etcd Component Options</description>
-        <topic href="etcd-component.html" label="Etcd"/>
-    </context>
-    <context id="event">
-        <description>Event Component Options</description>
-        <topic href="spring-event-component.html" label="Event"/>
+        <description>etcd Component Options</description>
+        <topic href="etcd-component.html" label="etcd"/>
     </context>
     <context id="eventadmin">
-        <description>EventAdmin Component Options</description>
-        <topic href="eventadmin-component.html" label="EventAdmin"/>
+        <description>OSGi EventAdmin Component Options</description>
+        <topic href="eventadmin-component.html" label="OSGi EventAdmin"/>
     </context>
     <context id="exec">
         <description>Exec Component Options</description>
@@ -475,44 +560,39 @@
     </context>
     <context id="file">
         <description>File Component Options</description>
-        <topic href="file-omponent.html" label="File"/>
+        <topic href="file-component.html" label="File"/>
     </context>
-    <!-- Not supported -->
-    <!--context id="fix">
-        <description>FIX Component Options</description>
-        <topic href="fix.html" label="FIX"/>
-    </context-->
     <context id="flatpack">
         <description>Flatpack Component Options</description>
         <topic href="flatpack-component.html" label="Flatpack"/>
     </context>
+    <context id="flink">
+        <description>Apache Flink Component Options</description>
+        <topic href="flink-component.html" label="Apache Flink"/>
+    </context>
     <context id="fop">
         <description>FOP Component Options</description>
-        <topic href="fop-omponent.html" label="FOP"/>
+        <topic href="fop-component.html" label="FOP"/>
     </context>
-    <context id="freemaker">
-        <description>Freemaker Component Options</description>
-        <topic href="freeMarker-component.html" label="Freemarker"/>
+    <context id="freemarker">
+        <description>Freemarker Component Options</description>
+        <topic href="freemarker-component.html" label="Freemarker"/>
     </context>
     <context id="ftp">
         <description>FTP Component Options</description>
         <topic href="ftp-component.html" label="FTP"/>
     </context>
     <context id="ftps">
-        <description>SFTP Component Options</description>
-        <topic href="ftps-component.html" label="SFTP"/>
+        <description>FTPS Component Options</description>
+        <topic href="ftps-component.html" label="FTPS"/>
     </context>
-    <context id="gauth">
-        <description>Google OAuth Component Options</description>
-        <topic href="IDU-gauth.html" label="Goggle OAuth"/>
+    <context id="ganglia">
+        <description>Ganglia Component Options</description>
+        <topic href="ganglia-component.html" label="Ganglia"/>
     </context>
     <context id="geocoder">
         <description>Geocoder Component Options</description>
         <topic href="geocoder-component.html" label="Geocoder"/>
-    </context>
-    <context id="ghttp">
-        <description>Google App Engine Component Options</description>
-        <topic href="IDU-ghttp.html" label="GHTTP"/>
     </context>
     <context id="git">
         <description>Git Component Options</description>
@@ -522,13 +602,9 @@
         <description>GitHub Component Options</description>
         <topic href="github-component.html" label="GitHub"/>
     </context>
-    <context id="glogin">
-        <description>Google App Engine Login Component Options</description>
-        <topic href="IDU-glogin.html" label="GLogin"/>
-    </context>
-    <context id="gmail">
-        <description>GMail Component Options</description>
-        <topic href="google-mail-component.html" label="GMail"/>
+    <context id="google-bigquery">
+        <description>Google BigQuery Component Options</description>
+        <topic href="google-bigquery-component.html" label="Google BigQuery"/>
     </context>
     <context id="google-calendar">
         <description>Google Calendar Component Options</description>
@@ -542,100 +618,163 @@
         <description>Google Mail Component Options</description>
         <topic href="google-mail-component.html" label="Google Mail"/>
     </context>
-    <context id="grape">
-        <description>Grape Component Options</description>
-        <topic href="Grape-GrapeComponent.html" label="Grape"/>
+    <context id="google-pubsub">
+        <description>Google Pubsub Component Options</description>
+        <topic href="google-pubsub-component.html" label="Google Pubsub"/>
     </context>
-    <context id="gtask">
-        <description>Google App Engine Task Queueing Component Options</description>
-        <topic href="IDU-gtask.html" label="GTask"/>
+    <!-- context id="gora">
+        <description>Gora Component Options</description>
+        <topic href="gora-component.html" label="Gora"/>
+    </context -->
+    <!-- context id="grape">
+        <description>Grape Component Options</description>
+        <topic href="grape-component.html" label="Grape"/>
+    </context -->
+    <context id="grpc">
+        <description>gRPC Component Options</description>
+        <topic href="grpc-component.html" label="gRPC"/>
     </context>
     <context id="guava-eventbus">
-        <description>Google Guava EventBus Component Options</description>
-        <topic href="GuavaEventBus-GuavaEventBusComponent.html" label="Google Guava EventBus"/>
+        <description>Guava EventBus Component Options</description>
+        <topic href="guava-eventbus-component.html" label="Guava EventBus"/>
     </context>
-    <context id="hazelcast">
-        <description>Hazelcast Component Options</description>
-        <topic href="HazelcastComponent-HazelcastComponent.html" label="Hazelcast"/>
+    <context id="hazelcast-atomicvalue">
+        <description>Hazelcast Atomic Number Component Options</description>
+        <topic href="hazelcast-atomicvalue-component.html" label="Hazelcast Atomic Number"/>
+    </context>
+    <context id="hazelcast-instance">
+        <description>Hazelcast Instance Component Options</description>
+        <topic href="hazelcast-instance-component.html" label="Hazelcast Instance"/>
+    </context>
+    <context id="hazelcast-list">
+        <description>Hazelcast List Component Options</description>
+        <topic href="hazelcast-list-component.html" label="Hazelcast List"/>
+    </context>
+    <context id="hazelcast-map">
+        <description>Hazelcast Map Component Options</description>
+        <topic href="hazelcast-map-component.html" label="Hazelcast Map"/>
+    </context>
+    <context id="hazelcast-multimap">
+        <description>Hazelcast Multimap Component Options</description>
+        <topic href="hazelcast-multimap-component.html" label="Hazelcast Multimap"/>
+    </context>
+    <context id="hazelcast-queue">
+        <description>Hazelcast Queue Component Options</description>
+        <topic href="hazelcast-queue-component.html" label="Hazelcast Queue"/>
+    </context>
+    <context id="hazelcast-replicatedmap">
+        <description>Hazelcast Replicated Map Component Options</description>
+        <topic href="hazelcast-replicatedmap-component.html" label="Hazelcast Replicated Map"/>
+    </context>
+    <context id="hazelcast-ringbuffer">
+        <description>Hazelcast Ringbuffer Component Options</description>
+        <topic href="hazelcast-ringbuffer-component.html" label="Hazelcast Ringbuffer"/>
+    </context>
+    <context id="hazelcast-seda">
+        <description>Hazelcast SEDA Component Options</description>
+        <topic href="hazelcast-seda-component.html" label="Hazelcast SEDA"/>
+    </context>
+    <context id="hazelcast-set">
+        <description>Hazelcast Set Component Options</description>
+        <topic href="hazelcast-set-component.html" label="Hazelcast Set"/>
+    </context>
+    <context id="hazelcast-topic">
+        <description>Hazelcast Topic Component Options</description>
+        <topic href="hazelcast-topic-component.html" label="Hazelcast Topic"/>
     </context>
     <context id="hbase">
         <description>HBase Component Options</description>
         <topic href="hbase-component.html" label="HBase"/>
     </context>
     <context id="hdfs">
-        <description>HDFS Component Options</description>
+        <description>HDFS Component (deprecated) Options</description>
         <topic href="hdfs-component.html" label="HDFS"/>
     </context>
     <context id="hdfs2">
         <description>HDFS2 Component Options</description>
         <topic href="hdfs2-component.html" label="HDFS2"/>
     </context>
-    <context id="hibernate">
-        <description>Hibernate Component Options</description>
-        <topic href="hibernate.html" label="Hibernate"/>
+    <context id="hipchat">
+        <description>Hipchat Component Options</description>
+        <topic href="hipchat-component.html" label="Hipchat"/>
     </context>
     <context id="http">
-        <description>HTTP Component Options</description>
+        <description>HTTP Component (deprecated) Options</description>
         <topic href="http-component.html" label="HTTP"/>
     </context>
     <context id="http4">
         <description>HTTP4 Component Options</description>
         <topic href="http4-component.html" label="HTTP4"/>
     </context>
-    <context id="http4s">
-        <description>HTTP4S Component Options</description>
-        <topic href="http4-component.html" label="HTTP4"/>
-    </context>
-    <context id="hipchat">
-        <description>Hipchat Component Options</description>
-        <topic href="hipchat-component.html" label="Hipchat"/>
-    </context>
-    <context id="hl7">
-        <description>HL7 Component Options</description>
-        <topic href="hl7-dataformat.html" label="HL7"/>
-    </context>
     <context id="ibatis">
-        <description>iBATIS Component Options</description>
-        <topic href="ibatis-component.html" label="iBATIS"/>
+        <description>iBatis Component (deprecated) Options</description>
+        <topic href="ibatis-component.html" label="iBatis"/>
     </context>
-    <context id="ignite">
-        <description>Ignite Component Options</description>
-        <topic href="IDU-Ignite.html" label="Ignite"/>
+    <context id="iec60870-client">
+        <description>IEC 60870 Client Component Options</description>
+        <topic href="iec60870-client-component.html" label="IEC 60870 Client"/>
     </context>
-    <context id="imap">
-        <description>Mail Component Options</description>
-        <topic href="mail-component.html" label="IMap"/>
+    <context id="iec60870-server">
+        <description>IEC 60870 Server Component Options</description>
+        <topic href="iec60870-server-component.html" label="IEC 60870 Server"/>
     </context>
-    <context id="imaps">
-        <description>Mail Component Options</description>
-        <topic href="mail-component.html" label="IMaps"/>
+    <context id="ignite-cache">
+        <description>Ignite Cache Component Options</description>
+        <topic href="ignite-cache-component.html" label="Ignite Cache"/>
     </context>
-   <!-- not supported as of 6.2.0 -->
-   <!-- <context id="infinispan">
+    <context id="ignite-compute">
+        <description>Ignite Compute Component Options</description>
+        <topic href="ignite-compute-component.html" label="Ignite Compute"/>
+    </context>
+    <context id="ignite-events">
+        <description>Ignite Events Component Options</description>
+        <topic href="ignite-events-component.html" label="Ignite Events"/>
+    </context>
+    <context id="ignite-idgen">
+        <description>Ignite ID Generator Component Options</description>
+        <topic href="ignite-idgen-component.html" label="Ignite ID Generator"/>
+    </context>
+    <context id="ignite-messaging">
+        <description>Ignite Messaging Component Options</description>
+        <topic href="ignite-messaging-component.html" label="Ignite Messaging"/>
+    </context>
+    <context id="ignite-queue">
+        <description>Ignite Queues Component Options</description>
+        <topic href="ignite-queue-component.html" label="Ignite Queues"/>
+    </context>
+    <context id="ignite-set">
+        <description>Ignite Sets Component Options</description>
+        <topic href="ignite-set-component.html" label="Ignite Sets"/>
+    </context>
+    <!-- REVISIT: camel-infinispan will be supported in Fuse 7.1 -->
+    <!-- context id="infinispan">
         <description>Infinispan Component Options</description>
-        <topic href="IDU-Infinispan.html" label="Infinispan"/>
-    </context> -->
+        <topic href="infinispan-component.html" label="Infinispan"/>
+    </context -->
+    <context id="influxdb">
+        <description>InfluxDB Component Options</description>
+        <topic href="influxdb-component.html" label="InfluxDB"/>
+    </context>
     <context id="irc">
         <description>IRC Component Options</description>
         <topic href="irc-component.html" label="IRC"/>
     </context>
-    <context id="ironmq">
+    <!-- context id="ironmq">
         <description>IronMQ Component Options</description>
-        <topic href="IronMQ-IronMQComponent.html" label="IronMQ"/>
+        <topic href="ironmq-component.html" label="IronMQ"/>
+    </context -->
+    <!-- context id="javaspace">
+        <description>JavaSpace Component (deprecated) Options</description>
+        <topic href="javaspace-component.html" label="JavaSpace"/>
+    </context -->
+    <context id="jbossdatagrid">
+        <description>JBoss Data Grid Component Options</description>
+        <topic href="JBossDataGrid.html" label="JBoss Data Grid"/>
     </context>
-    <!-- Not supported -->
-    <!--context id="javaspace">
-        <description>JavaSpace Component Options</description>
-        <topic href="javaSpace.html" label="JavaSpace"/>
-    </context-->
-    <context id="jbi">
-        <description>JBI Component Options</description>
-        <topic href="jbi.html" label="JBI"/>
-    </context>
-    <context id="jbpm">
-        <description>jBPM Component Options</description>
-        <topic href="jBPM-jBPMComponent.html" label="jBPM"/>
-    </context>
+    <!-- context id="jbpm">
+        <description>JBPM Component Options</description>
+        <topic href="jbpm-component.html" label="JBPM"/>
+    </context -->
     <context id="jcache">
         <description>JCache Component Options</description>
         <topic href="jcache-component.html" label="JCache"/>
@@ -653,40 +792,40 @@
         <topic href="jdbc-component.html" label="JDBC"/>
     </context>
     <context id="jetty">
-        <description>Jetty Component Options</description>
-        <topic href="jetty-component.html" label="Jetty"/>
+        <description>Jetty 9 Component Options</description>
+        <topic href="jetty-component.html" label="Jetty 9"/>
     </context>
     <context id="jgroups">
         <description>JGroups Component Options</description>
         <topic href="jgroups-component.html" label="JGroups"/>
     </context>
+    <context id="jing">
+        <description>Jing Component Options</description>
+        <topic href="jing-component.html" label="Jing"/>
+    </context>
     <context id="jira">
         <description>JIRA Component Options</description>
         <topic href="jira-component.html" label="JIRA"/>
-    </context>
-    <context id="scp">
-        <description>Jsch Component Options</description>
-        <topic href="Jsch-Jsch.html" label="Jsch"/>
-    </context>
-    <context id="rng">
-        <description>Jing Component Options</description>
-        <topic href="jing-component.html" label="Jing"/>
-    </context>
-    <context id="rnc">
-        <description>Jing Component Options</description>
-        <topic href="jing-component.html" label="Jing"/>
     </context>
     <context id="jms">
         <description>JMS Component Options</description>
         <topic href="jms-component.html" label="JMS"/>
     </context>
+    <context id="jmx">
+        <description>JMX Component Options</description>
+        <topic href="jmx-component.html" label="JMX"/>
+    </context>
     <context id="jolt">
-        <description>Jolt Component Options</description>
-        <topic href="jolt-component.html" label="Jolt"/>
+        <description>JOLT Component Options</description>
+        <topic href="jolt-component.html" label="JOLT"/>
     </context>
     <context id="jpa">
         <description>JPA Component Options</description>
         <topic href="jpa-component.html" label="JPA"/>
+    </context>
+    <context id="json-validator">
+        <description>JSON Schema Validator Component Options</description>
+        <topic href="json-validator-component.html" label="JSON Schema Validator"/>
     </context>
     <context id="jt400">
         <description>JT400 Component Options</description>
@@ -697,84 +836,148 @@
         <topic href="kafka-component.html" label="Kafka"/>
     </context>
     <context id="kestrel">
-        <description>Kestrel Component Options</description>
+        <description>Kestrel Component (deprecated) Options</description>
         <topic href="kestrel-component.html" label="Kestrel"/>
     </context>
     <context id="krati">
-        <description>Krati Component Options</description>
-        <topic href="krati-Component.html" label="Krati"/>
+        <description>Krati Component (deprecated) Options</description>
+        <topic href="krati-component.html" label="Krati"/>
     </context>
     <context id="kubernetes">
-        <description>Kubernetes Component Options</description>
+        <description>Kubernetes Component (deprecated) Options</description>
         <topic href="kubernetes-component.html" label="Kubernetes"/>
     </context>
-    <context id="kura">
-        <description>Kura Component Options</description>
-        <topic href="Kura-EclipseKuracomponent.html" label="Kura"/>
+    <context id="kubernetes-config-maps">
+        <description>Kubernetes ConfigMap Component Options</description>
+        <topic href="kubernetes-config-maps-component.html" label="Kubernetes ConfigMap"/>
+    </context>
+    <context id="kubernetes-deployments">
+        <description>Kubernetes Deployments Component Options</description>
+        <topic href="kubernetes-deployments-component.html" label="Kubernetes Deployments"/>
+    </context>
+    <context id="kubernetes-namespaces">
+        <description>Kubernetes Namespaces Component Options</description>
+        <topic href="kubernetes-namespaces-component.html" label="Kubernetes Namespaces"/>
+    </context>
+    <context id="kubernetes-nodes">
+        <description>Kubernetes Nodes Component Options</description>
+        <topic href="kubernetes-nodes-component.html" label="Kubernetes Nodes"/>
+    </context>
+    <context id="kubernetes-persistent-volumes">
+        <description>Kubernetes Persistent Volume Component Options</description>
+        <topic href="kubernetes-persistent-volumes-component.html" label="Kubernetes Persistent Volume"/>
+    </context>
+    <context id="kubernetes-persistent-volumes-claims">
+        <description>Kubernetes Persistent Volume Claim Component Options</description>
+        <topic href="kubernetes-persistent-volumes-claims-component.html" label="Kubernetes Persistent Volume Claim"/>
+    </context>
+    <context id="kubernetes-pods">
+        <description>Kubernetes Pods Component Options</description>
+        <topic href="kubernetes-pods-component.html" label="Kubernetes Pods"/>
+    </context>
+    <context id="kubernetes-replication-controllers">
+        <description>Kubernetes Replication Controller Component Options</description>
+        <topic href="kubernetes-replication-controllers-component.html" label="Kubernetes Replication Controller"/>
+    </context>
+    <context id="kubernetes-resources-quota">
+        <description>Kubernetes Resources Quota Component Options</description>
+        <topic href="kubernetes-resources-quota-component.html" label="Kubernetes Resources Quota"/>
+    </context>
+    <context id="kubernetes-secrets">
+        <description>Kubernetes Secrets Component Options</description>
+        <topic href="kubernetes-secrets-component.html" label="Kubernetes Secrets"/>
+    </context>
+    <context id="kubernetes-service-accounts">
+        <description>Kubernetes Service Account Component Options</description>
+        <topic href="kubernetes-service-accounts-component.html" label="Kubernetes Service Account"/>
+    </context>
+    <context id="kubernetes-services">
+        <description>Kubernetes Services Component Options</description>
+        <topic href="kubernetes-services-component.html" label="Kubernetes Services"/>
     </context>
     <context id="language">
         <description>Language Component Options</description>
         <topic href="language-component.html" label="Language"/>
     </context>
-    <context id="leveldb">
-        <description>LevelDB Component Options</description>
-        <topic href="LevelDB-LevelDB.html" label="LevelDB"/>
-    </context>
-    <context id="linkedin">
-        <description>Linkedin Component Options</description>
-        <topic href="linkedin-component.html" label="Linkedin"/>
-    </context>
     <context id="ldap">
         <description>LDAP Component Options</description>
         <topic href="ldap-component.html" label="LDAP"/>
     </context>
-    <context id="list">
-        <description>List Component Options</description>
-        <topic href="IDU-List.html" label="List"/>
+    <!-- context id="ldif">
+        <description>LDIF Component Options</description>
+        <topic href="ldif-component.html" label="LDIF"/>
+    </context -->
+    <context id="linkedin">
+        <description>Linkedin Component Options</description>
+        <topic href="linkedin-component.html" label="Linkedin"/>
     </context>
-    <context id="logEIP">
+    <context id="log">
         <description>Log Component Options</description>
         <topic href="log-component.html" label="Log"/>
     </context>
+    <!-- context id="lpr">
+        <description>Printer Component Options</description>
+        <topic href="lpr-component.html" label="Printer"/>
+    </context -->
     <context id="lucene">
         <description>Lucene Component Options</description>
         <topic href="lucene-component.html" label="Lucene"/>
     </context>
-    <context id="master">
-        <description>Master Component Options</description>
-        <topic href="Master.html" label="Master"/>
+    <context id="lumberjack">
+        <description>Lumberjack Component Options</description>
+        <topic href="lumberjack-component.html" label="Lumberjack"/>
     </context>
+    <context id="mail">
+        <description>Mail Component Options</description>
+        <topic href="mail-component.html" label="Mail"/>
+    </context>
+    <!-- context id="master">
+        <description>Master Component Options</description>
+        <topic href="master-component.html" label="Master"/>
+    </context -->
     <context id="metrics">
         <description>Metrics Component Options</description>
         <topic href="metrics-component.html" label="Metrics"/>
     </context>
-    <context id="mina">
-        <description>MINA Component Options</description>
-        <topic href="MINA-MINAComponent.html" label="MINA"/>
+    <context id="milo-client">
+        <description>OPC UA Client Component Options</description>
+        <topic href="milo-client-component.html" label="OPC UA Client"/>
     </context>
+    <context id="milo-server">
+        <description>OPC UA Server Component Options</description>
+        <topic href="milo-server-component.html" label="OPC UA Server"/>
+    </context>
+    <!-- context id="mina">
+        <description>Mina Component (deprecated) Options</description>
+        <topic href="mina-component.html" label="Mina"/>
+    </context -->
     <context id="mina2">
-        <description>MINA2 Component Options</description>
-        <topic href="mina2-component.html" label="MINA2"/>
+        <description>Mina2 Component Options</description>
+        <topic href="mina2-component.html" label="Mina2"/>
     </context>
     <context id="mllp">
         <description>MLLP Component Options</description>
         <topic href="mllp-component.html" label="MLLP"/>
     </context>
-    <context id="mock">
+    <!-- context id="mock">
         <description>Mock Component Options</description>
         <topic href="mock-component.html" label="Mock"/>
-    </context>
+    </context -->
     <context id="mongodb">
         <description>MongoDB Component Options</description>
         <topic href="mongodb-component.html" label="MongoDB"/>
     </context>
+    <context id="mongodb-gridfs">
+        <description>MongoDB GridFS Component Options</description>
+        <topic href="mongodb-gridfs-component.html" label="MongoDB GridFS"/>
+    </context>
+    <context id="mongodb3">
+        <description>MongoDB Component Options</description>
+        <topic href="mongodb3-component.html" label="MongoDB"/>
+    </context>
     <context id="mqtt">
         <description>MQTT Component Options</description>
         <topic href="mqtt-component.html" label="MQTT"/>
-    </context>
-    <context id="msmq">
-        <description>Microsoft Message Queuing Component Options</description>
-        <topic href="msmq.html" label="MSMQ"/>
     </context>
     <context id="msv">
         <description>MSV Component Options</description>
@@ -789,23 +992,23 @@
         <topic href="mvel-component.html" label="MVEL"/>
     </context>
     <context id="mybatis">
-        <description>mMBatis Component Options</description>
-        <topic href="mybatis-component.html" label="mybatis"/>
+        <description>MyBatis Component Options</description>
+        <topic href="mybatis-component.html" label="MyBatis"/>
     </context>
     <context id="nagios">
         <description>Nagios Component Options</description>
         <topic href="nagios-component.html" label="Nagios"/>
     </context>
     <context id="nats">
-        <description>NATS Component Options</description>
-        <topic href="nats-component.html" label="NATS"/>
+        <description>Nats Component Options</description>
+        <topic href="nats-component.html" label="Nats"/>
     </context>
     <context id="netty">
-        <description>Netty Component Options</description>
+        <description>Netty Component (deprecated) Options</description>
         <topic href="netty-component.html" label="Netty"/>
     </context>
     <context id="netty-http">
-        <description>Netty HTTP Component Options</description>
+        <description>Netty HTTP Component (deprecated) Options</description>
         <topic href="netty-http-component.html" label="Netty HTTP"/>
     </context>
     <context id="netty4">
@@ -820,69 +1023,109 @@
         <description>Olingo2 Component Options</description>
         <topic href="olingo2-component.html" label="Olingo2"/>
     </context>
+    <context id="olingo4">
+        <description>Olingo4 Component Options</description>
+        <topic href="olingo4-component.html" label="Olingo4"/>
+    </context>
     <context id="openshift">
-        <description>OpenShift Component Options</description>
-        <topic href="openshift-component.html" label="Openshift"/>
+        <description>OpenShift Component (deprecated) Options</description>
+        <topic href="openshift-component.html" label="OpenShift"/>
     </context>
-    <context id="optaplanner">
+    <context id="openshift-build-configs">
+        <description>Openshift Build Config Component Options</description>
+        <topic href="openshift-build-configs-component.html" label="Openshift Build Config"/>
+    </context>
+    <context id="openshift-builds">
+        <description>Openshift Builds Component Options</description>
+        <topic href="openshift-builds-component.html" label="Openshift Builds"/>
+    </context>
+    <context id="openstack-cinder">
+        <description>OpenStack Cinder Component Options</description>
+        <topic href="openstack-cinder-component.html" label="OpenStack Cinder"/>
+    </context>
+    <context id="openstack-glance">
+        <description>OpenStack Glance Component Options</description>
+        <topic href="openstack-glance-component.html" label="OpenStack Glance"/>
+    </context>
+    <context id="openstack-keystone">
+        <description>OpenStack Keystone Component Options</description>
+        <topic href="openstack-keystone-component.html" label="OpenStack Keystone"/>
+    </context>
+    <context id="openstack-neutron">
+        <description>OpenStack Neutron Component Options</description>
+        <topic href="openstack-neutron-component.html" label="OpenStack Neutron"/>
+    </context>
+    <context id="openstack-nova">
+        <description>OpenStack Nova Component Options</description>
+        <topic href="openstack-nova-component.html" label="OpenStack Nova"/>
+    </context>
+    <context id="openstack-swift">
+        <description>OpenStack Swift Component Options</description>
+        <topic href="openstack-swift-component.html" label="OpenStack Swift"/>
+    </context>
+    <!-- context id="optaplanner">
         <description>OptaPlanner Component Options</description>
-        <topic href="OptaPlanner-OptaPlanner.html" label="OptaPlanner"/>
-    </context>
+        <topic href="optaplanner-component.html" label="OptaPlanner"/>
+    </context -->
     <context id="paho">
         <description>Paho Component Options</description>
         <topic href="paho-component.html" label="Paho"/>
     </context>
     <context id="paxlogging">
-        <description>Pax-Logging Component Options</description>
-        <topic href="paxlogging-component.html" label="Pax-Logging"/>
+        <description>OSGi PAX Logging Component Options</description>
+        <topic href="paxlogging-component.html" label="OSGi PAX Logging"/>
     </context>
     <context id="pdf">
         <description>PDF Component Options</description>
         <topic href="pdf-component.html" label="PDF"/>
     </context>
     <context id="pgevent">
-        <description>PGEvent Component Options</description>
-        <topic href="pgevent-component.html" label="PGEvent"/>
-    </context>
-    <context id="pop3">
-        <description>Mail Component Options</description>
-        <topic href="mail-component.html" label="POP"/>
-    </context>
-    <context id="pop3s">
-        <description>Mail Component Options</description>
-        <topic href="mail-component.html" label="POP"/>
-    </context>
-    <context id="lpr">
-        <description>Printer Component Options</description>
-        <topic href="IDU-Printer.html" label="Printer"/>
+        <description>PostgresSQL Event Component Options</description>
+        <topic href="pgevent-component.html" label="PostgresSQL Event"/>
     </context>
     <context id="properties">
         <description>Properties Component Options</description>
         <topic href="properties-component.html" label="Properties"/>
     </context>
+    <context id="pubnub">
+        <description>PubNub Component Options</description>
+        <topic href="pubnub-component.html" label="PubNub"/>
+    </context>
     <context id="quartz">
-        <description>Quartz Component Options</description>
+        <description>Quartz Component (deprecated) Options</description>
         <topic href="quartz-component.html" label="Quartz"/>
     </context>
     <context id="quartz2">
         <description>Quartz2 Component Options</description>
         <topic href="quartz2-component.html" label="Quartz2"/>
     </context>
-    <context id="quickfix">
-        <description>Quickfix Component Options</description>
-        <topic href="Quickfix-QuickFIXJComponent.html" label="Quickfix"/>
-    </context>
+    <!-- context id="quickfix">
+        <description>QuickFix Component Options</description>
+        <topic href="quickfix-component.html" label="QuickFix"/>
+    </context -->
     <context id="rabbitmq">
         <description>RabbitMQ Component Options</description>
         <topic href="rabbitmq-component.html" label="RabbitMQ"/>
     </context>
+    <context id="reactive-streams">
+        <description>Reactive Streams Component Options</description>
+        <topic href="reactive-streams-component.html" label="Reactive Streams"/>
+    </context>
     <context id="ref">
-        <description>Registry Look-up Component Options</description>
+        <description>Ref Component Options</description>
         <topic href="ref-component.html" label="Ref"/>
     </context>
     <context id="rest">
-        <description>Rest Component Options</description>
-        <topic href="rest-component.html" label="Rest Component"/>
+        <description>REST Component Options</description>
+        <topic href="rest-component.html" label="REST"/>
+    </context>
+    <!-- context id="rest-api">
+        <description>REST API Component Options</description>
+        <topic href="rest-api-component.html" label="REST API"/>
+    </context -->
+    <context id="rest-swagger">
+        <description>REST Swagger Component Options</description>
+        <topic href="rest-swagger-component.html" label="REST Swagger"/>
     </context>
     <context id="restlet">
         <description>Restlet Component Options</description>
@@ -893,13 +1136,17 @@
         <topic href="rmi-component.html" label="RMI"/>
     </context>
     <context id="routebox">
-        <description>Routebox Component Options</description>
-        <topic href="routebox-component.html" label="Routebox"/>
+        <description>RouteBox Component (deprecated) Options</description>
+        <topic href="routebox-component.html" label="RouteBox"/>
     </context>
     <context id="rss">
         <description>RSS Component Options</description>
         <topic href="rss-component.html" label="RSS"/>
     </context>
+    <!-- context id="saga">
+        <description>Saga Component Options</description>
+        <topic href="saga-component.html" label="Saga"/>
+    </context -->
     <context id="salesforce">
         <description>Salesforce Component Options</description>
         <topic href="salesforce-component.html" label="Salesforce"/>
@@ -945,12 +1192,8 @@
         <topic href="SAP.html" label="SAP IDoc List Server"/>
     </context>
     <context id="sap-netweaver">
-        <description>SAP Netweaver Component Options</description>
-        <topic href="sap-netweaver-component.html" label="SAP Netweaver"/>
-    </context>
-    <context id="scalate">
-        <description>Scalate Component Options</description>
-        <topic href="scalate.html" label="Scalate"/>
+        <description>SAP NetWeaver Component Options</description>
+        <topic href="sap-netweaver-component.html" label="SAP NetWeaver"/>
     </context>
     <context id="scheduler">
         <description>Scheduler Component Options</description>
@@ -960,45 +1203,49 @@
         <description>Schematron Component Options</description>
         <topic href="schematron-component.html" label="Schematron"/>
     </context>
+    <context id="scp">
+        <description>SCP Component Options</description>
+        <topic href="scp-component.html" label="SCP"/>
+    </context>
     <context id="seda">
         <description>SEDA Component Options</description>
         <topic href="seda-component.html" label="SEDA"/>
     </context>
+    <context id="servicenow">
+        <description>ServiceNow Component Options</description>
+        <topic href="servicenow-component.html" label="ServiceNow"/>
+    </context>
     <context id="servlet">
         <description>Servlet Component Options</description>
-        <topic href="servlet-component.html" label="SERVLET"/>
+        <topic href="servlet-component.html" label="Servlet"/>
     </context>
     <context id="sftp">
-        <description>FTP Component Options</description>
-        <topic href="sftp-omponent.html" label="SFTP"/>
+        <description>SFTP Component Options</description>
+        <topic href="sftp-component.html" label="SFTP"/>
+    </context>
+    <context id="sip">
+        <description>SIP Component Options</description>
+        <topic href="sip-component.html" label="SIP"/>
     </context>
     <context id="sjms">
-        <description>SJMS Component Options</description>
-        <topic href="sjms-component.html" label="SJMS"/>
+        <description>Simple JMS Component Options</description>
+        <topic href="sjms-component.html" label="Simple JMS"/>
     </context>
     <context id="sjms-batch">
-        <description>SJMS-Batch Component Options</description>
-        <topic href="sjms-batch-component.html" label="SJMS-Batch"/>
+        <description>Simple JMS Batch Component Options</description>
+        <topic href="sjms-batch-component.html" label="Simple JMS Batch"/>
+    </context>
+    <context id="sjms2">
+        <description>Simple JMS2 Component Options</description>
+        <topic href="sjms2-component.html" label="Simple JMS2"/>
     </context>
     <context id="slack">
         <description>Slack Component Options</description>
         <topic href="slack-component.html" label="Slack"/>
-    </context>    
+    </context>
     <context id="smpp">
         <description>SMPP Component Options</description>
         <topic href="smpp-component.html" label="SMPP"/>
-    </context>
-    <context id="smpps">
-        <description>SMPP Component Options</description>
-        <topic href="smpp-component.html" label="SMPPS"/>
-    </context>
-    <context id="smtp">
-        <description>Mail Component Options</description>
-        <topic href="mail-component.html" label="SMTP"/>
-    </context>
-    <context id="smtps">
-        <description>Mail Component Options</description>
-        <topic href="mail-component.html" label="SMTPS"/>
     </context>
     <context id="snmp">
         <description>SNMP Component Options</description>
@@ -1008,22 +1255,13 @@
         <description>Solr Component Options</description>
         <topic href="solr-component.html" label="Solr"/>
     </context>
-    <context id="solrs">
-        <description>Solr Component Options</description>
-        <topic href="solr-component.html" label="Solr"/>
-    </context>
-    <context id="solrCloud">
-        <description>Solr Component Options</description>
-        <topic href="solr-component.html" label="Solr"/>
-    </context>
     <context id="spark">
-        <description>Spark Component Options</description>
-        <topic href="spark-component" label="Apache Spark"/>
+        <description>Apache Spark Component Options</description>
+        <topic href="spark-component.html" label="Apache Spark"/>
     </context>
-    <!-- Spark REST component approved by PM -->
-    <context id="sparkrest">
-        <description>Spark REST Component Options</description>
-        <topic href="spark-rest-component" label="Spark REST"/>
+    <context id="spark-rest">
+        <description>Spark Rest Component Options</description>
+        <topic href="spark-rest-component.html" label="Spark Rest"/>
     </context>
     <context id="splunk">
         <description>Splunk Component Options</description>
@@ -1033,14 +1271,9 @@
         <description>Spring Batch Component Options</description>
         <topic href="spring-batch-component.html" label="Spring Batch"/>
     </context>
-    <!-- TBD for F6.3/FT8.0 release -->
-    <!--  <context id="springboot">
-        <description>Spring Boot Component Options</description>
-        <topic href="IDU-SpringBoot.html" label="Spring Boot"/>
-    </context> -->
     <context id="spring-event">
-        <description>Event Component Options</description>
-        <topic href="spring-event-component.html" label="Event"/>
+        <description>Spring Event Component Options</description>
+        <topic href="spring-event-component.html" label="Spring Event"/>
     </context>
     <context id="spring-integration">
         <description>Spring Integration Component Options</description>
@@ -1054,13 +1287,17 @@
         <description>Spring Redis Component Options</description>
         <topic href="spring-redis-component.html" label="Spring Redis"/>
     </context>
+    <context id="spring-ws">
+        <description>Spring WebService Component Options</description>
+        <topic href="spring-ws-component.html" label="Spring WebService"/>
+    </context>
     <context id="sql">
         <description>SQL Component Options</description>
         <topic href="sql-component.html" label="SQL"/>
     </context>
     <context id="sql-stored">
-        <description>SQL Stored Component Options</description>
-        <topic href="sql-stored-component.html" label="SQL Stored"/>
+        <description>SQL Stored Procedure Component Options</description>
+        <topic href="sql-stored-component.html" label="SQL Stored Procedure"/>
     </context>
     <context id="ssh">
         <description>SSH Component Options</description>
@@ -1086,58 +1323,65 @@
         <description>Stub Component Options</description>
         <topic href="stub-component.html" label="Stub"/>
     </context>
-    <context id="sip">
-        <description>SIP Component Options</description>
-        <topic href="sip-component.html" label="SIP"/>
-    </context>
-    <context id="sips">
-        <description>SIP Component Options</description>
-        <topic href="sip-component.html" label="SIP"/>
-    </context>
-    <context id="spring-ws">
-        <description>Spring Web Services Component Options</description>
-        <topic href="spring-ws-component.html" label="Spring Web Services"/>
-    </context>
-    <context id="swagger">
-        <description>Swagger Component Options</description>
-        <topic href="Swagger-SwaggerScalaComponent.html" label="Swagger"/>
-    </context>
-    <context id="swagger-java">
-        <description>Swagger Java Component Options</description>
-        <topic href="SwaggerJava-SwaggerJavaComponent.html" label="Swagger Java"/>
+    <context id="telegram">
+        <description>Telegram Component Options</description>
+        <topic href="telegram-component.html" label="Telegram"/>
     </context>
     <context id="test">
         <description>Test Component Options</description>
         <topic href="test-component.html" label="Test"/>
     </context>
+    <context id="thrift">
+        <description>Thrift Component Options</description>
+        <topic href="thrift-component.html" label="Thrift"/>
+    </context>
+    <context id="tika">
+        <description>Tika Component Options</description>
+        <topic href="tika-component.html" label="Tika"/>
+    </context>
     <context id="timer">
         <description>Timer Component Options</description>
         <topic href="timer-component.html" label="Timer"/>
     </context>
+    <context id="twilio">
+        <description>Twilio Component Options</description>
+        <topic href="twilio-component.html" label="Twilio"/>
+    </context>
     <context id="twitter">
-        <description>Twitter Component Options</description>
+        <description>Twitter Component (deprecated) Options</description>
         <topic href="twitter-component.html" label="Twitter"/>
+    </context>
+    <context id="twitter-directmessage">
+        <description>Twitter Direct Message Component Options</description>
+        <topic href="twitter-directmessage-component.html" label="Twitter Direct Message"/>
+    </context>
+    <context id="twitter-search">
+        <description>Twitter Search Component Options</description>
+        <topic href="twitter-search-component.html" label="Twitter Search"/>
+    </context>
+    <context id="twitter-streaming">
+        <description>Twitter Streaming Component Options</description>
+        <topic href="twitter-streaming-component.html" label="Twitter Streaming"/>
+    </context>
+    <context id="twitter-timeline">
+        <description>Twitter Timeline Component Options</description>
+        <topic href="twitter-timeline-component.html" label="Twitter Timeline"/>
     </context>
     <context id="undertow">
         <description>Undertow Component Options</description>
         <topic href="undertow-component.html" label="Undertow"/>
     </context>
-    <!-- TBD for F6.3/FT8.0 release -->
-    <!--  <context id="urlrewrite">
-        <description>URLRewrite Component Options</description>
-        <topic href="IDU-URLRewrite.html" label="URLRewrite"/>
-    </context> -->
     <context id="validator">
-        <description>Validation Component Options</description>
-        <topic href="validator-component.html" label="Validation"/>
+        <description>Validator Component Options</description>
+        <topic href="validator-component.html" label="Validator"/>
     </context>
     <context id="velocity">
         <description>Velocity Component Options</description>
         <topic href="velocity-component.html" label="Velocity"/>
     </context>
     <context id="vertx">
-        <description>Vertx Component Options</description>
-        <topic href="vertx-component.html" label="Vertx"/>
+        <description>Vert.x Component Options</description>
+        <topic href="vertx-component.html" label="Vert.x"/>
     </context>
     <context id="vm">
         <description>VM Component Options</description>
@@ -1145,15 +1389,23 @@
     </context>
     <context id="weather">
         <description>Weather Component Options</description>
-        <topic href="Weather-WeatherComponent.html" label="Weather"/>
+        <topic href="weather-component.html" label="Weather"/>
     </context>
     <context id="websocket">
-        <description>Websocket Component Options</description>
-        <topic href="websocket-component.html" label="Websocket"/>
+        <description>Jetty Websocket Component Options</description>
+        <topic href="websocket-component.html" label="Jetty Websocket"/>
     </context>
+    <!-- context id="wordpress">
+        <description>Wordpress Component Options</description>
+        <topic href="wordpress-component.html" label="Wordpress"/>
+    </context -->
+    <!-- context id="xchange">
+        <description>XChange Component Options</description>
+        <topic href="xchange-component.html" label="XChange"/>
+    </context -->
     <context id="xmlrpc">
-        <description>XmlRpc Component Options</description>
-        <topic href="XmlRpc-XmlRpcComponent.html" label="XmlRpc"/>
+        <description>XML RPC Component Options</description>
+        <topic href="xmlrpc-component.html" label="XML RPC"/>
     </context>
     <context id="xmlsecurity">
         <description>XML Security Component Options</description>
@@ -1175,9 +1427,21 @@
         <description>Yammer Component Options</description>
         <topic href="yammer-component.html" label="Yammer"/>
     </context>
+    <!-- context id="yql">
+        <description>Yahoo Query Language Component Options</description>
+        <topic href="yql-component.html" label="Yahoo Query Language"/>
+    </context -->
+    <context id="zendesk">
+        <description>Zendesk Component Options</description>
+        <topic href="zendesk-component.html" label="Zendesk"/>
+    </context>
     <context id="zookeeper">
-        <description>Zookeeper Component Options</description>
-        <topic href="zookeeper-component.html" label="Zookeeper"/>
+        <description>ZooKeeper Component Options</description>
+        <topic href="zookeeper-component.html" label="ZooKeeper"/>
+    </context>
+    <context id="zookeeper-master">
+        <description>ZooKeeper Master Component Options</description>
+        <topic href="zookeeper-master-component.html" label="ZooKeeper Master"/>
     </context>
 
     <!-- Wizard pages -->
