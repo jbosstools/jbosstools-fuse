@@ -22,6 +22,7 @@ import org.eclipse.debug.core.DebugException;
 import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelCatalogCacheManager;
 import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelCatalogCoordinates;
 import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelModel;
+import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
 import org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -46,7 +47,7 @@ public class FuseIntegrationProjectCreatorRunnableCheckCatalogCacheLoadingIT
 	@Before
 	public void setup() throws Exception {
 		CamelCatalogCacheManager.getInstance().clear();
-		camelVersion = "2.17.0.redhat-630187";
+		camelVersion = CamelCatalogUtils.CAMEL_VERSION_LATEST_PRODUCTIZED_63;
 		super.setup();
 	}
 	
