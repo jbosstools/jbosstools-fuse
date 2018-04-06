@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:camel="http://camel.apache.org/schema/spring"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd        http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+    <bean class="taskmanager.TaskManager" id="taskManager" scope="singleton"/>
+    <camelContext id="camelContext-ed0fef08-e4ba-4fc3-a3cb-08ef612cfe06"
+        trace="false" xmlns="http://camel.apache.org/schema/spring">
+        <restConfiguration bindingMode="auto" component="restlet"
+            enableCORS="true" port="8080"/>
+        <rest path="/greetings">
+            <get consumes="text/plain" produces="text/plain" uri="/hello/{name}">
+                <to uri="direct:sayHello"/>
+            </get>
+        </rest>
+        <rest path="/taskmanager">
+            <get produces="application/json" uri="/tasks">
+                <to uri="direct:getTasks"/>
+            </get>
+            <get produces="application/json" uri="/tasks/{id}">
+                <to uri="direct:getTask"/>
+            </get>
+            <verb method="get" produces="application/json" uri="/task/{id}">
+                <to uri="direct:getTask"/>
+            </verb>
+            <head uri="/tasks/{id}">
+                <to uri="direct:getTask"/>
+            </head>
+            <post consumes="application/json"
+                produces="application/json" type="taskmanager.Task" uri="/tasks">
+                <to uri="direct:addTask"/>
+            </post>
+            <put consumes="application/json" produces="application/json"
+                type="taskmanager.Task" uri="/tasks">
+                <to uri="direct:updateTask"/>
+            </put>
+            <patch consumes="application/json"
+                produces="application/json" type="taskmanager.Task" uri="/tasks">
+                <to uri="direct:updateTask"/>
+            </patch>
+            <delete produces="application/json" uri="/tasks/{id}">
+                <to uri="direct:deleteTask"/>
+            </delete>
+            <delete produces="application/json" uri="/tasks">
+                <to uri="direct:initTaskManager"/>
+            </delete>
+        </rest>
+        <route id="_route1">
+            <from id="_from1" uri="direct:sayHello"/>
+            <setBody id="_setBody1">
+                <simple>Hello ${header.name}</simple>
+            </setBody>
+        </route>
+        <route id="_route2">
+            <from id="_from2" uri="direct:getTasks"/>
+            <bean id="_bean1" method="getTasks" ref="taskManager"/>
+        </route>
+        <route id="_route3">
+            <from id="_from3" uri="direct:getTask"/>
+            <setBody id="_setBody3">
+                <simple>${header.id}</simple>
+            </setBody>
+            <bean id="_bean2" method="getTask" ref="taskManager"/>
+        </route>
+        <route id="_route4">
+            <from id="_from4" uri="direct:addTask"/>
+            <bean id="_bean3" method="addTask" ref="taskManager"/>
+        </route>
+        <route id="_route5">
+            <from id="_from5" uri="direct:updateTask"/>
+            <bean id="_bean4" method="updateTask" ref="taskManager"/>
+        </route>
+        <route id="_route6">
+            <from id="_from6" uri="direct:deleteTask"/>
+            <setBody id="_setBody2">
+                <simple>${header.id}</simple>
+            </setBody>
+            <bean id="_bean5" method="deleteTask" ref="taskManager"/>
+        </route>
+        <route id="_route7">
+            <from id="_from7" uri="direct:initTaskManager"/>
+            <bean id="_bean6" method="init" ref="taskManager"/>
+        </route>
+    </camelContext>
+</beans>

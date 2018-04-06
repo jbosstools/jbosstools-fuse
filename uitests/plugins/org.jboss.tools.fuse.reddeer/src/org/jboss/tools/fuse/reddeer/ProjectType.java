@@ -14,6 +14,7 @@ public enum ProjectType {
 
 	JAVA("Java DSL"),
 	SPRING("Spring DSL", "camel-context.xml", "beans", "factory-bean", "constructor-arg"),
+	SPRINGBOOT("Spring DSL", "camel-context.xml", "beans", "factory-bean", "constructor-arg"),
 	BLUEPRINT("Blueprint DSL", "blueprint.xml", "blueprint", "factory-ref", "argument");
 
 	private String description;
