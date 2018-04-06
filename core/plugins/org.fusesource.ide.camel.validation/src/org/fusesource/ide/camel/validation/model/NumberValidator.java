@@ -19,6 +19,7 @@ import org.fusesource.ide.camel.model.service.core.util.CamelComponentUtils;
 import org.fusesource.ide.camel.model.service.core.util.PropertiesUtils;
 import org.fusesource.ide.camel.validation.l10n.Messages;
 import org.fusesource.ide.foundation.core.util.CamelPlaceHolderUtil;
+import org.fusesource.ide.foundation.core.util.Strings;
 
 /**
  * @author Aurelien Pupier
@@ -37,7 +38,7 @@ public class NumberValidator implements IValidator {
 
 	@Override
 	public IStatus validate(Object value) {
-		if (isNonEmpty(value)
+		if (Strings.isNonEmptyAndNotOnlySpaces(value)
 				&& !new CamelPlaceHolderUtil().isPlaceHolder(value)
 				&& (parameter == null || CamelComponentUtils.isNumberProperty(parameter))) {
 			try {
@@ -53,7 +54,4 @@ public class NumberValidator implements IValidator {
 		return ValidationStatus.ok();
 	}
 
-	protected boolean isNonEmpty(Object value) {
-		return value != null && value.toString().trim().length() > 0;
-	}
 }

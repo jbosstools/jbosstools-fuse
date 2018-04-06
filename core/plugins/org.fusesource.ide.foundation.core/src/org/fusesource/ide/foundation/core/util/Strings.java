@@ -32,6 +32,10 @@ public class Strings {
         return text == null || text.length() == 0;
     }
     
+	public static boolean isNonEmptyAndNotOnlySpaces(Object value) {
+		return value != null && value.toString().trim().length() > 0;
+	}
+    
     public static String splitCamelCase(String text) {
         StringBuilder buffer = new StringBuilder();
         char last = 'A';
