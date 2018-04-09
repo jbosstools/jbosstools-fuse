@@ -13,6 +13,7 @@ package org.jboss.tools.fuse.reddeer;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -109,7 +110,7 @@ public class CamelCatalogUtils {
 	 * 
 	 * @return String
 	 */
-	public String Components() {
+	public List<String> components() {
 		return getCatalogComponentsList(CatalogType.COMPONENT);
 	}
 
@@ -118,7 +119,7 @@ public class CamelCatalogUtils {
 	 *
 	 * @return String
 	 */
-	public String DataFormats() {
+	public List<String> dataFormats() {
 		return getCatalogComponentsList(CatalogType.DATAFORMAT);
 	}
 
@@ -127,7 +128,7 @@ public class CamelCatalogUtils {
 	 *
 	 * @return String
 	 */
-	public String Languages() {
+	public List<String> languages() {
 		return getCatalogComponentsList(CatalogType.LANGUAGE);
 	}
 
@@ -136,7 +137,7 @@ public class CamelCatalogUtils {
 	 *
 	 * @return String
 	 */
-	public String Models() {
+	public List<String> models() {
 		return getCatalogComponentsList(CatalogType.MODEL);
 	}
 
@@ -148,7 +149,7 @@ public class CamelCatalogUtils {
 	 * @return true/false
 	 */
 	public boolean isExistComponent(String name) {
-		return catalogNamePattern(name).matcher(Components()).find();
+		return catalogNamePattern(name).matcher(readListFile(CatalogType.COMPONENT)).find();
 	}
 
 	/**
@@ -159,7 +160,7 @@ public class CamelCatalogUtils {
 	 * @return true/false
 	 */
 	public boolean isExistDataFormat(String name) {
-		return catalogNamePattern(name).matcher(DataFormats()).find();
+		return catalogNamePattern(name).matcher(readListFile(CatalogType.DATAFORMAT)).find();
 	}
 
 	/**
@@ -170,7 +171,7 @@ public class CamelCatalogUtils {
 	 * @return true/false
 	 */
 	public boolean isExistLanguage(String name) {
-		return catalogNamePattern(name).matcher(Languages()).find();
+		return catalogNamePattern(name).matcher(readListFile(CatalogType.LANGUAGE)).find();
 	}
 
 	/**
@@ -181,7 +182,7 @@ public class CamelCatalogUtils {
 	 * @return true/false
 	 */
 	public boolean isExistModel(String name) {
-		return catalogNamePattern(name).matcher(Models()).find();
+		return catalogNamePattern(name).matcher(readListFile(CatalogType.MODEL)).find();
 	}
 
 	/**
@@ -230,7 +231,8 @@ public class CamelCatalogUtils {
 					}
 				}
 			} catch (Exception e) {
-				log.error("Trying to get non-existing 'componentProperties' JSON object for '" + type + "' - '" + name + "'");
+				log.error("Trying to get non-existing 'componentProperties' JSON object for '" + type + "' - '" + name
+						+ "'");
 			}
 		}
 		return properties;
@@ -253,13 +255,8 @@ public class CamelCatalogUtils {
 				+ name.replaceAll("\\s+", "-") + "|" + name.replaceAll("-", ""), Pattern.CASE_INSENSITIVE);
 	}
 
-	private String getCatalogComponentsList(CatalogType type) {
-		try {
-			return FileUtils.getFileContent(type.listPath);
-		} catch (IOException e) {
-			log.error("Resource missing: can't find a failing test case to copy (" + type.listPath + ")!");
-		}
-		return "";
+	private List<String> getCatalogComponentsList(CatalogType type) {
+		return Arrays.asList(readListFile(type).split("\n"));
 	}
 
 	/**
@@ -272,7 +269,7 @@ public class CamelCatalogUtils {
 	 * @return String path
 	 */
 	private String findJSONFile(CatalogType type, String name) {
-		Matcher m = catalogNamePattern("(" + name + ")").matcher(getCatalogComponentsList(type));
+		Matcher m = catalogNamePattern("(" + name + ")").matcher(readListFile(type));
 		while (m.find()) {
 			String path = type.path + "/" + m.group(1) + JSON_SUFFIX;
 			if (new File(path).exists())
@@ -293,6 +290,15 @@ public class CamelCatalogUtils {
 			return FileUtils.getFileContent(findJSONFile(type, name));
 		} catch (IOException e) {
 			log.error("Resource missing: can't find a failing test case to copy (" + name + ")!");
+		}
+		return "";
+	}
+
+	private String readListFile(CatalogType type) {
+		try {
+			return FileUtils.getFileContent(type.listPath);
+		} catch (IOException e) {
+			log.error("Resource missing: can't find path (" + type.listPath + ")!");
 		}
 		return "";
 	}
