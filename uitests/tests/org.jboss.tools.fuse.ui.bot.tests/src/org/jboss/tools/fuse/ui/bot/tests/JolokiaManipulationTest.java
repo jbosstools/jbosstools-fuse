@@ -160,7 +160,7 @@ public class JolokiaManipulationTest {
 		editor.activate();
 		editor.clickOnEditPart("Transform transform1");
 		propertiesView.activate();
-		propertiesView.setProperty(PropertyType.COMBO, "Language", "simple");
+		propertiesView.setProperty(PropertyType.COMBO, "Expression", "simple");
 		propertiesView.setProperty(PropertyType.TEXT, "Expression", MESSAGE);
 		editor.save();
 
