@@ -11,7 +11,6 @@
 package org.jboss.tools.fuse.reddeer.condition;
 
 import org.eclipse.reddeer.common.condition.AbstractWaitCondition;
-import org.eclipse.reddeer.core.exception.CoreLayerException;
 import org.eclipse.reddeer.swt.api.Tree;
 import org.eclipse.reddeer.swt.impl.tree.DefaultTreeItem;
 
@@ -43,7 +42,7 @@ public class TreeHasItem extends AbstractWaitCondition {
 	public boolean test() {
 		try {
 			new DefaultTreeItem(tree, path);
-		} catch (CoreLayerException e) {
+		} catch (Exception e) {
 			return false;
 		}
 		return true;
