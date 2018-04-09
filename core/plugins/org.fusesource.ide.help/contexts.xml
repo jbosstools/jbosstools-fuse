@@ -362,6 +362,10 @@
         <description>Azure Storage Queue Service Component Options</description>
         <topic href="azure-queue-component.html" label="Azure Storage Queue Service"/>
     </context>
+    <context id="beanEIP">
+        <description>Bean EIP</description>
+        <topic href="bean.html" label="Bean EIP"/>
+    </context>
     <context id="bean">
         <description>Bean Component Options</description>
         <topic href="bean-component.html" label="Bean"/>
