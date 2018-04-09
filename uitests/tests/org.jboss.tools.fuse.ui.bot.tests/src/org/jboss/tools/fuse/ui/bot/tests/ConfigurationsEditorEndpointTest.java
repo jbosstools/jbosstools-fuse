@@ -14,35 +14,36 @@ import static org.jboss.tools.fuse.reddeer.ProjectTemplate.CBR_SPRING;
 import static org.jboss.tools.fuse.reddeer.SupportedCamelVersions.CAMEL_2_17_0_REDHAT_630187;
 import static org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardDeploymentType.STANDALONE;
 import static org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardRuntimeType.KARAF;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
-import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import org.eclipse.reddeer.common.logging.Logger;
-import org.eclipse.reddeer.common.util.Display;
-import org.eclipse.reddeer.eclipse.ui.perspectives.JavaEEPerspective;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.XPathExpressionException;
+
+import org.eclipse.reddeer.common.condition.WaitCondition;
+import org.eclipse.reddeer.common.util.XPathEvaluator;
+import org.eclipse.reddeer.common.wait.TimePeriod;
+import org.eclipse.reddeer.common.wait.WaitUntil;
 import org.eclipse.reddeer.junit.internal.runner.ParameterizedRequirementsRunnerFactory;
 import org.eclipse.reddeer.junit.runner.RedDeerSuite;
+import org.eclipse.reddeer.requirements.cleanerrorlog.CleanErrorLogRequirement;
+import org.eclipse.reddeer.requirements.cleanworkspace.CleanWorkspaceRequirement;
 import org.eclipse.reddeer.requirements.cleanworkspace.CleanWorkspaceRequirement.CleanWorkspace;
 import org.eclipse.reddeer.requirements.openperspective.OpenPerspectiveRequirement.OpenPerspective;
-import org.eclipse.reddeer.swt.impl.styledtext.DefaultStyledText;
-import org.eclipse.reddeer.swt.impl.tree.DefaultTreeItem;
-import org.eclipse.reddeer.workbench.core.lookup.WorkbenchPartLookup;
-import org.eclipse.reddeer.workbench.handler.EditorHandler;
+import org.eclipse.reddeer.swt.impl.tree.DefaultTree;
 import org.eclipse.reddeer.workbench.impl.shell.WorkbenchShell;
-import org.eclipse.ui.IViewReference;
-import org.jboss.tools.fuse.reddeer.XPathEvaluator;
+import org.jboss.tools.fuse.reddeer.condition.TreeHasItem;
 import org.jboss.tools.fuse.reddeer.editor.CamelEditor;
 import org.jboss.tools.fuse.reddeer.editor.CamelEndpointDialog;
 import org.jboss.tools.fuse.reddeer.editor.ConfigurationsEditor;
-import org.jboss.tools.fuse.reddeer.editor.ConfigurationsEditor.Element;
+import org.jboss.tools.fuse.reddeer.perspectives.FuseIntegrationPerspective;
 import org.jboss.tools.fuse.reddeer.projectexplorer.CamelProject;
 import org.jboss.tools.fuse.reddeer.utils.ProjectFactory;
-import org.jboss.tools.fuse.reddeer.view.FusePropertiesView;
 import org.jboss.tools.fuse.reddeer.view.FusePropertiesView.DetailsProperty;
 import org.jboss.tools.fuse.ui.bot.tests.utils.EditorManipulator;
 import org.junit.After;
@@ -53,25 +54,28 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized.Parameters;
 import org.junit.runners.Parameterized.UseParametersRunnerFactory;
+import org.xml.sax.SAXException;
 
 /**
- * Tests for global elements - Endpoints in Configurations Tab in Camel editor
+ * Tests for manipulation with 'Endpoints' in 'Configurations' tab in Camel editor
  * 
  * @author djelinek
  */
 @CleanWorkspace
-@OpenPerspective(JavaEEPerspective.class)
+@OpenPerspective(FuseIntegrationPerspective.class)
 @RunWith(RedDeerSuite.class)
 @UseParametersRunnerFactory(ParameterizedRequirementsRunnerFactory.class)
-public class ConfigurationsEditorEndpointsTest extends DefaultTest {
-
-	protected Logger log = Logger.getLogger(ConfigurationsEditorEndpointsTest.class);
+public class ConfigurationsEditorEndpointTest {
 
 	public static final String PROJECT_NAME = "cbr";
 	public static final String CONTEXT = "camel-context.xml";
-	public static final String TYPE = "Red Hat Fuse";
+	public static final String ROOT = "Red Hat Fuse";
 
-	private String element;
+	private ConfigurationsEditor editor;
+	private String endpoint;
+	private String endpointName;
+	private String[] path;
+
 	private List<String> availableEndpoints = Arrays.asList(
 			"Atom - The atom component is used for consuming Atom RSS feeds.",
 			"Control Bus - The controlbus component provides easy management of Camel applications based on the Control Bus EIP pattern.",
@@ -125,73 +129,42 @@ public class ConfigurationsEditorEndpointsTest extends DefaultTest {
 	 */
 	@Parameters
 	public static Collection<String> setupData() {
-
-		new WorkbenchShell();
-		ProjectFactory.newProject(PROJECT_NAME).deploymentType(STANDALONE).runtimeType(KARAF)
-				.version(CAMEL_2_17_0_REDHAT_630187).template(CBR_SPRING).create();
-		for (IViewReference viewReference : WorkbenchPartLookup.getInstance().findAllViewReferences()) {
-			if (viewReference.getPartName().equals("Welcome")) {
-				final IViewReference iViewReference = viewReference;
-				Display.syncExec(new Runnable() {
-					@Override
-					public void run() {
-						iViewReference.getPage().hideView(iViewReference);
-					}
-				});
-				break;
-			}
-		}
-
+		createProject();
 		new CamelProject(PROJECT_NAME).openCamelContext(CONTEXT);
-		List<String> endpoints = CamelEndpointDialog.getEndpoints();
-		return endpoints;
+		CamelEditor.switchTab("Configurations");
+		return ConfigurationsEditor.getEndpoints();
 	}
 
-	/**
-	 * Utilizes passing parameters using the constructor
-	 * 
-	 * @param template
-	 *            a Global element - Endpoint
-	 */
-	public ConfigurationsEditorEndpointsTest(String element) {
-		this.element = element;
+	public ConfigurationsEditorEndpointTest(String endpoint) {
+		this.endpoint = endpoint;
+		this.endpointName = getLabel(endpoint);
+		path = new String[] { ROOT, this.endpointName, " (Endpoint)" };
 	}
 
-	/**
-	 * Prepares test environment
-	 */
 	@BeforeClass
 	public static void setupResetCamelContext() {
+		new WorkbenchShell().maximize();
 
-		ProjectFactory.newProject(PROJECT_NAME).deploymentType(STANDALONE).runtimeType(KARAF)
-				.version(CAMEL_2_17_0_REDHAT_630187).template(CBR_SPRING).create();
+		createProject();
 	}
 
 	@Before
 	public void initialSetup() {
-
+		new CleanErrorLogRequirement().fulfill();
 		new CamelProject(PROJECT_NAME).openCamelContext(CONTEXT);
-		// new CamelEditor("camel-context.xml").activate();
 		CamelEditor.switchTab("Configurations");
-	}
-
-	/**
-	 * Cleans up test environment
-	 */
-	@AfterClass
-	public static void setupDeleteProjects() {
-
-		new WorkbenchShell();
-		EditorHandler.getInstance().closeAll(true);
-		ProjectFactory.deleteAllProjects();
 	}
 
 	@After
 	public void clearEnviroment() {
-
-		// new CamelEditor("camel-context.xml").activate();
+		new CamelProject(PROJECT_NAME).openCamelContext(CONTEXT);
 		CamelEditor.switchTab("Source");
 		EditorManipulator.copyFileContentToCamelXMLEditor("resources/camel-context-cbr.xml");
+	}
+
+	@AfterClass
+	public static void setupDeleteProjects() {
+		new CleanWorkspaceRequirement().fulfill();
 	}
 
 	/**
@@ -201,8 +174,7 @@ public class ConfigurationsEditorEndpointsTest extends DefaultTest {
 	 */
 	@Test
 	public void testEndpointAvailability() {
-
-		assertTrue(element, availableEndpoints.contains(element));
+		assertTrue(endpoint, availableEndpoints.contains(endpoint));
 	}
 
 	/**
@@ -219,16 +191,8 @@ public class ConfigurationsEditorEndpointsTest extends DefaultTest {
 	 */
 	@Test
 	public void testCreateEndpoint() {
-
-		try {
-			ConfigurationsEditor confEditor = new ConfigurationsEditor(PROJECT_NAME, CONTEXT);
-			confEditor.activate();
-			String[] title = element.split(" ");
-			confEditor.createNewGlobalEndpoint(title[0], element);
-			new DefaultTreeItem(new String[] { TYPE, title[0] + " (Endpoint)" }).select();
-		} catch (Exception e) {
-			fail(element);
-		}
+		createEndpoint();
+		assertEndpointPath(true);
 	}
 
 	/**
@@ -246,25 +210,10 @@ public class ConfigurationsEditorEndpointsTest extends DefaultTest {
 	 */
 	@Test
 	public void testEditEndpoint() {
-
-		try {
-			ConfigurationsEditor confEditor = new ConfigurationsEditor(PROJECT_NAME, CONTEXT);
-			confEditor.activate();
-			String[] title = element.split(" ");
-			confEditor.createNewGlobalEndpoint(title[0], element);
-			confEditor.editGlobalEndpoint(title[0]);
-			FusePropertiesView view = new FusePropertiesView();
-			view.activate();
-			view.setDetailsProperty(DetailsProperty.URI, "changedUri");
-			view.setDetailsProperty(DetailsProperty.DESC, "changedDesc");
-			view.setDetailsProperty(DetailsProperty.ID, "changed" + title[0]);
-			view.setDetailsProperty(DetailsProperty.PATTERN, null);
-			view.setDetailsProperty(DetailsProperty.REF, null);
-			confEditor.activate();
-			new DefaultTreeItem(new String[] { TYPE, "changed" + title[0] + " (Endpoint)" }).select();
-		} catch (Exception e) {
-			fail(element);
-		}
+		createEndpoint();
+		editor.editEndpoint(endpointName).setDetailsProperty(DetailsProperty.ID, "new_" + endpointName);
+		path = new String[] { ROOT, "new_" + endpointName + " (Endpoint)" };
+		assertEndpointPath(true);
 	}
 
 	/**
@@ -282,18 +231,10 @@ public class ConfigurationsEditorEndpointsTest extends DefaultTest {
 	 */
 	@Test
 	public void testDeleteEndpoint() {
-
-		try {
-			ConfigurationsEditor confEditor = new ConfigurationsEditor(PROJECT_NAME, CONTEXT);
-			confEditor.activate();
-			String[] title = element.split(" ");
-			confEditor.createNewGlobalEndpoint(title[0], element);
-			confEditor.deleteGlobalElement(Element.ENDPOINT, title[0]);
-			new DefaultTreeItem(new String[] { TYPE, title[0] + " (Endpoint)" }).select();
-			fail(element);
-		} catch (Exception e) {
-			log.info("Endpoint: " + element + ", was deleted");
-		}
+		createEndpoint();
+		assertEndpointPath(true);
+		editor.deleteEndpoint(endpointName);
+		assertEndpointPath(false);
 	}
 
 	/**
@@ -312,29 +253,49 @@ public class ConfigurationsEditorEndpointsTest extends DefaultTest {
 	 */
 	@Test
 	public void testSourceXML() {
+		createEndpoint();
+		editor.close(true);
+		assertXPath(true, endpointName);
+		new CamelProject(PROJECT_NAME).openCamelContext(CONTEXT);
+		editor = new ConfigurationsEditor();
+		editor.deleteEndpoint(endpointName);
+		editor.close(true);
+		assertXPath(false, endpointName);
+	}
 
+	private void assertXPath(boolean expected, String name) {
+		String result;
 		try {
-			ConfigurationsEditor confEditor = new ConfigurationsEditor(PROJECT_NAME, CONTEXT);
-			confEditor.activate();
-			String[] title = element.split(" ");
-			confEditor.createNewGlobalEndpoint(title[0], element);
-			CamelEditor.switchTab("Source");
-			String content = new DefaultStyledText().getText();
-			log.info(content);
-			XPathEvaluator eval = new XPathEvaluator(new ByteArrayInputStream(content.getBytes()));
-			if (!eval.evaluateBoolean("/beans/camelContext/endpoint[@id='" + title[0] + "']"))
-				fail(element);
-			CamelEditor.switchTab("Configurations");
-			confEditor.deleteGlobalElement(Element.ENDPOINT, title[0]);
-			CamelEditor.switchTab("Source");
-			content = new DefaultStyledText().getText();
-			log.info(content);
-			eval = new XPathEvaluator(new ByteArrayInputStream(content.getBytes()));
-			if (eval.evaluateBoolean("/beans/camelContext/endpoint[@id='" + title[0] + "']"))
-				fail(element);
-			CamelEditor.switchTab("Configurations");
-		} catch (Exception e) {
-			fail(element);
+			XPathEvaluator eval = new XPathEvaluator(editor.getAssociatedFile().getInputStream(), false);
+			result = eval.evaluateXPath("/beans/camelContext/endpoint/@id");
+		} catch (XPathExpressionException | IOException | SAXException | ParserConfigurationException e) {
+			throw new RuntimeException(e);
+		}
+		assertEquals("Endpoint - " + name, expected, result.equals(name));
+	}
+
+	private String getLabel(String row) {
+		return row.split("\\s")[0].toLowerCase();
+	}
+
+	private static void createProject() {
+		ProjectFactory.newProject(PROJECT_NAME).deploymentType(STANDALONE).runtimeType(KARAF)
+				.version(CAMEL_2_17_0_REDHAT_630187).template(CBR_SPRING).create();
+	}
+
+	private void createEndpoint() {
+		editor = new ConfigurationsEditor();
+		CamelEndpointDialog wizard = editor.addEndpoint();
+		wizard.setCamelComponent(endpoint);
+		wizard.setId(endpointName);
+		wizard.finish();
+	}
+
+	private void assertEndpointPath(boolean expected) {
+		WaitCondition wait = new TreeHasItem(new DefaultTree(editor), path);
+		new WaitUntil(wait, TimePeriod.MEDIUM, false);
+		if (wait.getResult() != null) {
+			assertEquals("Endpoint - " + endpointName, expected, wait.getResult());
 		}
 	}
 

@@ -15,35 +15,37 @@ import static org.jboss.tools.fuse.reddeer.SupportedCamelVersions.CAMEL_2_17_0_R
 import static org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardDeploymentType.STANDALONE;
 import static org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardRuntimeType.KARAF;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.assertEquals;
 
-import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import org.eclipse.reddeer.common.logging.Logger;
-import org.eclipse.reddeer.common.util.Display;
-import org.eclipse.reddeer.eclipse.ui.perspectives.JavaEEPerspective;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.XPathExpressionException;
+
+import org.eclipse.reddeer.common.condition.WaitCondition;
+import org.eclipse.reddeer.common.util.XPathEvaluator;
+import org.eclipse.reddeer.common.wait.TimePeriod;
+import org.eclipse.reddeer.common.wait.WaitUntil;
 import org.eclipse.reddeer.junit.internal.runner.ParameterizedRequirementsRunnerFactory;
 import org.eclipse.reddeer.junit.runner.RedDeerSuite;
+import org.eclipse.reddeer.requirements.cleanerrorlog.CleanErrorLogRequirement;
+import org.eclipse.reddeer.requirements.cleanworkspace.CleanWorkspaceRequirement;
 import org.eclipse.reddeer.requirements.cleanworkspace.CleanWorkspaceRequirement.CleanWorkspace;
 import org.eclipse.reddeer.requirements.openperspective.OpenPerspectiveRequirement.OpenPerspective;
-import org.eclipse.reddeer.swt.impl.styledtext.DefaultStyledText;
-import org.eclipse.reddeer.swt.impl.text.LabeledText;
-import org.eclipse.reddeer.swt.impl.tree.DefaultTreeItem;
-import org.eclipse.reddeer.workbench.core.lookup.WorkbenchPartLookup;
-import org.eclipse.reddeer.workbench.handler.EditorHandler;
+import org.eclipse.reddeer.swt.impl.tree.DefaultTree;
 import org.eclipse.reddeer.workbench.impl.shell.WorkbenchShell;
-import org.eclipse.ui.IViewReference;
 import org.jboss.tools.fuse.reddeer.JiraIssue;
-import org.jboss.tools.fuse.reddeer.XPathEvaluator;
+import org.jboss.tools.fuse.reddeer.condition.TreeHasItem;
 import org.jboss.tools.fuse.reddeer.editor.CamelDataFormatDialog;
 import org.jboss.tools.fuse.reddeer.editor.CamelEditor;
 import org.jboss.tools.fuse.reddeer.editor.ConfigurationsEditor;
-import org.jboss.tools.fuse.reddeer.editor.ConfigurationsEditor.Element;
+import org.jboss.tools.fuse.reddeer.perspectives.FuseIntegrationPerspective;
 import org.jboss.tools.fuse.reddeer.projectexplorer.CamelProject;
 import org.jboss.tools.fuse.reddeer.utils.ProjectFactory;
+import org.jboss.tools.fuse.reddeer.view.FusePropertiesView.DetailsProperty;
 import org.jboss.tools.fuse.ui.bot.tests.utils.EditorManipulator;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -53,25 +55,28 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized.Parameters;
 import org.junit.runners.Parameterized.UseParametersRunnerFactory;
+import org.xml.sax.SAXException;
 
 /**
- * Tests for global elements - Data Formats in Configurations Tab in Camel editor
+ * Tests manipulation with Data Formats in 'Configurations' tab in Camel editor
  * 
  * @author djelinek
  */
 @CleanWorkspace
-@OpenPerspective(JavaEEPerspective.class)
+@OpenPerspective(FuseIntegrationPerspective.class)
 @RunWith(RedDeerSuite.class)
 @UseParametersRunnerFactory(ParameterizedRequirementsRunnerFactory.class)
-public class ConfigurationsEditorDataFormatsTest extends DefaultTest {
-
-	protected Logger log = Logger.getLogger(ConfigurationsEditorDataFormatsTest.class);
+public class ConfigurationsEditorDataFormatTest {
 
 	public static final String PROJECT_NAME = "cbr";
 	public static final String CONTEXT = "camel-context.xml";
-	public static final String TYPE = "Red Hat Fuse";
+	public static final String ROOT = "Red Hat Fuse";
 
-	private String element;
+	private ConfigurationsEditor editor;
+	private String dataFormat;
+	private String dataFormatName;
+	private String[] path;
+
 	private List<String> availableDataFormats = Arrays.asList("avro - Camel Avro data format",
 			"barcode - Camel Barcode (e.g. QRcode, PDF417, DataMatrix) support",
 			"base64 - Camel Base64 data format support", "beanio - Camel BeanIO data format support",
@@ -102,70 +107,42 @@ public class ConfigurationsEditorDataFormatsTest extends DefaultTest {
 	 */
 	@Parameters
 	public static Collection<String> setupData() {
-
-		new WorkbenchShell();
-		ProjectFactory.newProject(PROJECT_NAME).deploymentType(STANDALONE).runtimeType(KARAF)
-				.version(CAMEL_2_17_0_REDHAT_630187).template(CBR_SPRING).create();
-		for (IViewReference viewReference : WorkbenchPartLookup.getInstance().findAllViewReferences()) {
-			if (viewReference.getPartName().equals("Welcome")) {
-				final IViewReference iViewReference = viewReference;
-				Display.syncExec(new Runnable() {
-					@Override
-					public void run() {
-						iViewReference.getPage().hideView(iViewReference);
-					}
-				});
-				break;
-			}
-		}
+		createProject();
 		new CamelProject(PROJECT_NAME).openCamelContext(CONTEXT);
-		List<String> dataFormats = CamelDataFormatDialog.getDataFormats();
-		return dataFormats;
+		CamelEditor.switchTab("Configurations");
+		return ConfigurationsEditor.getDataFormats();
 	}
 
-	/**
-	 * Utilizes passing parameters using the constructor
-	 * 
-	 * @param template
-	 *            a Global element - Data Format
-	 */
-	public ConfigurationsEditorDataFormatsTest(String element) {
-		this.element = element;
+	public ConfigurationsEditorDataFormatTest(String dataFormat) {
+		this.dataFormat = dataFormat;
+		this.dataFormatName = getLabel(dataFormat);
+		path = new String[] { ROOT, this.dataFormatName, " (Data Format)" };
 	}
 
-	/**
-	 * Prepares test environment
-	 */
 	@BeforeClass
 	public static void setupResetCamelContext() {
+		new WorkbenchShell().maximize();
 
-		ProjectFactory.newProject(PROJECT_NAME).deploymentType(STANDALONE).runtimeType(KARAF)
-				.version(CAMEL_2_17_0_REDHAT_630187).template(CBR_SPRING).create();
+		createProject();
 	}
 
 	@Before
 	public void initialSetup() {
-
+		new CleanErrorLogRequirement().fulfill();
 		new CamelProject(PROJECT_NAME).openCamelContext(CONTEXT);
 		CamelEditor.switchTab("Configurations");
 	}
 
-	/**
-	 * Cleans up test environment
-	 */
-	@AfterClass
-	public static void setupDeleteProjects() {
-
-		new WorkbenchShell();
-		EditorHandler.getInstance().closeAll(true);
-		ProjectFactory.deleteAllProjects();
-	}
-
 	@After
 	public void clearEnviroment() {
-
+		new CamelProject(PROJECT_NAME).openCamelContext(CONTEXT);
 		CamelEditor.switchTab("Source");
 		EditorManipulator.copyFileContentToCamelXMLEditor("resources/camel-context-cbr.xml");
+	}
+
+	@AfterClass
+	public static void setupDeleteProjects() {
+		new CleanWorkspaceRequirement().fulfill();
 	}
 
 	/**
@@ -175,8 +152,7 @@ public class ConfigurationsEditorDataFormatsTest extends DefaultTest {
 	 */
 	@Test
 	public void testDataFormatAvailability() {
-
-		assertTrue(element, availableDataFormats.contains(element));
+		assertTrue(dataFormat, availableDataFormats.contains(dataFormat));
 	}
 
 	/**
@@ -193,16 +169,8 @@ public class ConfigurationsEditorDataFormatsTest extends DefaultTest {
 	 */
 	@Test
 	public void testCreateDataFormat() {
-
-		try {
-			ConfigurationsEditor confEditor = new ConfigurationsEditor(PROJECT_NAME, CONTEXT);
-			confEditor.activate();
-			String[] title = element.split(" ");
-			confEditor.createNewGlobalDataFormat(title[0], element);
-			new DefaultTreeItem(new String[] { TYPE, title[0] + " (Data Format)" }).select();
-		} catch (Exception e) {
-			fail(element);
-		}
+		createDataFormat();
+		assertDataFormatPath(true);
 	}
 
 	/**
@@ -220,19 +188,10 @@ public class ConfigurationsEditorDataFormatsTest extends DefaultTest {
 	 */
 	@Test
 	public void testEditDataFormat() {
-
-		try {
-			ConfigurationsEditor confEditor = new ConfigurationsEditor(PROJECT_NAME, CONTEXT);
-			confEditor.activate();
-			String[] title = element.split(" ");
-			confEditor.createNewGlobalDataFormat(title[0], element);
-			confEditor.editGlobalDataFormat(title[0]);
-			new LabeledText("Id").setText("changed" + title[0]);
-			confEditor.activate();
-			new DefaultTreeItem(new String[] { TYPE, "changed" + title[0] + " (Data Format)" }).select();
-		} catch (Exception e) {
-			fail(element);
-		}
+		createDataFormat();
+		editor.editDataFormat(dataFormatName).setDetailsProperty(DetailsProperty.ID, "new_" + dataFormatName);
+		path = new String[] { ROOT, "new_" + dataFormatName + " (Data Format)" };
+		assertDataFormatPath(true);
 	}
 
 	/**
@@ -250,18 +209,10 @@ public class ConfigurationsEditorDataFormatsTest extends DefaultTest {
 	 */
 	@Test
 	public void testDeleteDataFormat() {
-
-		try {
-			ConfigurationsEditor confEditor = new ConfigurationsEditor(PROJECT_NAME, CONTEXT);
-			confEditor.activate();
-			String[] title = element.split(" ");
-			confEditor.createNewGlobalDataFormat(title[0], element);
-			confEditor.deleteGlobalElement(Element.DATAFORMAT, title[0]);
-			new DefaultTreeItem(new String[] { TYPE, title[0] + " (Data Format)" }).select();
-			fail(element);
-		} catch (Exception e) {
-			log.info("Data Format: " + element + ", was deleted");
-		}
+		createDataFormat();
+		assertDataFormatPath(true);
+		editor.deleteDataFormat(dataFormatName);
+		assertDataFormatPath(false);
 	}
 
 	/**
@@ -280,39 +231,57 @@ public class ConfigurationsEditorDataFormatsTest extends DefaultTest {
 	 */
 	@Test
 	public void testSourceXML() {
+		createDataFormat();
+		editor.close(true);
+		assertXPath(true, dataFormatName);
+		new CamelProject(PROJECT_NAME).openCamelContext(CONTEXT);
+		editor = new ConfigurationsEditor();
+		editor.deleteDataFormat(dataFormatName);
+		editor.close(true);
+		assertXPath(false, dataFormatName);
+	}
 
+	private void assertXPath(boolean expected, String name) {
+		String evalResult;
+		String node = name;
+		if (!node.startsWith("mime") && !node.startsWith("univocity")) {
+			node = name.split("-")[0];
+		}
 		try {
-			ConfigurationsEditor confEditor = new ConfigurationsEditor(PROJECT_NAME, CONTEXT);
-			confEditor.activate();
-			String[] node = element.split(" ");
-			String[] format = new String[] { "" };
-			if (!node[0].startsWith("univocity") && !node[0].startsWith("mime"))
-				format = node[0].split("-");
-			else
-				format[0] = node[0];
-			confEditor.createNewGlobalDataFormat(node[0], element);
-			CamelEditor.switchTab("Source");
-			String content = new DefaultStyledText().getText();
-			log.info(content);
-			XPathEvaluator eval = new XPathEvaluator(new ByteArrayInputStream(content.getBytes()));
-			if (!eval.evaluateBoolean("/beans/camelContext/dataFormats/" + format[0] + "[@id='" + node[0] + "']")) {
-				testIssue_1930();
-				fail(element);
-			}
-			CamelEditor.switchTab("Configurations");
-			confEditor.deleteGlobalElement(Element.DATAFORMAT, node[0]);
-			CamelEditor.switchTab("Source");
-			content = new DefaultStyledText().getText();
-			log.info(content);
-			eval = new XPathEvaluator(new ByteArrayInputStream(content.getBytes()));
-			if (eval.evaluateBoolean("/beans/camelContext/dataFormats/" + format[0] + "[@id='" + node[0] + "']")) {
-				testIssue_1930();
-				fail(element);
-			}
-			CamelEditor.switchTab("Configurations");
-		} catch (Exception e) {
+			XPathEvaluator eval = new XPathEvaluator(editor.getAssociatedFile().getInputStream(), false);
+			evalResult = eval.evaluateXPath("/beans/camelContext/dataFormats/" + node + "/@id");
+		} catch (XPathExpressionException | IOException | SAXException | ParserConfigurationException e) {
+			throw new RuntimeException(e);
+		}
+		boolean result = evalResult.equals(name);
+		if (!result) {
 			testIssue_1930();
-			fail(element);
+		}
+		assertEquals("DataFormat - " + name, expected, result);
+	}
+
+	private String getLabel(String row) {
+		return row.split("\\s")[0];
+	}
+
+	private static void createProject() {
+		ProjectFactory.newProject(PROJECT_NAME).deploymentType(STANDALONE).runtimeType(KARAF)
+				.version(CAMEL_2_17_0_REDHAT_630187).template(CBR_SPRING).create();
+	}
+
+	private void createDataFormat() {
+		editor = new ConfigurationsEditor();
+		CamelDataFormatDialog wizard = editor.addDataFormat();
+		wizard.setDataFormat(dataFormat);
+		wizard.setIdText(dataFormatName);
+		wizard.finish();
+	}
+
+	private void assertDataFormatPath(boolean expected) {
+		WaitCondition wait = new TreeHasItem(new DefaultTree(editor), path);
+		new WaitUntil(wait, TimePeriod.MEDIUM, false);
+		if (wait.getResult() != null) {
+			assertEquals("DataFormat - " + dataFormatName, expected, wait.getResult());
 		}
 	}
 
@@ -320,7 +289,7 @@ public class ConfigurationsEditorDataFormatsTest extends DefaultTest {
 	 * https://issues.jboss.org/browse/FUSETOOLS-1930
 	 */
 	private void testIssue_1930() {
-		if (element.equals("zipfile - Camel Zip file support")) {
+		if (dataFormat.equals("zipfile - Camel Zip file support")) {
 			throw new JiraIssue("FUSETOOLS-1930");
 		}
 	}
