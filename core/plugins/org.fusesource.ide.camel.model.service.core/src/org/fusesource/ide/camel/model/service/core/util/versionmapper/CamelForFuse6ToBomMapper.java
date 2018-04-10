@@ -28,7 +28,7 @@ public class CamelForFuse6ToBomMapper extends OnlineVersionMapper {
 	static final String FUSE_621_R5_CAMEL_VERSION = "2.15.1.redhat-621169";
 	static final String FUSE_621_R6_CAMEL_VERSION = "2.15.1.redhat-621177";
 	static final String FUSE_621_R7_CAMEL_VERSION = "2.15.1.redhat-621186";
-	static final String FUSE_621_R8_CAMEL_VERSION = "2.15.1.redhat-621195";
+	static final String FUSE_621_R8_CAMEL_VERSION = "2.15.1.redhat-621211";
 	public static final String FUSE_621_R9_CAMEL_VERSION = "2.15.1.redhat-621216";
 
 	private static final String FUSE_621_R0_BOM_VERSION = "6.2.1.redhat-084";
@@ -39,7 +39,7 @@ public class CamelForFuse6ToBomMapper extends OnlineVersionMapper {
 	private static final String FUSE_621_R5_BOM_VERSION = "6.2.1.redhat-169";
 	private static final String FUSE_621_R6_BOM_VERSION = "6.2.1.redhat-177";
 	private static final String FUSE_621_R7_BOM_VERSION = "6.2.1.redhat-186";
-	private static final String FUSE_621_R8_BOM_VERSION = "6.2.1.redhat-195";
+	private static final String FUSE_621_R8_BOM_VERSION = "6.2.1.redhat-211";
 	private static final String FUSE_621_R9_BOM_VERSION = "6.2.1.redhat-216";
 
 	static final String FUSE_63_R0_CAMEL_VERSION = "2.17.0.redhat-630187";

@@ -53,7 +53,7 @@ import org.jboss.tools.fuse.reddeer.wizard.FuseServerWizard;
  */
 public class FuseServerManipulator {
 
-	private static final Logger log = Logger.getLogger(FuseServerManipulator.class);
+	public static final Logger log = Logger.getLogger(FuseServerManipulator.class);
 
 	public static void addServerRuntime(ServerKaraf base) {
 		WorkbenchPreferenceDialog dialog = new WorkbenchPreferenceDialog();

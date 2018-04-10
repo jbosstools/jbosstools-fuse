@@ -35,6 +35,7 @@ import org.fusesource.ide.camel.model.service.core.util.versionmapper.CamelForFu
 import org.fusesource.ide.camel.model.service.core.util.versionmapper.CamelForFuse7ToBomMapper;
 import org.fusesource.ide.camel.model.service.core.util.versionmapper.CamelForFuseOnOpenShiftToBomMapper;
 import org.fusesource.ide.camel.model.service.core.util.versionmapper.CamelForWildflyFuse7ToBomMapper;
+import org.fusesource.ide.camel.model.service.core.util.versionmapper.DefaultVersions;
 import org.fusesource.ide.camel.model.service.core.util.versionmapper.FISBomToFabric8MavenPluginMapper;
 import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.foundation.core.util.VersionUtil;
@@ -48,7 +49,7 @@ public class CamelCatalogUtils {
 
 	public static final String KEY_CAMEL_TEST_VERSIONS = "FUSE_TOOLING_CAMEL_TEST_VERSIONS";
 
-	public static final String DEFAULT_CAMEL_VERSION = CamelForFIS20ToBomMapper.FIS_20_R3_CAMEL_VERSION;
+	public static final String DEFAULT_CAMEL_VERSION = new DefaultVersions().getDefaultCamelVersion();
 	
 	public static final String CAMEL_SPRING_BOOT_STARTER = "camel-spring-boot-starter";
 	public static final String CAMEL_WILDFLY = "org.wildfly.camel";
@@ -215,9 +216,25 @@ public class CamelCatalogUtils {
 	protected static String getFuse6BomVersion(String camelVersion) {
 		if(CAMEL_VERSION_2_FUSE_6_BOM_MAPPING.containsKey(camelVersion)) {
 			return CAMEL_VERSION_2_FUSE_6_BOM_MAPPING.get(camelVersion);
+		} else if(new VersionUtil().isStrictlyGreaterThan("2.17.0", camelVersion)) {
+			return getLatest621BomVersion();
 		} else {
 			return CAMEL_VERSION_2_FUSE_6_BOM_MAPPING.values().stream().sorted(Comparator.reverseOrder()).findFirst().orElse(null);
 		}
+	}
+	
+	public static String getLatest621BomVersion() {
+		return getLatestBuild("6.2.1");
+	}
+	
+	public static String getLatest630BomVersion() {
+		return getLatestBuild("6.3.0");
+	}
+	
+	protected static String getLatestBuild(String fuseVersion) {
+		return CAMEL_VERSION_2_FUSE_6_BOM_MAPPING.values().stream()
+				.filter(version -> version.startsWith(fuseVersion))
+				.sorted(Comparator.reverseOrder()).findFirst().orElse(null);
 	}
 
 	private static boolean isBom(org.apache.maven.model.Dependency bom, org.apache.maven.model.Dependency fuseBomUsed) {

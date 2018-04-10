@@ -28,11 +28,11 @@ import org.eclipse.reddeer.swt.impl.tree.DefaultTreeItem;
  */
 public class FuseServerWizard extends NewServerWizard {
 
-	private static final String HOST_NAME = "Server's host name:";
-	private static final String NAME = "Server name:";
-	private static final String PORT_NUMBER = "SSH Port: ";
-	private static final String USER_NAME = "User Name:";
-	private static final String PASSWORD = "Password: ";
+	public static final String HOST_NAME = "Server's host name:";
+	public static final String NAME = "Server name:";
+	public static final String PORT_NUMBER = "SSH Port: ";
+	public static final String USER_NAME = "User Name:";
+	public static final String PASSWORD = "Password: ";
 
 	private String type;
 	private String name;

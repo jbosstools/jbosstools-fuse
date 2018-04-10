@@ -26,8 +26,8 @@ import org.eclipse.reddeer.workbench.impl.view.WorkbenchView;
  */
 public class MessagesView extends WorkbenchView {
 
-	private static final String TITLE = "Messages View";
-	private static final Logger log = Logger.getLogger(MessagesView.class);
+	public static final String TITLE = "Messages View";
+	public static final Logger log = Logger.getLogger(MessagesView.class);
 
 	public MessagesView() {
 		super(TITLE);

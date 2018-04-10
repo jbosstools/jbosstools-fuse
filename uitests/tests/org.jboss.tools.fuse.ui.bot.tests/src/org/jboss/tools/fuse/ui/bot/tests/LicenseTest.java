@@ -46,7 +46,7 @@ import org.junit.runners.Parameterized.UseParametersRunnerFactory;
 @UseParametersRunnerFactory(ParameterizedRequirementsRunnerFactory.class)
 public class LicenseTest {
 
-	private static final String LICENSE = "Red Hat, Inc. licenses these features and plugins to you under certain open "
+	public static final String LICENSE = "Red Hat, Inc. licenses these features and plugins to you under certain open "
 			+ "source licenses (or aggregations of such licenses), which in a particular case may include the Eclipse "
 			+ "Public License, the GNU Lesser General Public License, and/or certain other open source licenses. For "
 			+ "precise licensing details, consult the corresponding source code, or contact Red Hat, Attn: General "

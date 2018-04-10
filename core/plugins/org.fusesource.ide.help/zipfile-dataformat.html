@@ -1,0 +1,66 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>Zip File DataFormat</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><link rel="home" href="index.html" title="Red Hat Fuse Tooling for Eclipse"><link rel="up" href="IDU-Components.html" title="Part&nbsp;V.&nbsp;Apache Camel Component Reference"><link rel="prev" href="zendesk-component.html" title="Zendesk Component"><link rel="next" href="Zipkin-ZipkinComponent.html" title="Zipkin Component"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h2 class="title"><a name="zipfile-dataformat"></a>Zip File DataFormat</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="zipfile-dataformat.html#_zipfile_options">ZipFile Options</a></span></dt><dt><span class="section"><a href="zipfile-dataformat.html#_marshal_5">Marshal</a></span></dt><dt><span class="section"><a href="zipfile-dataformat.html#_unmarshal_6">Unmarshal</a></span></dt><dt><span class="section"><a href="zipfile-dataformat.html#_aggregate_4">Aggregate</a></span></dt><dt><span class="section"><a href="zipfile-dataformat.html#_dependencies_72">Dependencies</a></span></dt></dl></div><p><span class="strong"><strong>Available as of Camel version 2.11</strong></span></p><p>The Zip File Data Format is a message compression
+and de-compression format. Messages can be marshalled (compressed) to
+Zip files containing a single entry, and Zip files containing a single
+entry can be unmarshalled (decompressed) to the original file contents.
+This data format supports ZIP64, as long as Java 7 or later is being used].</p><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_zipfile_options"></a>ZipFile Options</h2></div></div></div><p>The Zip File dataformat supports 4 options which are listed below.</p><div class="informaltable"><table border="1" width="100%"><colgroup><col width="19%" class="col_1"><col width="11%" class="col_2"><col width="10%" class="col_3"><col width="60%" class="col_4"></colgroup><thead><tr><th align="left" valign="top">Name</th><th align="left" valign="top">Default</th><th align="left" valign="top">Java Type</th><th align="left" valign="top">Description</th></tr></thead><tbody><tr><td align="left" valign="top"><p><span class="strong"><strong>usingIterator</strong></span></p></td><td align="left" valign="top"><p><code class="literal">false</code></p></td><td align="left" valign="top"><p><code class="literal">Boolean</code></p></td><td align="left" valign="top"><p>If the zip file has more then one entry, the setting this option to true, allows to work with the splitter EIP, to split the data using an iterator in a streaming mode.</p></td></tr><tr><td align="left" valign="top"><p><span class="strong"><strong>allowEmptyDirectory</strong></span></p></td><td align="left" valign="top"><p><code class="literal">false</code></p></td><td align="left" valign="top"><p><code class="literal">Boolean</code></p></td><td align="left" valign="top"><p>If the zip file has more then one entry, setting this option to true, allows to get the iterator even if the directory is empty</p></td></tr><tr><td align="left" valign="top"><p><span class="strong"><strong>preservePathElements</strong></span></p></td><td align="left" valign="top"><p><code class="literal">false</code></p></td><td align="left" valign="top"><p><code class="literal">Boolean</code></p></td><td align="left" valign="top"><p>If the file name contains path elements, setting this option to true, allows the path to be maintained in the zip file.</p></td></tr><tr><td align="left" valign="top"><p><span class="strong"><strong>contentTypeHeader</strong></span></p></td><td align="left" valign="top"><p><code class="literal">false</code></p></td><td align="left" valign="top"><p><code class="literal">Boolean</code></p></td><td align="left" valign="top"><p>Whether the data format should set the Content-Type header with the type from the data format if the data format is capable of doing so. For example application/xml for data formats marshalling to XML, or application/json for data formats marshalling to JSon etc.</p></td></tr></tbody></table></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_marshal_5"></a>Marshal</h2></div></div></div><p>In this example we marshal a regular text/XML payload to a compressed
+payload using Zip file compression, and send it to an ActiveMQ queue
+called MY_QUEUE.</p><pre class="programlisting">from(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"direct:start"</em></strong>)
+    .marshal().zipFile()
+    .to(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"activemq:queue:MY_QUEUE"</em></strong>);</pre><p>The name of the Zip entry inside the created Zip file is based on the
+incoming <code class="literal">CamelFileName</code> message header, which is the standard message
+header used by the file component. Additionally, the
+outgoing <code class="literal">CamelFileName</code> message header is automatically set to the
+value of the incoming <code class="literal">CamelFileName</code> message header, with the ".zip"
+suffix. So for example, if the following route finds a file named
+"test.txt" in the input directory, the output will be a Zip file named
+"test.txt.zip" containing a single Zip entry named "test.txt":</p><pre class="programlisting">from(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"file:input/directory?antInclude=*/.txt"</em></strong>)
+    .marshal().zipFile()
+    .to(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"file:output/directory"</em></strong>);</pre><p>If there is no incoming <code class="literal">CamelFileName</code> message header (for example, if
+the file component is not the consumer), then the
+message ID is used by default, and since the message ID is normally a
+unique generated ID, you will end up with filenames like
+<code class="literal">ID-MACHINENAME-2443-1211718892437-1-0.zip</code>. If you want to override
+this behavior, then you can set the value of the <code class="literal">CamelFileName</code> header
+explicitly in your route:</p><pre class="programlisting">from(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"direct:start"</em></strong>)
+    .setHeader(Exchange.FILE_NAME, constant(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"report.txt"</em></strong>))
+    .marshal().zipFile()
+    .to(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"file:output/directory"</em></strong>);</pre><p>This route would result in a Zip file named "report.txt.zip" in the
+output directory, containing a single Zip entry named "report.txt".</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_unmarshal_6"></a>Unmarshal</h2></div></div></div><p>In this example we unmarshal a Zip file payload from an ActiveMQ queue
+called MY_QUEUE to its original format, and forward it for processing to
+the <code class="literal">UnZippedMessageProcessor</code>.</p><pre class="programlisting">from(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"activemq:queue:MY_QUEUE"</em></strong>)
+    .unmarshal().zipFile()
+    .process(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">new</strong> UnZippedMessageProcessor());</pre><p>If the zip file has more then one entry, the usingIterator option of
+ZipFileDataFormat to be true, and you can use splitter to do the further
+work.</p><pre class="programlisting">ZipFileDataFormat zipFile = <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">new</strong> ZipFileDataFormat();
+zipFile.setUsingIterator(true);
+
+from(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"file:src/test/resources/org/apache/camel/dataformat/zipfile/?consumer.delay=1000&amp;noop=true"</em></strong>)
+    .unmarshal(zipFile)
+    .split(body(Iterator.<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">class</strong>)).streaming()
+        .process(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">new</strong> UnZippedMessageProcessor())
+    .end();</pre><p>Or you can use the ZipSplitter as an expression for splitter directly
+like this</p><pre class="programlisting">from(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"file:src/test/resources/org/apache/camel/dataformat/zipfile?consumer.delay=1000&amp;noop=true"</em></strong>)
+    .split(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">new</strong> ZipSplitter()).streaming()
+        .process(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">new</strong> UnZippedMessageProcessor())
+    .end();</pre></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_aggregate_4"></a>Aggregate</h2></div></div></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>Please note that this aggregation strategy requires eager completion check to work properly.</p></td></tr></table></div><p>In this example we aggregate all text files found in the input directory
+into a single Zip file that is stored in the output directory.&nbsp;</p><pre class="programlisting">from(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"file:input/directory?antInclude=*/.txt"</em></strong>)
+    .aggregate(constant(true), <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">new</strong> ZipAggregationStrategy())
+        .completionFromBatchConsumer().eagerCheckCompletion()
+        .to(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"file:output/directory"</em></strong>);</pre><p>The outgoing&nbsp;<code class="literal">CamelFileName</code>&nbsp;message header is created using
+java.io.File.createTempFile, with the ".zip" suffix.&nbsp;If you want to
+override this behavior, then you can set the value of
+the&nbsp;<code class="literal">CamelFileName</code>&nbsp;header explicitly in your route:</p><pre class="programlisting">from(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"file:input/directory?antInclude=*/.txt"</em></strong>)
+    .aggregate(constant(true), <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">new</strong> ZipAggregationStrategy())
+        .completionFromBatchConsumer().eagerCheckCompletion()
+        .setHeader(Exchange.FILE_NAME, constant(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"reports.zip"</em></strong>))
+        .to(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"file:output/directory"</em></strong>);</pre></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_dependencies_72"></a>Dependencies</h2></div></div></div><p>To use Zip files in your camel routes you need to add a dependency on
+<span class="strong"><strong>camel-zipfile</strong></span> which implements this data format.</p><p>If you use Maven you can just add the following to your <code class="literal">pom.xml</code>,
+substituting the version number for the latest &amp; greatest release (see
+the download page for the latest versions).</p><pre class="programlisting"><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;dependency&gt;</strong>
+  <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;groupId&gt;</strong>org.apache.camel<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/groupId&gt;</strong>
+  <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;artifactId&gt;</strong>camel-zipfile<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/artifactId&gt;</strong>
+  <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;version&gt;</strong>x.x.x<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/version&gt;</strong>
+  <em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">&lt;!-- use the same version as your Camel core version --&gt;</em>
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/dependency&gt;</strong></pre></div></div></body></html>

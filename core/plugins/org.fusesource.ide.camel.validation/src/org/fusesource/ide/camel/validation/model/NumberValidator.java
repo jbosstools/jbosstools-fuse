@@ -18,6 +18,8 @@ import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.fusesource.ide.camel.model.service.core.util.CamelComponentUtils;
 import org.fusesource.ide.camel.model.service.core.util.PropertiesUtils;
 import org.fusesource.ide.camel.validation.l10n.Messages;
+import org.fusesource.ide.foundation.core.util.CamelPlaceHolderUtil;
+import org.fusesource.ide.foundation.core.util.Strings;
 
 /**
  * @author Aurelien Pupier
@@ -30,22 +32,26 @@ public class NumberValidator implements IValidator {
 	public NumberValidator(Parameter parameter) {
 		this.parameter = parameter;
 	}
+	
+	public NumberValidator() {
+	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.core.databinding.validation.IValidator#validate(java.lang.Object)
-	 */
 	@Override
 	public IStatus validate(Object value) {
-		// only check non-empty fields
-		if (CamelComponentUtils.isNumberProperty(parameter)) {
-			if (value != null && value.toString().trim().length() > 0) {
-				try {
-					PropertiesUtils.validateDuration(value.toString());
-				} catch (IllegalArgumentException ex) {
+		if (Strings.isNonEmptyAndNotOnlySpaces(value)
+				&& !new CamelPlaceHolderUtil().isPlaceHolder(value)
+				&& (parameter == null || CamelComponentUtils.isNumberProperty(parameter))) {
+			try {
+				PropertiesUtils.validateDuration(value.toString());
+			} catch (IllegalArgumentException ex) {
+				if (parameter != null) {
 					return ValidationStatus.error(NLS.bind(Messages.NumberValidator_messageError, parameter.getName()), ex);
+				} else {
+					return ValidationStatus.error(Messages.numberValidatorMessageErrorWithoutArgument);
 				}
 			}
 		}
 		return ValidationStatus.ok();
 	}
+
 }

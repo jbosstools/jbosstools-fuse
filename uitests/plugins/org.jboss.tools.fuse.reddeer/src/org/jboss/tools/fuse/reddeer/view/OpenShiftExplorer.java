@@ -41,9 +41,9 @@ import org.jboss.tools.fuse.reddeer.condition.OpenShiftPodIsRunning;
  */
 public class OpenShiftExplorer extends WorkbenchView {
 
-	private static final String TITLE = "OpenShift Explorer";
-	private static final String NEW_CONNECTION_TOOLTIP = "Connection...";
-	private static final String NEW_CONNECTION_WIZARD = "New OpenShift Connection";
+	public static final String TITLE = "OpenShift Explorer";
+	public static final String NEW_CONNECTION_TOOLTIP = "Connection...";
+	public static final String NEW_CONNECTION_WIZARD = "New OpenShift Connection";
 
 	private DefaultTreeItem selectedConnection;
 

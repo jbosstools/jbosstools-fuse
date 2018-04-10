@@ -29,11 +29,11 @@ import org.jboss.tools.fuse.reddeer.runtime.impl.ServerKaraf;
  */
 public class FuseServerRuntimePreferencePage extends RuntimePreferencePage {
 
-	private static final String FINISH_BUTTON = "Finish";
-	private static final String EDIT_BUTTON = "Edit...";
-	private static final String EDIT_WINDOW = "Edit Server Runtime Environment";
-	private static final String INSTALL_DIR = "Home Directory";
-	private static final String NAME = "Name";
+	public static final String FINISH_BUTTON = "Finish";
+	public static final String EDIT_BUTTON = "Edit...";
+	public static final String EDIT_WINDOW = "Edit Server Runtime Environment";
+	public static final String INSTALL_DIR = "Home Directory";
+	public static final String NAME = "Name";
 
 	public FuseServerRuntimePreferencePage(ReferencedComposite referencedComposite) {
 		super(referencedComposite);

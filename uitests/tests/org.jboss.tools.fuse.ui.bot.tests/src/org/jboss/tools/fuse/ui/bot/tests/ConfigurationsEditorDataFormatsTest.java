@@ -67,9 +67,9 @@ public class ConfigurationsEditorDataFormatsTest extends DefaultTest {
 
 	protected Logger log = Logger.getLogger(ConfigurationsEditorDataFormatsTest.class);
 
-	private static final String PROJECT_NAME = "cbr";
-	private static final String CONTEXT = "camel-context.xml";
-	private static final String TYPE = "Red Hat Fuse";
+	public static final String PROJECT_NAME = "cbr";
+	public static final String CONTEXT = "camel-context.xml";
+	public static final String TYPE = "Red Hat Fuse";
 
 	private String element;
 	private List<String> availableDataFormats = Arrays.asList("avro - Camel Avro data format",

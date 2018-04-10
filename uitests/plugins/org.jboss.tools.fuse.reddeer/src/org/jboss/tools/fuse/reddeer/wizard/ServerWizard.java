@@ -98,7 +98,7 @@ public class ServerWizard extends NewServerWizard {
 	}
 
 	public ServerWizard setRemoteServerHome(String remoteHome) {
-		new DefaultText(new DefaultGroup(REMOTE_RUNTIME_DETAILS), 0).setText(remoteHome);
+		new DefaultText(new DefaultGroup(this, REMOTE_RUNTIME_DETAILS), 0).setText(remoteHome);
 		return this;
 
 	}

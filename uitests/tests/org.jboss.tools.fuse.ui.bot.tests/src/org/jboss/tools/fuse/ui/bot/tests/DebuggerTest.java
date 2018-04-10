@@ -61,12 +61,12 @@ import org.junit.runner.RunWith;
 @RunWith(RedDeerSuite.class)
 public class DebuggerTest extends DefaultTest {
 
-	private static final String PROJECT_NAME = "cbr @1";
-	private static final String CAMEL_CONTEXT = "camel-context.xml";
-	private static final String CHOICE = "Choice";
-	private static final String CHOICE_ID = "_choice1";
-	private static final String LOG = "Log _log3";
-	private static final String LOG_ID = "_log3";
+	public static final String PROJECT_NAME = "cbr @1";
+	public static final String CAMEL_CONTEXT = "camel-context.xml";
+	public static final String CHOICE = "Choice";
+	public static final String CHOICE_ID = "_choice1";
+	public static final String LOG = "Log _log3";
+	public static final String LOG_ID = "_log3";
 
 	/**
 	 * Prepares test environment

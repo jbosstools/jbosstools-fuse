@@ -33,9 +33,9 @@ public class ConfigurationsEditor extends DefaultEditor {
 
 	public static final String CONFIGURATIONS_TAB = "Configurations";
 	public static final String ROOT_ELEMENT = "Red Hat Fuse";
+	public static final String TYPE = "Red Hat Fuse";
 
 	private static Logger log = Logger.getLogger(ConfigurationsEditor.class);
-	private static final String TYPE = "Red Hat Fuse";
 
 	public enum Element {
 

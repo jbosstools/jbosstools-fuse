@@ -80,7 +80,7 @@ public class JolokiaManipulationTest {
 
 	private static JolokiaConfiguration conf;
 
-	private static final String MESSAGE = "Test edit route";
+	public static final String MESSAGE = "Test edit route";
 
 	private static LogView errorLog = new LogView();
 

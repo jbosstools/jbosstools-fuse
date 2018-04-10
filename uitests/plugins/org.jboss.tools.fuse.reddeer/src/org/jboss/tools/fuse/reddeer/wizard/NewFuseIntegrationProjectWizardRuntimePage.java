@@ -33,21 +33,21 @@ import org.eclipse.reddeer.swt.impl.group.DefaultGroup;
  */
 public class NewFuseIntegrationProjectWizardRuntimePage extends WizardPage {
 
-	private static final String CAMEL_VERSION_GROUP_LABEL = "Select the Camel version";
-	private static final String DEPLOYMENT_GROUP_LABEL = "Choose the deployment platform";
-	private static final String RUNTIME_GROUP_LABEL = "Choose the runtime environment";
-	private static final String CAMEL_VERSION_GROUP_VERIFY_BTN_LABEL = "Verify";
+	public static final String CAMEL_VERSION_GROUP_LABEL = "Select the Camel version";
+	public static final String DEPLOYMENT_GROUP_LABEL = "Choose the deployment platform";
+	public static final String RUNTIME_GROUP_LABEL = "Choose the runtime environment";
+	public static final String CAMEL_VERSION_GROUP_VERIFY_BTN_LABEL = "Verify";
 
 	public NewFuseIntegrationProjectWizardRuntimePage(ReferencedComposite referencedComposite) {
 		super(referencedComposite);
 	}
 
 	public void setDeploymentType(NewFuseIntegrationProjectWizardDeploymentType deployment) {
-		new RadioButton(new DefaultGroup(DEPLOYMENT_GROUP_LABEL), deployment.getLabel()).toggle(true);
+		new RadioButton(new DefaultGroup(this, DEPLOYMENT_GROUP_LABEL), deployment.getLabel()).toggle(true);
 	}
 
 	public NewFuseIntegrationProjectWizardDeploymentType getDeploymentType() {
-		if (new RadioButton(new DefaultGroup(DEPLOYMENT_GROUP_LABEL), STANDALONE.getLabel()).isSelected()) {
+		if (new RadioButton(new DefaultGroup(this, DEPLOYMENT_GROUP_LABEL), STANDALONE.getLabel()).isSelected()) {
 			return STANDALONE;
 		} else {
 			return OPENSHIFT;
@@ -55,50 +55,50 @@ public class NewFuseIntegrationProjectWizardRuntimePage extends WizardPage {
 	}
 
 	public void setRuntimeType(NewFuseIntegrationProjectWizardRuntimeType runtime) {
-		new RadioButton(new DefaultGroup(RUNTIME_GROUP_LABEL), runtime.getLabel()).toggle(true);
+		new RadioButton(new DefaultGroup(this, RUNTIME_GROUP_LABEL), runtime.getLabel()).toggle(true);
 	}
 
 	public NewFuseIntegrationProjectWizardRuntimeType getRuntimeType() {
-		if (new RadioButton(new DefaultGroup(RUNTIME_GROUP_LABEL), EAP.getLabel()).isSelected()) {
+		if (new RadioButton(new DefaultGroup(this, RUNTIME_GROUP_LABEL), EAP.getLabel()).isSelected()) {
 			return EAP;
 		}
-		if (new RadioButton(new DefaultGroup(RUNTIME_GROUP_LABEL), KARAF.getLabel()).isSelected()) {
+		if (new RadioButton(new DefaultGroup(this, RUNTIME_GROUP_LABEL), KARAF.getLabel()).isSelected()) {
 			return KARAF;
 		}
 		return SPRINGBOOT;
 	}
 
 	public boolean isEnabledEAPRuntime() {
-		return new RadioButton(new DefaultGroup(RUNTIME_GROUP_LABEL), EAP.getLabel()).isEnabled();
+		return new RadioButton(new DefaultGroup(this, RUNTIME_GROUP_LABEL), EAP.getLabel()).isEnabled();
 	}
 
 	public boolean isEnabledKarafRuntime() {
-		return new RadioButton(new DefaultGroup(RUNTIME_GROUP_LABEL), KARAF.getLabel()).isEnabled();
+		return new RadioButton(new DefaultGroup(this, RUNTIME_GROUP_LABEL), KARAF.getLabel()).isEnabled();
 	}
 
 	public boolean isEnabledSpringBootRuntime() {
-		return new RadioButton(new DefaultGroup(RUNTIME_GROUP_LABEL), SPRINGBOOT.getLabel()).isEnabled();
+		return new RadioButton(new DefaultGroup(this, RUNTIME_GROUP_LABEL), SPRINGBOOT.getLabel()).isEnabled();
 	}
 
 	public List<String> getKarafRuntimes() {
-		return new DefaultCombo(new DefaultGroup(RUNTIME_GROUP_LABEL), 0).getItems();
+		return new DefaultCombo(new DefaultGroup(this, RUNTIME_GROUP_LABEL), 0).getItems();
 	}
 
 	public void selectKarafRuntime(String name) {
-		new DefaultCombo(new DefaultGroup(RUNTIME_GROUP_LABEL), 0).setSelection(name);
+		new DefaultCombo(new DefaultGroup(this, RUNTIME_GROUP_LABEL), 0).setSelection(name);
 	}
 
 	public List<String> getEAPRuntimes() {
-		return new DefaultCombo(new DefaultGroup(RUNTIME_GROUP_LABEL), 1).getItems();
+		return new DefaultCombo(new DefaultGroup(this, RUNTIME_GROUP_LABEL), 1).getItems();
 	}
 
 	public void selectEAPRuntime(String name) {
-		new DefaultCombo(new DefaultGroup(RUNTIME_GROUP_LABEL), 1).setSelection(name);
+		new DefaultCombo(new DefaultGroup(this, RUNTIME_GROUP_LABEL), 1).setSelection(name);
 	}
 
 	public void clickNewRuntimeButton() {
-		PushButton karafBTN = new PushButton(new DefaultGroup(RUNTIME_GROUP_LABEL), 0);
-		PushButton eapBTN = new PushButton(new DefaultGroup(RUNTIME_GROUP_LABEL), 1);
+		PushButton karafBTN = new PushButton(new DefaultGroup(this, RUNTIME_GROUP_LABEL), 0);
+		PushButton eapBTN = new PushButton(new DefaultGroup(this, RUNTIME_GROUP_LABEL), 1);
 		if (karafBTN.isEnabled()) {
 			karafBTN.click();
 		}
@@ -109,29 +109,29 @@ public class NewFuseIntegrationProjectWizardRuntimePage extends WizardPage {
 
 	public List<String> getAllAvailableCamelVersions() {
 		List<String> items = new ArrayList<>();
-		for (String s : new DefaultCombo(new DefaultGroup(CAMEL_VERSION_GROUP_LABEL), 0).getItems()) {
+		for (String s : new DefaultCombo(new DefaultGroup(this, CAMEL_VERSION_GROUP_LABEL), 0).getItems()) {
 			items.add(s.split("\\s")[0].trim());
 		}
 		return items;
 	}
 
 	public String getSelectedCamelVersion() {
-		return new DefaultCombo(new DefaultGroup(CAMEL_VERSION_GROUP_LABEL), 0).getText().split("\\s")[0].trim();
+		return new DefaultCombo(new DefaultGroup(this, CAMEL_VERSION_GROUP_LABEL), 0).getText().split("\\s")[0].trim();
 	}
 
 	public boolean isCamelVersionComboEditable() {
-		return new DefaultCombo(new DefaultGroup(CAMEL_VERSION_GROUP_LABEL), 0).isEnabled();
+		return new DefaultCombo(new DefaultGroup(this, CAMEL_VERSION_GROUP_LABEL), 0).isEnabled();
 	}
 
 	public void selectCamelVersion(String version) {
-		new DefaultCombo(new DefaultGroup(CAMEL_VERSION_GROUP_LABEL), 0).setSelection(version);
+		new DefaultCombo(new DefaultGroup(this, CAMEL_VERSION_GROUP_LABEL), 0).setSelection(version);
 	}
 
 	public void typeCamelVersion(String version) {
-		new DefaultCombo(new DefaultGroup(CAMEL_VERSION_GROUP_LABEL), 0).setText(version);
+		new DefaultCombo(new DefaultGroup(this, CAMEL_VERSION_GROUP_LABEL), 0).setText(version);
 	}
 
 	public void clickVerifyCamelVersionButton() {
-		new PushButton(new DefaultGroup(CAMEL_VERSION_GROUP_LABEL), CAMEL_VERSION_GROUP_VERIFY_BTN_LABEL).click();
+		new PushButton(new DefaultGroup(this, CAMEL_VERSION_GROUP_LABEL), CAMEL_VERSION_GROUP_VERIFY_BTN_LABEL).click();
 	}
 }

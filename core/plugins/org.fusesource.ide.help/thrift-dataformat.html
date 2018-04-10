@@ -1,0 +1,66 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>Thrift DataFormat</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><link rel="home" href="index.html" title="Red Hat Fuse Tooling for Eclipse"><link rel="up" href="IDU-Components.html" title="Part&nbsp;V.&nbsp;Apache Camel Component Reference"><link rel="prev" href="thrift-component.html" title="Thrift Component"><link rel="next" href="tidyMarkup-dataformat.html" title="TidyMarkup DataFormat"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h2 class="title"><a name="thrift-dataformat"></a>Thrift DataFormat</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="thrift-dataformat.html#_thrift_options">Thrift Options</a></span></dt><dt><span class="section"><a href="thrift-dataformat.html#_content_type_format">Content type format</a></span></dt><dt><span class="section"><a href="thrift-dataformat.html#_thrift_overview">Thrift overview</a></span></dt><dt><span class="section"><a href="thrift-dataformat.html#_defining_the_thrift_format">Defining the thrift format</a></span></dt><dt><span class="section"><a href="thrift-dataformat.html#_generating_java_classes_2">Generating Java classes</a></span></dt><dt><span class="section"><a href="thrift-dataformat.html#_java_dsl_2">Java DSL</a></span></dt><dt><span class="section"><a href="thrift-dataformat.html#_spring_dsl_2">Spring DSL</a></span></dt><dt><span class="section"><a href="thrift-dataformat.html#_dependencies_66">Dependencies</a></span></dt></dl></div><p><span class="strong"><strong>Available as of Camel version 2.20</strong></span></p><p>Camel provides a Data Format to serialize between
+Java and the Apache Thrift . The project&#8217;s site details why
+you may wish to
+<a class="link" href="https://thrift.apache.org/" target="_top">https://thrift.apache.org/</a>.
+Apache Thrift is language-neutral and
+platform-neutral, so messages produced by your Camel routes may be
+consumed by other language implementations.</p><p><a class="link" href="https://github.com/apache/thrift" target="_top">Apache Thrift Implementation</a></p><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_thrift_options"></a>Thrift Options</h2></div></div></div><p>The Thrift dataformat supports 3 options which are listed below.</p><div class="informaltable"><table border="1" width="100%"><colgroup><col width="19%" class="col_1"><col width="11%" class="col_2"><col width="10%" class="col_3"><col width="60%" class="col_4"></colgroup><thead><tr><th align="left" valign="top">Name</th><th align="left" valign="top">Default</th><th align="left" valign="top">Java Type</th><th align="left" valign="top">Description</th></tr></thead><tbody><tr><td align="left" valign="top"><p><span class="strong"><strong>instanceClass</strong></span></p></td><td align="left" valign="top">&nbsp;</td><td align="left" valign="top"><p><code class="literal">String</code></p></td><td align="left" valign="top"><p>Name of class to use when unarmshalling</p></td></tr><tr><td align="left" valign="top"><p><span class="strong"><strong>contentTypeFormat</strong></span></p></td><td align="left" valign="top"><p><code class="literal">binary</code></p></td><td align="left" valign="top"><p><code class="literal">String</code></p></td><td align="left" valign="top"><p>Defines a content type format in which thrift message will be serialized/deserialized from(to) the Java been. The format can either be native or json for either native binary thrift, json or simple json fields representation. The default value is binary.</p></td></tr><tr><td align="left" valign="top"><p><span class="strong"><strong>contentTypeHeader</strong></span></p></td><td align="left" valign="top"><p><code class="literal">false</code></p></td><td align="left" valign="top"><p><code class="literal">Boolean</code></p></td><td align="left" valign="top"><p>Whether the data format should set the Content-Type header with the type from the data format if the data format is capable of doing so. For example application/xml for data formats marshalling to XML, or application/json for data formats marshalling to JSon etc.</p></td></tr></tbody></table></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_content_type_format"></a>Content type format</h2></div></div></div><p>It&#8217;s possible to parse JSON message to convert it to the Thrift format and unparse it back using native util converter.
+To use this option, set contentTypeFormat value to 'json' or call thrift with second parameter.
+If default instance is not specified, always use native binary Thrift format.
+The simple JSON format is write-only (marshal) and produces a simple output format suitable for parsing by scripting languages.
+The sample code shows below:</p><pre class="programlisting">from(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"direct:marshal"</em></strong>)
+    .unmarshal()
+    .thrift(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"org.apache.camel.dataformat.thrift.generated.Work"</em></strong>, <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"json"</em></strong>)
+    .to(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"mock:reverse"</em></strong>);</pre></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_thrift_overview"></a>Thrift overview</h2></div></div></div><p>This quick overview of how to use Thrift. For more detail see the
+<a class="link" href="https://thrift.apache.org/tutorial/" target="_top">complete tutorial</a></p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_defining_the_thrift_format"></a>Defining the thrift format</h2></div></div></div><p>The first step is to define the format for the body of your exchange.
+This is defined in a .thrift file as so:</p><p><span class="strong"><strong>tutorial.thrift</strong></span></p><pre class="programlisting">namespace java org.apache.camel.dataformat.thrift.generated
+
+enum Operation {
+  ADD = <span xmlns="http://www.w3.org/1999/xhtml" class="hl-number">1</span>,
+  SUBTRACT = <span xmlns="http://www.w3.org/1999/xhtml" class="hl-number">2</span>,
+  MULTIPLY = <span xmlns="http://www.w3.org/1999/xhtml" class="hl-number">3</span>,
+  DIVIDE = <span xmlns="http://www.w3.org/1999/xhtml" class="hl-number">4</span>
+}
+
+struct Work {
+  <span xmlns="http://www.w3.org/1999/xhtml" class="hl-number">1</span>: i32 num1 = <span xmlns="http://www.w3.org/1999/xhtml" class="hl-number">0</span>,
+  <span xmlns="http://www.w3.org/1999/xhtml" class="hl-number">2</span>: i32 num2,
+  <span xmlns="http://www.w3.org/1999/xhtml" class="hl-number">3</span>: Operation op,
+  <span xmlns="http://www.w3.org/1999/xhtml" class="hl-number">4</span>: optional string comment,
+}</pre></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_generating_java_classes_2"></a>Generating Java classes</h2></div></div></div><p>The Apache Thrift provides a compiler which will generate the Java
+classes for the format we defined in our .thrift file.</p><p>You can also run the compiler for any additional supported languages you require manually.</p><p><code class="literal">thrift -r --gen java -out ../java/ ./tutorial-dataformat.thrift</code></p><p>This will generate separate Java class for each type defined in .thrift
+file, i.e. struct or enum.
+The generated classes implement org.apache.thrift.TBase which is required
+by the serialization mechanism. For this reason it important that only
+these classes are used in the body of your exchanges.
+Camel will throw an exception on route creation if you attempt to tell
+the Data Format to use a class that does not implement
+org.apache.thrift.TBase.</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_java_dsl_2"></a>Java DSL</h2></div></div></div><p>You can use create the ThriftDataFormat instance and pass it to Camel
+DataFormat marshal and unmarshal API like this.</p><pre class="programlisting">   ThriftDataFormat format = <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">new</strong> ThriftDataFormat(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">new</strong> Work());
+
+   from(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"direct:in"</em></strong>).marshal(format);
+   from(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"direct:back"</em></strong>).unmarshal(format).to(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"mock:reverse"</em></strong>);</pre><p>Or use the DSL thrift() passing the unmarshal default instance or
+default instance class name like this.</p><pre class="programlisting">   <em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// You don't need to specify the default instance for the thrift marshaling</em>
+   from(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"direct:marshal"</em></strong>).marshal().thrift();
+   from(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"direct:unmarshalA"</em></strong>).unmarshal()
+       .thrift(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"org.apache.camel.dataformat.thrift.generated.Work"</em></strong>)
+       .to(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"mock:reverse"</em></strong>);
+
+   from(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"direct:unmarshalB"</em></strong>).unmarshal().thrift(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">new</strong> Work()).to(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"mock:reverse"</em></strong>);</pre></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_spring_dsl_2"></a>Spring DSL</h2></div></div></div><p>The following example shows how to use Thrift to unmarshal using Spring
+configuring the thrift data type</p><pre class="programlisting">&lt;camelContext id=<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"camel"</em></strong> xmlns=<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"http://camel.apache.org/schema/spring"</em></strong>&gt;
+  &lt;route&gt;
+    &lt;from uri=<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"direct:start"</em></strong>/&gt;
+    &lt;unmarshal&gt;
+      &lt;thrift instanceClass=<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"org.apache.camel.dataformat.thrift.generated.Work"</em></strong> /&gt;
+    &lt;/unmarshal&gt;
+    &lt;to uri=<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"mock:result"</em></strong>/&gt;
+  &lt;/route&gt;
+&lt;/camelContext&gt;</pre></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_dependencies_66"></a>Dependencies</h2></div></div></div><p>To use Thrift in your camel routes you need to add the a dependency on
+<span class="strong"><strong>camel-thrift</strong></span> which implements this data format.</p><pre class="programlisting"><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;dependency&gt;</strong>
+  <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;groupId&gt;</strong>org.apache.camel<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/groupId&gt;</strong>
+  <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;artifactId&gt;</strong>camel-thrift<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/artifactId&gt;</strong>
+  <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;version&gt;</strong>x.x.x<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/version&gt;</strong>
+  <em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">&lt;!-- use the same version as your Camel core version --&gt;</em>
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/dependency&gt;</strong></pre></div></div></body></html>

@@ -17,7 +17,7 @@ package org.jboss.tools.fuse.reddeer;
  */
 public class JiraIssue extends AssertionError {
 
-	private static final long serialVersionUID = 1L;
+	public static final long serialVersionUID = 1L;
 
 	public JiraIssue(String issue) {
 		super("Please see https://issues.jboss.org/browse/" + issue);

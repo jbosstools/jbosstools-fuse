@@ -51,9 +51,9 @@ import org.junit.runner.RunWith;
 @OpenPerspective(FuseIntegrationPerspective.class)
 public class CamelCatalogDefaultTest {
 
-	private static final String PROJECT_NAME = "cbr";
+	public static final String PROJECT_NAME = "cbr";
 
-	private static final String CONTEXT = "camel-context.xml";
+	public static final String CONTEXT = "camel-context.xml";
 
 	private static CamelCatalogUtils catalog;
 

@@ -56,14 +56,14 @@ import org.junit.runner.RunWith;
 @RunWith(RedDeerSuite.class)
 public class DeploymentTest extends DefaultTest {
 
-	private static final String PROJECT_NAME = "project";
-	private static final String PROJECT_IS_DEPLOYED = "Route: cbr-route started and consuming from: Endpoint[file://work/cbr/input]";
-	private static final String PROJECT_IS_UNDEPLOYED = "Route: cbr-route shutdown complete, was consuming from: Endpoint[file://work/cbr/input]";
-	private static final String PROJECT_EAP_IS_DEPLOYED = "(CamelContext: spring-context) started";
-	private static final String PROJECT_EAP_IS_UNDEPLOYED = "(CamelContext: spring-context) is shutdown";
-	private static final String BROWSER_URL = "http://localhost:8080/camel-test-spring";
-	private static final String BROWSER_CONTENT_DEPLOYED = "Hello null";
-	private static final String BROWSER_CONTENT_UNDEPLOYED = "404";
+	public static final String PROJECT_NAME = "project";
+	public static final String PROJECT_IS_DEPLOYED = "Route: cbr-route started and consuming from: Endpoint[file://work/cbr/input]";
+	public static final String PROJECT_IS_UNDEPLOYED = "Route: cbr-route shutdown complete, was consuming from: Endpoint[file://work/cbr/input]";
+	public static final String PROJECT_EAP_IS_DEPLOYED = "(CamelContext: spring-context) started";
+	public static final String PROJECT_EAP_IS_UNDEPLOYED = "(CamelContext: spring-context) is shutdown";
+	public static final String BROWSER_URL = "http://localhost:8080/camel-test-spring";
+	public static final String BROWSER_CONTENT_DEPLOYED = "Hello null";
+	public static final String BROWSER_CONTENT_UNDEPLOYED = "404";
 
 	@InjectRequirement
 	private static FuseRequirement serverRequirement;

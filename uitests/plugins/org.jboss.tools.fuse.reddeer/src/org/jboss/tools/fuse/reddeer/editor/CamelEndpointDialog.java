@@ -33,7 +33,7 @@ import org.eclipse.reddeer.swt.impl.tree.DefaultTreeItem;
  */
 public class CamelEndpointDialog extends WizardDialog {
 	
-	private static final String TYPE = "Red Hat Fuse";
+	public static final String TYPE = "Red Hat Fuse";
 
 	public void activate() {
 		new WaitUntil(new ShellIsAvailable("Choose Global Camel endpoint"));
@@ -72,14 +72,14 @@ public class CamelEndpointDialog extends WizardDialog {
 	}
 	
 	public LabeledText getFilter() {
-		return new LabeledText(new DefaultGroup("Camel component selection"),"Id *");
+		return new LabeledText(new DefaultGroup(this, "Camel component selection"),"Id *");
 	}
 	
 	/**
 	 * Return filter text in Camel endpoint dialog<br/>
 	 */
 	public String getFilterText() {
-		return new LabeledText(new DefaultGroup("Camel component selection"),"Id *").getText();
+		return new LabeledText(new DefaultGroup(this, "Camel component selection"),"Id *").getText();
 	}
 	
 	/**
@@ -89,29 +89,29 @@ public class CamelEndpointDialog extends WizardDialog {
 	 * 			String text that will be used for filter
 	 */
 	public void setFilter(String filter) {
-		new LabeledText(new DefaultGroup("Camel component selection"),"Id *").setText(filter);;
+		new LabeledText(new DefaultGroup(this, "Camel component selection"),"Id *").setText(filter);;
 	}
 	
 	public Button getShowOnlyPaletteComponents() {
-		return new CheckBox(new DefaultGroup("Camel component selection"),"Show only palette components");
+		return new CheckBox(new DefaultGroup(this, "Camel component selection"),"Show only palette components");
 	}
 	
 	/**
 	 * Checks button (checkbox) "Show only palette components" in Camel endpoint dialog<br/>
 	 */
 	public void setShowOnlyPaletteComponents() {
-		new CheckBox(new DefaultGroup("Camel component selection"),"Show only palette components").click();
+		new CheckBox(new DefaultGroup(this, "Camel component selection"),"Show only palette components").click();
 	}
 	
 	public Button getGroupedByCategories() {
-		return new CheckBox(new DefaultGroup("Camel component selection"),"Grouped by categories");
+		return new CheckBox(new DefaultGroup(this, "Camel component selection"),"Grouped by categories");
 	}
 	
 	/**
 	 * Checks button (checkbox) "Grouped by categories" in Camel endpoint dialog<br/>
 	 */
 	public void setGroupedByCategories() {
-		new CheckBox(new DefaultGroup("Camel component selection"),"Grouped by categories").click();
+		new CheckBox(new DefaultGroup(this, "Camel component selection"),"Grouped by categories").click();
 	}	
 	
 	/**
