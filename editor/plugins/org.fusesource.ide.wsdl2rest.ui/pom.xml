@@ -10,7 +10,7 @@
 
 	<artifactId>org.fusesource.ide.wsdl2rest.ui</artifactId>
 	<packaging>eclipse-plugin</packaging>
-	<name>JBoss Fuse Tooling :: Camel Editor :: Plugins :: Wsdl2Rest UI </name>
+	<name>Red Hat Fuse Tooling :: Camel Editor :: Plugins :: Wsdl2Rest UI</name>
 
 	<dependencies>
 		<dependency>

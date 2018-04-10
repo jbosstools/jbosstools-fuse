@@ -9,7 +9,7 @@ In the project you will find an "example" directory that includes several files 
 1. Create a new Fuse Integration project. Leave it as a Blank project that uses the Spring DSL.
 2. Create a new src/main/resources/wsdl directory.
 3. Copy the HelloService.wsdl file into the src/main/resources/wsdl directory.
-4. Select the project, click New->Other, and select the JBoss Fuse->WSDL to Camel Rest DSL Wizard. 
+4. Select the project, click New->Other, and select the Red Hat Fuse->WSDL to Camel Rest DSL Wizard. 
 5. On the "Select Incoming WSDL and Project for Generated Output" page, click the "..." button beside the WSDL File field and select HelloService.wsdl.
 6. Click Next. 
 7. BUG - change the "Destination Java Folder" path to not include /java at the end. It gets appended during the code generation phase right now.

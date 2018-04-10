@@ -20,6 +20,13 @@ import java.beans.PropertyChangeSupport;
  */
 public class Wsdl2RestOptions {
 
+	private static final String TARGET_REST_SERVICE_ADDRESS = "targetRestServiceAddress"; //$NON-NLS-1$
+	private static final String TARGET_SERVICE_ADDRESS = "targetServiceAddress"; //$NON-NLS-1$
+	private static final String DESTINATION_CAMEL = "destinationCamel"; //$NON-NLS-1$
+	private static final String DESTINATION_JAVA = "destinationJava"; //$NON-NLS-1$
+	private static final String PROJECT_NAME = "projectName"; //$NON-NLS-1$
+	private static final String WSDL_URL = "wsdlURL"; //$NON-NLS-1$
+	
 	private String wsdlURL;
 	private String projectName;
 	private String destinationJava;
@@ -42,7 +49,7 @@ public class Wsdl2RestOptions {
 	 * @param wsdlURL
 	 */
 	public void setWsdlURL(String wsdlURL) {
-		firePropertyChange("wsdlURL", this.wsdlURL, this.wsdlURL = wsdlURL); //$NON-NLS-1$
+		firePropertyChange(WSDL_URL, this.wsdlURL, this.wsdlURL = wsdlURL);
 	}
 
 	/**
@@ -58,7 +65,7 @@ public class Wsdl2RestOptions {
 	 * @param projectName
 	 */
 	public void setProjectName(String projectName) {
-		firePropertyChange("projectName", this.projectName, this.projectName = projectName); //$NON-NLS-1$
+		firePropertyChange(PROJECT_NAME, this.projectName, this.projectName = projectName);
 	}
 
 	/**
@@ -74,7 +81,7 @@ public class Wsdl2RestOptions {
 	 * @param destinationJava
 	 */
 	public void setDestinationJava(String destinationJava) {
-		firePropertyChange("destinationJava", this.destinationJava, this.destinationJava = destinationJava); //$NON-NLS-1$
+		firePropertyChange(DESTINATION_JAVA, this.destinationJava, this.destinationJava = destinationJava);
 	}
 
 	/**
@@ -90,7 +97,7 @@ public class Wsdl2RestOptions {
 	 * @param destinationCamel
 	 */
 	public void setDestinationCamel(String destinationCamel) {
-		firePropertyChange("destinationCamel", this.destinationCamel, this.destinationCamel = destinationCamel); //$NON-NLS-1$
+		firePropertyChange(DESTINATION_CAMEL, this.destinationCamel, this.destinationCamel = destinationCamel);
 	}
 
 	/**
@@ -106,7 +113,7 @@ public class Wsdl2RestOptions {
 	 * @param targetServiceAddress
 	 */
 	public void setTargetServiceAddress(String targetServiceAddress) {
-		firePropertyChange("targetServiceAddress", this.targetServiceAddress, this.targetServiceAddress = targetServiceAddress); //$NON-NLS-1$
+		firePropertyChange(TARGET_SERVICE_ADDRESS, this.targetServiceAddress, this.targetServiceAddress = targetServiceAddress);
 	}
 
 	/**
@@ -122,7 +129,7 @@ public class Wsdl2RestOptions {
 	 * @param targetServiceAddress
 	 */
 	public void setTargetRestServiceAddress(String targetRestServiceAddress) {
-		firePropertyChange("targetRestServiceAddress", this.targetRestServiceAddress, this.targetRestServiceAddress = targetRestServiceAddress); //$NON-NLS-1$
+		firePropertyChange(TARGET_REST_SERVICE_ADDRESS, this.targetRestServiceAddress, this.targetRestServiceAddress = targetRestServiceAddress);
 	}
 
 	/**
