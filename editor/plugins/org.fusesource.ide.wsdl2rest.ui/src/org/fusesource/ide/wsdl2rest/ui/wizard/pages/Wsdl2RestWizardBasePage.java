@@ -14,9 +14,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
-import java.net.URI;
 import java.net.URL;
-import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -32,14 +30,10 @@ import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.beans.BeanProperties;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.core.databinding.validation.IValidator;
-import org.eclipse.core.filesystem.EFS;
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IType;
@@ -69,16 +63,12 @@ import org.eclipse.ui.dialogs.FilteredResourcesSelectionDialog;
 import org.eclipse.ui.dialogs.SelectionDialog;
 import org.eclipse.ui.model.BaseWorkbenchContentProvider;
 import org.eclipse.ui.model.WorkbenchLabelProvider;
-import org.fusesource.ide.foundation.core.util.CamelUtils;
 import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.wsdl2rest.ui.internal.UIMessages;
 import org.fusesource.ide.wsdl2rest.ui.internal.Wsdl2RestUIActivator;
 import org.fusesource.ide.wsdl2rest.ui.wizard.Wsdl2RestOptions;
 import org.fusesource.ide.wsdl2rest.ui.wizard.Wsdl2RestWizard;
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 /**
@@ -293,36 +283,6 @@ public abstract class Wsdl2RestWizardBasePage extends WizardPage {
 	}
 
 	/**
-	 * Checks to see if the selected project is Blueprint or not (Spring).
-	 * @return boolean
-	 */
-	protected boolean isProjectBlueprint() {
-		if (!Strings.isEmpty(getOptionsFromWizard().getProjectName())) {
-			try {
-				IProject testProject = ResourcesPlugin.getWorkspace().getRoot().getProject(getOptionsFromWizard().getProjectName());
-				final List<IFile> files = CamelUtils.getFilesWithCamelContentType(testProject);
-				if (!files.isEmpty()) {
-					IFile iFile = files.iterator().next();
-					// gets URI for EFS.
-					URI uri = iFile.getLocationURI();
-
-					// what if file is a link, resolve it.
-					if(iFile.isLinked()){
-						uri = iFile.getRawLocationURI();
-					}
-
-					// Gets native File using EFS
-					File javaFile = EFS.getStore(uri).toLocalFile(0, new NullProgressMonitor());			
-					return CamelUtils.isBlueprintFile(javaFile.getAbsolutePath());
-				}
-			} catch (CoreException ce) {
-				Wsdl2RestUIActivator.pluginLog().logError(ce);
-			}
-		}
-		return false;
-	}
-
-	/**
 	 * Initialize text control if incoming String is not null or empty.
 	 * @param textControl
 	 * @param value
@@ -378,5 +338,9 @@ public abstract class Wsdl2RestWizardBasePage extends WizardPage {
 			}
 		}
 		return locationURL;
+	}
+	
+	protected Wsdl2RestWizard getWsdl2RestWizard() {
+		return (Wsdl2RestWizard) this.getWizard();
 	}
 }

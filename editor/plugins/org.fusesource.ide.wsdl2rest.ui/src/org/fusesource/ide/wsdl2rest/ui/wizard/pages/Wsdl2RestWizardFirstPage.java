@@ -31,6 +31,7 @@ import org.eclipse.core.databinding.observable.ChangeEvent;
 import org.eclipse.core.databinding.observable.IChangeListener;
 import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.wsdl2rest.ui.internal.UIMessages;
+import org.fusesource.ide.wsdl2rest.ui.internal.Wsdl2RestUIActivator;
 
 /**
  * Main page of the wsdl2rest Wizard, which collects the main data for the utility.
@@ -148,7 +149,15 @@ public class Wsdl2RestWizardFirstPage extends Wsdl2RestWizardBasePage {
 		IPath javaPath = new Path(pathSrcJava.toString());
 		String projectJavaPath = selectedProject.getFullPath().append(javaPath).toPortableString();
 		String projectConfigPath = null;
-		if (isProjectBlueprint()) {
+		boolean isBlueprintProject = false;
+		try {
+			if (getWsdl2RestWizard().isProjectBlueprint(selectedProject)) {
+				isBlueprintProject = true;
+			}
+		} catch (Exception e) {
+			Wsdl2RestUIActivator.pluginLog().logError(e);
+		}
+		if (isBlueprintProject) {
 			StringBuilder pathBlueprint = pathSrcResources.append(Path.SEPARATOR).append("OSGI-INF") //$NON-NLS-1$
 					.append(Path.SEPARATOR).append("blueprint"); //$NON-NLS-1$
 			IPath configPath = new Path(pathBlueprint.toString());
