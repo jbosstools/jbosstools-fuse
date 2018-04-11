@@ -4,7 +4,7 @@
 
    <intro>
       <description>
-         This cheat sheet walks you through the steps to create a new <b>Fuse Integration</b> project using the Content-Based Router pattern.
+         This cheat sheet walks you through the steps to create a new <b>Fuse Integration</b> project based on Spring Boot.
 	</description>
    </intro>
 
