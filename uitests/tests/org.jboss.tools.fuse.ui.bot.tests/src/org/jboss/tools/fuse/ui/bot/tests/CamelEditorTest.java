@@ -16,12 +16,14 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.eclipse.reddeer.common.condition.AbstractWaitCondition;
 import org.eclipse.reddeer.common.exception.RedDeerException;
 import org.eclipse.reddeer.common.logging.Logger;
 import org.eclipse.reddeer.common.wait.WaitUntil;
+import org.eclipse.reddeer.core.util.FileUtil;
 import org.eclipse.reddeer.eclipse.ui.perspectives.JavaEEPerspective;
 import org.eclipse.reddeer.eclipse.ui.views.log.LogView;
 import org.eclipse.reddeer.gef.view.PaletteView;
@@ -35,6 +37,7 @@ import org.eclipse.reddeer.workbench.exception.WorkbenchLayerException;
 import org.eclipse.reddeer.workbench.handler.EditorHandler;
 import org.eclipse.reddeer.workbench.impl.shell.WorkbenchShell;
 import org.jboss.tools.fuse.reddeer.ProjectTemplate;
+import org.jboss.tools.fuse.reddeer.component.Atom;
 import org.jboss.tools.fuse.reddeer.component.File;
 import org.jboss.tools.fuse.reddeer.component.Log;
 import org.jboss.tools.fuse.reddeer.component.Otherwise;
@@ -68,6 +71,9 @@ import org.junit.runner.RunWith;
 public class CamelEditorTest extends DefaultTest {
 
 	protected Logger log = Logger.getLogger(CamelEditorTest.class);
+	
+	public static final String PROJECT_NAME = "cbr";
+	public static final String CAMEL_CONTEXT = "camel-context.xml";
 
 	/**
 	 * Prepares test environment
@@ -75,7 +81,7 @@ public class CamelEditorTest extends DefaultTest {
 	@Before
 	public void setupResetCamelContext() {
 		new WorkbenchShell();
-		ProjectFactory.newProject("cbr").deploymentType(STANDALONE).runtimeType(KARAF)
+		ProjectFactory.newProject(PROJECT_NAME).deploymentType(STANDALONE).runtimeType(KARAF)
 				.template(ProjectTemplate.CBR_SPRING).create();
 		LogView view = new LogView();
 		view.open();
@@ -107,7 +113,7 @@ public class CamelEditorTest extends DefaultTest {
 	 * Prepares IDE for tests manipulate with components in the Camel Editor
 	 */
 	private static void setupPrepareIDEForManipulationTests() {
-		new CamelProject("cbr").openCamelContext("camel-context.xml");
+		new CamelProject(PROJECT_NAME).openCamelContext(CAMEL_CONTEXT);
 		CamelEditor.switchTab("Source");
 		EditorManipulator.copyFileContentToCamelXMLEditor("resources/camel-context-otherwise.xml");
 		CamelEditor.switchTab("Design");
@@ -131,8 +137,8 @@ public class CamelEditorTest extends DefaultTest {
 	@Test
 	public void testPalette() {
 
-		new CamelProject("cbr").openCamelContext("camel-context.xml");
-		CamelEditor editor = new CamelEditor("camel-context.xml");
+		new CamelProject(PROJECT_NAME).openCamelContext(CAMEL_CONTEXT);
+		CamelEditor editor = new CamelEditor(CAMEL_CONTEXT);
 		editor.activate();
 		int initSize = editor.palleteGetComponents().size();
 		editor.paletteSearch("File");
@@ -165,7 +171,7 @@ public class CamelEditorTest extends DefaultTest {
 	public void testXMLEditor() {
 
 		setupPrepareIDEForManipulationTests();
-		CamelEditor editor = new CamelEditor("camel-context.xml");
+		CamelEditor editor = new CamelEditor(CAMEL_CONTEXT);
 		assertFalse(editor.isComponentAvailable("Otherwise"));
 		CamelEditor.switchTab("Source");
 		EditorManipulator.copyFileContentToCamelXMLEditor("resources/camel-context-all.xml");
@@ -173,6 +179,36 @@ public class CamelEditorTest extends DefaultTest {
 		assertTrue(editor.isComponentAvailable("Otherwise"));
 		assertTrue(editor.isComponentAvailable("file:target/messages/others"));
 		LogChecker.assertNoFuseError();
+	}
+	
+	/**
+	 * <p>
+	 * Test tries to manipulate with Camel route and verifies changes affecting 'Source' tab (view of XML file) and also checks XML on filesystem level
+	 * </p>
+	 * <b>Steps</b>
+	 * <ol>
+	 * <li>create a new project - CBR - SPRING</li>
+	 * <li>open camel-context.xml file</li>
+	 * <li>add new component <p>Atom</p> into Camel editor</li>
+	 * <li>save Camel editor changes</li>
+	 * <li>switch to Camel editor <p>Source</p> tab</li>
+	 * <li>compare content from active text editor with content of XML file (camel-context.xml on filesystem)</li>
+	 * </ol>
+	 */
+	@Test
+	public void testXMLFile() throws IOException {
+		CamelProject project = new CamelProject(PROJECT_NAME);
+		project.openCamelContext(CAMEL_CONTEXT);
+
+		CamelEditor editor = new CamelEditor(CAMEL_CONTEXT);
+		editor.addCamelComponent(new Atom(), "Route cbr-route");
+		editor.save();
+
+		CamelEditor.switchTab("Source");
+		String source = new SourceEditor().getText();
+		String file = FileUtil.readFile(editor.getAssociatedFile().getAbsolutePath());
+
+		assertEquals("XML file from file system is different from content of Camel editor 'Source' tab", source, file);
 	}
 
 	/**
@@ -198,7 +234,7 @@ public class CamelEditorTest extends DefaultTest {
 	@RunIf(conditionClass = IssueIsClosed.class)
 	public void testCodeCompletion() {
 
-		new CamelProject("cbr").openCamelContext("camel-context.xml");
+		new CamelProject(PROJECT_NAME).openCamelContext(CAMEL_CONTEXT);
 		CamelEditor.switchTab("Source");
 		EditorManipulator.copyFileContentToCamelXMLEditor("resources/camel-context-all.xml");
 		SourceEditor editor = new SourceEditor();
@@ -252,7 +288,7 @@ public class CamelEditorTest extends DefaultTest {
 	public void testDragAndDropComponents() {
 
 		setupPrepareIDEForManipulationTests();
-		CamelEditor editor = new CamelEditor("camel-context.xml");
+		CamelEditor editor = new CamelEditor(CAMEL_CONTEXT);
 		editor.addCamelComponent(new Otherwise(), "Choice");
 		editor.addCamelComponent(new Log(), "Otherwise");
 		try {
@@ -289,7 +325,7 @@ public class CamelEditorTest extends DefaultTest {
 	@Test
 	public void testCollapseExpandFeature() {
 
-		CamelEditor editor = new CamelEditor("camel-context.xml");
+		CamelEditor editor = new CamelEditor(CAMEL_CONTEXT);
 		CamelComponentEditPart editPart = new CamelComponentEditPart("Choice");
 		int startHeight = editPart.getBounds().height;
 
