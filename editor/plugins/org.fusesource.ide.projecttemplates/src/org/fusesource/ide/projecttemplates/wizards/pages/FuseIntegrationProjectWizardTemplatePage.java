@@ -15,6 +15,8 @@ import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -25,6 +27,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.FilteredTree;
@@ -69,6 +72,7 @@ public class FuseIntegrationProjectWizardTemplatePage extends WizardPage {
 		
 		setControl(container);
 		
+		selectDefaultTemplates(listTemplates);
 		validate();
 	}
 
@@ -195,6 +199,15 @@ public class FuseIntegrationProjectWizardTemplatePage extends WizardPage {
 		if (listTemplates != null) {
 			listTemplates.getViewer().refresh();
 			listTemplates.getViewer().expandAll();
+			selectDefaultTemplates(listTemplates);
+		}
+	}
+
+	private void selectDefaultTemplates(FilteredTree listTemplates) {
+		TreeViewer viewer = listTemplates.getViewer();
+		TreeItem[] unfilteredItems = viewer.getTree().getItems();
+		if (viewer.getSelection().isEmpty() && unfilteredItems.length == 1) {
+			viewer.setSelection(new StructuredSelection(unfilteredItems[0].getData()));
 		}
 	}
 
