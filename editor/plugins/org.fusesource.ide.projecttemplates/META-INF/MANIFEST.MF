@@ -72,4 +72,5 @@ Export-Package: org.fusesource.ide.projecttemplates.actions;x-friends:="org.fuse
  org.fusesource.ide.projecttemplates.util.maven,
  org.fusesource.ide.projecttemplates.wizards,
  org.fusesource.ide.projecttemplates.wizards.pages;x-friends:="org.fusesource.ide.projecttemplates.tests.integration",
- org.fusesource.ide.projecttemplates.wizards.pages.model;x-friends:="org.fusesource.ide.projecttemplates.tests.integration"
+ org.fusesource.ide.projecttemplates.wizards.pages.model;x-friends:="org.fusesource.ide.projecttemplates.tests.integration",
+ org.fusesource.ide.projecttemplates.wizards.pages.provider

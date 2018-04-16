@@ -40,5 +40,10 @@ public abstract class AbstractOSESpringBootXMLTemplate extends AbstractProjectTe
 		}
 		
 	}
+	
+	@Override
+	public boolean isDefault(EnvironmentData environment, CamelDSLType dslType) {
+		return isCompatible(environment) && CamelDSLType.SPRING.equals(dslType);
+	}
 
 }
