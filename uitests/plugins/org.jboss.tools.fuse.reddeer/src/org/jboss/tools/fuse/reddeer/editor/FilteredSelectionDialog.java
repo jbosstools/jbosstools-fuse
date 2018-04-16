@@ -58,7 +58,7 @@ public class FilteredSelectionDialog extends DefaultShell {
 	}
 
 	public void ok() {
-		List<TableItem> selectedItems = new DefaultTable(this).getSelectetItems();
+		List<TableItem> selectedItems = new DefaultTable(this).getSelectedItems();
 		if (selectedItems.isEmpty()) {
 			throw new RedDeerException("No item is selected");
 		}

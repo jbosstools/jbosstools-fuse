@@ -34,9 +34,8 @@ public class ServerRuntimeWizard extends WizardDialog {
 		super(TITLE);
 	}
 
-	public ServerRuntimeWizard activate() {
+	public void activate() {
 		new DefaultShell(TITLE).setFocus();
-		return this;
 	}
 
 	public ServerRuntimeWizard setType(String category, String label) {
