@@ -93,6 +93,16 @@ public class CamelModel {
 	}
 	
 	/**
+	 * adds a dataformat to the cache (overwrites existing dataformat with same name)
+	 * 
+	 * @param overriddenName
+	 * @param dataformat	the dataformat to add
+	 */
+	public void addDataFormat(String overriddenName, DataFormat dataformat) {
+		dataformats.put(overriddenName, dataformat);
+	}
+	
+	/**
 	 * returns the dataformat with the given name if existing
 	 * 
 	 * @param name	the name of the dataformat (for instance "base64")
@@ -211,4 +221,5 @@ public class CamelModel {
 	public void setLanguages(Map<String, Language> languages) {
 		this.languages.putAll(languages);
 	}
+
 }
