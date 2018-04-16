@@ -19,6 +19,7 @@ import org.apache.camel.catalog.CamelCatalog;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelModel;
 import org.fusesource.ide.camel.model.service.core.catalog.components.Component;
+import org.fusesource.ide.camel.model.service.core.catalog.dataformats.DataFormat;
 import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 
@@ -45,6 +46,14 @@ public class CamelModelPatcher {
 		applyMissingWhenChildDefinitionForChoice(loadedModel);
 		applyFixesToComponentsSyntax(loadedModel);
 		applyMissingCamelContextEip(camelVersion, loadedModel);
+		applyZipFileDataformatNameInconsistencyWorkaround(loadedModel);
+	}
+
+	private static void applyZipFileDataformatNameInconsistencyWorkaround(CamelModel loadedModel) {
+		DataFormat zipfileDataformat = loadedModel.getDataFormat("zipfile");
+		if (zipfileDataformat != null) {
+			loadedModel.addDataFormat("zipFile", zipfileDataformat);
+		}
 	}
 
 	private static void applyMissingCamelContextEip(String camelVersion, CamelModel loadedModel) {
