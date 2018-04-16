@@ -76,6 +76,31 @@ import org.fusesource.ide.projecttemplates.wizards.pages.model.FuseRuntimeKind;
  */
 public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage {
 
+	private static final String POSSIBLE_WILDFLY_RUNTIME_IDS =
+			"org.jboss.ide.eclipse.as.runtime.60,"
+			+ "org.jboss.ide.eclipse.as.runtime.70,"
+			+ "org.jboss.ide.eclipse.as.runtime.71,"
+			+ "org.jboss.ide.eclipse.as.runtime.wildfly.80,"
+			+ "org.jboss.ide.eclipse.as.runtime.wildfly.90,"
+			+ "org.jboss.ide.eclipse.as.runtime.wildfly.100,"
+			+ "org.jboss.ide.eclipse.as.runtime.wildfly.110,"
+			+ "org.jboss.ide.eclipse.as.runtime.eap.50,"
+			+ "org.jboss.ide.eclipse.as.runtime.eap.60,"
+			+ "org.jboss.ide.eclipse.as.runtime.eap.61,"
+			+ "org.jboss.ide.eclipse.as.runtime.eap.70,"
+			+ "org.jboss.ide.eclipse.as.runtime.eap.71";
+	private static final String POSSIBLE_KARAF_RUNTIME_IDS =
+			"org.fusesource.ide.fuseesb.runtime.60,"
+			+ "org.fusesource.ide.fuseesb.runtime.61,"
+			+ "org.fusesource.ide.fuseesb.runtime.62,"
+			+ "org.fusesource.ide.fuseesb.runtime.63,"
+			+ "org.fusesource.ide.fuseesb.runtime.70,"
+			+ "org.fusesource.ide.karaf.runtime.22,"
+			+ "org.fusesource.ide.karaf.runtime.23,"
+			+ "org.fusesource.ide.karaf.runtime.24,"
+			+ "org.fusesource.ide.karaf.runtime.30,"
+			+ "org.fusesource.ide.karaf.runtime.40,"
+			+ "org.fusesource.ide.karaf.runtime.41";
 	static final String UNKNOWN_CAMEL_VERSION = "unknown"; //$NON-NLS-1$
 	private static final Pattern MAVEN_VERSION_PATTERN = Pattern.compile("^(\\d+){1}(\\.\\d+){1}(\\.\\d+){1}?((\\.|\\-).*)?$");
 
@@ -200,12 +225,12 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 		Button karafRadio = new Button(runtimeGrp, SWT.RADIO);
 		karafRadio.setText(Messages.newProjectWizardRuntimePageKarafChoice);
 		dbc.bindValue(WidgetProperties.enabled().observe(karafRadio), standAloneObservable);
-		runtimeKarafComboViewer = createRuntimeSelection(runtimeGrp, karafRadio);
+		runtimeKarafComboViewer = createRuntimeSelection(runtimeGrp, karafRadio, POSSIBLE_KARAF_RUNTIME_IDS);
 		
 		Button eapRadio = new Button(runtimeGrp, SWT.RADIO);
 		eapRadio.setText(Messages.newProjectWizardRuntimePageWildflyChoice);
 		dbc.bindValue(WidgetProperties.enabled().observe(eapRadio), standAloneObservable);
-		runtimeWildflyComboViewer = createRuntimeSelection(runtimeGrp, eapRadio);
+		runtimeWildflyComboViewer = createRuntimeSelection(runtimeGrp, eapRadio, POSSIBLE_WILDFLY_RUNTIME_IDS);
 		
 		SelectObservableValue<FuseRuntimeKind> observableValue = new SelectObservableValue<>();
 		observableValue.addOption(FuseRuntimeKind.SPRINGBOOT, WidgetProperties.selection().observe(springBootRadio));
@@ -215,7 +240,7 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 		environmentRuntimeObservable.addChangeListener(event -> refreshFilteredTemplates());
 	}
 
-	private ComboViewer createRuntimeSelection(Group runtimeGrp, Button relatedRadioButton) {
+	private ComboViewer createRuntimeSelection(Group runtimeGrp, Button relatedRadioButton, String possibleRuntimeIds) {
 		ComboViewer runtimeComboViewer = new ComboViewer(runtimeGrp, SWT.NONE | SWT.READ_ONLY);
 		runtimeComboViewer.setComparator(new ViewerComparator((o1, o2) -> {
 			if (Messages.newProjectWizardRuntimePageNoRuntimeSelectedLabel.equals(o1)){
@@ -242,7 +267,7 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				String[] oldRuntimes = runtimeComboViewer.getCombo().getItems();
-				boolean created = ServerUIUtil.showNewRuntimeWizard(getShell(), null, null);
+				boolean created = ServerUIUtil.showNewRuntimeWizard(getShell(), null, null, possibleRuntimeIds);
 				if (created) {
 					String[] newRuntimes = runtimeComboViewer.getCombo().getItems();
 					String newRuntime = getNewRuntime(oldRuntimes, newRuntimes);
