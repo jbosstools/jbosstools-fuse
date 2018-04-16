@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>org.fusesource.ide</groupId>
 		<artifactId>project</artifactId>
-		<version>10.3.0-SNAPSHOT</version>
+		<version>11.0.0-SNAPSHOT</version>
 	</parent>
 	<artifactId>org.fusesource.ide.updatesite</artifactId>
 	<name>Red Hat Fuse Tooling :: Update Site</name>
@@ -17,7 +17,7 @@
 		<update.site.name>JBoss Tools Fuse Tooling</update.site.name>
 		<update.site.description>CI Build</update.site.description>
 		<siteTemplateFolder>siteTemplateFolder</siteTemplateFolder>
-		<target.eclipse.version>4.7 (Oxygen)</target.eclipse.version>
+		<target.eclipse.version>4.8 (Photon)</target.eclipse.version>
 	</properties>
 	<build>
 		<plugins>

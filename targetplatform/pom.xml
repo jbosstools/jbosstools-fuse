@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.fusesource.ide</groupId>
 		<artifactId>project</artifactId>
-		<version>10.3.0-SNAPSHOT</version>
+		<version>11.0.0-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
 
@@ -154,8 +154,8 @@
 	</pluginRepositories>
 	<repositories>
 		<repository>
-			<id>jbosstools-oxygen-staging</id>
-			<url>http://download.jboss.org/jbosstools/oxygen/staging/updates/</url>
+			<id>jbosstools-photon-staging</id>
+			<url>http://download.jboss.org/jbosstools/photon/staging/updates/</url>
 			<layout>p2</layout>
 		</repository>
 	</repositories>

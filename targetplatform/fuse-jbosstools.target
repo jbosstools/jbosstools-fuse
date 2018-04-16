@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?pde version="3.8"?><target includeMode="feature" name="fuse-10.3.0-SNAPSHOT" sequenceNumber="8">
+<?pde version="3.8"?><target includeMode="feature" name="fuse" sequenceNumber="8">
 <locations>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="org.jboss.ide.eclipse.archives.feature.feature.group" version="3.6.111.v20170811-1737"/>
@@ -24,7 +24,7 @@
 <unit id="org.jboss.tools.openshift.io.feature.feature.group" version="3.4.2.v20180117-1656"/>
 <unit id="org.jboss.tools.openshift.js.feature.feature.group" version="3.4.2.v20171215-1903"/>
 <unit id="org.jboss.tools.maven.springboot.feature.feature.group" version="1.8.102.v20180117-1049"/>
-<repository location="http://download.jboss.org/jbosstools/oxygen/staging/updates/"/>
+<repository location="http://download.jboss.org/jbosstools/photon/staging/updates/"/>
 </location>
 
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
@@ -32,7 +32,7 @@
 <unit id="org.jboss.ide.eclipse.as.test.feature.feature.group" version="3.5.2.v20171205-2159"/>
 <unit id="org.jboss.tools.test.feature.feature.group" version="3.7.100.v20170529-1436"/>
 <unit id="org.jboss.tools.runtime.test.feature.feature.group" version="3.4.0.v20171129-1613"/>
-<repository location="http://download.jboss.org/jbosstools/oxygen/staging/updates/coretests/"/>
+<repository location="http://download.jboss.org/jbosstools/photon/staging/updates/coretests/"/>
 </location>
 
 </locations>
