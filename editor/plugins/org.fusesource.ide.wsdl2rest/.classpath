@@ -35,7 +35,7 @@
 	<classpathentry exported="true" kind="lib" path="lib/ant-nodeps-1.8.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/cxf-tools-wsdlto-frontend-javascript-3.1.7.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/wsdl2rest-util.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/wsdl2rest-impl.jar" sourcepath="/wsdl2rest/impl/src"/>
+	<classpathentry exported="true" kind="lib" path="lib/wsdl2rest-impl.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/woodstox-core-5.0.3.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/cxf-rt-bindings-soap-3.2.1.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
