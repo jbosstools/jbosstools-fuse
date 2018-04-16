@@ -154,8 +154,8 @@
 	</pluginRepositories>
 	<repositories>
 		<repository>
-			<id>jbosstools-oxygen-staging</id>
-			<url>http://download.jboss.org/jbosstools/oxygen/staging/updates/</url>
+			<id>jbosstools-photon-staging</id>
+			<url>http://download.jboss.org/jbosstools/photon/staging/updates/</url>
 			<layout>p2</layout>
 		</repository>
 	</repositories>

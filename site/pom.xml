@@ -17,7 +17,7 @@
 		<update.site.name>JBoss Tools Fuse Tooling</update.site.name>
 		<update.site.description>CI Build</update.site.description>
 		<siteTemplateFolder>siteTemplateFolder</siteTemplateFolder>
-		<target.eclipse.version>4.7 (Oxygen)</target.eclipse.version>
+		<target.eclipse.version>4.8 (Photon)</target.eclipse.version>
 	</properties>
 	<build>
 		<plugins>
