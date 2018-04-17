@@ -1,42 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
+	<classpathentry exported="true" kind="lib" path="lib/commons-validator-1.6.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8">
 		<attributes>
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
-	<classpathentry kind="src" path="src/"/>
-	<classpathentry exported="true" kind="lib" path="lib/args4j-2.0.31.jar"/>
+	<classpathentry kind="src" path="src"/>
 	<classpathentry exported="true" kind="lib" path="lib/javaparser-core-2.5.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/commons-collections-3.2.2.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/camel-spring-2.20.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/cxf-core-3.2.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/stax2-api-3.1.4.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/cxf-codegen-plugin-3.1.7.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/cxf-rt-databinding-jaxb-3.2.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/cxf-rt-wsdl-3.2.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/cxf-tools-common-3.1.7.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/cxf-tools-wsdlto-core-3.1.7.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/cxf-tools-wsdlto-frontend-jaxws-3.1.7.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/commons-lang-2.4.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/velocity-1.7.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/javax.ws.rs-api-2.0.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/slf4j-api-1.7.22.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/wsdl4j-1.6.3.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/jaxb-core-2.2.11.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/cxf-tools-wsdlto-databinding-jaxb-3.1.7.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jaxb-xjc-2.2.11.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/xml-resolver-1.2.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/xmlschema-core-2.2.2.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/cxf-tools-validator-3.1.7.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/ant-1.9.6.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/ant-launcher-1.9.6.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/ant-nodeps-1.8.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/cxf-tools-wsdlto-frontend-javascript-3.1.7.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/wsdl2rest-util.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/args4j-2.33.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/camel-spring-2.21.0.fuse-000069.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/cxf-core-3.1.11.fuse-000226.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/cxf-codegen-plugin-3.1.11.fuse-000226.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/cxf-rt-databinding-jaxb-3.1.11.fuse-000226.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/cxf-rt-wsdl-3.1.11.fuse-000226.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/cxf-tools-common-3.1.11.fuse-000226.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/cxf-tools-wsdlto-core-3.1.11.fuse-000226.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/cxf-tools-wsdlto-frontend-jaxws-3.1.11.fuse-000226.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/javax.ws.rs-api-2.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/slf4j-api-1.7.25.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/woodstox-core-asl-4.4.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jaxb-core-2.3.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/cxf-tools-wsdlto-databinding-jaxb-3.1.11.fuse-000226.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/xmlschema-core-2.2.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/cxf-tools-validator-3.1.11.fuse-000226.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/ant-1.10.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/ant-launcher-1.10.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/cxf-tools-wsdlto-frontend-javascript-3.1.11.fuse-000226.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/cxf-rt-bindings-soap-3.1.11.fuse-000226.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/wsdl2rest-impl.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/woodstox-core-5.0.3.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/cxf-rt-bindings-soap-3.2.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/wsdl2rest-util.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

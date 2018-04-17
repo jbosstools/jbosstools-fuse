@@ -6,7 +6,7 @@ Bundle-Version: 10.3.0.qualifier
 Bundle-Activator: org.fusesource.ide.wsdl2rest.ui.internal.Wsdl2RestUIActivator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
- org.fusesource.ide.wsdl2rest,
+ org.fusesource.ide.wsdl2rest;visibility:=reexport,
  org.eclipse.core.resources,
  org.fusesource.ide.foundation.core,
  org.eclipse.jdt.ui,
@@ -29,12 +29,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.m2e.maven.runtime
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
-Bundle-ClassPath: lib/commons-validator-1.4.0.jar,
- .
-Export-Package: org.apache.commons.validator,
- org.apache.commons.validator.routines,
- org.apache.commons.validator.routines.checkdigit,
- org.apache.commons.validator.util,
+Bundle-ClassPath: .
+Export-Package: 
  org.fusesource.ide.wsdl2rest.ui.internal,
  org.fusesource.ide.wsdl2rest.ui.wizard,
  org.fusesource.ide.wsdl2rest.ui.wizard.pages
