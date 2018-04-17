@@ -1,4 +1,3 @@
-
 #!/bin/bash
 
 #########################################
@@ -14,7 +13,7 @@ if [ "$#" -ne 2 ]; then
     echo "Please specify the old and the new Eclipse name like this:"
     echo "      changeVersion.sh <oldEclipseName> <newEclipseName>"
     echo "Example:"
-    echo "      changeVersion.sh photon photon"
+    echo "      changeVersion.sh oxygen photon"
     exit 0
 fi
 
@@ -44,4 +43,3 @@ find * -name '*.target' | xargs perl -pi -e "s/${OLD_ECLIPSE^}/${NEW_ECLIPSE^}/g
 find * -name '*.md' | xargs perl -pi -e "s/${OLD_ECLIPSE^}/${NEW_ECLIPSE^}/g"
 
 echo "DONE!"
-
