@@ -22,10 +22,10 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
-import org.fusesource.ide.camel.editor.utils.BuildAndRefreshJobWaiterUtil;
 import org.fusesource.ide.camel.editor.utils.CamelUtils;
 import org.fusesource.ide.camel.model.service.core.util.CamelFilesFinder;
 import org.fusesource.ide.camel.model.service.core.util.JavaCamelFilesFinder;
+import org.fusesource.ide.foundation.core.util.BuildAndRefreshJobWaiterUtil;
 import org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator;
 
 /**

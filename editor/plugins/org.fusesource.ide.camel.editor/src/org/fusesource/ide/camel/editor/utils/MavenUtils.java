@@ -39,6 +39,7 @@ import org.eclipse.m2e.core.internal.IMavenConstants;
 import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 import org.fusesource.ide.camel.editor.internal.UIMessages;
 import org.fusesource.ide.camel.model.service.core.util.CamelMavenUtils;
+import org.fusesource.ide.foundation.core.util.BuildAndRefreshJobWaiterUtil;
 import org.fusesource.ide.foundation.ui.util.Shells;
 
 /**

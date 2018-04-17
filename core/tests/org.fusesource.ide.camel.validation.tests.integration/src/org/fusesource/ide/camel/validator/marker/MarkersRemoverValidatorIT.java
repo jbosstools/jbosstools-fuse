@@ -35,11 +35,11 @@ import org.eclipse.ui.internal.views.markers.ProblemsView;
 import org.fusesource.ide.branding.perspective.FusePerspective;
 import org.fusesource.ide.camel.editor.CamelEditor;
 import org.fusesource.ide.camel.editor.globalconfiguration.CamelGlobalConfigEditor;
-import org.fusesource.ide.camel.editor.utils.JobWaiterUtil;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.test.util.editor.AbstractCamelEditorIT;
 import org.fusesource.ide.camel.validation.ValidationFactory;
 import org.fusesource.ide.camel.validation.ValidationResult;
+import org.fusesource.ide.foundation.core.util.JobWaiterUtil;
 import org.junit.Test;
 
 /**

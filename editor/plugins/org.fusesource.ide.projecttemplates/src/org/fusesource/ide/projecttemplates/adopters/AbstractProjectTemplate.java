@@ -20,6 +20,7 @@ import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.core.runtime.jobs.Job;
 import org.fusesource.ide.camel.model.service.core.util.OnlineArtifactVersionSearcher;
+import org.fusesource.ide.foundation.core.util.JobWaiterUtil;
 import org.fusesource.ide.projecttemplates.adopters.configurators.TemplateConfiguratorSupport;
 import org.fusesource.ide.projecttemplates.adopters.creators.TemplateCreatorSupport;
 import org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType;
@@ -54,15 +55,15 @@ public abstract class AbstractProjectTemplate {
 	public final boolean create(IProject project, CommonNewProjectMetaData projectMetaData, IProgressMonitor monitor) throws CoreException {
 		SubMonitor subMonitor = SubMonitor.convert(monitor, 100);
 		// first we create the project template		
-		boolean ok = getCreator(projectMetaData).create(project, projectMetaData, subMonitor.newChild(30));
+		boolean ok = getCreator(projectMetaData).create(project, projectMetaData, subMonitor.split(30));
 		// then we configure the project
 		if (ok) {
 			refreshProjectSync(project, monitor);
-			ok = getConfigurator().configure(project, projectMetaData, subMonitor.newChild(30));
-			refreshProjectSync(project,  subMonitor.newChild(15));
-			project.getFolder("bin").delete(true,  subMonitor.newChild(5)); //$NON-NLS-1$
-			project.getFolder("build").delete(true,  subMonitor.newChild(5)); //$NON-NLS-1$
-			refreshProjectSync(project,  subMonitor.newChild(15));
+			ok = getConfigurator().configure(project, projectMetaData, subMonitor.split(30));
+			refreshProjectSync(project,  subMonitor.split(15));
+			project.getFolder("bin").delete(true,  subMonitor.split(5)); //$NON-NLS-1$
+			project.getFolder("build").delete(true,  subMonitor.split(5)); //$NON-NLS-1$
+			refreshProjectSync(project,  subMonitor.split(15));
 		}
 		return ok;
 	}
@@ -72,6 +73,7 @@ public abstract class AbstractProjectTemplate {
 		project.refreshLocal(IProject.DEPTH_INFINITE, subMonitor.split(1));
 		try {
 			Job.getJobManager().join(ResourcesPlugin.FAMILY_MANUAL_REFRESH, subMonitor.split(1));
+			JobWaiterUtil.updateUI();
 		} catch (OperationCanceledException e) {
 			ProjectTemplatesActivator.pluginLog().logError(e);
 		} catch (InterruptedException ex) { 

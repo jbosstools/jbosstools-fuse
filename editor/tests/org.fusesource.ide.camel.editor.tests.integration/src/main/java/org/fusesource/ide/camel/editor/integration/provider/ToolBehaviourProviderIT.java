@@ -45,12 +45,12 @@ import org.fusesource.ide.camel.editor.integration.globalconfiguration.wizards.p
 import org.fusesource.ide.camel.editor.provider.ActiveMQPaletteEntry;
 import org.fusesource.ide.camel.editor.provider.ActiveMQPaletteEntryDependenciesManager;
 import org.fusesource.ide.camel.editor.provider.ToolBehaviourProvider;
-import org.fusesource.ide.camel.editor.utils.BuildAndRefreshJobWaiterUtil;
 import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelCatalogCacheManager;
 import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelModel;
 import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
 import org.fusesource.ide.camel.model.service.core.tests.integration.core.io.FuseProject;
 import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
+import org.fusesource.ide.foundation.core.util.BuildAndRefreshJobWaiterUtil;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;

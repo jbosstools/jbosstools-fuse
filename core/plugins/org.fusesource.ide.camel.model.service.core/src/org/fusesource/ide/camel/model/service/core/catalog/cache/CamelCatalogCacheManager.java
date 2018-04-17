@@ -25,6 +25,7 @@ import org.fusesource.ide.camel.model.service.core.CamelServiceManagerUtil;
 import org.fusesource.ide.camel.model.service.core.internal.Messages;
 import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
 import org.fusesource.ide.camel.model.service.core.util.CamelMavenUtils;
+import org.fusesource.ide.foundation.core.util.JobWaiterUtil;
 
 /**
  * @author lhein
@@ -60,8 +61,9 @@ public class CamelCatalogCacheManager {
 	 * @return the cached catalog or an empty one if not yet in cache
 	 */
 	private synchronized CamelModel getCachedCatalog(CamelCatalogCoordinates coordinates, IProgressMonitor monitor) {
+		SubMonitor subMon = SubMonitor.convert(monitor, 1);
 		if (!camelModelCache.containsKey(coordinates)) {
-			initializeCatalog(coordinates, monitor);
+			initializeCatalog(coordinates, subMon.split(1, SubMonitor.SUPPRESS_NONE));
 		}
 		CamelModel camelModel = camelModelCache.get(coordinates);
 		lastRetrievedCamelCatalog = camelModel;
@@ -107,17 +109,19 @@ public class CamelCatalogCacheManager {
 	 */
 	protected void initializeCatalog(CamelCatalogCoordinates coordinates, IProgressMonitor monitor) {
 		SubMonitor subMonitor = SubMonitor.convert(monitor, NLS.bind(Messages.initializingCamelModel, coordinates.getVersion()), 1);
+		JobWaiterUtil.updateUI();
 		Dependency dep = new Dependency();
 		dep.setGroupId(coordinates.getGroupId());
 		dep.setArtifactId(coordinates.getArtifactId());
 		dep.setVersion(coordinates.getVersion());
 		
-		camelModelCache.put(coordinates, CamelServiceManagerUtil.getManagerService().getCamelModel(coordinates.getVersion(), CamelCatalogUtils.getRuntimeProviderFromDependency(dep)));
+		camelModelCache.put(coordinates, CamelServiceManagerUtil.getManagerService().getCamelModel(coordinates.getVersion(), CamelCatalogUtils.getRuntimeProviderFromDependency(dep), subMonitor.split(1, SubMonitor.SUPPRESS_NONE)));
 		subMonitor.setWorkRemaining(0);
 	}
 	
 	public CamelModel getCamelModelForProject(IProject project, IProgressMonitor monitor) {
 		SubMonitor subMonitor = SubMonitor.convert(monitor, Messages.retrievingCamelModel, 3);
+		JobWaiterUtil.updateUI();
 		CamelCatalogCoordinates coords;
 		if (project == null) {
 			if(lastRetrievedCamelCatalog != null) {
@@ -125,15 +129,15 @@ public class CamelCatalogCacheManager {
 			}
 			coords = CamelCatalogUtils.getDefaultCatalogCoordinates();
 		} else {
-			coords = CamelCatalogUtils.getCatalogCoordinatesForProject(project, subMonitor.split(1));
+			coords = CamelCatalogUtils.getCatalogCoordinatesForProject(project, subMonitor.split(1, SubMonitor.SUPPRESS_NONE));
 			// initialize repos for the dep lookup
-			List<Repository> mavenRepositories = new CamelMavenUtils().getRepositories(project, subMonitor.split(1));
+			List<Repository> mavenRepositories = new CamelMavenUtils().getRepositories(project, subMonitor.split(1, SubMonitor.SUPPRESS_NONE));
 			CamelServiceManagerUtil.getManagerService().updateMavenRepositoryLookup(mavenRepositories, coords);
 		}
 
 		subMonitor.setWorkRemaining(1);
 		if (coords != null) {
-			return getCachedCatalog(coords, subMonitor.split(1));
+			return getCachedCatalog(coords, subMonitor.split(1, SubMonitor.SUPPRESS_NONE));
 		}
 		subMonitor.setWorkRemaining(0);
 		return null;

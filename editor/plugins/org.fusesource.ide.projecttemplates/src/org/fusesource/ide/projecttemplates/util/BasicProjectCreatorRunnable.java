@@ -36,9 +36,10 @@ import org.eclipse.wst.validation.internal.ValManager;
 import org.eclipse.wst.validation.internal.model.GlobalPreferences;
 import org.eclipse.wst.validation.internal.model.GlobalPreferencesValues;
 import org.fusesource.ide.branding.perspective.FusePerspective;
-import org.fusesource.ide.camel.editor.utils.BuildAndRefreshJobWaiterUtil;
 import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelCatalogCacheManager;
 import org.fusesource.ide.camel.model.service.core.internal.CamelModelServiceCoreActivator;
+import org.fusesource.ide.foundation.core.util.BuildAndRefreshJobWaiterUtil;
+import org.fusesource.ide.foundation.core.util.JobWaiterUtil;
 import org.fusesource.ide.foundation.core.util.VersionUtil;
 import org.fusesource.ide.projecttemplates.adopters.AbstractProjectTemplate;
 import org.fusesource.ide.projecttemplates.impl.simple.EmptyProjectTemplateForFuse6;
@@ -68,16 +69,17 @@ public abstract class BasicProjectCreatorRunnable implements IRunnableWithProgre
 	
 	@Override
 	public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+		SubMonitor subMonitor = SubMonitor.convert(monitor, Messages.basicProjectCreatorRunnableCreatingTheProjectMonitorMessage, 8);
+		JobWaiterUtil.updateUI();
 		boolean oldValueForValidation = disableGlobalValidationDuringProjectCreation();
 		try {
-			SubMonitor subMonitor = SubMonitor.convert(monitor, Messages.basicProjectCreatorRunnableCreatingTheProjectMonitorMessage, 8);
 			CamelModelServiceCoreActivator.getProjectClasspathChangeListener().deactivate();
 
 			// first create the project skeleton
 			BasicProjectCreator c = new BasicProjectCreator(metadata);
 			boolean ok = c.create(subMonitor.split(1));
 			IProject prj = c.getProject();
-						
+			
 			if (ok) {
 				// then configure the project for the given template
 				AbstractProjectTemplate template = retrieveTemplate();
@@ -89,6 +91,8 @@ public abstract class BasicProjectCreatorRunnable implements IRunnableWithProgre
 				}
 			}
 
+			JobWaiterUtil.updateUI();
+			
 			// switch perspective if needed
 			if (requiresFuseIntegrationPerspective()) {
 				IWorkbenchWindow workbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
@@ -101,13 +105,15 @@ public abstract class BasicProjectCreatorRunnable implements IRunnableWithProgre
 			}
 			subMonitor.setWorkRemaining(5);
 				
+			JobWaiterUtil.updateUI();
+			
 			// refresh
 			try {
 				prj.refreshLocal(IProject.DEPTH_INFINITE, subMonitor.split(1));
 			} catch (CoreException ex) {
 				ProjectTemplatesActivator.pluginLog().logError(ex);
 			}
-
+			
 			// user hook for doing additional project configuration work
 			doAdditionalProjectConfiguration(prj, subMonitor.split(1));
 
@@ -119,9 +125,11 @@ public abstract class BasicProjectCreatorRunnable implements IRunnableWithProgre
 			
 			// finally open any editors required
 			openRequiredFilesInEditor(prj, subMonitor.split(1));
-
+			
 			// a final refresh
 			new BuildAndRefreshJobWaiterUtil().waitJob(subMonitor.split(1));
+			
+			JobWaiterUtil.updateUI();
 		} finally {
 			setbackValidationValueAfterProjectCreation(oldValueForValidation);
 			CamelModelServiceCoreActivator.getProjectClasspathChangeListener().activate();	

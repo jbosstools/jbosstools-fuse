@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.maven.model.Repository;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelCatalogCoordinates;
 import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelModel;
 
@@ -30,10 +31,21 @@ public interface ICamelManagerService {
 	/**
 	 * creates and returns the camel model for a specific version and runtime
 	 * 
-	 * @param runtimeProvider	the name of the runtime provider
-	 * @return	the camel model
+	 * @param camelVersion
+	 * @param runtimeProvider
+	 * @return
 	 */
 	CamelModel getCamelModel(String camelVersion, String runtimeProvider);
+	
+	/**
+	 * creates and returns the camel model for a specific version and runtime
+	 * 
+	 * @param camelVersion
+	 * @param runtimeProvider
+	 * @param monitor
+	 * @return
+	 */
+	CamelModel getCamelModel(String camelVersion, String runtimeProvider, IProgressMonitor monitor);
 	
 	/**
 	 * use this method to add additional repositories to use for dependency lookups

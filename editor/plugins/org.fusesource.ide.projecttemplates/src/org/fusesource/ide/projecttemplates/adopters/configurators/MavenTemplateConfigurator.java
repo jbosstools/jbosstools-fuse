@@ -19,8 +19,9 @@ import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.project.IProjectConfigurationManager;
 import org.eclipse.m2e.core.project.ResolverConfiguration;
-import org.fusesource.ide.camel.editor.utils.BuildAndRefreshJobWaiterUtil;
 import org.fusesource.ide.camel.model.service.core.util.CamelMavenUtils;
+import org.fusesource.ide.foundation.core.util.BuildAndRefreshJobWaiterUtil;
+import org.fusesource.ide.foundation.core.util.JobWaiterUtil;
 import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.projecttemplates.internal.Messages;
 import org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator;
@@ -41,6 +42,7 @@ public class MavenTemplateConfigurator extends DefaultTemplateConfigurator {
 	@Override
 	public boolean configure(IProject project, CommonNewProjectMetaData metadata, IProgressMonitor monitor) {
 		SubMonitor subMonitor = SubMonitor.convert(monitor, Messages.mavenTemplateConfiguratorConfiguringTemplatesMonitorMessage, 3);
+		JobWaiterUtil.updateUI();
 		boolean ok = super.configure(project, metadata, subMonitor.split(1));
 
 		if (ok) {
@@ -58,12 +60,14 @@ public class MavenTemplateConfigurator extends DefaultTemplateConfigurator {
 				MavenUtils.manageStagingRepositories(m2model);
 			}
 			subMonitor.setWorkRemaining(2);
+			JobWaiterUtil.updateUI();
 			
 			if (ok && !Strings.isBlank(metadata.getCamelVersion())) {
 				// by default configure the version of camel used in the pom.xml
 				ok = MavenUtils.configurePomCamelVersion(m2model, metadata, metadata.getCamelVersion(), subMonitor.split(1));
 			}
 			subMonitor.setWorkRemaining(1);
+			JobWaiterUtil.updateUI();
 		} finally {
 			MavenUtils.saveModelToPOM(project, m2model, subMonitor.split(1));
 		}
@@ -79,6 +83,7 @@ public class MavenTemplateConfigurator extends DefaultTemplateConfigurator {
 	 */
 	protected boolean configureMavenNature(IProject project, IProgressMonitor monitor) {
 		SubMonitor subMonitor = SubMonitor.convert(monitor,Messages.mavenTemplateConfiguratorConfiguringMavenNatureMonitorMessage, 4);
+		JobWaiterUtil.updateUI();
 		try {
 			ResolverConfiguration configuration = new ResolverConfiguration();
 			configuration.setResolveWorkspaceProjects(true);
