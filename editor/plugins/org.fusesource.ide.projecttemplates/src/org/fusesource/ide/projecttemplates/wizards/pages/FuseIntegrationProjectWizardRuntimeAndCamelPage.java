@@ -19,6 +19,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.beans.PojoProperties;
@@ -55,6 +57,7 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.wst.common.project.facet.core.runtime.RuntimeManager;
 import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.IRuntimeLifecycleListener;
+import org.eclipse.wst.server.core.IRuntimeType;
 import org.eclipse.wst.server.core.ServerCore;
 import org.eclipse.wst.server.ui.ServerUIUtil;
 import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
@@ -76,31 +79,6 @@ import org.fusesource.ide.projecttemplates.wizards.pages.model.FuseRuntimeKind;
  */
 public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage {
 
-	private static final String POSSIBLE_WILDFLY_RUNTIME_IDS =
-			"org.jboss.ide.eclipse.as.runtime.60,"
-			+ "org.jboss.ide.eclipse.as.runtime.70,"
-			+ "org.jboss.ide.eclipse.as.runtime.71,"
-			+ "org.jboss.ide.eclipse.as.runtime.wildfly.80,"
-			+ "org.jboss.ide.eclipse.as.runtime.wildfly.90,"
-			+ "org.jboss.ide.eclipse.as.runtime.wildfly.100,"
-			+ "org.jboss.ide.eclipse.as.runtime.wildfly.110,"
-			+ "org.jboss.ide.eclipse.as.runtime.eap.50,"
-			+ "org.jboss.ide.eclipse.as.runtime.eap.60,"
-			+ "org.jboss.ide.eclipse.as.runtime.eap.61,"
-			+ "org.jboss.ide.eclipse.as.runtime.eap.70,"
-			+ "org.jboss.ide.eclipse.as.runtime.eap.71";
-	private static final String POSSIBLE_KARAF_RUNTIME_IDS =
-			"org.fusesource.ide.fuseesb.runtime.60,"
-			+ "org.fusesource.ide.fuseesb.runtime.61,"
-			+ "org.fusesource.ide.fuseesb.runtime.62,"
-			+ "org.fusesource.ide.fuseesb.runtime.63,"
-			+ "org.fusesource.ide.fuseesb.runtime.70,"
-			+ "org.fusesource.ide.karaf.runtime.22,"
-			+ "org.fusesource.ide.karaf.runtime.23,"
-			+ "org.fusesource.ide.karaf.runtime.24,"
-			+ "org.fusesource.ide.karaf.runtime.30,"
-			+ "org.fusesource.ide.karaf.runtime.40,"
-			+ "org.fusesource.ide.karaf.runtime.41";
 	static final String UNKNOWN_CAMEL_VERSION = "unknown"; //$NON-NLS-1$
 	private static final Pattern MAVEN_VERSION_PATTERN = Pattern.compile("^(\\d+){1}(\\.\\d+){1}(\\.\\d+){1}?((\\.|\\-).*)?$");
 
@@ -225,12 +203,12 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 		Button karafRadio = new Button(runtimeGrp, SWT.RADIO);
 		karafRadio.setText(Messages.newProjectWizardRuntimePageKarafChoice);
 		dbc.bindValue(WidgetProperties.enabled().observe(karafRadio), standAloneObservable);
-		runtimeKarafComboViewer = createRuntimeSelection(runtimeGrp, karafRadio, POSSIBLE_KARAF_RUNTIME_IDS);
+		runtimeKarafComboViewer = createRuntimeSelection(runtimeGrp, karafRadio, getPossibleKarafRuntimeTypes());
 		
 		Button eapRadio = new Button(runtimeGrp, SWT.RADIO);
 		eapRadio.setText(Messages.newProjectWizardRuntimePageWildflyChoice);
 		dbc.bindValue(WidgetProperties.enabled().observe(eapRadio), standAloneObservable);
-		runtimeWildflyComboViewer = createRuntimeSelection(runtimeGrp, eapRadio, POSSIBLE_WILDFLY_RUNTIME_IDS);
+		runtimeWildflyComboViewer = createRuntimeSelection(runtimeGrp, eapRadio, getPossibleWildflyRuntimeTypes());
 		
 		SelectObservableValue<FuseRuntimeKind> observableValue = new SelectObservableValue<>();
 		observableValue.addOption(FuseRuntimeKind.SPRINGBOOT, WidgetProperties.selection().observe(springBootRadio));
@@ -238,6 +216,27 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 		observableValue.addOption(FuseRuntimeKind.WILDFLY, WidgetProperties.selection().observe(eapRadio));
 		dbc.bindValue(observableValue, environmentRuntimeObservable);
 		environmentRuntimeObservable.addChangeListener(event -> refreshFilteredTemplates());
+	}
+	
+	protected String getPossibleWildflyRuntimeTypes() {
+		return getAllRuntimeTypeIds()
+				.filter(runtimeTypeId ->
+						runtimeTypeId.startsWith("org.jboss.ide.eclipse.as.runtime.")
+						|| runtimeTypeId.startsWith("org.jboss.ide.eclipse.as.runtime.wildfly.")
+						|| runtimeTypeId.startsWith("org.jboss.ide.eclipse.as.runtime.eap."))
+				.collect(Collectors.joining(","));
+	}
+
+	protected Stream<String> getAllRuntimeTypeIds() {
+		return Stream.of(ServerCore.getRuntimeTypes()).map(IRuntimeType::getId);
+	}
+	
+	protected String getPossibleKarafRuntimeTypes() {
+		return getAllRuntimeTypeIds()
+				.filter(runtimeTypeId ->
+						runtimeTypeId.startsWith("org.fusesource.ide.fuseesb.runtime.")
+						|| runtimeTypeId.startsWith("org.fusesource.ide.karaf.runtime."))
+				.collect(Collectors.joining(","));
 	}
 
 	private ComboViewer createRuntimeSelection(Group runtimeGrp, Button relatedRadioButton, String possibleRuntimeIds) {
