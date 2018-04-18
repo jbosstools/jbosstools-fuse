@@ -77,7 +77,6 @@ public class Wsdl2RestWizardTest {
 		Iterator<IFile> fileIter = files.iterator();
 		while (fileIter.hasNext()) {
 			IFile tempFile = fileIter.next();
-			System.out.println(tempFile.toString());
 			if (tempFile.getName().equals(name)) {
 				return tempFile;
 			}
@@ -95,7 +94,6 @@ public class Wsdl2RestWizardTest {
 	    IResourceVisitor webInfCollector = new IResourceVisitor() {
 	      @Override
 	      public boolean visit(IResource resource) throws CoreException {
-				System.out.println("Resource visitor is visiting " + resource.toString());
 	        if (resource.getType() == IResource.FILE && extension.equalsIgnoreCase(resource.getFileExtension())) {
 	          xmlFiles.add((IFile) resource);
 	          return false;  // No need to visit sub-directories.
