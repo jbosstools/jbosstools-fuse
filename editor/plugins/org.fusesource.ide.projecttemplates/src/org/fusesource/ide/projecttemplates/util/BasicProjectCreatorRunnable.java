@@ -22,6 +22,7 @@ import org.eclipse.jface.dialogs.MessageDialogWithToggle;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.osgi.util.NLS;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IPerspectiveDescriptor;
 import org.eclipse.ui.IWorkbenchPreferenceConstants;
 import org.eclipse.ui.IWorkbenchWindow;
@@ -52,6 +53,8 @@ import org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator;
 public abstract class BasicProjectCreatorRunnable implements IRunnableWithProgress {
 	
 	protected CommonNewProjectMetaData metadata;
+	private boolean templateConfigDone;
+	private boolean camelCatalogCachingDone;
 	
 	public BasicProjectCreatorRunnable(CommonNewProjectMetaData metadata) {
 		this.metadata = metadata;
@@ -80,14 +83,9 @@ public abstract class BasicProjectCreatorRunnable implements IRunnableWithProgre
 			IProject prj = c.getProject();
 			
 			if (ok) {
-				// then configure the project for the given template
-				AbstractProjectTemplate template = retrieveTemplate();
-				// now execute the template
-				try {
-					template.create(prj, metadata, subMonitor.split(1));
-				} catch (CoreException ex) {
-					ProjectTemplatesActivator.pluginLog().logError("Unable to create project...", ex); //$NON-NLS-1$
-				}
+				Display.getDefault().asyncExec( () ->  {
+					createAndConfigureTemplate(prj, metadata, subMonitor.split(1));
+				});
 			}
 
 			// switch perspective if needed
@@ -101,6 +99,11 @@ public abstract class BasicProjectCreatorRunnable implements IRunnableWithProgre
 				}
 			}
 			subMonitor.setWorkRemaining(5);
+			
+			while (!templateConfigDone) {
+				// process UI events while waiting for the template to be created and configured
+				Display.getDefault().readAndDispatch();
+			}
 				
 			// refresh
 			try {
@@ -114,8 +117,17 @@ public abstract class BasicProjectCreatorRunnable implements IRunnableWithProgre
 
 			// preload camel catalog for the given version
 			if (shouldPreloadCatalog()) {
-				CamelCatalogCacheManager.getInstance().getCamelModelForProject(prj, subMonitor.split(1, SubMonitor.SUPPRESS_NONE));
+				Display.getDefault().asyncExec( () -> { 
+					CamelCatalogCacheManager.getInstance().getCamelModelForProject(prj, subMonitor.split(1, SubMonitor.SUPPRESS_NONE));
+					setCamelCatalogCachingDone(true);
+				});
+				
+				while (!camelCatalogCachingDone) {
+					// process UI events while waiting for Camel catalog to be prepared
+					Display.getDefault().readAndDispatch();
+				}
 			}
+			
 			subMonitor.setWorkRemaining(2);
 			
 			// finally open any editors required
@@ -126,6 +138,22 @@ public abstract class BasicProjectCreatorRunnable implements IRunnableWithProgre
 		} finally {
 			setbackValidationValueAfterProjectCreation(oldValueForValidation);
 			CamelModelServiceCoreActivator.getProjectClasspathChangeListener().activate();	
+		}
+	}
+	
+	private void createAndConfigureTemplate(final IProject prj, final CommonNewProjectMetaData meta, final IProgressMonitor monitor) {
+		SubMonitor subMonitor = SubMonitor.convert(monitor, 2);
+		// then configure the project for the given template
+		AbstractProjectTemplate template = retrieveTemplate();
+		subMonitor.setWorkRemaining(1);
+		// now execute the template
+		try {
+			template.create(prj, meta, subMonitor.split(1));
+		} catch (CoreException ex) {
+			ProjectTemplatesActivator.pluginLog().logError("Unable to create project...", ex); //$NON-NLS-1$
+		} finally {
+			setTemplateConfigDone(true);
+			subMonitor.setWorkRemaining(0);
 		}
 	}
 	
@@ -243,5 +271,19 @@ public abstract class BasicProjectCreatorRunnable implements IRunnableWithProgre
 		} else {
 			return metadata.getTemplate();
 		}
+	}
+	
+	/**
+	 * @param camelCatalogCachingDone the camelCatalogCachingDone to set
+	 */
+	public void setCamelCatalogCachingDone(boolean camelCatalogCachingDone) {
+		this.camelCatalogCachingDone = camelCatalogCachingDone;
+	}
+	
+	/**
+	 * @param templateConfigDone the templateConfigDone to set
+	 */
+	public void setTemplateConfigDone(boolean templateConfigDone) {
+		this.templateConfigDone = templateConfigDone;
 	}
 }
