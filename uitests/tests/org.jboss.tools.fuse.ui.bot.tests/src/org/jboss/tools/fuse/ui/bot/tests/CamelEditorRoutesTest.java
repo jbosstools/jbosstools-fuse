@@ -36,7 +36,7 @@ import org.jboss.tools.fuse.reddeer.component.Route;
 import org.jboss.tools.fuse.reddeer.editor.CamelComponentEditPart;
 import org.jboss.tools.fuse.reddeer.editor.CamelEditor;
 import org.jboss.tools.fuse.reddeer.projectexplorer.CamelProject;
-import org.jboss.tools.fuse.ui.bot.tests.utils.ProjectFactory;
+import org.jboss.tools.fuse.reddeer.utils.ProjectFactory;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

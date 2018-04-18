@@ -4,7 +4,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 	<parent>
 		<groupId>org.fusesource.ide</groupId>
 		<artifactId>core</artifactId>
-		<version>10.3.0-SNAPSHOT</version>
+		<version>11.0.0-SNAPSHOT</version>
 	</parent>
 	<groupId>org.fusesource.ide.core</groupId>
 	<artifactId>plugins</artifactId>
@@ -15,6 +15,10 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 		<module>org.fusesource.ide.foundation.ui</module>
 		<module>org.fusesource.ide.camel.model.service.core</module>
 		<module>org.fusesource.ide.camel.model.service.impl</module>
+		<module>org.fusesource.ide.camel.model.service.impl.v2151redhat621216</module>
+		<module>org.fusesource.ide.camel.model.service.impl.v2170redhat630310</module>
+		<module>org.fusesource.ide.camel.model.service.impl.v2181redhat000021</module>
+		<module>org.fusesource.ide.camel.model.service.impl.v2203</module>
 		<module>org.fusesource.ide.camel.validation</module>
 		<module>org.fusesource.ide.cheatsheets</module>
 		<module>org.fusesource.ide.graph</module>

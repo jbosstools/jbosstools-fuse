@@ -2,7 +2,7 @@
 <feature
       id="org.fusesource.ide.core.feature"
       label="%featureName"
-      version="10.3.0.qualifier"
+      version="11.0.0.qualifier"
       provider-name="%providerName"
       plugin="org.fusesource.ide.tooling"
       license-feature="org.jboss.tools.foundation.license.feature"
@@ -140,6 +140,34 @@
 
    <plugin
          id="org.fusesource.ide.camel.validation"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.fusesource.ide.camel.model.service.impl.v2151redhat621216"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.fusesource.ide.camel.model.service.impl.v2170redhat630310"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.fusesource.ide.camel.model.service.impl.v2181redhat000021"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.fusesource.ide.camel.model.service.impl.v2203"
          download-size="0"
          install-size="0"
          version="0.0.0"

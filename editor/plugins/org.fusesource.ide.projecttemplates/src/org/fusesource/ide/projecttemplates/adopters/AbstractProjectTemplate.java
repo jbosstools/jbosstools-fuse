@@ -102,4 +102,8 @@ public abstract class AbstractProjectTemplate {
 		bomToSearch.setArtifactId(artifactId);
 		return new OnlineArtifactVersionSearcher().findLatestVersion(new NullProgressMonitor(), bomToSearch);
 	}
+
+	public boolean isDefault(EnvironmentData environment, CamelDSLType dslType) {
+		return false;
+	}
 }

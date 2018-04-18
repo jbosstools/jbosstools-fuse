@@ -444,7 +444,7 @@ public class CamelEditor extends GEFEditor {
 	 * @param value
 	 *            value of the property
 	 */
-	public void setProperty(Class<? extends Widget> type, String name, String value) {
+	public void setProperty(Class<? extends Widget<?>> type, String name, String value) {
 		log.debug("Setting '" + value + "' as the property '" + name + "' of selelected component in the Camel Editor");
 		PropertySheet prop = new PropertySheet();
 		prop.open();

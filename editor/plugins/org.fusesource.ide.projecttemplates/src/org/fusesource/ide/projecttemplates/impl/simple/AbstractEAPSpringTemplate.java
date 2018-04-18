@@ -52,5 +52,10 @@ public abstract class AbstractEAPSpringTemplate extends AbstractProjectTemplate 
 		}
 
 	}
+	
+	@Override
+	public boolean isDefault(EnvironmentData environment, CamelDSLType dslType) {
+		return isCompatible(environment) && CamelDSLType.SPRING.equals(dslType);
+	}
 
 }

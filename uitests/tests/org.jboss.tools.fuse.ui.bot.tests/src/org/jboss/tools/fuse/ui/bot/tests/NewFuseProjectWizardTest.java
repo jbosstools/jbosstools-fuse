@@ -38,12 +38,12 @@ import org.jboss.tools.fuse.reddeer.LogGrapper;
 import org.jboss.tools.fuse.reddeer.ResourceHelper;
 import org.jboss.tools.fuse.reddeer.SupportedCamelVersions;
 import org.jboss.tools.fuse.reddeer.dialog.WhereToFindMoreTemplatesMessageDialog;
+import org.jboss.tools.fuse.reddeer.utils.LogChecker;
+import org.jboss.tools.fuse.reddeer.utils.ProjectFactory;
 import org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizard;
 import org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardAdvancedPage;
 import org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardFirstPage;
 import org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardRuntimePage;
-import org.jboss.tools.fuse.ui.bot.tests.utils.LogChecker;
-import org.jboss.tools.fuse.ui.bot.tests.utils.ProjectFactory;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -143,16 +143,6 @@ public class NewFuseProjectWizardTest {
 		}
 	}
 
-	private boolean hasErrors() {
-
-		new ProblemsView().open();
-		for (TreeItem item : new DefaultTree().getItems()) {
-			if (item.getText().toLowerCase().contains("error"))
-				return true;
-		}
-		return false;
-	}
-
 	/**
 	 * <p>
 	 * Verifies that all supported Camel versions are available in New Fuse Project Wizard
@@ -231,4 +221,13 @@ public class NewFuseProjectWizardTest {
 		LogChecker.assertNoFuseError();
 	}
 
+	private boolean hasErrors() {
+
+		new ProblemsView().open();
+		for (TreeItem item : new DefaultTree().getItems()) {
+			if (item.getText().toLowerCase().contains("error"))
+				return true;
+		}
+		return false;
+	}
 }

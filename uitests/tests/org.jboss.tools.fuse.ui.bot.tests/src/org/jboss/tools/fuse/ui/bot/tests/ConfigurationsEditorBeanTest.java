@@ -11,7 +11,7 @@
 package org.jboss.tools.fuse.ui.bot.tests;
 
 import static org.jboss.tools.fuse.reddeer.ResourceHelper.getResourceAbsolutePath;
-import static org.jboss.tools.fuse.ui.bot.tests.utils.ProjectFactory.importExistingProject;
+import static org.jboss.tools.fuse.reddeer.utils.ProjectFactory.importExistingProject;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 

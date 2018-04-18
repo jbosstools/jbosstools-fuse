@@ -54,5 +54,10 @@ public abstract class AbstractCBRTemplate extends AbstractProjectTemplate {
 		}
 
 	}
+	
+	@Override
+	public boolean isDefault(EnvironmentData environment, CamelDSLType dslType) {
+		return isCompatible(environment) && CamelDSLType.BLUEPRINT.equals(dslType);
+	}
 
 }

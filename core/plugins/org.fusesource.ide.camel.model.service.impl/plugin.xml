@@ -7,5 +7,10 @@
             class="org.fusesource.ide.camel.model.service.internal.CamelService">
       </class>
    </extension>
-
+   <extension-point id="org.fusesource.ide.camel.model.service.impl.camelcatalogprovider" name="Camel Service" schema="schema/camelcatalogprovider.exsd"/>
+	<extension
+         point="org.fusesource.ide.camel.model.service.impl.camelcatalogprovider">
+      <class class="org.fusesource.ide.camel.model.service.internal.CamelCatalogWrapper">
+      </class>
+   </extension>
 </plugin>

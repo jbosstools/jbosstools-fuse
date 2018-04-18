@@ -45,5 +45,10 @@ public class EnvironmentData {
 	public void setFuseRuntime(FuseRuntimeKind fuseRuntime) {
 		this.fuseRuntime = fuseRuntime;
 	}
+	
+	@Override
+	public String toString() {
+		return camelVersion + " " + deploymentPlatform + " " + fuseRuntime;
+	}
 
 }

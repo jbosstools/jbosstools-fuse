@@ -10,21 +10,27 @@
  ******************************************************************************/ 
 package org.fusesource.ide.projecttemplates.wizards.pages;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.FilteredTree;
@@ -69,6 +75,7 @@ public class FuseIntegrationProjectWizardTemplatePage extends WizardPage {
 		
 		setControl(container);
 		
+		selectDefaultTemplates(listTemplates);
 		validate();
 	}
 
@@ -93,7 +100,7 @@ public class FuseIntegrationProjectWizardTemplatePage extends WizardPage {
 		listTemplates = createFilteredTree(templates);
 
 		templateInfoText = new Text(templates, SWT.MULTI | SWT.READ_ONLY | SWT.WRAP | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
-		templateInfoText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		templateInfoText.setLayoutData(GridDataFactory.fillDefaults().grab(false, true).hint(200, SWT.DEFAULT).create());
 	}
 
 	protected void createTemplatesTopInformation(Composite templates) {
@@ -109,10 +116,6 @@ public class FuseIntegrationProjectWizardTemplatePage extends WizardPage {
 		filteredTemplatesInformationMessage.setFont(JFaceResources.getFontRegistry().getItalic(JFaceResources.DEFAULT_FONT));
 	}
 
-	/**
-	 * @param parent
-	 * @return
-	 */
 	private FilteredTree createFilteredTree(Composite parent) {
 		final int treeStyle = SWT.SINGLE | SWT.V_SCROLL | SWT.H_SCROLL | SWT.BORDER;
 		listTemplates = new FilteredTree(parent, treeStyle, new TemplateNameAndKeywordPatternFilter(), true);
@@ -195,7 +198,53 @@ public class FuseIntegrationProjectWizardTemplatePage extends WizardPage {
 		if (listTemplates != null) {
 			listTemplates.getViewer().refresh();
 			listTemplates.getViewer().expandAll();
+			selectDefaultTemplates(listTemplates);
 		}
+	}
+
+	private void selectDefaultTemplates(FilteredTree listTemplates) {
+		TreeViewer viewer = listTemplates.getViewer();
+		Set<TreeItem> unfilteredItems = retrieveAllTreeItems(viewer);
+		if (viewer.getSelection().isEmpty()) {
+			if (unfilteredItems.size() == 1) {
+				viewer.setSelection(new StructuredSelection(unfilteredItems.iterator().next().getData()));
+			} else {
+				TemplateItem defaultToSelect = determineDefaultTemplateToSelect(unfilteredItems, environment);
+				if (defaultToSelect != null) {
+					viewer.setSelection(new StructuredSelection(defaultToSelect));
+				}
+			}
+		}
+	}
+
+	protected Set<TreeItem> retrieveAllTreeItems(TreeViewer viewer) {
+		Set<TreeItem> res = new HashSet<>();
+		TreeItem[] rootItems = viewer.getTree().getItems();
+		res.addAll(retrieveAllTreeItems(rootItems));
+		return res;
+	}
+
+	private Set<TreeItem> retrieveAllTreeItems(TreeItem[] items) {
+		Set<TreeItem> res = new HashSet<>();
+		if(items !=null) {
+			res.addAll(Arrays.asList(items));
+			for (TreeItem treeItem : items) {
+				res.addAll(retrieveAllTreeItems(treeItem.getItems()));
+			}
+		}
+		return res;
+	}
+
+	private TemplateItem determineDefaultTemplateToSelect(Set<TreeItem> unfilteredItems, EnvironmentData environment) {
+		for (TreeItem treeItem : unfilteredItems) {
+			if (treeItem.getData() instanceof TemplateItem) {
+				TemplateItem templateItem = (TemplateItem) treeItem.getData();
+				if (templateItem.isDefault(environment)) {
+					return templateItem;
+				}
+			}
+		}
+		return null;
 	}
 
 }

@@ -86,4 +86,8 @@ public class TemplateItem implements TemplateOrCategoryItem {
 	public CamelDSLType getDslType() {
 		return dslType;
 	}
+
+	public boolean isDefault(EnvironmentData environment) {
+		return template.isDefault(environment, dslType);
+	}
 }

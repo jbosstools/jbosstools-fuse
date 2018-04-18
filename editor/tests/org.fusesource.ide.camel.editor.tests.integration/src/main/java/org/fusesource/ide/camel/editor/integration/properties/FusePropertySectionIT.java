@@ -110,19 +110,4 @@ public class FusePropertySectionIT {
 //		Mockito.verify(label).setForeground(Mockito.any(Color.class));
 	}
 
-	@Test
-	public void testExpressionLabeledAsLanguage(){
-		Parameter parameter = new Parameter();
-		parameter.setName("expression");
-		parameter.setRequired("true");
-		parameter.setDeprecated("false");
-		parameter.setOneOf(new String[] { "simple", "header", "constant" });
-		parameter.setKind("expression");
-		parameter.setJavaType("org.apache.camel.model.language.ExpressionDefinition");
-		
-		fusePropertySection.createPropertyLabel(toolkit, page, parameter);
-		
-		assertEquals("Language *", labelCaptor.getValue());
-//		Mockito.verify(label).setForeground(Mockito.any(Color.class));
-	}
 }

@@ -13,6 +13,7 @@ package org.jboss.tools.fuse.ui.bot.tests;
 import static org.eclipse.reddeer.requirements.server.ServerRequirementState.PRESENT;
 import static org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardDeploymentType.STANDALONE;
 import static org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardRuntimeType.KARAF;
+import static org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardRuntimeType.SPRINGBOOT;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -25,10 +26,10 @@ import org.eclipse.reddeer.workbench.handler.WorkbenchShellHandler;
 import org.jboss.tools.fuse.reddeer.LogGrapper;
 import org.jboss.tools.fuse.reddeer.requirement.FuseRequirement;
 import org.jboss.tools.fuse.reddeer.requirement.FuseRequirement.Fuse;
+import org.jboss.tools.fuse.reddeer.utils.ProjectFactory;
 import org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizard;
 import org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardFirstPage;
 import org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardRuntimePage;
-import org.jboss.tools.fuse.ui.bot.tests.utils.ProjectFactory;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -76,7 +77,8 @@ public class NewFuseProjectWizardWithFuseRequirementsTest {
 		NewFuseIntegrationProjectWizardRuntimePage secondPage = new NewFuseIntegrationProjectWizardRuntimePage(wiz);
 		secondPage.setDeploymentType(STANDALONE);
 		secondPage.setRuntimeType(KARAF);
-		assertEquals("There is something wrong in 'Target Runtime' Combo box!", 2, secondPage.getKarafRuntimes().size());
+		assertEquals("There is something wrong in 'Target Runtime' Combo box!", 2,
+				secondPage.getKarafRuntimes().size());
 		for (String temp : secondPage.getKarafRuntimes()) {
 			if (!(temp.equals("No Runtime selected")
 					|| temp.equals(serverRequirement.getConfiguration().getServer().getRuntimeName()))) {
@@ -89,5 +91,47 @@ public class NewFuseProjectWizardWithFuseRequirementsTest {
 				serverRequirement.getConfiguration().getCamelVersion(), secondPage.getSelectedCamelVersion());
 		wiz.cancel();
 		assertTrue("There are some errors in Error Log", LogGrapper.getPluginErrors("fuse").size() == 0);
+	}
+
+	/**
+	 * <p>
+	 * Tests switching of runtime types and checking whether Camel version is editable. For more details:
+	 * https://issues.jboss.org/browse/FUSETOOLS-2877
+	 * </p>
+	 * <b>Steps:</b>
+	 * <ol>
+	 * <li>setup a JBoss Fuse runtime</li>
+	 * <li>Invoke <i>File --> New --> Fuse Integration Project</i> wizard</li>
+	 * <li>Set project name</li>
+	 * <li>Hit 'Next'</li>
+	 * <li>Select the configured runtime and check whether Camel version is set properly and user cannot change it</li>
+	 * <li>Select Runtime type to "SpringBoot" and check whether Camel version is editable</li>
+	 * <li>Select Runtime type back to Karaf. There should be a runtime selected in appropriate combobox. Check whether
+	 * Camel version combobox is disabled</li>
+	 * <li>Cancel the wizard</li>
+	 * </ol>
+	 */
+	@Test
+	public void testRuntimeTypesSwitching() {
+		NewFuseIntegrationProjectWizard wiz = new NewFuseIntegrationProjectWizard();
+		wiz.open();
+		NewFuseIntegrationProjectWizardFirstPage firstPage = new NewFuseIntegrationProjectWizardFirstPage(wiz);
+		firstPage.setProjectName("test");
+		wiz.next();
+		NewFuseIntegrationProjectWizardRuntimePage secondPage = new NewFuseIntegrationProjectWizardRuntimePage(wiz);
+		secondPage.setDeploymentType(STANDALONE);
+		secondPage.setRuntimeType(KARAF);
+		assertTrue("No runtime is selected => Camel version should be editable",
+				secondPage.isCamelVersionComboEditable());
+		secondPage.selectKarafRuntime(serverRequirement.getConfiguration().getServer().getRuntimeName());
+		assertFalse("A runtime is selected => Camel version should not be editable",
+				secondPage.isCamelVersionComboEditable());
+		secondPage.setRuntimeType(SPRINGBOOT);
+		assertTrue("SpringBoot runtime is selected => Camel version should be editable",
+				secondPage.isCamelVersionComboEditable());
+		secondPage.setRuntimeType(KARAF);
+		assertFalse("A runtime is selected => Camel version should not be editable",
+				secondPage.isCamelVersionComboEditable());
+		wiz.cancel();
 	}
 }
