@@ -39,7 +39,6 @@ import org.fusesource.ide.branding.perspective.FusePerspective;
 import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelCatalogCacheManager;
 import org.fusesource.ide.camel.model.service.core.internal.CamelModelServiceCoreActivator;
 import org.fusesource.ide.foundation.core.util.BuildAndRefreshJobWaiterUtil;
-import org.fusesource.ide.foundation.core.util.JobWaiterUtil;
 import org.fusesource.ide.foundation.core.util.VersionUtil;
 import org.fusesource.ide.projecttemplates.adopters.AbstractProjectTemplate;
 import org.fusesource.ide.projecttemplates.impl.simple.EmptyProjectTemplateForFuse6;
@@ -70,7 +69,7 @@ public abstract class BasicProjectCreatorRunnable implements IRunnableWithProgre
 	@Override
 	public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 		SubMonitor subMonitor = SubMonitor.convert(monitor, Messages.basicProjectCreatorRunnableCreatingTheProjectMonitorMessage, 8);
-		JobWaiterUtil.updateUI();
+
 		boolean oldValueForValidation = disableGlobalValidationDuringProjectCreation();
 		try {
 			CamelModelServiceCoreActivator.getProjectClasspathChangeListener().deactivate();
@@ -91,8 +90,6 @@ public abstract class BasicProjectCreatorRunnable implements IRunnableWithProgre
 				}
 			}
 
-			JobWaiterUtil.updateUI();
-			
 			// switch perspective if needed
 			if (requiresFuseIntegrationPerspective()) {
 				IWorkbenchWindow workbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
@@ -105,8 +102,6 @@ public abstract class BasicProjectCreatorRunnable implements IRunnableWithProgre
 			}
 			subMonitor.setWorkRemaining(5);
 				
-			JobWaiterUtil.updateUI();
-			
 			// refresh
 			try {
 				prj.refreshLocal(IProject.DEPTH_INFINITE, subMonitor.split(1));
@@ -128,8 +123,6 @@ public abstract class BasicProjectCreatorRunnable implements IRunnableWithProgre
 			
 			// a final refresh
 			new BuildAndRefreshJobWaiterUtil().waitJob(subMonitor.split(1));
-			
-			JobWaiterUtil.updateUI();
 		} finally {
 			setbackValidationValueAfterProjectCreation(oldValueForValidation);
 			CamelModelServiceCoreActivator.getProjectClasspathChangeListener().activate();	

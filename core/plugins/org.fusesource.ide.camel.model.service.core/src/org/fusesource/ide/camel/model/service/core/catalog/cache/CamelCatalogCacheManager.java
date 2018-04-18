@@ -25,7 +25,6 @@ import org.fusesource.ide.camel.model.service.core.CamelServiceManagerUtil;
 import org.fusesource.ide.camel.model.service.core.internal.Messages;
 import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
 import org.fusesource.ide.camel.model.service.core.util.CamelMavenUtils;
-import org.fusesource.ide.foundation.core.util.JobWaiterUtil;
 
 /**
  * @author lhein
@@ -109,7 +108,6 @@ public class CamelCatalogCacheManager {
 	 */
 	protected void initializeCatalog(CamelCatalogCoordinates coordinates, IProgressMonitor monitor) {
 		SubMonitor subMonitor = SubMonitor.convert(monitor, NLS.bind(Messages.initializingCamelModel, coordinates.getVersion()), 1);
-		JobWaiterUtil.updateUI();
 		Dependency dep = new Dependency();
 		dep.setGroupId(coordinates.getGroupId());
 		dep.setArtifactId(coordinates.getArtifactId());
@@ -121,7 +119,6 @@ public class CamelCatalogCacheManager {
 	
 	public CamelModel getCamelModelForProject(IProject project, IProgressMonitor monitor) {
 		SubMonitor subMonitor = SubMonitor.convert(monitor, Messages.retrievingCamelModel, 3);
-		JobWaiterUtil.updateUI();
 		CamelCatalogCoordinates coords;
 		if (project == null) {
 			if(lastRetrievedCamelCatalog != null) {

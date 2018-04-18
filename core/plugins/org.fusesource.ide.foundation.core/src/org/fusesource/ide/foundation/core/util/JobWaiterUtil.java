@@ -16,7 +16,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.swt.widgets.Display;
 import org.fusesource.ide.foundation.core.internal.FoundationCoreActivator;
 
 /**
@@ -59,7 +58,6 @@ public class JobWaiterUtil {
 		try {
 			for (Object jobFamily : jobFamilies) {
 				Job.getJobManager().join(jobFamily, subMon.split(1));
-				updateUI();
 			}
 		} catch (InterruptedException iex) {
 			// Workaround to bug
@@ -76,12 +74,6 @@ public class JobWaiterUtil {
 		subMon.setWorkRemaining(0);
 	}
 
-	public static void updateUI() {
-		while (Display.getDefault().readAndDispatch()) {
-			// wait for more events
-		}
-	}
-	
 	public boolean isEndless() {
 		return isEndless;
 	}

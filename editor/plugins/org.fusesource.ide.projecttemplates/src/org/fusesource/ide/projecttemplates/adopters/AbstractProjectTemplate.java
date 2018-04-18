@@ -20,7 +20,6 @@ import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.core.runtime.jobs.Job;
 import org.fusesource.ide.camel.model.service.core.util.OnlineArtifactVersionSearcher;
-import org.fusesource.ide.foundation.core.util.JobWaiterUtil;
 import org.fusesource.ide.projecttemplates.adopters.configurators.TemplateConfiguratorSupport;
 import org.fusesource.ide.projecttemplates.adopters.creators.TemplateCreatorSupport;
 import org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType;
@@ -73,7 +72,6 @@ public abstract class AbstractProjectTemplate {
 		project.refreshLocal(IProject.DEPTH_INFINITE, subMonitor.split(1));
 		try {
 			Job.getJobManager().join(ResourcesPlugin.FAMILY_MANUAL_REFRESH, subMonitor.split(1));
-			JobWaiterUtil.updateUI();
 		} catch (OperationCanceledException e) {
 			ProjectTemplatesActivator.pluginLog().logError(e);
 		} catch (InterruptedException ex) { 
