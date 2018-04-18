@@ -22,6 +22,7 @@ import org.apache.camel.catalog.maven.MavenVersionManager;
 import org.apache.camel.catalog.springboot.SpringBootRuntimeProvider;
 import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
 import org.fusesource.ide.camel.model.service.impl.ICamelCatalogWrapper;
+import org.fusesource.ide.foundation.core.util.VersionUtil;
 import org.fusesource.ide.preferences.StagingRepositoriesUtils;
 import org.jboss.tools.foundation.core.plugin.log.IPluginLog;
 
@@ -63,7 +64,7 @@ public class DynamicCamelCatalog implements ICamelCatalogWrapper {
 
 	public String loadVersion(String requestedVersion) {
 		if (!catalog.loadVersion(requestedVersion)) {
-			if(OLDER_CAMEL_VERSION_WITH_CATALOG.compareTo(requestedVersion) > 1) {
+			if (new VersionUtil().isGreaterThan(OLDER_CAMEL_VERSION_WITH_CATALOG, requestedVersion)) {
 				logger.logError("No catalog available for older version than 2.15.0, the 2.15.6 catalog will be used."); //$NON-NLS-0$
 				if(catalog.loadVersion(OLDER_CAMEL_CATALOG_VERSION_TO_LOAD_IN_CASE_OF_ERROR)) {
 					return OLDER_CAMEL_CATALOG_VERSION_TO_LOAD_IN_CASE_OF_ERROR;
