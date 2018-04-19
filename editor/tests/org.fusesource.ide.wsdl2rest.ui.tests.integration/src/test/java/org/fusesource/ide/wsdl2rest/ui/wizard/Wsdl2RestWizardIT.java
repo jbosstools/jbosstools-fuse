@@ -33,14 +33,14 @@ import org.junit.Test;
  * 
  * @author brianf
  */
-public class Wsdl2RestWizardTest {
+public class Wsdl2RestWizardIT {
 	
     static final String WSDL_LOCATION = "src/test/resources/wsdl/Address.wsdl"; //$NON-NLS-1$
     static final String OUTPUT_PATH = "target/generated-wsdl2rest"; //$NON-NLS-1$
     static final String SPRING_CAMEL_PATH = "/src/main/resources/META-INF/spring/doclit-camel-context.xml"; //$NON-NLS-1$
 
     @Rule
-	public FuseProject fuseProject = new FuseProject(Wsdl2RestWizardTest.class.getName());
+	public FuseProject fuseProject = new FuseProject(Wsdl2RestWizardIT.class.getName());
 
 	@Test
 	public void testWsdl2RestWizardFinish() throws Exception {
