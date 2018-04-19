@@ -218,5 +218,20 @@
       </plugin>
     </plugins>
   </build>
+  
+  <repositories>
+    	<repository>
+  		<id>Saved staging repo for cxf</id>
+  		<url>https://repository.jboss.org/nexus/content/repositories/fusesource_releases_external-9109/</url>
+  	</repository>
+  	  	<repository>
+  		<id>Saved staging repo for camel</id>
+  		<url>https://repository.jboss.org/nexus/content/repositories/fusesource_releases_external-9110/</url>
+  	</repository>
+  	<repository>
+  		<id>Saved staging repo for WSDL2rest</id>
+  		<url>https://repository.jboss.org/nexus/content/repositories/fusesource_releases_external-9111/</url>
+  	</repository>
+  </repositories>
 
 </project>
