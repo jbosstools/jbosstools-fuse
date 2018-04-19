@@ -44,6 +44,7 @@ Bundle-ClassPath: .,
  lib/wsd2rest-impl.jar,
  lib/wsdl2rest-util.jar,
  lib/commons-validator-1.6.jar
-Export-Package: org.jboss.fuse.wsdl2rest,
+Export-Package: org.apache.commons.validator.routines;x-friends:="org.fusesource.ide.wsdl2rest.ui",
+ org.jboss.fuse.wsdl2rest,
  org.jboss.fuse.wsdl2rest.impl,
  org.jboss.fuse.wsdl2rest.util
