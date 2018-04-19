@@ -8,7 +8,7 @@
  * Contributors: 
  * Red Hat, Inc. - initial API and implementation 
  ******************************************************************************/ 
-package org.fusesource.ide.wsdl2rest.ui.wizard;
+package org.fusesource.ide.wsdl2rest.ui.tests.integration;
 
 import java.io.File;
 import java.net.URL;
@@ -24,6 +24,7 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceVisitor;
 import org.eclipse.core.runtime.CoreException;
 import org.fusesource.ide.camel.model.service.core.tests.integration.core.io.FuseProject;
+import org.fusesource.ide.wsdl2rest.ui.wizard.Wsdl2RestWizard;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
