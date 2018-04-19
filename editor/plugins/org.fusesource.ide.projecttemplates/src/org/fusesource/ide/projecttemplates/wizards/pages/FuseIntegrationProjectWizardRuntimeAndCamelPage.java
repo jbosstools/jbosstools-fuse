@@ -54,6 +54,7 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.wst.common.project.facet.core.runtime.RuntimeManager;
 import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.IRuntimeLifecycleListener;
@@ -202,11 +203,13 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 		
 		Button karafRadio = new Button(runtimeGrp, SWT.RADIO);
 		karafRadio.setText(Messages.newProjectWizardRuntimePageKarafChoice);
+		karafRadio.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).span(3, 1).create());
 		dbc.bindValue(WidgetProperties.enabled().observe(karafRadio), standAloneObservable);
 		runtimeKarafComboViewer = createRuntimeSelection(runtimeGrp, karafRadio, getPossibleKarafRuntimeTypes());
 		
 		Button eapRadio = new Button(runtimeGrp, SWT.RADIO);
 		eapRadio.setText(Messages.newProjectWizardRuntimePageWildflyChoice);
+		eapRadio.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).span(3, 1).create());
 		dbc.bindValue(WidgetProperties.enabled().observe(eapRadio), standAloneObservable);
 		runtimeWildflyComboViewer = createRuntimeSelection(runtimeGrp, eapRadio, getPossibleWildflyRuntimeTypes());
 		
@@ -240,6 +243,9 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 	}
 
 	private ComboViewer createRuntimeSelection(Group runtimeGrp, Button relatedRadioButton, String possibleRuntimeIds) {
+		Label runtimeLabel = new Label(runtimeGrp, SWT.NONE);
+		runtimeLabel.setText(Messages.newProjectWizardRuntimePageOptionalRuntime);
+		runtimeLabel.setLayoutData(GridDataFactory.fillDefaults().indent(20, 4).create());
 		ComboViewer runtimeComboViewer = new ComboViewer(runtimeGrp, SWT.NONE | SWT.READ_ONLY);
 		runtimeComboViewer.setComparator(new ViewerComparator((o1, o2) -> {
 			if (Messages.newProjectWizardRuntimePageNoRuntimeSelectedLabel.equals(o1)){
@@ -279,6 +285,7 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 		
 		dbc.bindValue(WidgetProperties.enabled().observe(runtimeComboViewer.getCombo()), WidgetProperties.selection().observe(relatedRadioButton));
 		dbc.bindValue(WidgetProperties.enabled().observe(runtimeNewButton), WidgetProperties.selection().observe(relatedRadioButton));
+		dbc.bindValue(WidgetProperties.enabled().observe(runtimeLabel), WidgetProperties.selection().observe(relatedRadioButton));
 		
 		return runtimeComboViewer;
 	}
