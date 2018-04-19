@@ -249,7 +249,7 @@ public class Wsdl2RestWizard extends Wizard implements INewWizard {
 					} else {
 						IPath projectPath = ResourcesPlugin.getWorkspace().getRoot().findMember(project.getName()).getLocation();
 						Path contextpath = new File(projectPath.makeAbsolute() + File.separator + "rest-blueprint-context.xml").toPath(); //$NON-NLS-1$
-						tool.setBlueprintContext(Paths.get(camelPath.toFile().toURI()));
+						tool.setBlueprintContext(contextpath);
 					}
 				}
 				if (!Strings.isEmpty(options.getTargetServiceAddress())) {
