@@ -12,5 +12,5 @@
   
   <artifactId>org.fusesource.ide.wsdl2rest.ui.tests.integration</artifactId>
   <packaging>eclipse-test-plugin</packaging>
-  <name>Red Hat Fuse Tooling :: Camel Editor :: Tests :: Wsdl2Rest -Integration Tests</name>
+  <name>Red Hat Fuse Tooling :: Camel Editor :: Tests :: Wsdl2Rest - Integration Tests</name>
 </project>
