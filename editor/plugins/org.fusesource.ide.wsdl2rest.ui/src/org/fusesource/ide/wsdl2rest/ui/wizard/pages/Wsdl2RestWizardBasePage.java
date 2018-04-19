@@ -157,9 +157,11 @@ public abstract class Wsdl2RestWizardBasePage extends WizardPage {
 		IObservableValue wsdlTarget = WidgetProperties.text(SWT.Modify).observe(control);
 		IObservableValue wsdlModel = BeanProperties.
 				value(Wsdl2RestOptions.class, modelID).observe(getOptionsFromWizard());		
-		Binding newBinding = dbc.bindValue(wsdlTarget, wsdlModel, 
-				new UpdateValueStrategy().setBeforeSetValidator(validator), null);
-		return newBinding;
+		return dbc.bindValue(
+				wsdlTarget,
+				wsdlModel,
+				new UpdateValueStrategy().setBeforeSetValidator(validator),
+				null);
 	}
 
 	/**

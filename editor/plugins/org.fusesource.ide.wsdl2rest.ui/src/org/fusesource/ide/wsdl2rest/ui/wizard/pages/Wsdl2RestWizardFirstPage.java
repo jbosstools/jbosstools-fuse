@@ -11,6 +11,8 @@
 package org.fusesource.ide.wsdl2rest.ui.wizard.pages;
 
 import org.eclipse.core.databinding.Binding;
+import org.eclipse.core.databinding.observable.ChangeEvent;
+import org.eclipse.core.databinding.observable.IChangeListener;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
@@ -19,7 +21,6 @@ import org.eclipse.jface.databinding.fieldassist.ControlDecorationSupport;
 import org.eclipse.jface.databinding.wizard.WizardPageSupport;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
-import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -27,8 +28,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.core.databinding.observable.ChangeEvent;
-import org.eclipse.core.databinding.observable.IChangeListener;
 import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.wsdl2rest.ui.internal.UIMessages;
 import org.fusesource.ide.wsdl2rest.ui.internal.Wsdl2RestUIActivator;
@@ -42,14 +41,8 @@ public class Wsdl2RestWizardFirstPage extends Wsdl2RestWizardBasePage {
 
 	private Text urlTextControl;
 
-	/**
-	 * Constructor
-	 * @param pageName
-	 * @param title
-	 * @param titleImage
-	 */
-	public Wsdl2RestWizardFirstPage(String pageName, String title, ImageDescriptor titleImage) {
-		super(pageName, title, titleImage);
+	public Wsdl2RestWizardFirstPage(String pageName, String title) {
+		super(pageName, title, null);
 		setMessage(UIMessages.wsdl2RestWizardFirstPagePageOneDescription);
 	}
 

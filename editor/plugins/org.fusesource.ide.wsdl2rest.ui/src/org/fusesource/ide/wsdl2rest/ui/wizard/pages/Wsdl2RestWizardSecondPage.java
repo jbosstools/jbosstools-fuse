@@ -17,7 +17,6 @@ import org.eclipse.jface.databinding.fieldassist.ControlDecorationSupport;
 import org.eclipse.jface.databinding.wizard.WizardPageSupport;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
-import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -38,7 +37,7 @@ public class Wsdl2RestWizardSecondPage extends Wsdl2RestWizardBasePage {
 	 * @param pageName
 	 */
 	public Wsdl2RestWizardSecondPage(String pageName) {
-		this(pageName, null, null);
+		this(pageName, null);
 	}
 
 	/**
@@ -47,8 +46,8 @@ public class Wsdl2RestWizardSecondPage extends Wsdl2RestWizardBasePage {
 	 * @param title
 	 * @param titleImage
 	 */
-	public Wsdl2RestWizardSecondPage(String pageName, String title, ImageDescriptor titleImage) {
-		super(pageName, title, titleImage);
+	public Wsdl2RestWizardSecondPage(String pageName, String title) {
+		super(pageName, title, null);
 		setMessage(UIMessages.wsdl2RestWizardSecondPagePageTwoDescription);
 	}
 
