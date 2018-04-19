@@ -6,7 +6,7 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
-	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="src/"/>
 	<classpathentry exported="true" kind="lib" path="lib/javaparser-core-2.5.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/commons-collections-3.2.2.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/stax2-api-3.1.4.jar"/>
@@ -36,8 +36,8 @@
 	<classpathentry exported="true" kind="lib" path="lib/ant-launcher-1.10.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/cxf-tools-wsdlto-frontend-javascript-3.1.11.fuse-000226.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/cxf-rt-bindings-soap-3.1.11.fuse-000226.jar"/>
-    <classpathentry exported="true" kind="lib" path="lib/wsdl2rest-impl.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/wsdl2rest-util.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/wsdl2rest-impl.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/commons-validator-1.6.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
