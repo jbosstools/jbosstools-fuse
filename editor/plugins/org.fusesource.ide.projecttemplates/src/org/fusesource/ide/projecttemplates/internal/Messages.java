@@ -76,6 +76,7 @@ public class Messages extends NLS {
 	public static String newProjectWizardRuntimePageDeploymentPlatformGroup;
 	public static String newProjectWizardRuntimePageDeploymentPlatformContainer;
 	public static String newProjectWizardRuntimePageDeploymentPlatformStanalone;
+	public static String newProjectWizardRuntimePageOptionalRuntime;
 
 	public static String unzipStreamCreatorUnzippingTemplateFileMonitorMessage;
 	
