@@ -154,9 +154,9 @@ public abstract class Wsdl2RestWizardBasePage extends WizardPage {
 	 * @return
 	 */
 	protected Binding createBinding(Text control, String modelID, IValidator validator) {
-		IObservableValue wsdlTarget = WidgetProperties.text(SWT.Modify).observe(control);
-		IObservableValue wsdlModel = BeanProperties.
-				value(Wsdl2RestOptions.class, modelID).observe(getOptionsFromWizard());		
+		IObservableValue<?> wsdlTarget = WidgetProperties.text(SWT.Modify).observe(control);
+		@SuppressWarnings("unchecked")
+		IObservableValue<?> wsdlModel = BeanProperties.value(Wsdl2RestOptions.class, modelID).observe(getOptionsFromWizard());		
 		return dbc.bindValue(
 				wsdlTarget,
 				wsdlModel,
