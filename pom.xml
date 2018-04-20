@@ -248,6 +248,21 @@
 			<plugin>
 				<groupId>org.eclipse.tycho.extras</groupId>
 				<artifactId>tycho-source-feature-plugin</artifactId>
+		       <executions>
+		          <execution>
+		            <phase>package</phase>
+		            <id>source-feature</id>
+		            <goals>
+		              <goal>source-feature</goal>
+		            </goals>
+		            <configuration>
+		              <excludes>
+		                <!-- ID of the non-source bundle(s) to exclude from the generated source feature -->
+		                <plugin id="org.fusesource.ide.wsdl2rest"/>
+		              </excludes>
+		            </configuration>
+		          </execution>
+		        </executions>
 			</plugin>
 			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
