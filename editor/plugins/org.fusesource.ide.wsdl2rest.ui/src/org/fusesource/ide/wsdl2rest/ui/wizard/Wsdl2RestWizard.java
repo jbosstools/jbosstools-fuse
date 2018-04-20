@@ -11,7 +11,6 @@
 package org.fusesource.ide.wsdl2rest.ui.wizard;
 
 import java.io.File;
-import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
 import java.net.URL;
 import java.nio.file.Path;
@@ -28,8 +27,10 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
@@ -64,25 +65,23 @@ public class Wsdl2RestWizard extends Wizard implements INewWizard {
 		options = new Wsdl2RestOptions();
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.ui.IWorkbenchWizard#init(org.eclipse.ui.IWorkbench, org.eclipse.jface.viewers.IStructuredSelection)
-	 */
 	@Override
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 		setWindowTitle(UIMessages.wsdl2RestWizardWindowTitle);
 		setNeedsProgressMonitor(true);
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.jface.wizard.Wizard#performFinish()
-	 */
 	@Override
 	public boolean performFinish() {
 		try {
 			generate();
 		} catch (Exception e) {
 			Wsdl2RestUIActivator.pluginLog().logError(e);
-			MessageDialog.openError(getShell(), "Error", e.getMessage());
+			ErrorDialog.openError(
+					getShell(),
+					UIMessages.wsdl2RestWizardErrorWindowTitle,
+					UIMessages.wsdl2RestWizardErrorMessage,
+					new Status(IStatus.ERROR, Wsdl2RestUIActivator.PLUGIN_ID, e.getMessage(), e));
 			return false;
 		}
 		return true;
@@ -212,9 +211,7 @@ public class Wsdl2RestWizard extends Wizard implements INewWizard {
 				Thread.currentThread().setContextClassLoader(loader);
 				tool.process();
 				updateDependencies();
-			} catch (Exception e) {
-				throw new InvocationTargetException(e);
-			} finally {
+			}  finally {
 				Thread.currentThread().setContextClassLoader(oldLoader);
 			}
 		}

@@ -42,6 +42,8 @@ public class UIMessages extends NLS {
 	public static String wsdl2RestWizardSecondPageValidatorPathRequired;
 	public static String wsdl2RestWizardSecondPageValidatorServiceAddressMustBeValid;
 	public static String wsdl2RestWizardWindowTitle;
+	public static String wsdl2RestWizardErrorMessage;
+	public static String wsdl2RestWizardErrorWindowTitle;
 
 	static {
 		// initialize resource bundle
