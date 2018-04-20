@@ -209,6 +209,7 @@
     </plugins>
   </build>
   
+  <!-- Make sure that all these repos are saved in Nexus before we do the merge to Master -->
   <repositories>
     	<repository>
   		<id>Saved staging repo for cxf</id>
