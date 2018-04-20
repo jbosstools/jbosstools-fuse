@@ -19,6 +19,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.beans.PojoProperties;
@@ -36,6 +38,7 @@ import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.ViewerComparator;
+import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.jst.server.core.FacetUtil;
 import org.eclipse.osgi.util.NLS;
@@ -51,10 +54,10 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
-import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
 import org.eclipse.wst.common.project.facet.core.runtime.RuntimeManager;
 import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.IRuntimeLifecycleListener;
+import org.eclipse.wst.server.core.IRuntimeType;
 import org.eclipse.wst.server.core.ServerCore;
 import org.eclipse.wst.server.ui.ServerUIUtil;
 import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
@@ -64,6 +67,8 @@ import org.fusesource.ide.foundation.ui.util.Widgets;
 import org.fusesource.ide.projecttemplates.internal.Messages;
 import org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator;
 import org.fusesource.ide.projecttemplates.util.CamelVersionChecker;
+import org.fusesource.ide.projecttemplates.wizards.pages.filter.KarafRuntimeFilter;
+import org.fusesource.ide.projecttemplates.wizards.pages.filter.WildflyRuntimeFilter;
 import org.fusesource.ide.projecttemplates.wizards.pages.model.EnvironmentData;
 import org.fusesource.ide.projecttemplates.wizards.pages.model.FuseDeploymentPlatform;
 import org.fusesource.ide.projecttemplates.wizards.pages.model.FuseRuntimeKind;
@@ -198,12 +203,12 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 		Button karafRadio = new Button(runtimeGrp, SWT.RADIO);
 		karafRadio.setText(Messages.newProjectWizardRuntimePageKarafChoice);
 		dbc.bindValue(WidgetProperties.enabled().observe(karafRadio), standAloneObservable);
-		runtimeKarafComboViewer = createRuntimeSelection(runtimeGrp, karafRadio);
+		runtimeKarafComboViewer = createRuntimeSelection(runtimeGrp, karafRadio, getPossibleKarafRuntimeTypes());
 		
 		Button eapRadio = new Button(runtimeGrp, SWT.RADIO);
 		eapRadio.setText(Messages.newProjectWizardRuntimePageWildflyChoice);
 		dbc.bindValue(WidgetProperties.enabled().observe(eapRadio), standAloneObservable);
-		runtimeWildflyComboViewer = createRuntimeSelection(runtimeGrp, eapRadio);
+		runtimeWildflyComboViewer = createRuntimeSelection(runtimeGrp, eapRadio, getPossibleWildflyRuntimeTypes());
 		
 		SelectObservableValue<FuseRuntimeKind> observableValue = new SelectObservableValue<>();
 		observableValue.addOption(FuseRuntimeKind.SPRINGBOOT, WidgetProperties.selection().observe(springBootRadio));
@@ -212,8 +217,29 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 		dbc.bindValue(observableValue, environmentRuntimeObservable);
 		environmentRuntimeObservable.addChangeListener(event -> refreshFilteredTemplates());
 	}
+	
+	protected String getPossibleWildflyRuntimeTypes() {
+		return getAllRuntimeTypeIds()
+				.filter(runtimeTypeId ->
+						runtimeTypeId.startsWith("org.jboss.ide.eclipse.as.runtime.")
+						|| runtimeTypeId.startsWith("org.jboss.ide.eclipse.as.runtime.wildfly.")
+						|| runtimeTypeId.startsWith("org.jboss.ide.eclipse.as.runtime.eap."))
+				.collect(Collectors.joining(","));
+	}
 
-	private ComboViewer createRuntimeSelection(Group runtimeGrp, Button relatedRadioButton) {
+	protected Stream<String> getAllRuntimeTypeIds() {
+		return Stream.of(ServerCore.getRuntimeTypes()).map(IRuntimeType::getId);
+	}
+	
+	protected String getPossibleKarafRuntimeTypes() {
+		return getAllRuntimeTypeIds()
+				.filter(runtimeTypeId ->
+						runtimeTypeId.startsWith("org.fusesource.ide.fuseesb.runtime.")
+						|| runtimeTypeId.startsWith("org.fusesource.ide.karaf.runtime."))
+				.collect(Collectors.joining(","));
+	}
+
+	private ComboViewer createRuntimeSelection(Group runtimeGrp, Button relatedRadioButton, String possibleRuntimeIds) {
 		ComboViewer runtimeComboViewer = new ComboViewer(runtimeGrp, SWT.NONE | SWT.READ_ONLY);
 		runtimeComboViewer.setComparator(new ViewerComparator((o1, o2) -> {
 			if (Messages.newProjectWizardRuntimePageNoRuntimeSelectedLabel.equals(o1)){
@@ -240,7 +266,7 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				String[] oldRuntimes = runtimeComboViewer.getCombo().getItems();
-				boolean created = ServerUIUtil.showNewRuntimeWizard(getShell(), null, null);
+				boolean created = ServerUIUtil.showNewRuntimeWizard(getShell(), null, null, possibleRuntimeIds);
 				if (created) {
 					String[] newRuntimes = runtimeComboViewer.getCombo().getItems();
 					String newRuntime = getNewRuntime(oldRuntimes, newRuntimes);
@@ -280,26 +306,26 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 	}	
 
 	private void configureRuntimeCombo() {
-		configureRuntimeCombo(runtimeKarafComboViewer);
-		configureRuntimeCombo(runtimeWildflyComboViewer);
+		serverRuntimes = getServerRuntimes();
+		configureRuntimeCombo(runtimeKarafComboViewer, new KarafRuntimeFilter(serverRuntimes));
+		configureRuntimeCombo(runtimeWildflyComboViewer, new WildflyRuntimeFilter(serverRuntimes));
 	}
 
-	private void configureRuntimeCombo(ComboViewer runtimeComboViewer) {
+	private void configureRuntimeCombo(ComboViewer runtimeComboViewer, ViewerFilter filter) {
 		if (Widgets.isDisposed(runtimeComboViewer)) {
 			return;
 		}
 
 		String lastUsedRuntime = lastSelectedRuntime;
 		List<String> runtimesList = new ArrayList<>();
-		String selectedRuntime = null;
-
-		serverRuntimes = getServerRuntimes(null);
-		runtimeComboViewer.setInput(ArrayContentProvider.getInstance());
+		runtimeComboViewer.setInput(Collections.emptySet());
 		runtimesList.addAll(serverRuntimes.keySet());
 		runtimesList.add(Messages.newProjectWizardRuntimePageNoRuntimeSelectedLabel);
+		runtimeComboViewer.addFilter(filter);
 		runtimeComboViewer.setInput(runtimesList);
 		runtimeComboViewer.setSelection(new StructuredSelection(Messages.newProjectWizardRuntimePageNoRuntimeSelectedLabel));
 
+		String selectedRuntime = null;
 		for (Map.Entry<String, IRuntime> entry : serverRuntimes.entrySet()) {
 			IRuntime runtime = entry.getValue();
 			if (lastUsedRuntime != null && lastUsedRuntime.equals(runtime.getId())) {
@@ -312,14 +338,8 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 		}
 	}
 
-	private Map<String, IRuntime> getServerRuntimes(IProjectFacetVersion facetVersion) {
-		Set<org.eclipse.wst.common.project.facet.core.runtime.IRuntime> runtimesSet;
-		if (facetVersion == null) {
-			runtimesSet = RuntimeManager.getRuntimes();
-		} else {
-			runtimesSet = RuntimeManager.getRuntimes(Collections.singleton(facetVersion));
-		}
-
+	private Map<String, IRuntime> getServerRuntimes() {
+		Set<org.eclipse.wst.common.project.facet.core.runtime.IRuntime> runtimesSet = RuntimeManager.getRuntimes();
 		Map<String, IRuntime> runtimesMap = new LinkedHashMap<>();
 		for (org.eclipse.wst.common.project.facet.core.runtime.IRuntime r : runtimesSet) {
 			IRuntime serverRuntime = FacetUtil.getRuntime(r);
