@@ -14,6 +14,7 @@ import org.apache.commons.validator.routines.UrlValidator;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IStatus;
+import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.wsdl2rest.ui.internal.UIMessages;
 
 /**
@@ -31,10 +32,8 @@ public class TargetURLValidator implements IValidator {
 	 */
 	@Override
 	public IStatus validate(Object value) {
-		if (((value instanceof String) && ((String) value).length() > 0)) {
-			if (!urlValidator.isValid((String)value)) {
-				return ValidationStatus.error(UIMessages.wsdl2RestWizardSecondPageValidatorServiceAddressMustBeValid);
-			}
+		if (value instanceof String && !Strings.isBlank((String) value) && !urlValidator.isValid((String)value)) {
+			return ValidationStatus.error(UIMessages.wsdl2RestWizardSecondPageValidatorServiceAddressMustBeValid);
 		}
 		return ValidationStatus.ok();
 	}
