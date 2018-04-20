@@ -57,8 +57,6 @@ public class Wsdl2RestWizard extends Wizard implements INewWizard {
 	 */
 	final Wsdl2RestOptions options;
 	
-	private IProject project;
-
 	/**
 	 * Constructor
 	 */
@@ -115,11 +113,11 @@ public class Wsdl2RestWizard extends Wizard implements INewWizard {
 		super.addPages();
 
 		// page one
-		project = getSelectedProjectFromSelectionService();
+		IProject initialProject = getSelectedProjectFromSelectionService();
 		Wsdl2RestWizardFirstPage pageOne = new Wsdl2RestWizardFirstPage("page1", //$NON-NLS-1$ 
 				UIMessages.wsdl2RestWizardPageOneTitle);
-		if (project != null) {
-			options.setProjectName(project.getName());
+		if (initialProject != null) {
+			options.setProjectName(initialProject.getName());
 		}
 		addPage(pageOne);
 
@@ -151,6 +149,7 @@ public class Wsdl2RestWizard extends Wizard implements INewWizard {
 		one.setGroupId("org.jboss.spec.javax.ws.rs"); //$NON-NLS-1$
 		one.setVersion("1.0.0.Final-redhat-1"); //$NON-NLS-1$
 		deps.add(one);
+		IProject project = options.getProject();
 		new MavenUtils().updateMavenDependencies(deps, project);
 		project.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
 	}
@@ -171,6 +170,7 @@ public class Wsdl2RestWizard extends Wizard implements INewWizard {
 		URL wsdlLocation = new URL(options.getWsdlURL());
 		IPath javaPath = new org.eclipse.core.runtime.Path(options.getDestinationJava());
 		IResource resource = ResourcesPlugin.getWorkspace().getRoot().findMember(javaPath);
+		IProject project = options.getProject();
 		if (resource == null) {
 			IFolder folder = project.getFolder(javaPath.removeFirstSegments(1));
 			if (!folder.exists()) {
@@ -195,7 +195,7 @@ public class Wsdl2RestWizard extends Wizard implements INewWizard {
 
 				Path outJavaPath = javaFile.toPath();
 				Wsdl2Rest tool = new Wsdl2Rest(wsdlLocation, outJavaPath);
-				initContextForTool(isBlueprint, camelPath, camelFile, tool);
+				initContextForTool(isBlueprint, camelFile, tool);
 				if (!Strings.isEmpty(options.getTargetServiceAddress())) {
 					URI targetAddressURI = new URI(options.getTargetServiceAddress());
 					URL targetAddressURL = targetAddressURI.toURL();
@@ -220,12 +220,13 @@ public class Wsdl2RestWizard extends Wizard implements INewWizard {
 		}
 	}
 
-	protected void initContextForTool(boolean isBlueprint, IPath camelPath, File camelFile, Wsdl2Rest tool) {
+	protected void initContextForTool(boolean isBlueprint, File camelFile, Wsdl2Rest tool) {
 		if (!isBlueprint) {
 			if (camelFile != null) {
 				Path contextpath = new File(camelFile.getAbsolutePath() + File.separator + "rest-camel-context.xml").toPath(); //$NON-NLS-1$
 				tool.setCamelContext(contextpath); 
 			} else {
+				IProject project = options.getProject();
 				IPath projectPath = ResourcesPlugin.getWorkspace().getRoot().findMember(project.getName()).getLocation();
 				Path contextpath = new File(projectPath.makeAbsolute() + File.separator + "rest-camel-context.xml").toPath(); //$NON-NLS-1$
 				tool.setCamelContext(contextpath); 
@@ -235,6 +236,7 @@ public class Wsdl2RestWizard extends Wizard implements INewWizard {
 				Path contextpath = new File(camelFile.getAbsolutePath() + File.separator + "rest-blueprint-context.xml").toPath(); //$NON-NLS-1$
 				tool.setCamelContext(contextpath); 
 			} else {
+				IProject project = options.getProject();
 				IPath projectPath = ResourcesPlugin.getWorkspace().getRoot().findMember(project.getName()).getLocation();
 				Path contextpath = new File(projectPath.makeAbsolute() + File.separator + "rest-blueprint-context.xml").toPath(); //$NON-NLS-1$
 				tool.setBlueprintContext(contextpath);
@@ -296,11 +298,4 @@ public class Wsdl2RestWizard extends Wizard implements INewWizard {
 		return options;
 	}
 	
-	/**
-	 * For testing purposes
-	 * @param project
-	 */
-	public void setProject(IProject project) {
-		this.project = project;
-	}
 }
