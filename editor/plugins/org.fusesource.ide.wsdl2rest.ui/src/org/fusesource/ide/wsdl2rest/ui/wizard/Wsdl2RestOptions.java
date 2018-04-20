@@ -13,6 +13,9 @@ package org.fusesource.ide.wsdl2rest.ui.wizard;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.ResourcesPlugin;
+
 /**
  * Collects the various data points needed for the wsdl2rest utility.
  * @author brianf
@@ -153,5 +156,9 @@ public class Wsdl2RestOptions {
 	 */
 	protected void firePropertyChange(String propertyName, Object oldValue, Object newValue) {
 		changeSupport.firePropertyChange(propertyName, oldValue, newValue);
+	}
+	
+	public IProject getProject() {
+		return ResourcesPlugin.getWorkspace().getRoot().getProject(getProjectName());
 	}
 }
