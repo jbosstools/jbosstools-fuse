@@ -52,7 +52,9 @@ public class Wsdl2RestOptions {
 	 * @param wsdlURL
 	 */
 	public void setWsdlURL(String wsdlURL) {
-		firePropertyChange(WSDL_URL, this.wsdlURL, this.wsdlURL = wsdlURL);
+        String oldValue = this.wsdlURL;
+        this.wsdlURL = wsdlURL;
+		firePropertyChange(WSDL_URL, oldValue, wsdlURL);
 	}
 
 	/**
@@ -68,7 +70,9 @@ public class Wsdl2RestOptions {
 	 * @param projectName
 	 */
 	public void setProjectName(String projectName) {
-		firePropertyChange(PROJECT_NAME, this.projectName, this.projectName = projectName);
+        String oldValue = this.projectName;
+        this.projectName = projectName;
+		firePropertyChange(PROJECT_NAME, oldValue,  projectName);
 	}
 
 	/**
@@ -84,7 +88,9 @@ public class Wsdl2RestOptions {
 	 * @param destinationJava
 	 */
 	public void setDestinationJava(String destinationJava) {
-		firePropertyChange(DESTINATION_JAVA, this.destinationJava, this.destinationJava = destinationJava);
+        String oldValue = this.destinationJava;
+        this.destinationJava = destinationJava;
+		firePropertyChange(DESTINATION_JAVA, oldValue, destinationJava);
 	}
 
 	/**
@@ -100,7 +106,9 @@ public class Wsdl2RestOptions {
 	 * @param destinationCamel
 	 */
 	public void setDestinationCamel(String destinationCamel) {
-		firePropertyChange(DESTINATION_CAMEL, this.destinationCamel, this.destinationCamel = destinationCamel);
+        String oldValue = this.destinationCamel;
+        this.destinationCamel = destinationCamel;
+		firePropertyChange(DESTINATION_CAMEL, oldValue, destinationCamel);
 	}
 
 	/**
@@ -116,7 +124,9 @@ public class Wsdl2RestOptions {
 	 * @param targetServiceAddress
 	 */
 	public void setTargetServiceAddress(String targetServiceAddress) {
-		firePropertyChange(TARGET_SERVICE_ADDRESS, this.targetServiceAddress, this.targetServiceAddress = targetServiceAddress);
+        String oldValue = this.targetServiceAddress;
+        this.targetServiceAddress = targetServiceAddress;
+		firePropertyChange(TARGET_SERVICE_ADDRESS, oldValue, targetServiceAddress);
 	}
 
 	/**
@@ -132,7 +142,9 @@ public class Wsdl2RestOptions {
 	 * @param targetServiceAddress
 	 */
 	public void setTargetRestServiceAddress(String targetRestServiceAddress) {
-		firePropertyChange(TARGET_REST_SERVICE_ADDRESS, this.targetRestServiceAddress, this.targetRestServiceAddress = targetRestServiceAddress);
+        String oldValue = this.targetRestServiceAddress;
+        this.targetRestServiceAddress = targetRestServiceAddress;
+		firePropertyChange(TARGET_REST_SERVICE_ADDRESS, oldValue, targetRestServiceAddress);
 	}
 
 	/**
