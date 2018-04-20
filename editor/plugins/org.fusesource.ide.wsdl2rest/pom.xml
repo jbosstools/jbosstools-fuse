@@ -24,16 +24,6 @@
         <version.commons.lang>2.4</version.commons.lang>
         <version.commons.validator>1.6</version.commons.validator>
         <version.wsdl2rest>0.7.0.fuse-000044</version.wsdl2rest>
-
-        <!-- Plugin versions -->
-        <version-build-helper-plugin>3.0.0</version-build-helper-plugin>
-        <version-maven-antrun-plugin>1.8</version-maven-antrun-plugin>
-        <version-maven-compiler-plugin>3.7.0</version-maven-compiler-plugin>
-        <version-maven-jar-plugin>2.6</version-maven-jar-plugin>
-        <version-maven-javadoc-plugin>2.9.1</version-maven-javadoc-plugin>
-        <version-maven-release-plugin>2.5</version-maven-release-plugin>
-        <version-maven-source-plugin>2.3</version-maven-source-plugin>
-        <version-maven-surefire-plugin>2.20.1</version-maven-surefire-plugin>
     </properties>
 
     <dependencyManagement>
