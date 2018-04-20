@@ -35,19 +35,19 @@ import org.junit.Test;
  * @author brianf
  */
 public class Wsdl2RestWizardIT {
-	
-    static final String WSDL_LOCATION = "src/test/resources/wsdl/Address.wsdl"; //$NON-NLS-1$
-    static final String OUTPUT_PATH = "target/generated-wsdl2rest"; //$NON-NLS-1$
-    static final String SPRING_CAMEL_PATH = "/src/main/resources/META-INF/spring/doclit-camel-context.xml"; //$NON-NLS-1$
 
-    @Rule
+	static final String WSDL_LOCATION = "src/test/resources/wsdl/Address.wsdl"; //$NON-NLS-1$
+	static final String OUTPUT_PATH = "target/generated-wsdl2rest"; //$NON-NLS-1$
+	static final String SPRING_CAMEL_PATH = "/src/main/resources/META-INF/spring/doclit-camel-context.xml"; //$NON-NLS-1$
+
+	@Rule
 	public FuseProject fuseProject = new FuseProject(Wsdl2RestWizardIT.class.getName());
 
 	@Test
 	public void testWsdl2RestWizardFinish() throws Exception {
-    	Wsdl2RestWizard wizard = new Wsdl2RestWizard();
-        File wsdlFile = new File(WSDL_LOCATION);
-        Path outpath = new File(OUTPUT_PATH).toPath();
+		Wsdl2RestWizard wizard = new Wsdl2RestWizard();
+		File wsdlFile = new File(WSDL_LOCATION);
+		Path outpath = new File(OUTPUT_PATH).toPath();
 		wizard.getOptions().setWsdlURL(wsdlFile.toURI().toURL().toExternalForm());
 		wizard.getOptions().setProjectName(fuseProject.getProject().getName());
 		wizard.getOptions().setDestinationJava(outpath.toString());
@@ -62,11 +62,11 @@ public class Wsdl2RestWizardIT {
 
 		IProject pr = fuseProject.getProject();
 		pr.refreshLocal(IResource.DEPTH_INFINITE, null);
-		
+
 		List<IFile> xmlFiles = findAllFilesWithExtension(pr, "xml");
 		IResource camelFile = findFileWithNameInList("rest-camel-context.xml", xmlFiles); //$NON-NLS-1$
 		Assert.assertTrue("Generated Camel file not found", camelFile != null && camelFile.exists());
-		
+
 		List<IFile> javaFiles = findAllFilesWithExtension(pr, "java");
 		IResource addAddressJavaFile = findFileWithNameInList("AddAddress.java", javaFiles); //$NON-NLS-1$
 		Assert.assertTrue("Generated AddAddress class not found",  //$NON-NLS-1$
@@ -83,29 +83,29 @@ public class Wsdl2RestWizardIT {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Returns a list of *.xml files in {@code container}.
 	 */
 	private List<IFile> findAllFilesWithExtension(IContainer container, String extension) {
-	  final List<IFile> xmlFiles = new ArrayList<>();
+		final List<IFile> xmlFiles = new ArrayList<>();
 
-	  try {
-	    IResourceVisitor webInfCollector = new IResourceVisitor() {
-	      @Override
-	      public boolean visit(IResource resource) throws CoreException {
-	        if (resource.getType() == IResource.FILE && extension.equalsIgnoreCase(resource.getFileExtension())) {
-	          xmlFiles.add((IFile) resource);
-	          return false;  // No need to visit sub-directories.
-	        }
-	        return true;
-	      }
-	    };
-	    container.accept(webInfCollector);
-	  } catch (CoreException ex) {
-	    // Our attempt to find files failed, but don't error out.
-	  }
-	  return xmlFiles;
+		try {
+			IResourceVisitor webInfCollector = new IResourceVisitor() {
+				@Override
+				public boolean visit(IResource resource) throws CoreException {
+					if (resource.getType() == IResource.FILE && extension.equalsIgnoreCase(resource.getFileExtension())) {
+						xmlFiles.add((IFile) resource);
+						return false;  // No need to visit sub-directories.
+					}
+					return true;
+				}
+			};
+			container.accept(webInfCollector);
+		} catch (CoreException ex) {
+			// Our attempt to find files failed, but don't error out.
+		}
+		return xmlFiles;
 	}	
 
 }
