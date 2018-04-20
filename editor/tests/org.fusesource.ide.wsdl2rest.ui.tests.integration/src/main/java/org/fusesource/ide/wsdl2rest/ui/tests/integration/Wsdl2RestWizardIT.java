@@ -48,7 +48,6 @@ public class Wsdl2RestWizardIT {
     	Wsdl2RestWizard wizard = new Wsdl2RestWizard();
         File wsdlFile = new File(WSDL_LOCATION);
         Path outpath = new File(OUTPUT_PATH).toPath();
-        wizard.setProject(fuseProject.getProject());
 		wizard.getOptions().setWsdlURL(wsdlFile.toURI().toURL().toExternalForm());
 		wizard.getOptions().setProjectName(fuseProject.getProject().getName());
 		wizard.getOptions().setDestinationJava(outpath.toString());

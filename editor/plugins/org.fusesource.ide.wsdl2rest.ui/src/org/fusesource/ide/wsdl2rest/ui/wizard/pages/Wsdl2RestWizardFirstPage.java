@@ -14,7 +14,6 @@ import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.observable.ChangeEvent;
 import org.eclipse.core.databinding.observable.IChangeListener;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.databinding.fieldassist.ControlDecorationSupport;
@@ -117,8 +116,7 @@ public class Wsdl2RestWizardFirstPage extends Wsdl2RestWizardBasePage {
 
 		@Override
 		public void handleChange(ChangeEvent arg0) {
-			IProject selectedProject = 
-					ResourcesPlugin.getWorkspace().getRoot().getProject(getOptionsFromWizard().getProjectName());
+			IProject selectedProject = getOptionsFromWizard().getProject();
 			if (selectedProject != null) {
 				setPathsFromProjectSelection(selectedProject);
 			}
@@ -131,7 +129,7 @@ public class Wsdl2RestWizardFirstPage extends Wsdl2RestWizardBasePage {
 	 */
 	private void setPathsFromProjectSelection(IProject selectedProject) {
 		if (selectedProject == null) {
-			selectedProject = ResourcesPlugin.getWorkspace().getRoot().getProject(getOptionsFromWizard().getProjectName());
+			selectedProject = getOptionsFromWizard().getProject();
 		}
 		StringBuilder pathSrcJava = new StringBuilder().append("src") //$NON-NLS-1$
 				.append(Path.SEPARATOR).append("main") //$NON-NLS-1$
