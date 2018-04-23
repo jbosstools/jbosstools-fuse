@@ -111,7 +111,7 @@ public abstract class Wsdl2RestWizardBasePage extends WizardPage {
 		Label label = new Label(composite, SWT.NONE);
 		label.setText(labelText);
 		Text textControl = new Text(composite, SWT.BORDER);
-		textControl.setLayoutData(GridDataFactory.fillDefaults().indent(10, 0).grab(true, false).span(span, 1).create());
+		textControl.setLayoutData(GridDataFactory.swtDefaults().align(SWT.FILL, SWT.CENTER).indent(10, 0).grab(true, false).span(span, 1).create());
 		return textControl;
 	}
 
