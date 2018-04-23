@@ -58,11 +58,12 @@ public class Wsdl2RestWizard extends Wizard implements INewWizard {
 	 */
 	final Wsdl2RestOptions options;
 	
-	/**
-	 * Constructor
-	 */
 	public Wsdl2RestWizard() {
 		options = new Wsdl2RestOptions();
+	}
+	
+	public Wsdl2RestWizard(Wsdl2RestOptions options) {
+		this.options = options;
 	}
 
 	@Override
@@ -162,10 +163,10 @@ public class Wsdl2RestWizard extends Wizard implements INewWizard {
 	
 	/**
 	 * Use the settings collected and call the wsdl2rest utility.
-	 * (Public for testing purposes only.)
+	 *
 	 * @throws Exception
 	 */
-	public void generate() throws Exception {
+	private void generate() throws Exception {
 		URL wsdlLocation = new URL(options.getWsdlURL());
 		IPath javaPath = new org.eclipse.core.runtime.Path(options.getDestinationJava());
 		IResource resource = ResourcesPlugin.getWorkspace().getRoot().findMember(javaPath);
