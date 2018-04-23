@@ -34,15 +34,6 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.jdt.core.IJavaElement;
-import org.eclipse.jdt.core.IJavaProject;
-import org.eclipse.jdt.core.IType;
-import org.eclipse.jdt.core.JavaCore;
-import org.eclipse.jdt.core.JavaModelException;
-import org.eclipse.jdt.core.search.IJavaSearchScope;
-import org.eclipse.jdt.core.search.SearchEngine;
-import org.eclipse.jdt.ui.IJavaElementSearchConstants;
-import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.jface.databinding.swt.DisplayRealm;
 import org.eclipse.jface.databinding.swt.WidgetProperties;
 import org.eclipse.jface.layout.GridDataFactory;
@@ -57,10 +48,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.dialogs.ElementTreeSelectionDialog;
-import org.eclipse.ui.dialogs.SelectionDialog;
 import org.eclipse.ui.model.BaseWorkbenchContentProvider;
 import org.eclipse.ui.model.WorkbenchLabelProvider;
 import org.fusesource.ide.foundation.core.util.Strings;
@@ -231,38 +220,6 @@ public abstract class Wsdl2RestWizardBasePage extends WizardPage {
 			if (result.length == 1) {
 				return (((IFolder) result[0]).getFullPath().toPortableString());
 			}
-		}
-		return null;
-	}
-
-	/**
-	 * Opens a dialog to allow selection of a Java class in the workbench.
-	 * @param project
-	 * @param shell
-	 * @return
-	 */
-	protected String handleClassBrowse(IProject project, Shell shell) {
-		IJavaSearchScope scope = null;
-		if (project != null) {
-			IJavaProject jproject = JavaCore.create(project);
-			if (jproject == null) {
-				scope = SearchEngine.createWorkspaceScope();
-			} else {
-				scope = SearchEngine.createJavaSearchScope(new IJavaElement[] { jproject });
-			}
-		}
-
-		try {
-			SelectionDialog dialog = JavaUI.createTypeDialog(shell, null, scope,
-					IJavaElementSearchConstants.CONSIDER_CLASSES_AND_INTERFACES, false, ""); //$NON-NLS-1$
-			if (dialog.open() == SelectionDialog.OK) {
-				Object[] result = dialog.getResult();
-				if (result.length > 0 && result[0] instanceof IType) {
-					return ((IType) result[0]).getFullyQualifiedName();
-				}
-			}
-		} catch (JavaModelException e) {
-			Wsdl2RestUIActivator.pluginLog().logError(e);
 		}
 		return null;
 	}
