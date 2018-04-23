@@ -20,9 +20,11 @@ import java.util.List;
 
 import org.apache.maven.model.Dependency;
 import org.eclipse.core.filesystem.EFS;
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
@@ -185,7 +187,16 @@ public class Wsdl2RestWizard extends Wizard implements INewWizard {
 		
 		File javaFile = findJavaFile(resource);
 		IPath camelPath = new org.eclipse.core.runtime.Path(options.getDestinationCamel());
-		IResource camelResource = ResourcesPlugin.getWorkspace().getRoot().findMember(camelPath);
+		IWorkspaceRoot wroot = ResourcesPlugin.getWorkspace().getRoot();
+		IContainer camelResource = (IContainer) wroot.findMember(camelPath);
+		if (camelResource == null) {
+			IFolder folder = project.getFolder(camelPath.removeFirstSegments(1));
+			if (!folder.exists()) {
+				prepare(folder);
+				camelResource = folder;
+				project.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
+			}
+		}
 		File camelFile = findCamelFile(camelResource);
 		if (javaFile != null) {
 			ClassLoader oldLoader = Thread.currentThread().getContextClassLoader();
