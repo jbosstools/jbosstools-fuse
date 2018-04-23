@@ -9,7 +9,7 @@
             icon="icons/camel_project_16x16.png"
             hasPages="true"
             id="org.fusesource.ide.wsdl2rest.wizard"
-            name="WSDL to Camel Rest DSL Wizard">
+            name="Camel Rest DSL from WSDL">
       </wizard>
    </extension>
 
