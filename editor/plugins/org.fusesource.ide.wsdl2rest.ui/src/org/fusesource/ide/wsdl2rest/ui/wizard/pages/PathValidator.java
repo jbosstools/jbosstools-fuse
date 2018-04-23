@@ -43,6 +43,20 @@ public class PathValidator implements IValidator {
 		return container != null && container.exists();
 	}
 
+	/**
+	 * If part of the path exists in the selected project, this will check if it's 
+	 * going to have to be created when the user clicks Finish. If it doesn't already
+	 * exist, we will provide a warning that it will be created.
+	 * @param path
+	 * @return
+	 */
+	private boolean isPathAccessibleAbsolute(String path) {
+		Path testPath = new Path(path);
+		IResource container = 
+				ResourcesPlugin.getWorkspace().getRoot().findMember(testPath);
+		return container != null && container.exists();
+	}
+
 	@Override
 	public IStatus validate(Object value) {
 		if (value instanceof String) {
@@ -52,6 +66,9 @@ public class PathValidator implements IValidator {
 			}
 			if (!isPathAccessible(stringValue)) {
 				return ValidationStatus.error(UIMessages.wsdl2RestWizardSecondPageValidatorPathMustBeAccessible);
+			}
+			if (!isPathAccessibleAbsolute(stringValue)) {
+				return ValidationStatus.warning(UIMessages.wsdl2RestWizardSecondPageValidatorPathWarning);
 			}
 		}
 		return ValidationStatus.ok();   		
