@@ -55,11 +55,11 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.dialogs.ElementTreeSelectionDialog;
-import org.eclipse.ui.dialogs.FilteredResourcesSelectionDialog;
 import org.eclipse.ui.dialogs.SelectionDialog;
 import org.eclipse.ui.model.BaseWorkbenchContentProvider;
 import org.eclipse.ui.model.WorkbenchLabelProvider;
@@ -190,29 +190,12 @@ public abstract class Wsdl2RestWizardBasePage extends WizardPage {
 	 * Opens a simple dialog to allow selection of a WSDL file.
 	 */
 	protected void selectWSDL() {
-		FilteredResourcesSelectionDialog dialog = new FilteredResourcesSelectionDialog(getShell(), false,
-				ResourcesPlugin.getWorkspace().getRoot(), IResource.FILE) {
-			@Override
-			protected ItemsFilter createFilter() {
-				return new ResourceFilter() {
-					@Override
-					public boolean matchItem(Object item) {
-						IResource resource = (IResource) item;
-						return super.matchItem(item) && "wsdl".equals(resource.getFileExtension()); //$NON-NLS-1$
-					}
-				};
-			}
-		};
-		dialog.setInitialPattern("*"); //$NON-NLS-1$
-		if (dialog.open() == FilteredResourcesSelectionDialog.OK) {
-			Object[] result = dialog.getResult();
-			if (result == null || result.length != 1 || !(result[0] instanceof IResource)) {
-				return;
-			}
+		FileDialog fileDialog = new FileDialog(getShell());
+		fileDialog.setFilterExtensions(new String[] {"*.wsdl"});
+		String selectedFile = fileDialog.open();
+		if (selectedFile != null) {
 			try {
-				IResource resultFile = (IResource) result[0];
-				File actualFile = resultFile.getLocation().toFile();
-				getOptionsFromWizard().setWsdlURL(actualFile.toURI().toURL().toExternalForm());
+				getOptionsFromWizard().setWsdlURL(new File(selectedFile).toURI().toURL().toExternalForm());
 			} catch (MalformedURLException e) {
 				Wsdl2RestUIActivator.pluginLog().logError(e);
 			}
