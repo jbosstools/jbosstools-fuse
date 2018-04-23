@@ -10,6 +10,8 @@
  ******************************************************************************/ 
 package org.fusesource.ide.wsdl2rest.ui.tests.integration;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.io.File;
 import java.net.URL;
 import java.nio.file.Path;
@@ -24,6 +26,7 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceVisitor;
 import org.eclipse.core.runtime.CoreException;
 import org.fusesource.ide.camel.model.service.core.tests.integration.core.io.FuseProject;
+import org.fusesource.ide.wsdl2rest.ui.wizard.Wsdl2RestOptions;
 import org.fusesource.ide.wsdl2rest.ui.wizard.Wsdl2RestWizard;
 import org.junit.Assert;
 import org.junit.Rule;
@@ -45,20 +48,17 @@ public class Wsdl2RestWizardIT {
 
 	@Test
 	public void testWsdl2RestWizardFinish() throws Exception {
-		Wsdl2RestWizard wizard = new Wsdl2RestWizard();
 		File wsdlFile = new File(WSDL_LOCATION);
 		Path outpath = new File(OUTPUT_PATH).toPath();
-		wizard.getOptions().setWsdlURL(wsdlFile.toURI().toURL().toExternalForm());
-		wizard.getOptions().setProjectName(fuseProject.getProject().getName());
-		wizard.getOptions().setDestinationJava(outpath.toString());
-		wizard.getOptions().setDestinationCamel(SPRING_CAMEL_PATH);
-		wizard.getOptions().setTargetRestServiceAddress(new URL("http://localhost:8083/myjaxrs").toExternalForm()); //$NON-NLS-1$
-		wizard.getOptions().setTargetServiceAddress(new URL("http://localhost:8080/doclit").toExternalForm()); //$NON-NLS-1$
-		try {
-			wizard.generate();
-		} catch (Exception ex) {
-			throw ex;
-		}
+		Wsdl2RestOptions options = new Wsdl2RestOptions();
+		options.setWsdlURL(wsdlFile.toURI().toURL().toExternalForm());
+		options.setProjectName(fuseProject.getProject().getName());
+		options.setDestinationJava(outpath.toString());
+		options.setDestinationCamel(SPRING_CAMEL_PATH);
+		options.setTargetRestServiceAddress(new URL("http://localhost:8083/myjaxrs").toExternalForm()); //$NON-NLS-1$
+		options.setTargetServiceAddress(new URL("http://localhost:8080/doclit").toExternalForm()); //$NON-NLS-1$
+		Wsdl2RestWizard wizard = new Wsdl2RestWizard(options);
+		assertThat(wizard.performFinish()).isTrue();
 
 		IProject pr = fuseProject.getProject();
 		pr.refreshLocal(IResource.DEPTH_INFINITE, null);
