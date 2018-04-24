@@ -45,16 +45,15 @@ public class Wsdl2RestWizardIT {
 
 	@Rule
 	public FuseProject fuseProject = new FuseProject(Wsdl2RestWizardIT.class.getName());
-
-	@Test
-	public void testWsdl2RestWizardFinish() throws Exception {
+	
+	private void runWsdl2RestWizard(String camelPath) throws Exception {
 		File wsdlFile = new File(WSDL_LOCATION);
 		Path outpath = new File(OUTPUT_PATH).toPath();
 		Wsdl2RestOptions options = new Wsdl2RestOptions();
 		options.setWsdlURL(wsdlFile.toURI().toURL().toExternalForm());
 		options.setProjectName(fuseProject.getProject().getName());
 		options.setDestinationJava(outpath.toString());
-		options.setDestinationCamel(SPRING_CAMEL_PATH);
+		options.setDestinationCamel(camelPath);
 		options.setTargetRestServiceAddress(new URL("http://localhost:8083/myjaxrs").toExternalForm()); //$NON-NLS-1$
 		options.setTargetServiceAddress(new URL("http://localhost:8080/doclit").toExternalForm()); //$NON-NLS-1$
 		Wsdl2RestWizard wizard = new Wsdl2RestWizard(options);
@@ -71,6 +70,18 @@ public class Wsdl2RestWizardIT {
 		IResource addAddressJavaFile = findFileWithNameInList("AddAddress.java", javaFiles); //$NON-NLS-1$
 		Assert.assertTrue("Generated AddAddress class not found",  //$NON-NLS-1$
 				addAddressJavaFile != null && addAddressJavaFile.exists());
+	}
+	
+
+	@Test
+	public void testWsdl2RestWizardWithNoProjectInCamelPath() throws Exception {
+		runWsdl2RestWizard(SPRING_CAMEL_PATH);
+	}
+
+	@Test
+	public void testWsdl2RestWizardWithProjectInCamelPath() throws Exception {
+		String camelPath = '/' + Wsdl2RestWizardIT.class.getName() + '/' + SPRING_CAMEL_PATH;
+		runWsdl2RestWizard(camelPath);
 	}
 
 	private IFile findFileWithNameInList(String name, List<IFile> files) {

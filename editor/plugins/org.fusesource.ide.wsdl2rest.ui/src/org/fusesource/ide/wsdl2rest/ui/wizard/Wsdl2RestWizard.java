@@ -190,7 +190,12 @@ public class Wsdl2RestWizard extends Wizard implements INewWizard {
 		IWorkspaceRoot wroot = ResourcesPlugin.getWorkspace().getRoot();
 		IContainer camelResource = (IContainer) wroot.findMember(camelPath);
 		if (camelResource == null) {
-			IFolder folder = project.getFolder(camelPath.removeFirstSegments(1));
+			IFolder folder;
+			if (options.getDestinationCamel().startsWith('/' + options.getProjectName())) {
+				folder = project.getFolder(camelPath.removeFirstSegments(1));
+			} else {
+				folder = project.getFolder(camelPath);
+			}
 			if (!folder.exists()) {
 				prepare(folder);
 				camelResource = folder;
