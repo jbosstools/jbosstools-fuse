@@ -40,6 +40,7 @@ import org.fusesource.ide.branding.perspective.FusePerspective;
 import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelCatalogCacheManager;
 import org.fusesource.ide.camel.model.service.core.internal.CamelModelServiceCoreActivator;
 import org.fusesource.ide.foundation.core.util.BuildAndRefreshJobWaiterUtil;
+import org.fusesource.ide.foundation.core.util.JobWaiterUtil;
 import org.fusesource.ide.foundation.core.util.VersionUtil;
 import org.fusesource.ide.projecttemplates.adopters.AbstractProjectTemplate;
 import org.fusesource.ide.projecttemplates.impl.simple.EmptyProjectTemplateForFuse6;
@@ -72,7 +73,7 @@ public abstract class BasicProjectCreatorRunnable implements IRunnableWithProgre
 	@Override
 	public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 		SubMonitor subMonitor = SubMonitor.convert(monitor, Messages.basicProjectCreatorRunnableCreatingTheProjectMonitorMessage, 8);
-
+		
 		boolean oldValueForValidation = disableGlobalValidationDuringProjectCreation();
 		try {
 			CamelModelServiceCoreActivator.getProjectClasspathChangeListener().deactivate();
@@ -88,6 +89,10 @@ public abstract class BasicProjectCreatorRunnable implements IRunnableWithProgre
 				});
 			}
 
+			while (!templateConfigDone) {
+				JobWaiterUtil.updateUI();
+			}
+			
 			// switch perspective if needed
 			if (requiresFuseIntegrationPerspective()) {
 				IWorkbenchWindow workbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
@@ -99,11 +104,6 @@ public abstract class BasicProjectCreatorRunnable implements IRunnableWithProgre
 				}
 			}
 			subMonitor.setWorkRemaining(5);
-			
-			while (!templateConfigDone) {
-				// process UI events while waiting for the template to be created and configured
-				Display.getDefault().readAndDispatch();
-			}
 				
 			// refresh
 			try {
@@ -123,8 +123,7 @@ public abstract class BasicProjectCreatorRunnable implements IRunnableWithProgre
 				});
 				
 				while (!camelCatalogCachingDone) {
-					// process UI events while waiting for Camel catalog to be prepared
-					Display.getDefault().readAndDispatch();
+					JobWaiterUtil.updateUI();
 				}
 			}
 			
@@ -137,7 +136,7 @@ public abstract class BasicProjectCreatorRunnable implements IRunnableWithProgre
 			new BuildAndRefreshJobWaiterUtil().waitJob(subMonitor.split(1));
 		} finally {
 			setbackValidationValueAfterProjectCreation(oldValueForValidation);
-			CamelModelServiceCoreActivator.getProjectClasspathChangeListener().activate();	
+			CamelModelServiceCoreActivator.getProjectClasspathChangeListener().activate();
 		}
 	}
 	

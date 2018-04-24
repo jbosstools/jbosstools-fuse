@@ -31,6 +31,7 @@ import org.apache.maven.model.Repository;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
+import org.eclipse.osgi.util.NLS;
 import org.fusesource.ide.camel.model.service.core.CamelSchemaProvider;
 import org.fusesource.ide.camel.model.service.core.ICamelManagerService;
 import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelCatalogCoordinates;
@@ -128,7 +129,7 @@ public class CamelService implements ICamelManagerService {
 	@Override
 	public CamelModel getCamelModel(String camelVersion, String runtimeProvider, IProgressMonitor monitor) {
 		CamelCatalogCoordinates coords = CamelCatalogUtils.getCatalogCoordinatesFor(runtimeProvider, camelVersion);
-		SubMonitor subMonitor = SubMonitor.convert(monitor, "Downloading Camel Dependencies for version " + coords.getVersion(), 4);
+		SubMonitor subMonitor = SubMonitor.convert(monitor, NLS.bind(Messages.loadingCamelModel, coords.getVersion()), 4);
 		subMonitor.setWorkRemaining(3);
 		ICamelCatalogWrapper catalog = getCatalog(coords);
 		subMonitor.setWorkRemaining(2);
