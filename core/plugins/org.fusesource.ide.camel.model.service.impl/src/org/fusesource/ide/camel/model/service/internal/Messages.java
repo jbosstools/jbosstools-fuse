@@ -11,7 +11,6 @@
 package org.fusesource.ide.camel.model.service.internal;
 
 import org.eclipse.osgi.util.NLS;
-import org.fusesource.ide.camel.model.service.core.internal.CamelModelServiceCoreActivator;
 
 /**
  * @author lheinema
@@ -19,7 +18,7 @@ import org.fusesource.ide.camel.model.service.core.internal.CamelModelServiceCor
  */
 public class Messages extends NLS {
 	static {
-		NLS.initializeMessages(CamelModelServiceCoreActivator.PLUGIN_ID + ".internal.messages", Messages.class);
+		NLS.initializeMessages("org.fusesource.ide.camel.model.service.internal.messages", Messages.class);
 	}
 	
 	public static String loadingCamelModel;
