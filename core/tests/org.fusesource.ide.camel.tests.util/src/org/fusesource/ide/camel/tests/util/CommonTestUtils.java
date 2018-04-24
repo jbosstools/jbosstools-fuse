@@ -12,6 +12,9 @@ package org.fusesource.ide.camel.tests.util;
 
 import java.io.File;
 
+import org.eclipse.debug.core.DebugPlugin;
+import org.eclipse.debug.internal.ui.DebugUIPlugin;
+import org.eclipse.debug.internal.ui.IInternalDebugUIConstants;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.SWTException;
 import org.eclipse.swt.widgets.Display;
@@ -103,7 +106,7 @@ public class CommonTestUtils {
 	public static void enablePerspectiveSwitchPreset() {
 		IPreferenceStore store = IDEWorkbenchPlugin.getDefault().getPreferenceStore();
 		store.setValue(IDEInternalPreferences.PROJECT_SWITCH_PERSP_MODE, IDEInternalPreferences.PSPM_ALWAYS);
-		
+		DebugUIPlugin.getDefault().getPreferenceStore().setValue(IInternalDebugUIConstants.PREF_SWITCH_PERSPECTIVE_ON_SUSPEND, IDEInternalPreferences.PSPM_ALWAYS);
 	}
 	
 	/**
