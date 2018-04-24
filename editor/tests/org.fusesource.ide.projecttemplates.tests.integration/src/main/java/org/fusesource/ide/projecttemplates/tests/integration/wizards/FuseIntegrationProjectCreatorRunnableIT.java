@@ -260,9 +260,7 @@ public abstract class FuseIntegrationProjectCreatorRunnableIT extends AbstractPr
 		int currentAwaitedTime = 0;
 		while (currentAwaitedTime < ThreadGarbageCollector.THREAD_LIFE_DURATION && !deploymentFinished) {
 			readAndDispatch(0);
-			JMXConnector jmxc = null;
-			try{
-				jmxc = JMXConnectorFactory.connect(new JMXServiceURL(ICamelDebugConstants.DEFAULT_JMX_URI));
+			try (JMXConnector jmxc = JMXConnectorFactory.connect(new JMXServiceURL(ICamelDebugConstants.DEFAULT_JMX_URI))) {
 				MBeanServerConnection mbsc = jmxc.getMBeanServerConnection();
 				deploymentFinished = !mbsc.queryMBeans(new ObjectName(CamelDebugFacade.CAMEL_DEBUGGER_MBEAN_DEFAULT), null).isEmpty();
 				isDeploymentOk = deploymentFinished;
@@ -270,10 +268,6 @@ public abstract class FuseIntegrationProjectCreatorRunnableIT extends AbstractPr
 				System.out.println("isDeployment Finished? " + isDeploymentOk);
 			} catch(IOException ioe){
 				System.out.println("JMX connection attempt failed");
-			} finally {
-				if (jmxc != null) {
-					jmxc.close();
-				}
 			}
 			Thread.sleep(500);
 			currentAwaitedTime += 500;
