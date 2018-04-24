@@ -110,7 +110,10 @@ public class CommonTestUtils {
 	 * closes all editors
 	 */
 	public static void closeAllEditors() {
-		PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().closeAllEditors(false);
+		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+		if (page != null) {
+			page.closeAllEditors(false);
+		}
 	}
 	
 	/**
