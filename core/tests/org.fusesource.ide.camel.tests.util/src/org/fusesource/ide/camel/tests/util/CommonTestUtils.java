@@ -12,7 +12,9 @@ package org.fusesource.ide.camel.tests.util;
 
 import java.io.File;
 
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.DebugPlugin;
+import org.eclipse.debug.core.model.IBreakpoint;
 import org.eclipse.debug.internal.ui.DebugUIPlugin;
 import org.eclipse.debug.internal.ui.IInternalDebugUIConstants;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -27,6 +29,7 @@ import org.eclipse.ui.WorkbenchException;
 import org.eclipse.ui.internal.ide.IDEInternalPreferences;
 import org.eclipse.ui.internal.ide.IDEWorkbenchPlugin;
 import org.fusesource.ide.branding.perspective.FusePerspective;
+import org.fusesource.ide.launcher.debug.util.ICamelDebugConstants;
 
 /**
  * @author lhein
@@ -43,16 +46,23 @@ public class CommonTestUtils {
 	 * and creating a screenshot folder
 	 * 
 	 * @param screenshotFolder	the folder to store screenshots
-	 * @throws WorkbenchException Occurs when an error occurred while interacting with the Eclipse Workbench, for instance, an error while opening Fuse Perspective
+	 * @throws CoreException 
 	 */
-	public static void prepareIntegrationTestLaunch(String screenshotFolder) throws WorkbenchException {
+	public static void prepareIntegrationTestLaunch(String screenshotFolder) throws CoreException {
 		closeAllEditors();
 		enablePerspectiveSwitchPreset();
 		createScreenshotFolder(screenshotFolder);		
 		closeWelcomePage();
 		closeAllPerspectives();
 		openFuseIntegrationPerspective();
-		
+		clearAllCamelBreakpoints();
+	}
+
+	private static void clearAllCamelBreakpoints() throws CoreException {
+		for (IBreakpoint camelBreakpoint : DebugPlugin.getDefault().getBreakpointManager().getBreakpoints(ICamelDebugConstants.ID_CAMEL_DEBUG_MODEL)) {
+			Activator.pluginLog().logError("Breakpoint registered which shouldn't!" + camelBreakpoint);
+			camelBreakpoint.delete();
+		}
 	}
 
 	/**
