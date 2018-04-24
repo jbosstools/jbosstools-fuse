@@ -67,7 +67,7 @@ public abstract class SyndesisExtensionProjectCreatorRunnableIT extends Abstract
 	protected Map<String, String> versions;
 	
 	@Before
-	public void setup() throws WorkbenchException {
+	public void setup() throws CoreException {
 		SyndesisExtensionIntegrationTestsActivator.pluginLog()
 				.logInfo("Starting setup for " + SyndesisExtensionProjectCreatorRunnableIT.class.getSimpleName());
 		CommonTestUtils.prepareIntegrationTestLaunch(SCREENSHOT_FOLDER);
