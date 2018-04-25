@@ -169,7 +169,7 @@
 		<repository>
 			<id>fuse-early-access</id>
 			<name>Fuse Early Access - staging</name>
-			<url>https://origin-repository.jboss.org/nexus/content/</url>
+			<url>https://repository.jboss.org/nexus/content/</url>
 		</repository>
 
 	</repositories>
