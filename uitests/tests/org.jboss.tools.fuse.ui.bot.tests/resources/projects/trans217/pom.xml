@@ -124,7 +124,7 @@
     </repository>
     <repository>
       <id>fuse-early-access</id>
-      <url>https://origin-repository.jboss.org/nexus/content/groups/ea/</url>
+      <url>https://repository.jboss.org/nexus/content/groups/ea/</url>
     </repository>
   </repositories>
   <pluginRepositories>
@@ -170,7 +170,7 @@
     </pluginRepository>
     <pluginRepository>
       <id>fuse-early-access</id>
-      <url>https://origin-repository.jboss.org/nexus/content/groups/ea/</url>
+      <url>https://repository.jboss.org/nexus/content/groups/ea/</url>
     </pluginRepository>
   </pluginRepositories>
   <build>
