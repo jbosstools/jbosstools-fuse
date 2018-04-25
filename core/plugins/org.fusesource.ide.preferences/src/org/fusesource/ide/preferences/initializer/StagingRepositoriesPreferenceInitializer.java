@@ -32,7 +32,7 @@ public class StagingRepositoriesPreferenceInitializer extends AbstractPreference
 	private static final String PRODUCT_FUSE_NON_PRODUCTIZED_STAGING_REPO_URI =
 			"fuse-early-access"+
 			StagingRepositoriesConstants.NAME_URL_SEPARATOR+
-			"https://origin-repository.jboss.org/nexus/content/groups/ea/";
+			"https://repository.jboss.org/nexus/content/groups/ea/";
 	private static final String THIRD_PARTY_STAGING_REPO_URI =
 			"redhat-ea"+
 			StagingRepositoriesConstants.NAME_URL_SEPARATOR+

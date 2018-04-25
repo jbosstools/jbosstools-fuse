@@ -98,7 +98,7 @@ public class OnlineArtifactVersionSearcher {
 			if(!initializer.isStagingRepositoriesEnabled()) {
 				Repository mavenRepo = new Repository();
 				mavenRepo.setId("fuse-early-access");
-				mavenRepo.setUrl("https://origin-repository.jboss.org/nexus/content/groups/ea/");
+				mavenRepo.setUrl("https://repository.jboss.org/nexus/content/groups/ea/");
 				additionalMavenRepos.add(mavenRepo);
 			}
 			try {
