@@ -20,11 +20,9 @@ import java.util.List;
 
 import org.apache.maven.model.Dependency;
 import org.eclipse.core.filesystem.EFS;
-import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
@@ -131,7 +129,7 @@ public class Wsdl2RestWizard extends Wizard implements INewWizard {
 
 	public boolean isProjectBlueprint(IProject project) {
 		CamelMavenUtils cmu = new CamelMavenUtils();
-		List<Dependency> projectDependencies = cmu.getDependencyList(project);
+		List<Dependency> projectDependencies = cmu.getDependencyList(project, true);
 		Iterator<Dependency> depIter = projectDependencies.iterator();
 		while(depIter.hasNext()) {
 			Dependency dependency = depIter.next();
@@ -163,6 +161,23 @@ public class Wsdl2RestWizard extends Wizard implements INewWizard {
 		}
 	}
 	
+	private IResource getResourceForPath(IProject project, IPath path) throws CoreException {
+		IResource resource = ResourcesPlugin.getWorkspace().getRoot().findMember(path);
+		if (resource == null) {
+			IFolder folder;
+			if (!path.isEmpty() && path.segment(0).equals(options.getProjectName())) {
+				path = path.removeFirstSegments(1);
+			}
+			folder = project.getFolder(path);
+			if (!folder.exists()) {
+				prepare(folder);
+				project.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
+			}
+			resource = folder;
+		}
+		return resource;
+	}
+	
 	/**
 	 * Use the settings collected and call the wsdl2rest utility.
 	 *
@@ -171,38 +186,17 @@ public class Wsdl2RestWizard extends Wizard implements INewWizard {
 	private void generate() throws Exception {
 		URL wsdlLocation = new URL(options.getWsdlURL());
 		IPath javaPath = new org.eclipse.core.runtime.Path(options.getDestinationJava());
-		IResource resource = ResourcesPlugin.getWorkspace().getRoot().findMember(javaPath);
 		IProject project = options.getProject();
-		if (resource == null) {
-			IFolder folder = project.getFolder(javaPath.removeFirstSegments(1));
-			if (!folder.exists()) {
-				prepare(folder);
-				resource = folder;
-				project.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
-			}
-		}
+		IResource resource = getResourceForPath(project, javaPath);
+		File javaFile = findFileInEFS(resource);
 
 		// use project to determine if we are building a spring or blueprint project
 		boolean isBlueprint = isProjectBlueprint(project);
 		
-		File javaFile = findJavaFile(resource);
 		IPath camelPath = new org.eclipse.core.runtime.Path(options.getDestinationCamel());
-		IWorkspaceRoot wroot = ResourcesPlugin.getWorkspace().getRoot();
-		IContainer camelResource = (IContainer) wroot.findMember(camelPath);
-		if (camelResource == null) {
-			IFolder folder;
-			if (options.getDestinationCamel().startsWith('/' + options.getProjectName())) {
-				folder = project.getFolder(camelPath.removeFirstSegments(1));
-			} else {
-				folder = project.getFolder(camelPath);
-			}
-			if (!folder.exists()) {
-				prepare(folder);
-				camelResource = folder;
-				project.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
-			}
-		}
-		File camelFile = findCamelFile(camelResource);
+		IResource camelResource = getResourceForPath(project, camelPath);
+		File camelFile = findFileInEFS(camelResource);
+		
 		if (javaFile != null) {
 			ClassLoader oldLoader = Thread.currentThread().getContextClassLoader();
 			try {
@@ -234,6 +228,11 @@ public class Wsdl2RestWizard extends Wizard implements INewWizard {
 		}
 	}
 
+	/**
+	 * @param isBlueprint
+	 * @param camelFile
+	 * @param tool
+	 */
 	protected void initContextForTool(boolean isBlueprint, File camelFile, Wsdl2Rest tool) {
 		if (!isBlueprint) {
 			if (camelFile != null) {
@@ -263,8 +262,8 @@ public class Wsdl2RestWizard extends Wizard implements INewWizard {
 	 * @return
 	 * @throws CoreException
 	 */
-	protected File findJavaFile(IResource resource) throws CoreException {
-		File javaFile = null;
+	protected File findFileInEFS(IResource resource) throws CoreException {
+		File fileFound = null;
 		if (resource instanceof IFolder) {
 			IFolder destFolder = (IFolder) resource;
 			// gets URI for EFS.
@@ -276,32 +275,9 @@ public class Wsdl2RestWizard extends Wizard implements INewWizard {
 			}
 
 			// Gets native File using EFS
-			javaFile = EFS.getStore(uri).toLocalFile(0, new NullProgressMonitor());			
+			fileFound = EFS.getStore(uri).toLocalFile(0, new NullProgressMonitor());			
 		}
-		return javaFile;
-	}
-
-	/**
-	 * @param camelResource
-	 * @return
-	 * @throws CoreException
-	 */
-	protected File findCamelFile(IResource camelResource) throws CoreException {
-		File camelFile = null;
-		if (camelResource instanceof IFolder) {
-			IFolder camelDestFolder = (IFolder) camelResource;
-			// gets URI for EFS.
-			URI cameluri = camelDestFolder.getLocationURI();
-
-			// what if file is a link, resolve it.
-			if(camelDestFolder.isLinked()){
-				cameluri = camelDestFolder.getRawLocationURI();
-			}
-
-			// Gets native File using EFS
-			camelFile = EFS.getStore(cameluri).toLocalFile(0, new NullProgressMonitor());			
-		}
-		return camelFile;
+		return fileFound;
 	}
 
 	/**
