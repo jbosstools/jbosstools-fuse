@@ -20,5 +20,6 @@ Require-Bundle: org.junit,
  org.fusesource.ide.camel.model.service.core.tests.integration,
  org.fusesource.ide.camel.model.service.core,
  org.fusesource.ide.wsdl2rest.ui,
- org.eclipse.jdt.core
+ org.eclipse.jdt.core,
+ org.fusesource.ide.camel.editor
 Bundle-Vendor: %Bundle-Vendor
