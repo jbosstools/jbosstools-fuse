@@ -13,6 +13,8 @@ package org.fusesource.ide.wsdl2rest.ui.tests.integration;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -23,12 +25,15 @@ import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IResourceVisitor;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.NullProgressMonitor;
+import org.fusesource.ide.camel.editor.utils.BuildAndRefreshJobWaiterUtil;
+import org.fusesource.ide.camel.editor.utils.JobWaiterUtil;
 import org.fusesource.ide.camel.model.service.core.tests.integration.core.io.FuseProject;
 import org.fusesource.ide.wsdl2rest.ui.wizard.Wsdl2RestOptions;
 import org.fusesource.ide.wsdl2rest.ui.wizard.Wsdl2RestWizard;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -40,18 +45,54 @@ import org.junit.Test;
 public class Wsdl2RestWizardIT {
 
 	static final String WSDL_LOCATION = "src/test/resources/wsdl/Address.wsdl"; //$NON-NLS-1$
-	static final String OUTPUT_PATH = "target/generated-wsdl2rest"; //$NON-NLS-1$
-	static final String SPRING_CAMEL_PATH = "/src/main/resources/META-INF/spring/doclit-camel-context.xml"; //$NON-NLS-1$
+	static final String OUTPUT_PATH = "src/main/java"; //$NON-NLS-1$
+	static final String SPRING_CAMEL_PATH = "/src/main/resources/META-INF/spring"; //$NON-NLS-1$
+	static final String BLUEPRINT_CAMEL_PATH = "/src/main/resources/OSGI-INF/blueprint"; //$NON-NLS-1$
 
 	@Rule
 	public FuseProject fuseProject = new FuseProject(Wsdl2RestWizardIT.class.getName());
+
+	@Rule
+	public FuseProject fuseProject2 = new FuseProject(Wsdl2RestWizardIT.class.getName() + '2');
+
+	@Rule
+	public FuseProject fuseProject3 = new FuseProject(Wsdl2RestWizardIT.class.getName() + '3', true);
 	
-	private void runWsdl2RestWizard(String camelPath) throws Exception {
+	@Rule
+	public FuseProject fuseProject4 = new FuseProject(Wsdl2RestWizardIT.class.getName() + '4', true);
+
+	@Before
+	public void setup() throws CoreException, IOException {
+		fuseProject.createEmptyCamelFile();
+		fuseProject2.createEmptyCamelFile();
+		fuseProject3.createEmptyBlueprintCamelFile();
+		fuseProject4.createEmptyBlueprintCamelFile();
+		waitJob();
+	}
+
+	protected void waitJob() {
+		JobWaiterUtil jobWaiterUtil = new BuildAndRefreshJobWaiterUtil();
+		jobWaiterUtil.setEndless(true);
+		jobWaiterUtil.waitJob(new NullProgressMonitor());
+	}
+
+	private void processContainer(IContainer container, String extension, List<IFile> fileList) throws CoreException {
+		IResource [] members = container.members();
+		for (IResource member : members) {
+			if (member instanceof IContainer) {
+				processContainer((IContainer)member, extension, fileList);
+			} else if (member instanceof IFile && extension.equalsIgnoreCase(member.getFileExtension())) {
+				fileList.add((IFile) member);
+			}
+		}
+	} 
+
+	private void runWsdl2RestWizard(String camelPath, FuseProject project, String camelFileName) throws MalformedURLException, CoreException {
 		File wsdlFile = new File(WSDL_LOCATION);
 		Path outpath = new File(OUTPUT_PATH).toPath();
 		Wsdl2RestOptions options = new Wsdl2RestOptions();
 		options.setWsdlURL(wsdlFile.toURI().toURL().toExternalForm());
-		options.setProjectName(fuseProject.getProject().getName());
+		options.setProjectName(project.getProject().getName());
 		options.setDestinationJava(outpath.toString());
 		options.setDestinationCamel(camelPath);
 		options.setTargetRestServiceAddress(new URL("http://localhost:8083/myjaxrs").toExternalForm()); //$NON-NLS-1$
@@ -59,29 +100,41 @@ public class Wsdl2RestWizardIT {
 		Wsdl2RestWizard wizard = new Wsdl2RestWizard(options);
 		assertThat(wizard.performFinish()).isTrue();
 
-		IProject pr = fuseProject.getProject();
+		IProject pr = project.getProject();
 		pr.refreshLocal(IResource.DEPTH_INFINITE, null);
 
-		List<IFile> xmlFiles = findAllFilesWithExtension(pr, "xml");
-		IResource camelFile = findFileWithNameInList("rest-camel-context.xml", xmlFiles); //$NON-NLS-1$
+		List<IFile> xmlFiles = new ArrayList<>();
+		processContainer(pr, "xml", xmlFiles);
+		IResource camelFile = findFileWithNameInList(camelFileName, xmlFiles);
 		Assert.assertTrue("Generated Camel file not found", camelFile != null && camelFile.exists());
 
-		List<IFile> javaFiles = findAllFilesWithExtension(pr, "java");
+		List<IFile> javaFiles = new ArrayList<>();
+		processContainer(pr, "java", javaFiles);
 		IResource addAddressJavaFile = findFileWithNameInList("AddAddress.java", javaFiles); //$NON-NLS-1$
 		Assert.assertTrue("Generated AddAddress class not found",  //$NON-NLS-1$
 				addAddressJavaFile != null && addAddressJavaFile.exists());
 	}
-	
 
 	@Test
-	public void testWsdl2RestWizardWithNoProjectInCamelPath() throws Exception {
-		runWsdl2RestWizard(SPRING_CAMEL_PATH);
+	public void testWsdl2RestWizardWithNoProjectInCamelPath() throws MalformedURLException, CoreException {
+		runWsdl2RestWizard(SPRING_CAMEL_PATH, fuseProject, "rest-camel-context.xml");
 	}
 
 	@Test
-	public void testWsdl2RestWizardWithProjectInCamelPath() throws Exception {
-		String camelPath = '/' + Wsdl2RestWizardIT.class.getName() + '/' + SPRING_CAMEL_PATH;
-		runWsdl2RestWizard(camelPath);
+	public void testWsdl2RestWizardWithProjectInCamelPath() throws MalformedURLException, CoreException {
+		String camelPath = '/' + fuseProject2.getProject().getName() + '/' + SPRING_CAMEL_PATH;
+		runWsdl2RestWizard(camelPath, fuseProject2, "rest-camel-context.xml");
+	}
+
+	@Test
+	public void testWsdl2RestWizardWithBlueprintNoProjectInCamelPath() throws MalformedURLException, CoreException {
+		runWsdl2RestWizard(BLUEPRINT_CAMEL_PATH, fuseProject3, "rest-blueprint-context.xml");
+	}
+	
+	@Test
+	public void testWsdl2RestWizardWithBlueprintProjectInCamelPath() throws MalformedURLException, CoreException {
+		String camelPath = '/' + fuseProject4.getProject().getName() + '/' + BLUEPRINT_CAMEL_PATH;
+		runWsdl2RestWizard(camelPath, fuseProject4, "rest-blueprint-context.xml");
 	}
 
 	private IFile findFileWithNameInList(String name, List<IFile> files) {
@@ -94,29 +147,5 @@ public class Wsdl2RestWizardIT {
 		}
 		return null;
 	}
-
-	/**
-	 * Returns a list of *.xml files in {@code container}.
-	 */
-	private List<IFile> findAllFilesWithExtension(IContainer container, String extension) {
-		final List<IFile> xmlFiles = new ArrayList<>();
-
-		try {
-			IResourceVisitor webInfCollector = new IResourceVisitor() {
-				@Override
-				public boolean visit(IResource resource) throws CoreException {
-					if (resource.getType() == IResource.FILE && extension.equalsIgnoreCase(resource.getFileExtension())) {
-						xmlFiles.add((IFile) resource);
-						return false;  // No need to visit sub-directories.
-					}
-					return true;
-				}
-			};
-			container.accept(webInfCollector);
-		} catch (CoreException ex) {
-			// Our attempt to find files failed, but don't error out.
-		}
-		return xmlFiles;
-	}	
 
 }
