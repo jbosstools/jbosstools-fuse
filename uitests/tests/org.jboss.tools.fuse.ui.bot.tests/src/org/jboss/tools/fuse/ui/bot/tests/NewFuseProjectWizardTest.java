@@ -112,7 +112,7 @@ public class NewFuseProjectWizardTest {
 	 * <li>Invoke <i>File --> New --> Fuse Integration Project</i> wizard</li>
 	 * <li>Set project name</li>
 	 * <li>Hit 'Next'</li>
-	 * <li>Verify that 'No Runtime Selected' is in 'Target Runtime'</li>
+	 * <li>Verify that 'None selected' is in 'Target Runtime'</li>
 	 * <li>Change the version of Camel to '2.17.3'</li>
 	 * <li>Finish the wizard</li>
 	 * <li>Check whether the project has in 'pom.xml' right version of Camel</li>

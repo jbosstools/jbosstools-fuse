@@ -62,7 +62,7 @@ public class NewFuseProjectWizardWithFuseRequirementsTest {
 	 * <li>Hit 'Next'</li>
 	 * <li>Check whether the configured runtime is present in 'Target Runtime' combobox</li>
 	 * <li>Select the configured runtime and check whether Camel version is set properly and user cannot change it</li>
-	 * <li>Select 'Target Runtime' to 'No Runtime Selected'</li>
+	 * <li>Select 'Target Runtime' to 'None selected'</li>
 	 * <li>Check whether user can change Camel Version</li>
 	 * <li>Cancel the wizard</li>
 	 * </ol>
@@ -80,7 +80,7 @@ public class NewFuseProjectWizardWithFuseRequirementsTest {
 		assertEquals("There is something wrong in 'Target Runtime' Combo box!", 2,
 				secondPage.getKarafRuntimes().size());
 		for (String temp : secondPage.getKarafRuntimes()) {
-			if (!(temp.equals("No Runtime selected")
+			if (!(temp.equals("None selected")
 					|| temp.equals(serverRequirement.getConfiguration().getServer().getRuntimeName()))) {
 				fail("'Target Runtime' Combo box contains something wrong!");
 			}
