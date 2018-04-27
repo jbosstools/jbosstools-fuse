@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017 Red Hat, Inc. 
+ * Copyright (c) 2018 Red Hat, Inc. 
  * Distributed under license by Red Hat, Inc. All rights reserved. 
  * This program is made available under the terms of the 
  * Eclipse Public License v1.0 which accompanies this distribution, 
@@ -10,59 +10,98 @@
  ******************************************************************************/
 package org.jboss.tools.fuse.ui.bot.tests;
 
-import static org.eclipse.reddeer.requirements.server.ServerRequirementState.RUNNING;
+import static org.eclipse.reddeer.requirements.server.ServerRequirementState.PRESENT;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
-import org.eclipse.reddeer.common.exception.WaitTimeoutExpiredException;
-import org.eclipse.reddeer.common.wait.AbstractWait;
 import org.eclipse.reddeer.common.wait.TimePeriod;
-import org.eclipse.reddeer.common.wait.WaitUntil;
 import org.eclipse.reddeer.eclipse.m2e.core.ui.wizard.MavenImportWizard;
-import org.eclipse.reddeer.eclipse.ui.problems.Problem;
+import org.eclipse.reddeer.eclipse.ui.navigator.resources.ProjectExplorer;
 import org.eclipse.reddeer.eclipse.ui.views.log.LogView;
 import org.eclipse.reddeer.eclipse.ui.views.markers.ProblemsView;
 import org.eclipse.reddeer.eclipse.ui.views.markers.ProblemsView.ProblemType;
-import org.eclipse.reddeer.junit.annotation.RequirementRestriction;
+import org.eclipse.reddeer.junit.internal.runner.ParameterizedRequirementsRunnerFactory;
 import org.eclipse.reddeer.junit.requirement.inject.InjectRequirement;
-import org.eclipse.reddeer.junit.requirement.matcher.RequirementMatcher;
 import org.eclipse.reddeer.junit.runner.RedDeerSuite;
+import org.eclipse.reddeer.requirements.cleanworkspace.CleanWorkspaceRequirement.CleanWorkspace;
+import org.eclipse.reddeer.requirements.openperspective.OpenPerspectiveRequirement.OpenPerspective;
 import org.eclipse.reddeer.workbench.impl.shell.WorkbenchShell;
 import org.eclipse.reddeer.workbench.ui.dialogs.WorkbenchPreferenceDialog;
-import org.jboss.tools.fuse.reddeer.JiraIssue;
-import org.jboss.tools.fuse.reddeer.LogGrapper;
-import org.jboss.tools.fuse.reddeer.condition.FuseLogContainsText;
+import org.jboss.tools.fuse.reddeer.perspectives.FuseIntegrationPerspective;
 import org.jboss.tools.fuse.reddeer.preference.ConsolePreferencePage;
 import org.jboss.tools.fuse.reddeer.projectexplorer.CamelProject;
 import org.jboss.tools.fuse.reddeer.requirement.FuseRequirement;
 import org.jboss.tools.fuse.reddeer.requirement.FuseRequirement.Fuse;
-import org.jboss.tools.fuse.reddeer.runtime.ServerTypeMatcher;
-import org.jboss.tools.fuse.reddeer.runtime.impl.ServerFuse;
 import org.jboss.tools.fuse.reddeer.utils.FuseServerManipulator;
+import org.jboss.tools.fuse.reddeer.utils.LogChecker;
 import org.jboss.tools.fuse.reddeer.utils.ProjectFactory;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized.Parameters;
+import org.junit.runners.Parameterized.UseParametersRunnerFactory;
 
 /**
- * Tests quickstarts which contains Red Hat Fuse Runtime
+ * Test compliance between Fuse Tooling and Quickstarts distributed with Fuse runtime
  * 
  * @author tsedmik
  */
-@Fuse(state = RUNNING)
+@CleanWorkspace
 @RunWith(RedDeerSuite.class)
+@Fuse(state = PRESENT)
+@OpenPerspective(FuseIntegrationPerspective.class)
+@UseParametersRunnerFactory(ParameterizedRequirementsRunnerFactory.class)
 public class QuickStartsTest {
 
 	@InjectRequirement
-	private FuseRequirement serverRequirement;
-	
-	@RequirementRestriction
-	public static RequirementMatcher getRestrictionMatcher() {
-		return new RequirementMatcher(Fuse.class, "server", new ServerTypeMatcher(ServerFuse.class));
+	private static FuseRequirement serverRequirement;
+
+	private String quickstart;
+
+	public QuickStartsTest(String quickstart) {
+		this.quickstart = quickstart;
+	}
+
+	/**
+	 * Sets parameters for parameterized test
+	 * 
+	 * @return List of all available quickstarts
+	 */
+	@Parameters(name = "{0}")
+	public static Collection<String> setupData() {
+		File quickstartsHome = new File(serverRequirement.getConfiguration().getServer().getHome() + "/quickstarts/");
+		List<String> allQuickstarts = new ArrayList<>();
+		searchQuickstart(quickstartsHome, allQuickstarts);
+		return allQuickstarts;
+	}
+
+	/**
+	 * Recursive algorithm which search for quickstarts in Fuse runtime distribution. A Folder with quickstart is
+	 * determined as a folder with child folder 'src'.
+	 * 
+	 * @param startingPoint
+	 *                          File from where is searching started
+	 * @param result
+	 *                          List of absolute paths to all quickstarts found
+	 */
+	private static void searchQuickstart(File startingPoint, List<String> result) {
+		for (String item : startingPoint.list()) {
+			File itemAsFile = new File(startingPoint.getAbsolutePath() + "/" + item);
+			if (itemAsFile.isFile()) {
+				continue;
+			}
+			if (itemAsFile.isDirectory() && itemAsFile.getName().equals("src")) {
+				result.add(itemAsFile.getParentFile().getAbsolutePath());
+				break;
+			}
+			searchQuickstart(itemAsFile, result);
+		}
 	}
 
 	/**
@@ -96,17 +135,6 @@ public class QuickStartsTest {
 	}
 
 	/**
-	 * Removes all deployed projects
-	 */
-	@After
-	public void setupUndeployProjects() {
-
-		AbstractWait.sleep(TimePeriod.DEFAULT);
-		new WorkbenchShell();
-		FuseServerManipulator.removeAllModules(serverRequirement.getConfiguration().getServer().getName());
-	}
-
-	/**
 	 * Deletes all created projects
 	 */
 	@After
@@ -115,136 +143,29 @@ public class QuickStartsTest {
 	}
 
 	/**
-	 * <p>
-	 * Test tries to deploy 'beginner-camel-cbr' quickstart to Red Hat Fuse Runtime.
-	 * </p>
-	 * <b>Steps:</b>
-	 * <ol>
-	 * <li>import 'beginner-camel-cbr' project from Red Hat Fuse quickstarts</li>
-	 * <li>check that project is ok (no errors, unresolved dependencies, ...)</li>
-	 * <li>deploy the project to Red Hat Fuse</li>
-	 * <li>check whether the project is successfully deployed (check whether Red Hat Fuse log contains '(CamelContext:
-	 * cbr-example-context) started')</li>
-	 * </ol>
+	 * Remove all deployed project on the runtime
 	 */
-	@Test
-	public void testBeginnerCamelCBR() {
-
-		String quickstart = serverRequirement.getConfiguration().getServer().getHome() + "/quickstarts/beginner/camel-cbr";
-		MavenImportWizard.importProject(quickstart);
-		assertTrue("There are some errors in Error Log", LogGrapper.getPluginErrors("fuse").size() == 0);
-		CamelProject project = new CamelProject("beginner-camel-cbr");
-		project.enableCamelNature();
-		FuseServerManipulator.addModule(serverRequirement.getConfiguration().getServer().getName(), "beginner-camel-cbr");
-		try {
-			new WaitUntil(new FuseLogContainsText("(CamelContext: cbr-example-context) started"));
-		} catch (WaitTimeoutExpiredException e) {
-			fail("Project 'beginner-camel-cbr' was not sucessfully deployed!");
-		}
-		checkProblemsView();
+	@After
+	public void setupRemoveAllDeployedProjects() {
+		FuseServerManipulator.removeAllModules(serverRequirement.getConfiguration().getServer().getName());
 	}
 
 	/**
 	 * <p>
-	 * Test tries to deploy 'beginner-camel-eips' quickstart to Red Hat Fuse Runtime.
+	 * Test tries to import a quickstart from Red Hat Fuse Runtime.
 	 * </p>
 	 * <b>Steps:</b>
 	 * <ol>
-	 * <li>import 'beginner-camel-eips' project from Red Hat Fuse quickstarts</li>
+	 * <li>import a project from Red Hat Fuse quickstarts</li>
 	 * <li>check that project is ok (no errors, unresolved dependencies, ...)</li>
-	 * <li>deploy the project to Red Hat Fuse</li>
-	 * <li>check whether the project is successfully deployed (check whether Red Hat Fuse log contains '(CamelContext:
-	 * eip-example-context) started')</li>
 	 * </ol>
 	 */
 	@Test
-	public void testBeginnerCamelEIPs() {
+	public void testQuickStart() {
 
-		String quickstart = serverRequirement.getConfiguration().getServer().getHome()
-				+ "/quickstarts/beginner/camel-eips";
-		MavenImportWizard.importProject(quickstart);
-		assertTrue("There are some errors in Error Log", LogGrapper.getPluginErrors("fuse").size() == 0);
-		CamelProject project = new CamelProject("beginner-camel-eips");
-		project.enableCamelNature();
-		FuseServerManipulator.addModule(serverRequirement.getConfiguration().getServer().getName(), "beginner-camel-eips");
-		try {
-			new WaitUntil(new FuseLogContainsText("(CamelContext: eip-example-context) started"));
-		} catch (WaitTimeoutExpiredException e) {
-			fail("Project 'beginner-camel-eips' was not sucessfully deployed!");
-		}
-		checkProblemsView();
-	}
-
-	/**
-	 * <p>
-	 * Test tries to deploy 'beginner-camel-errorhandler' quickstart to Red Hat Fuse Runtime.
-	 * </p>
-	 * <b>Steps:</b>
-	 * <ol>
-	 * <li>import 'beginner-camel-errorhandler' project from Red Hat Fuse quickstarts</li>
-	 * <li>check that project is ok (no errors, unresolved dependencies, ...)</li>
-	 * <li>deploy the project to Red Hat Fuse</li>
-	 * <li>check whether the project is successfully deployed (check whether Red Hat Fuse log contains '(CamelContext:
-	 * errors-example-context) started')</li>
-	 * </ol>
-	 */
-	@Test
-	public void testBeginnerCamelErrorHandler() {
-
-		String quickstart = serverRequirement.getConfiguration().getServer().getHome()
-				+ "/quickstarts/beginner/camel-errorhandler";
-		MavenImportWizard.importProject(quickstart);
-		assertTrue("There are some errors in Error Log", LogGrapper.getPluginErrors("fuse").size() == 0);
-		CamelProject project = new CamelProject("beginner-camel-errorhandler");
-		project.enableCamelNature();
-		FuseServerManipulator.addModule(serverRequirement.getConfiguration().getServer().getName(), "beginner-camel-errorhandler");
-		try {
-			new WaitUntil(new FuseLogContainsText("(CamelContext: errors-example-context) started"));
-		} catch (WaitTimeoutExpiredException e) {
-			fail("Project 'beginner-camel-errorhandler' was not sucessfully deployed!");
-		}
-		checkProblemsView();
-	}
-
-	/**
-	 * <p>
-	 * Test tries to deploy 'beginner-camel-log' quickstart to Red Hat Fuse Runtime.
-	 * </p>
-	 * <b>Steps:</b>
-	 * <ol>
-	 * <li>import 'beginner-camel-log' project from Red Hat Fuse quickstarts</li>
-	 * <li>check that project is ok (no errors, unresolved dependencies, ...)</li>
-	 * <li>deploy the project to Red Hat Fuse</li>
-	 * <li>check whether the project is successfully deployed (check whether Red Hat Fuse log contains '(CamelContext:
-	 * log-example-context) started')</li>
-	 * </ol>
-	 */
-	@Test
-	public void testBeginnerCamelLog() {
-
-		String quickstart = serverRequirement.getConfiguration().getServer().getHome() + "/quickstarts/beginner/camel-log";
-		MavenImportWizard.importProject(quickstart);
-		assertTrue("There are some errors in Error Log", LogGrapper.getPluginErrors("fuse").size() == 0);
-		CamelProject project = new CamelProject("beginner-camel-log");
-		project.enableCamelNature();
-		FuseServerManipulator.addModule(serverRequirement.getConfiguration().getServer().getName(), "beginner-camel-log");
-		try {
-			new WaitUntil(new FuseLogContainsText("(CamelContext: log-example-context) started"));
-		} catch (WaitTimeoutExpiredException e) {
-			fail("Project 'beginner-camel-log' was not sucessfully deployed!");
-		}
-		checkProblemsView();
-	}
-
-	private void checkProblemsView() {
-		
-		List<Problem> problems = new ProblemsView().getProblems(ProblemType.ERROR);
-		if (problems.size() == 0) {
-			return;
-		}
-		if (problems.size() == 1 && problems.get(0).getDescription().startsWith("Referenced file contains errors (http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd).")) {
-			throw new JiraIssue("ENTESB-6115");
-		}
-		fail("There are some errors in Problems view");
+		MavenImportWizard.importProject(quickstart, TimePeriod.getCustom(1000));
+		new CamelProject(new ProjectExplorer().getProjects().get(0).getName()).update();
+		LogChecker.assertNoFuseError();
+		assertTrue("Problems view contains some errors", new ProblemsView().getProblems(ProblemType.ERROR).isEmpty());
 	}
 }
