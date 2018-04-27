@@ -39,6 +39,9 @@ public class UIMessages extends NLS {
 	public static String wsdl2RestWizardSecondPageTargetServiceAddressLabel;
 	public static String wsdl2RestWizardSecondPageValidatorJavaClassMustExist;
 	public static String wsdl2RestWizardSecondPageValidatorPathMustBeAccessible;
+
+	public static String wsdl2RestWizardSecondPageValidatorPathOverwriteWarning;
+	public static String wsdl2RestWizardSecondPageValidatorFileOverwriteWarning;
 	public static String wsdl2RestWizardSecondPageValidatorPathRequired;
 
 	public static String wsdl2RestWizardSecondPageValidatorPathWarning;

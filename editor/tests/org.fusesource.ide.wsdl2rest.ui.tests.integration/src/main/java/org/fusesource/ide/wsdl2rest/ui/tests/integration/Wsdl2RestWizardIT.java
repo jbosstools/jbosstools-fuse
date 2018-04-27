@@ -61,12 +61,16 @@ public class Wsdl2RestWizardIT {
 	@Rule
 	public FuseProject fuseProject4 = new FuseProject(Wsdl2RestWizardIT.class.getName() + '4', true);
 
+	@Rule
+	public FuseProject fuseProject5 = new FuseProject(Wsdl2RestWizardIT.class.getName() + '5', true);
+
 	@Before
 	public void setup() throws CoreException, IOException {
 		fuseProject.createEmptyCamelFile();
 		fuseProject2.createEmptyCamelFile();
 		fuseProject3.createEmptyBlueprintCamelFile();
 		fuseProject4.createEmptyBlueprintCamelFile();
+		fuseProject5.createEmptyCamelFile();
 		waitJob();
 	}
 
@@ -98,6 +102,7 @@ public class Wsdl2RestWizardIT {
 		options.setTargetRestServiceAddress(new URL("http://localhost:8083/myjaxrs").toExternalForm()); //$NON-NLS-1$
 		options.setTargetServiceAddress(new URL("http://localhost:8080/doclit").toExternalForm()); //$NON-NLS-1$
 		Wsdl2RestWizard wizard = new Wsdl2RestWizard(options);
+		wizard.setInTest(true);
 		assertThat(wizard.performFinish()).isTrue();
 
 		IProject pr = project.getProject();
@@ -117,24 +122,30 @@ public class Wsdl2RestWizardIT {
 
 	@Test
 	public void testWsdl2RestWizardWithNoProjectInCamelPath() throws MalformedURLException, CoreException {
-		runWsdl2RestWizard(SPRING_CAMEL_PATH, fuseProject, "rest-camel-context.xml");
+		runWsdl2RestWizard(SPRING_CAMEL_PATH, fuseProject, Wsdl2RestWizard.DEFAULT_CONFIG_NAME);
 	}
 
 	@Test
 	public void testWsdl2RestWizardWithProjectInCamelPath() throws MalformedURLException, CoreException {
 		String camelPath = '/' + fuseProject2.getProject().getName() + '/' + SPRING_CAMEL_PATH;
-		runWsdl2RestWizard(camelPath, fuseProject2, "rest-camel-context.xml");
+		runWsdl2RestWizard(camelPath, fuseProject2, Wsdl2RestWizard.DEFAULT_CONFIG_NAME);
 	}
 
 	@Test
 	public void testWsdl2RestWizardWithBlueprintNoProjectInCamelPath() throws MalformedURLException, CoreException {
-		runWsdl2RestWizard(BLUEPRINT_CAMEL_PATH, fuseProject3, "rest-blueprint-context.xml");
+		runWsdl2RestWizard(BLUEPRINT_CAMEL_PATH, fuseProject3, Wsdl2RestWizard.DEFAULT_BLUEPRINT_CONFIG_NAME);
 	}
 	
 	@Test
 	public void testWsdl2RestWizardWithBlueprintProjectInCamelPath() throws MalformedURLException, CoreException {
 		String camelPath = '/' + fuseProject4.getProject().getName() + '/' + BLUEPRINT_CAMEL_PATH;
-		runWsdl2RestWizard(camelPath, fuseProject4, "rest-blueprint-context.xml");
+		runWsdl2RestWizard(camelPath, fuseProject4, Wsdl2RestWizard.DEFAULT_BLUEPRINT_CONFIG_NAME);
+	}
+
+	@Test
+	public void testWsdl2RestWizardWithCustomFileInCamelPath() throws MalformedURLException, CoreException {
+		String camelPath = SPRING_CAMEL_PATH + '/' + "customconfig.xml";
+		runWsdl2RestWizard(camelPath, fuseProject5, "customconfig.xml");
 	}
 
 	private IFile findFileWithNameInList(String name, List<IFile> files) {
