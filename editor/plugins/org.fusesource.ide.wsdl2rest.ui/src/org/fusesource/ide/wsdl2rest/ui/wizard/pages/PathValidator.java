@@ -12,11 +12,15 @@ package org.fusesource.ide.wsdl2rest.ui.wizard.pages;
 
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.databinding.validation.ValidationStatus;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.fusesource.ide.wsdl2rest.ui.internal.UIMessages;
+import org.fusesource.ide.wsdl2rest.ui.internal.Wsdl2RestUIActivator;
 
 /**
  * Validates that a given path exists in the selected project.
@@ -57,6 +61,25 @@ public class PathValidator implements IValidator {
 		return container != null && container.exists();
 	}
 
+	private String doContentsExist(String path) throws CoreException {
+		Path testPath = new Path(path);
+		IResource resource = 
+				ResourcesPlugin.getWorkspace().getRoot().findMember(testPath);
+		if (resource.getType() == IResource.FOLDER) {
+			IFolder folder = (IFolder) resource;
+			if (folder.members() != null && folder.members().length > 0) {
+				return UIMessages.wsdl2RestWizardSecondPageValidatorPathOverwriteWarning;
+			}
+		}
+		if (resource.getType() == IResource.FILE) {
+			IFile file = (IFile) resource;
+			if (file.exists() && file.isAccessible()) {
+				return UIMessages.wsdl2RestWizardSecondPageValidatorFileOverwriteWarning;
+			}
+		}
+		return null;
+	}
+
 	@Override
 	public IStatus validate(Object value) {
 		if (value instanceof String) {
@@ -69,6 +92,14 @@ public class PathValidator implements IValidator {
 			}
 			if (!isPathAccessibleAbsolute(stringValue)) {
 				return ValidationStatus.warning(UIMessages.wsdl2RestWizardSecondPageValidatorPathWarning);
+			} 
+			try {
+				String message = doContentsExist(stringValue);
+				if (message != null){
+					return ValidationStatus.warning(message);
+				}
+			} catch (CoreException e) {
+				Wsdl2RestUIActivator.pluginLog().logError(e);
 			}
 		}
 		return ValidationStatus.ok();   		

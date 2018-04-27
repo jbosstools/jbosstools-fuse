@@ -20,6 +20,7 @@ import java.util.List;
 
 import org.apache.maven.model.Dependency;
 import org.eclipse.core.filesystem.EFS;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -31,6 +32,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.ErrorDialog;
+import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
@@ -39,6 +41,8 @@ import org.eclipse.ui.ISelectionService;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 import org.fusesource.ide.camel.editor.utils.MavenUtils;
+import org.fusesource.ide.camel.model.service.core.io.CamelIOHandler;
+import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
 import org.fusesource.ide.camel.model.service.core.util.CamelMavenUtils;
 import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.wsdl2rest.ui.internal.UIMessages;
@@ -57,6 +61,14 @@ public class Wsdl2RestWizard extends Wizard implements INewWizard {
 	 * Collection of settings used by the wsdl2rest utility.
 	 */
 	final Wsdl2RestOptions options;
+	
+	public static final String DEFAULT_CONFIG_NAME = "rest-camel-context.xml"; //$NON-NLS-1$
+	public static final String DEFAULT_BLUEPRINT_CONFIG_NAME = "rest-blueprint-context.xml"; //$NON-NLS-1$
+	public static final String DEFAULT_SPRINGBOOT_CONFIG_NAME = "rest-springboot-context.xml"; //$NON-NLS-1$
+
+	private Wsdl2RestWizardSecondPage pageTwo;
+	
+	private boolean inTest = false;
 	
 	public Wsdl2RestWizard() {
 		options = new Wsdl2RestOptions();
@@ -121,15 +133,14 @@ public class Wsdl2RestWizard extends Wizard implements INewWizard {
 		}
 		addPage(pageOne);
 
-		// page two
-		Wsdl2RestWizardSecondPage pageTwo = new Wsdl2RestWizardSecondPage("page2", //$NON-NLS-1$ 
+		pageTwo = new Wsdl2RestWizardSecondPage("page2", //$NON-NLS-1$ 
 				UIMessages.wsdl2RestWizardPageTwoTitle); 
 		addPage(pageTwo);
 	}
 
 	public boolean isProjectBlueprint(IProject project) {
 		CamelMavenUtils cmu = new CamelMavenUtils();
-		List<Dependency> projectDependencies = cmu.getDependencyList(project, true);
+		List<Dependency> projectDependencies = cmu.getDependencyList(project);
 		Iterator<Dependency> depIter = projectDependencies.iterator();
 		while(depIter.hasNext()) {
 			Dependency dependency = depIter.next();
@@ -141,7 +152,13 @@ public class Wsdl2RestWizard extends Wizard implements INewWizard {
 		return false;
 	}
 	
-	private void updateDependencies() throws CoreException {
+	public boolean isProjectSpringBoot(IProject project) {
+		CamelMavenUtils cmu = new CamelMavenUtils();
+		List<Dependency> projectDependencies = cmu.getDependencyList(project);
+		return CamelCatalogUtils.hasSpringBootDependency(projectDependencies);
+	}
+
+	private void updateDependencies() {
 		List<org.fusesource.ide.camel.model.service.core.catalog.Dependency> deps = new ArrayList<>();
 		org.fusesource.ide.camel.model.service.core.catalog.Dependency one = 
 				new org.fusesource.ide.camel.model.service.core.catalog.Dependency();
@@ -151,7 +168,6 @@ public class Wsdl2RestWizard extends Wizard implements INewWizard {
 		deps.add(one);
 		IProject project = options.getProject();
 		new MavenUtils().updateMavenDependencies(deps, project);
-		project.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
 	}
 
 	private void prepare(IFolder folder) throws CoreException {
@@ -164,16 +180,37 @@ public class Wsdl2RestWizard extends Wizard implements INewWizard {
 	private IResource getResourceForPath(IProject project, IPath path) throws CoreException {
 		IResource resource = ResourcesPlugin.getWorkspace().getRoot().findMember(path);
 		if (resource == null) {
-			IFolder folder;
 			if (!path.isEmpty() && path.segment(0).equals(options.getProjectName())) {
 				path = path.removeFirstSegments(1);
 			}
-			folder = project.getFolder(path);
+			IFolder folder = project.getFolder(path);
 			if (!folder.exists()) {
 				prepare(folder);
-				project.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
 			}
 			resource = folder;
+		}
+		return resource;
+	}
+	
+	private IResource getFileForPath(IProject project, IPath path) throws CoreException {
+		if (path.getFileExtension() == null) {
+			return getResourceForPath(project, path);
+		}
+		IResource resource = ResourcesPlugin.getWorkspace().getRoot().findMember(path);
+		if (resource == null) {
+			if (!path.isEmpty() && !path.segment(0).equals(options.getProjectName())) {
+				path = project.getFullPath().append(path);
+			}
+			resource = ResourcesPlugin.getWorkspace().getRoot().findMember(path);
+			if (resource == null) {
+				IPath absolute = ResourcesPlugin.getWorkspace().getRoot().getLocation().append(path).makeAbsolute();
+				java.io.File ioFile = absolute.removeLastSegments(1).makeAbsolute().toFile();
+				ioFile.mkdirs();
+				project.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
+				IFile newFile = ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(absolute);
+				new CamelIOHandler().loadCamelModel(newFile, new NullProgressMonitor());				
+				resource = newFile;
+			}
 		}
 		return resource;
 	}
@@ -192,9 +229,10 @@ public class Wsdl2RestWizard extends Wizard implements INewWizard {
 
 		// use project to determine if we are building a spring or blueprint project
 		boolean isBlueprint = isProjectBlueprint(project);
+		boolean isSpringBoot = isProjectSpringBoot(project);
 		
 		IPath camelPath = new org.eclipse.core.runtime.Path(options.getDestinationCamel());
-		IResource camelResource = getResourceForPath(project, camelPath);
+		IResource camelResource = getFileForPath(project, camelPath);
 		File camelFile = findFileInEFS(camelResource);
 		
 		if (javaFile != null) {
@@ -205,7 +243,7 @@ public class Wsdl2RestWizard extends Wizard implements INewWizard {
 
 				Path outJavaPath = javaFile.toPath();
 				Wsdl2Rest tool = new Wsdl2Rest(wsdlLocation, outJavaPath);
-				initContextForTool(isBlueprint, camelFile, tool);
+				initContextForTool(isBlueprint, isSpringBoot, camelFile, tool);
 				if (!Strings.isEmpty(options.getTargetServiceAddress())) {
 					URI targetAddressURI = new URI(options.getTargetServiceAddress());
 					URL targetAddressURL = targetAddressURI.toURL();
@@ -224,37 +262,49 @@ public class Wsdl2RestWizard extends Wizard implements INewWizard {
 				updateDependencies();
 			}  finally {
 				Thread.currentThread().setContextClassLoader(oldLoader);
+				project.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
 			}
 		}
 	}
 
 	/**
 	 * @param isBlueprint
+	 * @param isSpringBoot
+	 * @return
+	 */
+	public String getCamelFileName(boolean isBlueprint, boolean isSpringBoot) {
+		if (isBlueprint) {
+			return DEFAULT_BLUEPRINT_CONFIG_NAME;
+		}
+		if (isSpringBoot) {
+			return DEFAULT_SPRINGBOOT_CONFIG_NAME;
+		}
+		return DEFAULT_CONFIG_NAME;
+	}
+	
+	/**
+	 * @param isBlueprint
 	 * @param camelFile
 	 * @param tool
 	 */
-	protected void initContextForTool(boolean isBlueprint, File camelFile, Wsdl2Rest tool) {
-		if (!isBlueprint) {
-			if (camelFile != null) {
-				Path contextpath = new File(camelFile.getAbsolutePath() + File.separator + "rest-camel-context.xml").toPath(); //$NON-NLS-1$
-				tool.setCamelContext(contextpath); 
-			} else {
-				IProject project = options.getProject();
-				IPath projectPath = ResourcesPlugin.getWorkspace().getRoot().findMember(project.getName()).getLocation();
-				Path contextpath = new File(projectPath.makeAbsolute() + File.separator + "rest-camel-context.xml").toPath(); //$NON-NLS-1$
-				tool.setCamelContext(contextpath); 
-			}
+	protected Path initContextForTool(boolean isBlueprint, boolean isSpringBoot, File camelFile, Wsdl2Rest tool) {
+		Path contextpath = null;
+		if (camelFile != null && !camelFile.isDirectory()) {
+			contextpath = new File(camelFile.getAbsolutePath()).toPath();
+			tool.setCamelContext(contextpath);
 		} else {
+			String camelConfigName = getCamelFileName(isBlueprint, isSpringBoot);
 			if (camelFile != null) {
-				Path contextpath = new File(camelFile.getAbsolutePath() + File.separator + "rest-blueprint-context.xml").toPath(); //$NON-NLS-1$
+				contextpath = new File(camelFile.getAbsolutePath() + File.separator + camelConfigName).toPath();
 				tool.setCamelContext(contextpath); 
 			} else {
 				IProject project = options.getProject();
 				IPath projectPath = ResourcesPlugin.getWorkspace().getRoot().findMember(project.getName()).getLocation();
-				Path contextpath = new File(projectPath.makeAbsolute() + File.separator + "rest-blueprint-context.xml").toPath(); //$NON-NLS-1$
-				tool.setBlueprintContext(contextpath);
+				contextpath = new File(projectPath.makeAbsolute() + File.separator + camelConfigName).toPath();
+				tool.setCamelContext(contextpath); 
 			}
 		}
+		return contextpath;
 	}
 
 	/**
@@ -264,19 +314,18 @@ public class Wsdl2RestWizard extends Wizard implements INewWizard {
 	 */
 	protected File findFileInEFS(IResource resource) throws CoreException {
 		File fileFound = null;
-		if (resource instanceof IFolder) {
-			IFolder destFolder = (IFolder) resource;
-			// gets URI for EFS.
-			URI uri = destFolder.getLocationURI();
 
-			// what if file is a link, resolve it.
-			if(destFolder.isLinked()){
-				uri = destFolder.getRawLocationURI();
-			}
+		// gets URI for EFS.
+		URI uri = resource.getLocationURI();
 
-			// Gets native File using EFS
-			fileFound = EFS.getStore(uri).toLocalFile(0, new NullProgressMonitor());			
+		// what if file is a link, resolve it.
+		if(resource.isLinked()){
+			uri = resource.getRawLocationURI();
 		}
+
+		// Gets native File using EFS
+		fileFound = EFS.getStore(uri).toLocalFile(0, new NullProgressMonitor());			
+
 		return fileFound;
 	}
 
@@ -287,5 +336,24 @@ public class Wsdl2RestWizard extends Wizard implements INewWizard {
 	public Wsdl2RestOptions getOptions() {
 		return options;
 	}
-	
+
+	@Override
+	public boolean canFinish() {
+		boolean flag = super.canFinish();
+		if (flag && !this.inTest && 
+				getContainer().getCurrentPage().equals(this.getStartingPage()) && 
+				pageTwo.getMessageType() == IMessageProvider.WARNING &&
+				pageTwo.getMessage().startsWith("Caution:")) { //$NON-NLS-1$
+			return false;
+		}
+		return flag;
+	}
+
+	/**
+	 * In place to avoid needing to trigger the user to go to the next page due to warnings.
+	 * @param flag
+	 */
+	public void setInTest(boolean flag) {
+		this.inTest = flag;
+	}
 }
