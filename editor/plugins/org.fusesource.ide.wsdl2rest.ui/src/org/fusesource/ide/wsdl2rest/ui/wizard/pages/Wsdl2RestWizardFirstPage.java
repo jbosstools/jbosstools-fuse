@@ -141,10 +141,10 @@ public class Wsdl2RestWizardFirstPage extends Wsdl2RestWizardBasePage {
 		String projectJavaPath = selectedProject.getFullPath().append(javaPath).toPortableString();
 		String projectConfigPath = null;
 		boolean isBlueprintProject = false;
+		boolean isSpringBootProject = false;
 		try {
-			if (getWsdl2RestWizard().isProjectBlueprint(selectedProject)) {
-				isBlueprintProject = true;
-			}
+			isBlueprintProject = getWsdl2RestWizard().isProjectBlueprint(selectedProject);
+			isSpringBootProject = getWsdl2RestWizard().isProjectSpringBoot(selectedProject);
 		} catch (Exception e) {
 			Wsdl2RestUIActivator.pluginLog().logError(e);
 		}
@@ -152,6 +152,10 @@ public class Wsdl2RestWizardFirstPage extends Wsdl2RestWizardBasePage {
 			StringBuilder pathBlueprint = pathSrcResources.append(Path.SEPARATOR).append("OSGI-INF") //$NON-NLS-1$
 					.append(Path.SEPARATOR).append("blueprint"); //$NON-NLS-1$
 			IPath configPath = new Path(pathBlueprint.toString());
+			projectConfigPath = selectedProject.getFullPath().append(configPath).toPortableString();
+		} else if (isSpringBootProject) {
+			StringBuilder pathSpring = pathSrcResources.append(Path.SEPARATOR).append("spring"); //$NON-NLS-1$
+			IPath configPath = new Path(pathSpring.toString());
 			projectConfigPath = selectedProject.getFullPath().append(configPath).toPortableString();
 		} else { // use spring 
 			StringBuilder pathSpring = pathSrcResources.append(Path.SEPARATOR).append("META-INF") //$NON-NLS-1$
