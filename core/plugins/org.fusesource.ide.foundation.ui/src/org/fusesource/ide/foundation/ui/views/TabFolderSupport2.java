@@ -71,6 +71,11 @@ public abstract class TabFolderSupport2 extends TabbedPropertySheetPage {
 					configurationElements = new IConfigurationElement[] { new IConfigurationElement() {
 
 						@Override
+						public int getHandleId() {
+							return contributorId.hashCode();
+						};
+						
+						@Override
 						public Object createExecutableExtension(String propertyName) throws CoreException {
 							// TODO Auto-generated method stub
 							return null;
