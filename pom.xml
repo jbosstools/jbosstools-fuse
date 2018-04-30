@@ -1,6 +1,6 @@
-<!-- Copyright (C) 2010 FuseSource, Corp. All rights reserved. http://fusesource.com 
-	The software in this package is published under the terms of the AGPL license 
-	a copy of which has been included with this distribution in the license.txt 
+<!-- Copyright (C) 2010 FuseSource, Corp. All rights reserved. http://fusesource.com
+	The software in this package is published under the terms of the AGPL license
+	a copy of which has been included with this distribution in the license.txt
 	file. -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
@@ -28,12 +28,12 @@
 		<system>jira</system>
 		<url>https://issues.jboss.org/browse/FUSETOOLS</url>
 	</issueManagement>
-  
+
 	<scm>
 		<connection>scm:git:git://git@github.com:jbosstools/jbosstools-fuse.git</connection>
 		<developerConnection>scm:git:ssh://git@github.com:jbosstools/jbosstools-fuse.git</developerConnection>
 		<url>https://github.com/jbosstools/jbosstools-fuse</url>
-	</scm>	
+	</scm>
 
 	<prerequisites>
 		<maven>3.0.2</maven>
@@ -66,7 +66,7 @@
 		<jackson.version>2.5.1</jackson.version>
 		<slf4j.version>1.7.5</slf4j.version>
 		<sonar.test.inclusions>**/*Test.*,**/test/**/*,**/*IT.*</sonar.test.inclusions>
-		
+
 		<!-- This property allows to specify Camel version used during test executions (where applicable). It is a comma-separated list. -->
 		<camelVersionsToTestWith />
 	</properties>
@@ -172,6 +172,12 @@
 			<url>https://repository.jboss.org/nexus/content/</url>
 		</repository>
 
+		<!-- Remove it once RedDeer 2.1.0 is on targetplatform -->
+		<repository>
+			<id>reddeer-snapshots</id>
+			<layout>p2</layout>
+			<url>http://download.eclipse.org/reddeer/releases/2.1.0/</url>
+		</repository>
 	</repositories>
 
 	<pluginRepositories>

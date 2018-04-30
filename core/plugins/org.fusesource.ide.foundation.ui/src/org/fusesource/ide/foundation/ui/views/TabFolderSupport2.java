@@ -162,6 +162,10 @@ public abstract class TabFolderSupport2 extends TabbedPropertySheetPage {
 							return null;
 						}
 
+						public int getHandleId() {
+							return 0;
+						}
+
 						@Override
 						public boolean isValid() {
 							return true;

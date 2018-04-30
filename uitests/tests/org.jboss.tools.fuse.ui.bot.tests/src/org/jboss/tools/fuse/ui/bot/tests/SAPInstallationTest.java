@@ -85,9 +85,8 @@ public class SAPInstallationTest {
 			super(TITLE, "Red Hat Fuse", "Install Red Hat Fuse SAP Tool Suite");
 		}
 
-		public InstallationWizard activate() {
+		public void activate() {
 			new DefaultShell(TITLE);
-			return this;
 		}
 
 		public Text getIDoc3ArchiveVersion() {

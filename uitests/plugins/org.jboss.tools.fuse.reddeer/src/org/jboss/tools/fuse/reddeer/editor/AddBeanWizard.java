@@ -35,9 +35,8 @@ public class AddBeanWizard extends WizardDialog {
 		super(title);
 	}
 
-	public AddBeanWizard activate() {
+	public void activate() {
 		setShell(new DefaultShell(TITLE));
-		return this;
 	}
 
 	public void setId(String id) {
