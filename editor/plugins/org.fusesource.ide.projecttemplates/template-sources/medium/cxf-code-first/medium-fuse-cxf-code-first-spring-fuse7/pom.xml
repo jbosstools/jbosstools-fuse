@@ -209,7 +209,7 @@
 			</snapshots>
 			<id>jboss-ea-repository</id>
 			<name>Red Hat JBoss Early Access Repository</name>
-			<url>http://origin-repository.jboss.org/nexus/content/groups/ea</url>
+			<url>http://repository.jboss.org/nexus/content/groups/ea</url>
 		</repository>
 	</repositories>
 	<pluginRepositories>
@@ -260,7 +260,7 @@
 			</snapshots>
 			<id>jboss-ea-repository</id>
 			<name>Red Hat JBoss Early Access Repository</name>
-			<url>http://origin-repository.jboss.org/nexus/content/groups/ea</url>
+			<url>http://repository.jboss.org/nexus/content/groups/ea</url>
 		</pluginRepository>
 	</pluginRepositories>
 
