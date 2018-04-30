@@ -73,7 +73,7 @@ public abstract class TabFolderSupport2 extends TabbedPropertySheetPage {
 						@Override
 						public int getHandleId() {
 							return contributorId.hashCode();
-						};
+						}
 						
 						@Override
 						public Object createExecutableExtension(String propertyName) throws CoreException {
