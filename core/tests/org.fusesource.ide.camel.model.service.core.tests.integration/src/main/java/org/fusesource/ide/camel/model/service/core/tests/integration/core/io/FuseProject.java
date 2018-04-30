@@ -135,6 +135,7 @@ public class FuseProject extends ExternalResource {
 	public FuseProject(String projectName, String camelVersion) {
 		this.projectName = projectName;
 		this.camelVersion = camelVersion;
+		this.isBlueprint = false;
 	}
 
 	public FuseProject(String projectName, String camelVersion, boolean isBlueprint) {
