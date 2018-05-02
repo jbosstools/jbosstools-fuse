@@ -16,7 +16,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.swt.widgets.Display;
 import org.fusesource.ide.foundation.core.internal.FoundationCoreActivator;
 
 /**
@@ -58,7 +57,6 @@ public class JobWaiterUtil {
 		SubMonitor subMon = SubMonitor.convert(monitor, jobFamilies.size());
 		try {
 			for (Object jobFamily : jobFamilies) {
-				updateUI();
 				Job.getJobManager().join(jobFamily, subMon.split(1));
 			}
 		} catch (InterruptedException iex) {
@@ -82,11 +80,5 @@ public class JobWaiterUtil {
 
 	public void setEndless(boolean isEndless) {
 		this.isEndless = isEndless;
-	}
-	
-	public static void updateUI() {
-		while (Display.getDefault().readAndDispatch()) {
-			// wait until all unprocessed UI events are handled
-		}	
 	}
 }

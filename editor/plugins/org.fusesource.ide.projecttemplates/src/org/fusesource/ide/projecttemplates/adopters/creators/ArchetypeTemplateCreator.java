@@ -37,13 +37,13 @@ public abstract class ArchetypeTemplateCreator implements TemplateCreatorSupport
 	@Override
 	public boolean create(IProject project, CommonNewProjectMetaData metadata, IProgressMonitor monitor) {
 		SubMonitor subMonitor = SubMonitor.convert(monitor, Messages.archetypeTemplateCreatorCreatingTemplateFromArchetypeMonitorMessage, 2);
-		Archetype archetype = getArchetype(metadata, subMonitor.newChild(1));
+		Archetype archetype = getArchetype(metadata, subMonitor.split(1));
 		
 		ProjectImportConfiguration config = null;
 		
 		IProjectConfigurationManager manager = MavenPlugin.getProjectConfigurationManager();
 		try {
-			manager.createArchetypeProjects(project.getLocation(), archetype, archetype.getGroupId(), archetype.getArtifactId(), archetype.getVersion(), getJavaPackage(), archetype.getProperties(), config, subMonitor.newChild(1)); 
+			manager.createArchetypeProjects(project.getLocation(), archetype, archetype.getGroupId(), archetype.getArtifactId(), archetype.getVersion(), getJavaPackage(), archetype.getProperties(), config, subMonitor.split(1)); 
 		} catch (CoreException ex) {
 			ProjectTemplatesActivator.pluginLog().logError(ex);
 			return false;

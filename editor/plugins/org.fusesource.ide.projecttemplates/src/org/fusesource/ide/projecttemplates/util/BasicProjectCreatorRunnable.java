@@ -16,7 +16,10 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubMonitor;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialogWithToggle;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -24,8 +27,10 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IPerspectiveDescriptor;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPreferenceConstants;
 import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.WorkbenchException;
 import org.eclipse.ui.ide.IDE;
@@ -40,7 +45,6 @@ import org.fusesource.ide.branding.perspective.FusePerspective;
 import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelCatalogCacheManager;
 import org.fusesource.ide.camel.model.service.core.internal.CamelModelServiceCoreActivator;
 import org.fusesource.ide.foundation.core.util.BuildAndRefreshJobWaiterUtil;
-import org.fusesource.ide.foundation.core.util.JobWaiterUtil;
 import org.fusesource.ide.foundation.core.util.VersionUtil;
 import org.fusesource.ide.projecttemplates.adopters.AbstractProjectTemplate;
 import org.fusesource.ide.projecttemplates.impl.simple.EmptyProjectTemplateForFuse6;
@@ -54,8 +58,9 @@ import org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator;
 public abstract class BasicProjectCreatorRunnable implements IRunnableWithProgress {
 	
 	protected CommonNewProjectMetaData metadata;
-	private boolean templateConfigDone;
-	private boolean camelCatalogCachingDone;
+	
+	private int result;
+	private IWorkbenchPage activePage;
 	
 	public BasicProjectCreatorRunnable(CommonNewProjectMetaData metadata) {
 		this.metadata = metadata;
@@ -72,87 +77,15 @@ public abstract class BasicProjectCreatorRunnable implements IRunnableWithProgre
 	
 	@Override
 	public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-		SubMonitor subMonitor = SubMonitor.convert(monitor, Messages.basicProjectCreatorRunnableCreatingTheProjectMonitorMessage, 8);
-		
-		boolean oldValueForValidation = disableGlobalValidationDuringProjectCreation();
-		try {
-			CamelModelServiceCoreActivator.getProjectClasspathChangeListener().deactivate();
+		SubMonitor subMonitor = SubMonitor.convert(monitor, Messages.basicProjectCreatorRunnableCreatingTheProjectMonitorMessage, 1);
+		// first create the project skeleton
+		BasicProjectCreator c = new BasicProjectCreator(metadata);
+		final boolean ok = c.create(subMonitor.split(1));
+		final IProject prj = c.getProject();
 
-			// first create the project skeleton
-			BasicProjectCreator c = new BasicProjectCreator(metadata);
-			boolean ok = c.create(subMonitor.split(1));
-			IProject prj = c.getProject();
-			
-			if (ok) {
-				Display.getDefault().asyncExec( () ->  {
-					createAndConfigureTemplate(prj, metadata, subMonitor.split(1));
-				});
-			}
-
-			while (!templateConfigDone) {
-				JobWaiterUtil.updateUI();
-			}
-			
-			// switch perspective if needed
-			if (requiresFuseIntegrationPerspective()) {
-				IWorkbenchWindow workbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-				IPerspectiveDescriptor finalPersp = PlatformUI.getWorkbench().getPerspectiveRegistry().findPerspectiveWithId(FusePerspective.ID);
-				IPerspectiveDescriptor currentPersp = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getPerspective();
-				final boolean switchPerspective = currentPersp.getId().equals(finalPersp.getId()) ? false : confirmPerspectiveSwitch(workbenchWindow, finalPersp);
-				if (switchPerspective) {
-					switchToFusePerspective(workbenchWindow);
-				}
-			}
-			subMonitor.setWorkRemaining(5);
-				
-			// refresh
-			try {
-				prj.refreshLocal(IProject.DEPTH_INFINITE, subMonitor.split(1));
-			} catch (CoreException ex) {
-				ProjectTemplatesActivator.pluginLog().logError(ex);
-			}
-			
-			// user hook for doing additional project configuration work
-			doAdditionalProjectConfiguration(prj, subMonitor.split(1));
-
-			// preload camel catalog for the given version
-			if (shouldPreloadCatalog()) {
-				Display.getDefault().asyncExec( () -> { 
-					CamelCatalogCacheManager.getInstance().getCamelModelForProject(prj, subMonitor.split(1, SubMonitor.SUPPRESS_NONE));
-					setCamelCatalogCachingDone(true);
-				});
-				
-				while (!camelCatalogCachingDone) {
-					JobWaiterUtil.updateUI();
-				}
-			}
-			
-			subMonitor.setWorkRemaining(2);
-			
-			// finally open any editors required
-			openRequiredFilesInEditor(prj, subMonitor.split(1));
-			
-			// a final refresh
-			new BuildAndRefreshJobWaiterUtil().waitJob(subMonitor.split(1));
-		} finally {
-			setbackValidationValueAfterProjectCreation(oldValueForValidation);
-			CamelModelServiceCoreActivator.getProjectClasspathChangeListener().activate();
-		}
-	}
-	
-	private void createAndConfigureTemplate(final IProject prj, final CommonNewProjectMetaData meta, final IProgressMonitor monitor) {
-		SubMonitor subMonitor = SubMonitor.convert(monitor, 2);
-		// then configure the project for the given template
-		AbstractProjectTemplate template = retrieveTemplate();
-		subMonitor.setWorkRemaining(1);
-		// now execute the template
-		try {
-			template.create(prj, meta, subMonitor.split(1));
-		} catch (CoreException ex) {
-			ProjectTemplatesActivator.pluginLog().logError("Unable to create project...", ex); //$NON-NLS-1$
-		} finally {
-			setTemplateConfigDone(true);
-			subMonitor.setWorkRemaining(0);
+		if (ok) {
+			ProjectSetupJob job = new ProjectSetupJob(Messages.basicProjectCreatorRunnableCreatingTheProjectMonitorMessage, prj, metadata);
+			job.schedule();
 		}
 	}
 	
@@ -238,25 +171,27 @@ public abstract class BasicProjectCreatorRunnable implements IRunnableWithProgre
 			message = NLS.bind(ResourceMessages.NewProject_perspSwitchMessageWithDesc, new String[] { finalPersp.getLabel(), desc });
 		}
 
-		MessageDialogWithToggle dialog = MessageDialogWithToggle.openYesNoQuestion(window.getShell(), ResourceMessages.NewProject_perspSwitchTitle, message,
-				null /* use the default message for the toggle */,
-				false /* toggle is initially unchecked */, store, IDEInternalPreferences.PROJECT_SWITCH_PERSP_MODE);
-		int result = dialog.getReturnCode();
+		Display.getDefault().syncExec( () -> {
+			MessageDialogWithToggle dialog = MessageDialogWithToggle.openYesNoQuestion(window.getShell(), ResourceMessages.NewProject_perspSwitchTitle, message,
+					null /* use the default message for the toggle */,
+					false /* toggle is initially unchecked */, store, IDEInternalPreferences.PROJECT_SWITCH_PERSP_MODE);
+			result = dialog.getReturnCode();
 
-		// If we are not going to prompt anymore propagate the choice.
-		if (dialog.getToggleState()) {
-			String preferenceValue;
-			if (result == IDialogConstants.YES_ID) {
-				// Doesn't matter if it is replace or new window
-				// as we are going to use the open perspective setting
-				preferenceValue = IWorkbenchPreferenceConstants.OPEN_PERSPECTIVE_REPLACE;
-			} else {
-				preferenceValue = IWorkbenchPreferenceConstants.NO_NEW_PERSPECTIVE;
+			// If we are not going to prompt anymore propagate the choice.
+			if (dialog.getToggleState()) {
+				String preferenceValue;
+				if (result == IDialogConstants.YES_ID) {
+					// Doesn't matter if it is replace or new window
+					// as we are going to use the open perspective setting
+					preferenceValue = IWorkbenchPreferenceConstants.OPEN_PERSPECTIVE_REPLACE;
+				} else {
+					preferenceValue = IWorkbenchPreferenceConstants.NO_NEW_PERSPECTIVE;
+				}
+
+				// update PROJECT_OPEN_NEW_PERSPECTIVE to correspond
+				PrefUtil.getAPIPreferenceStore().setValue(IDE.Preferences.PROJECT_OPEN_NEW_PERSPECTIVE, preferenceValue);
 			}
-
-			// update PROJECT_OPEN_NEW_PERSPECTIVE to correspond
-			PrefUtil.getAPIPreferenceStore().setValue(IDE.Preferences.PROJECT_OPEN_NEW_PERSPECTIVE, preferenceValue);
-		}
+		});
 		return result == IDialogConstants.YES_ID;
 	}
 	
@@ -272,17 +207,111 @@ public abstract class BasicProjectCreatorRunnable implements IRunnableWithProgre
 		}
 	}
 	
-	/**
-	 * @param camelCatalogCachingDone the camelCatalogCachingDone to set
-	 */
-	public void setCamelCatalogCachingDone(boolean camelCatalogCachingDone) {
-		this.camelCatalogCachingDone = camelCatalogCachingDone;
-	}
 	
-	/**
-	 * @param templateConfigDone the templateConfigDone to set
-	 */
-	public void setTemplateConfigDone(boolean templateConfigDone) {
-		this.templateConfigDone = templateConfigDone;
+	public class ProjectSetupJob extends Job {
+		
+		private IProject project;
+		private CommonNewProjectMetaData metadata;
+		
+		public ProjectSetupJob(final String name, final IProject project, CommonNewProjectMetaData metadata) {
+			super(name);
+			this.project = project;
+			this.metadata = metadata;
+		}
+		
+		/* (non-Javadoc)
+		 * @see org.eclipse.core.runtime.jobs.Job#run(org.eclipse.core.runtime.IProgressMonitor)
+		 */
+		@Override
+		protected IStatus run(IProgressMonitor monitor) {
+			SubMonitor subMonitor = SubMonitor.convert(monitor, Messages.basicProjectCreatorRunnableCreatingTheProjectMonitorMessage, 7);
+
+			boolean oldValueForValidation = disableGlobalValidationDuringProjectCreation();
+			CamelModelServiceCoreActivator.getProjectClasspathChangeListener().deactivate();
+			
+			try {
+				IWorkbenchWindow workbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+				IPerspectiveDescriptor finalPersp = PlatformUI.getWorkbench().getPerspectiveRegistry().findPerspectiveWithId(FusePerspective.ID);
+				if (workbenchWindow == null) {
+					for (IWorkbenchWindow w : PlatformUI.getWorkbench().getWorkbenchWindows()) {
+						if (w != null && w.getActivePage() != null) {
+							workbenchWindow = w;
+							activePage = w.getActivePage();
+							break;
+						}
+					}
+				}
+
+				ensureProgressViewVisible();
+								
+				// prepare the template inside the project
+				createAndConfigureTemplate(project, metadata, subMonitor.split(1));
+
+				// switch perspective if needed
+				if (requiresFuseIntegrationPerspective() && workbenchWindow != null && activePage != null) {
+					IPerspectiveDescriptor currentPersp = workbenchWindow.getActivePage().getPerspective();
+
+					final boolean switchPerspective = currentPersp.getId().equals(finalPersp.getId()) ? false : confirmPerspectiveSwitch(workbenchWindow, finalPersp);
+					if (switchPerspective) {
+						switchToFusePerspective(workbenchWindow);
+						ensureProgressViewVisible();
+					}
+				}
+				subMonitor.setWorkRemaining(5);
+
+				// refresh
+				try {
+					project.refreshLocal(IProject.DEPTH_INFINITE, subMonitor.split(1));
+				} catch (CoreException ex) {
+					ProjectTemplatesActivator.pluginLog().logError(ex);
+				}
+				
+				// user hook for doing additional project configuration work
+				doAdditionalProjectConfiguration(project, subMonitor.split(1));
+
+				// preload camel catalog for the given version
+				if (shouldPreloadCatalog()) {
+					CamelCatalogCacheManager.getInstance().getCamelModelForProject(project, subMonitor.split(1, SubMonitor.SUPPRESS_NONE));
+				}
+				
+				subMonitor.setWorkRemaining(2);
+				
+				// finally open any editors required
+				openRequiredFilesInEditor(project, subMonitor.split(1));
+				
+				// a final refresh
+				new BuildAndRefreshJobWaiterUtil().waitJob(subMonitor.split(1));
+			} finally {
+				setbackValidationValueAfterProjectCreation(oldValueForValidation);
+				CamelModelServiceCoreActivator.getProjectClasspathChangeListener().activate();
+			}
+
+			return Status.OK_STATUS;
+		}
+		
+		private void ensureProgressViewVisible() {
+			Display.getDefault().syncExec( () -> {
+				try {
+					activePage.showView("org.eclipse.ui.views.ProgressView");
+				} catch (PartInitException ex) {
+					ProjectTemplatesActivator.pluginLog().logError(ex);
+				}		
+			});
+		}
+		
+		private void createAndConfigureTemplate(final IProject prj, final CommonNewProjectMetaData meta, final IProgressMonitor monitor) {
+			SubMonitor subMonitor = SubMonitor.convert(monitor, 2);
+			// then configure the project for the given template
+			AbstractProjectTemplate template = retrieveTemplate();
+			subMonitor.setWorkRemaining(1);
+			// now execute the template
+			try {
+				template.create(prj, meta, subMonitor.split(1));
+			} catch (CoreException ex) {
+				ProjectTemplatesActivator.pluginLog().logError("Unable to create project...", ex); //$NON-NLS-1$
+			} finally {
+				subMonitor.setWorkRemaining(0);
+			}
+		}
 	}
 }

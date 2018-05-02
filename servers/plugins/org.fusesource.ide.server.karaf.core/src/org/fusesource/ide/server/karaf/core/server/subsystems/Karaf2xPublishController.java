@@ -109,12 +109,12 @@ public class Karaf2xPublishController extends AbstractSubsystemController implem
 		// first see if we need to delegate to another custom publisher, such as bpel / osgi
 		IPublishControllerDelegate delegate = PublishControllerUtil.findDelegatePublishController(getServer(),modules, true);
 		if( delegate != null ) {
-			return delegate.publishModule(kind, deltaKind, modules, subMonitor.newChild(2));
+			return delegate.publishModule(kind, deltaKind, modules, subMonitor.split(2));
 		}
 		
 		int publishType = PublishControllerUtil.getPublishType(getServer(), modules, kind, deltaKind);
 		if( publishType == PublishControllerUtil.REMOVE_PUBLISH){
-			return removeModule(modules, subMonitor.newChild(2));
+			return removeModule(modules, subMonitor.split(2));
 		}
 
 		if( ServerModelUtilities.isAnyDeleted(modules) ) {
@@ -126,9 +126,9 @@ public class Karaf2xPublishController extends AbstractSubsystemController implem
 		    // commented out after the updates to m2e-wtp which now handles
 		    // cleanVersions as an option (FUSETOOLS-2018)
 //			for (IModule module : modules) {
-//				KarafUtils.runBuild(GOALS, module, subMonitor.newChild(1));
+//				KarafUtils.runBuild(GOALS, module, subMonitor.split(1));
 //			}
-			return handleZippedPublish(modules, publishType, false, subMonitor.newChild(1));
+			return handleZippedPublish(modules, publishType, false, subMonitor.split(1));
 		}
 		
 		return IServer.PUBLISH_STATE_UNKNOWN;
@@ -136,15 +136,15 @@ public class Karaf2xPublishController extends AbstractSubsystemController implem
 	
 	private int handleZippedPublish(IModule[] module, int publishType, boolean force, IProgressMonitor monitor) throws CoreException{
 		SubMonitor subMonitor = SubMonitor.convert(monitor, "Packaging Module", 3); //$NON-NLS-1$
-		IPath tmpArchive = getTempBundlePath(module, subMonitor.newChild(1));
+		IPath tmpArchive = getTempBundlePath(module, subMonitor.split(1));
 		
 		LocalZippedModulePublishRunner runner = createZippedRunner(module, tmpArchive); 
 		
 		// Trimmed code from StandardFilesystemPublishController
-		IStatus result = runner.fullPublishModule(subMonitor.newChild(1));
+		IStatus result = runner.fullPublishModule(subMonitor.split(1));
 		if( result == null || result.isOK()) {
 			if( tmpArchive.toFile().exists()) {
-				return transferBuiltModule(module, tmpArchive, subMonitor.newChild(1));
+				return transferBuiltModule(module, tmpArchive, subMonitor.split(1));
 			}
 		}
 		subMonitor.setWorkRemaining(0);
@@ -245,9 +245,9 @@ public class Karaf2xPublishController extends AbstractSubsystemController implem
         IProject project = module.getProject();
         if (project != null) {
         	SubMonitor subMonitor = SubMonitor.convert(monitor, 2);
-        	IMavenProjectFacade facade = MavenPlugin.getMavenProjectRegistry().create(project.getFile(IMavenConstants.POM_FILE_NAME), true, subMonitor.newChild(1));
+        	IMavenProjectFacade facade = MavenPlugin.getMavenProjectRegistry().create(project.getFile(IMavenConstants.POM_FILE_NAME), true, subMonitor.split(1));
         	try {
-				MavenProject mavenProject = facade.getMavenProject(subMonitor.newChild(1));
+				MavenProject mavenProject = facade.getMavenProject(subMonitor.split(1));
 				return mavenProject.getVersion();
 			} catch (CoreException e) {
 				Activator.getLogger().warning(e);

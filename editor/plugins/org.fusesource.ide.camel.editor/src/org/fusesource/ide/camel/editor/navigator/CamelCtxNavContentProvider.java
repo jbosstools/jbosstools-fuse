@@ -159,7 +159,7 @@ public class CamelCtxNavContentProvider implements ICommonContentProvider, IReso
 		private CamelCtxNavRouteNode[] getRoutes(IFile camelFile, IProgressMonitor monitor) {
 			SubMonitor subMonitor = SubMonitor.convert(monitor, 1);
 			CamelIOHandler ioHandler = new CamelIOHandler();
-			final CamelFile rc = ioHandler.loadCamelModel(camelFile, subMonitor.newChild(1));
+			final CamelFile rc = ioHandler.loadCamelModel(camelFile, subMonitor.split(1));
 			if (rc != null && rc.getRouteContainer() != null) {
 				return rc.getRouteContainer().getChildElements()
 						.stream()

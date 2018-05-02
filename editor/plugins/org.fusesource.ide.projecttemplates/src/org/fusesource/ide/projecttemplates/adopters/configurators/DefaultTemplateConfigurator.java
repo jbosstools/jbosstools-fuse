@@ -171,11 +171,11 @@ public class DefaultTemplateConfigurator implements TemplateConfiguratorSupport 
 	 */
 	protected void installFacet(IProject project, String facetName, String facetVersion, IDataModel config, IProgressMonitor monitor) throws CoreException {
 		SubMonitor subMonitor = SubMonitor.convert(monitor, 3);
-		IFacetedProject fp = ProjectFacetsManager.create(project, true, subMonitor.newChild(1));
+		IFacetedProject fp = ProjectFacetsManager.create(project, true, subMonitor.split(1));
 		if (facetVersion != null) {
-			fp.installProjectFacet(ProjectFacetsManager.getProjectFacet(facetName).getVersion(facetVersion), config, subMonitor.newChild(1));
+			fp.installProjectFacet(ProjectFacetsManager.getProjectFacet(facetName).getVersion(facetVersion), config, subMonitor.split(1));
 		} else {
-			fp.installProjectFacet(ProjectFacetsManager.getProjectFacet(facetName).getDefaultVersion(), config, subMonitor.newChild(1));
+			fp.installProjectFacet(ProjectFacetsManager.getProjectFacet(facetName).getDefaultVersion(), config, subMonitor.split(1));
 		}
 		project.refreshLocal(IProject.DEPTH_INFINITE, subMonitor.split(1));
 	}
