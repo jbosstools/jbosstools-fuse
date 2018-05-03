@@ -13,6 +13,7 @@ package org.jboss.tools.fuse.reddeer.editor;
 import java.util.List;
 
 import org.eclipse.reddeer.common.exception.RedDeerException;
+import org.eclipse.reddeer.common.util.Display;
 import org.eclipse.reddeer.common.wait.TimePeriod;
 import org.eclipse.reddeer.common.wait.WaitUntil;
 import org.eclipse.reddeer.common.wait.WaitWhile;
@@ -53,7 +54,19 @@ public class FilteredSelectionDialog extends DefaultShell {
 	}
 
 	public FilteredSelectionDialog selectItem(String text) {
-		new DefaultTable(this).getItem(text).select();
+		DefaultTable table = new DefaultTable(this);
+		Display.syncExec(new Runnable() {
+
+			@Override
+			public void run() {
+				org.eclipse.swt.widgets.TableItem[] item = table.getSWTWidget().getSelection();
+				if (item.length > 0) {
+					if (!item[0].getText().startsWith(text)) {
+						table.getItem(text).select();
+					}
+				}
+			}
+		});
 		return this;
 	}
 

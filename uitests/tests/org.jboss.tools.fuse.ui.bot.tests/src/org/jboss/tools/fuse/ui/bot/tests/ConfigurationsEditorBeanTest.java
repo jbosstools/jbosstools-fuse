@@ -14,6 +14,7 @@ import static org.jboss.tools.fuse.reddeer.ResourceHelper.getResourceAbsolutePat
 import static org.jboss.tools.fuse.reddeer.utils.ProjectFactory.importExistingProject;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.hamcrest.CoreMatchers.equalTo;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -49,7 +50,9 @@ import org.jboss.tools.fuse.reddeer.view.ConfigurationsPropertiesView;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ErrorCollector;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized.Parameters;
 import org.junit.runners.Parameterized.UseParametersRunnerFactory;
@@ -59,6 +62,7 @@ import org.xml.sax.SAXException;
  * Tests manipulating with beans in Configuration editor. All tests are performed on prepared projects.
  * 
  * @author apodhrad
+ * @author djelinek
  *
  */
 @CleanWorkspace
@@ -68,10 +72,14 @@ import org.xml.sax.SAXException;
 public class ConfigurationsEditorBeanTest {
 
 	public static final String PROJECT_NAME_PREFIX = "bean";
+	public static final String CLASS_NAME = "BeanComponent";
 
 	private String projectName;
 	private ProjectType projectType;
 	private ConfigurationsEditor editor;
+	
+	@Rule
+	public ErrorCollector collector = new ErrorCollector();
 
 	@Parameters(name = "{0}")
 	public static Collection<ProjectType> projectTypes() {
@@ -191,6 +199,44 @@ public class ConfigurationsEditorBeanTest {
 
 		assertXPath("hello.NewBean", "/bean[@id='newBeanWithNewClass']/@class");
 		assertXPath("singleton", "/bean[@id='newBeanWithNewClass']/@scope");
+	}
+
+	/**
+	 * <p>
+	 * Tests verifies informations provided in global Bean property view were correctly initialized in new Java class
+	 * wizard
+	 * </p>
+	 * <b>Steps:</b>
+	 * <ol>
+	 * <li>Open a camel context in Camel editor</li>
+	 * <li>Switch to Configurations</li>
+	 * <li>Add a new bean</li>
+	 * <li>Set Id 'beanComponent'</li>
+	 * <li>Select Class 'BeanComponent'</li>
+	 * <li>Create new Java class 'BeanComponent'</li>
+	 * <li>Verifies wizard 'class name', 'source folder' and 'package name' for class provided in global Bean property
+	 * view were correctly initialized</li>
+	 * </ol>
+	 */
+	@Test
+	public void testNewJavaClassWizardInitialization() {
+		new CamelProject(projectName).openCamelContext(projectType.getCamelContext());
+		editor = new ConfigurationsEditor();
+		
+		AddBeanWizard beanWizard = editor.addBean();
+		beanWizard.setId("beanComponent");
+		beanWizard.browseClass().waitForItems().selectItem(CLASS_NAME).ok();
+		NewClassCreationWizard classWizard = beanWizard.addClass();
+		NewClassWizardPage wizardPage = new NewClassWizardPage(classWizard);
+		
+		collector.checkThat(wizardPage.getName(), equalTo(CLASS_NAME));
+		collector.checkThat(wizardPage.getSourceFolder(), equalTo(projectName + "/src/main/java"));
+		collector.checkThat(wizardPage.getPackage(), equalTo("org.apache.camel.component.bean"));
+
+		classWizard.finish();
+		beanWizard.finish();
+		editor.close(true);
+		new DefaultEditor(CLASS_NAME + ".java").close(true);
 	}
 
 	/**
