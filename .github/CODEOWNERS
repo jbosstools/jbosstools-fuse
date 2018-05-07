@@ -3,7 +3,7 @@
 *	@jbosstools/fuse-tooling-eng
 
 # QE Tests
-/uitests/	@jbosstools/fuse-tooling-qe @jbosstools/fuse-tooling-eng
+/uitests/	@jbosstools/fuse-tooling-qe
 
 # Documentation
 /core/plugins/org.fusesource.ide.help/	@jbosstools/fuse-tooling-doc @jbosstools/fuse-tooling-eng
