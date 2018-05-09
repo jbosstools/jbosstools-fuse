@@ -26,6 +26,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 		<module>org.fusesource.ide.project.tests.integration</module>
 		<module>org.fusesource.ide.projecttemplates.tests</module>
 		<module>org.fusesource.ide.projecttemplates.tests.integration</module>
+        <module>org.fusesource.ide.wsdl2rest.ui.tests.integration</module>
 	</modules>
 </project>
 	
