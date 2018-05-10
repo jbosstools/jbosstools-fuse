@@ -84,6 +84,9 @@ public class RestElementPropertiesSection extends FusePropertySection {
 			IObservableValue<?> targetValue = (IObservableValue<?>) creator.getUiObservable();
 			modelValueMap.put(p.getName(), modelValue);
 			targetValueMap.put(p.getName(), targetValue);
+			
+			// properties are read only for now
+			creator.getControl().setEnabled(false);
 			return creator;
 		}
 		throw new NullPointerException();
