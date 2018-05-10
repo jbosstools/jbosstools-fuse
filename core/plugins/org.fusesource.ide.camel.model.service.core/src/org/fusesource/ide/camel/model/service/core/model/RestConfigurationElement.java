@@ -28,12 +28,12 @@ public class RestConfigurationElement extends AbstractRestCamelModelElement {
 	 * @param underlyingNode
 	 */
 	public RestConfigurationElement(AbstractCamelModelElement parent, Node underlyingNode) {
-		super(parent, underlyingNode);
+		super(parent, underlyingNode, false);
 //		setUnderlyingMetaModelObject(new GlobalBeanEIP());
 	}
 	
 	public RestConfigurationElement(String name) {
-		super(null, null);
+		super(null, null, false);
 //		setUnderlyingMetaModelObject(new GlobalBeanEIP());
 	}
 	
