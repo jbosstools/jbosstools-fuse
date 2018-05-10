@@ -88,6 +88,9 @@ public class RestVerbElementPropertiesSection extends FusePropertySection {
 			IObservableValue<?> targetValue = (IObservableValue<?>) creator.getUiObservable();
 			modelValueMap.put(p.getName(), modelValue);
 			targetValueMap.put(p.getName(), targetValue);
+			
+			// read only for now
+			creator.getControl().setEnabled(false);
 			return creator;
 		}
 		throw new NullPointerException();
@@ -98,7 +101,7 @@ public class RestVerbElementPropertiesSection extends FusePropertySection {
 
 		// define the properties we're handling here
 		Parameter idParam = createParameter(RestElementEIP.PROP_ID, String.class.getName());
-//		idParam.setRequired("true"); //$NON-NLS-1$
+		idParam.setRequired("true"); //$NON-NLS-1$
 		parameterList.put(RestVerbElementEIP.PROP_ID, idParam);
 		
 		parameterList.put(RestVerbElementEIP.PROP_URI,
