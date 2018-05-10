@@ -110,27 +110,34 @@ public class RestVerbElement extends AbstractRestCamelModelElement {
 		return null;
 	}
 
+	private boolean foundChild(Node tmp, String value) {
+		if (tmp instanceof Element && ((Element) tmp).getTagName().contentEquals(TO_ELEMENT_TAG)) {
+			Node attr = tmp.getAttributes().getNamedItem(URI_PARAMETER_KEY);
+			if (attr != null) {
+				if (value == null || value.isEmpty()) {
+					// remove from parent?
+					getXmlNode().removeChild(tmp);
+					notifyAboutDeletion(this);
+				} else {
+					if (!attr.getNodeValue().contentEquals(value)) {
+						attr.setNodeValue(value);
+					}
+				}
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	public void setToUri(String value) {
 		NodeList list = getXmlNode().getChildNodes();
 		boolean foundTo = false;
 		if (list != null && list.getLength() > 0) {
 			for (int i = 0; i < list.getLength(); i++) {
 				Node tmp = list.item(i);
-				if (tmp instanceof Element && ((Element) tmp).getTagName().contentEquals(TO_ELEMENT_TAG)) {
-					Node attr = tmp.getAttributes().getNamedItem(URI_PARAMETER_KEY);
-					if (attr != null) {
-						if (value == null || value.isEmpty()) {
-							// remove from parent?
-							getXmlNode().removeChild(tmp);
-							notifyAboutDeletion(this);
-						} else {
-							if (!attr.getNodeValue().contentEquals(value)) {
-								attr.setNodeValue(value);
-							}
-						}
-						foundTo = true;
-						break;
-					}
+				foundTo = foundChild(tmp, value);
+				if (foundTo) { 
+					break;
 				}
 			}
 		}

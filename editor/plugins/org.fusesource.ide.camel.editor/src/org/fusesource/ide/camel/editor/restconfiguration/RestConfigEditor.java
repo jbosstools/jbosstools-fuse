@@ -90,7 +90,6 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 	private ListViewer restList;
 	private RestEditorColorManager colorManager = new RestEditorColorManager();
 	private Map<String, Eip> restModel;
-	private CamelFile designEditorModel;
 	private CamelContextElement ctx;
 	
 	/**
@@ -142,7 +141,7 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 
 		this.parent.setLayout(gl);
 
-		designEditorModel = parentEditor.getDesignEditor().getModel();
+		CamelFile designEditorModel = parentEditor.getDesignEditor().getModel();
 		if (designEditorModel != null) {
 			designEditorModel.addModelListener(this);
 			

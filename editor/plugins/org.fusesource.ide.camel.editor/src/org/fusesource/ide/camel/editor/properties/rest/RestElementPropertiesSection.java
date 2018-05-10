@@ -121,11 +121,11 @@ public class RestElementPropertiesSection extends FusePropertySection {
 	}
 	
 	private AbstractParameterPropertyUICreator createPropertyFieldEditor(final Composite page, Parameter p) {
-		if (p.getJavaType().equals(String.class.getName())) {
+		if ("java.lang.String".equals(p.getJavaType())) { //$NON-NLS-1$
 			AbstractTextFieldParameterPropertyUICreator txtFieldCreator = new TextParameterPropertyUICreator(dbc, modelMap, eip, selectedEP, p, getValidatorForField(p), page, getWidgetFactory());
 			txtFieldCreator.create();
 			return txtFieldCreator;
-		} else if (p.getJavaType().equals(Boolean.class.getName())) {
+		} else if ("java.lang.Boolean".equals(p.getJavaType())) { //$NON-NLS-1$
 			AbstractParameterPropertyUICreator creator = new BooleanParameterPropertyUICreatorForAdvanced(
 					dbc, modelMap, eip, selectedEP, p, page, getWidgetFactory());
 			creator.create();
