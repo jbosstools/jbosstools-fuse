@@ -124,7 +124,9 @@ public class RestVerbElement extends AbstractRestCamelModelElement {
 							getXmlNode().removeChild(tmp);
 							notifyAboutDeletion(this);
 						} else {
-							attr.setNodeValue(value);
+							if (!attr.getNodeValue().contentEquals(value)) {
+								attr.setNodeValue(value);
+							}
 						}
 						foundTo = true;
 						break;
