@@ -34,20 +34,20 @@ import org.fusesource.ide.camel.model.service.core.model.CamelRouteElement;
  */
 public class RouteRefAttributeComboFieldPropertyUICreator extends ComboParameterPropertyUICreator {
 
-	public RouteRefAttributeComboFieldPropertyUICreator(DataBindingContext dbc, IObservableMap modelMap, Eip eip, AbstractCamelModelElement camelModelElement, Parameter parameter,
+	public RouteRefAttributeComboFieldPropertyUICreator(DataBindingContext dbc, IObservableMap<String, String> modelMap, Eip eip, AbstractCamelModelElement camelModelElement, Parameter parameter,
 			Composite parent, TabbedPropertySheetWidgetFactory widgetFactory) {
 		super(dbc, modelMap, eip, camelModelElement, parameter, parent, widgetFactory, 
 				new ComboParameterPropertyModifyListener(camelModelElement, parameter.getName()));
 		setValues();
 	}
 
-	public RouteRefAttributeComboFieldPropertyUICreator(DataBindingContext dbc, IObservableMap modelMap, Eip eip, AbstractCamelModelElement camelModelElement, Parameter parameter,
+	public RouteRefAttributeComboFieldPropertyUICreator(DataBindingContext dbc, IObservableMap<String, String> modelMap, Eip eip, AbstractCamelModelElement camelModelElement, Parameter parameter,
 			Composite parent, TabbedPropertySheetWidgetFactory widgetFactory, ComboParameterPropertyModifyListener listener) {
 		super(dbc, modelMap, eip, camelModelElement, parameter, parent, widgetFactory, listener);
 		setValues();
 	}
 
-	public RouteRefAttributeComboFieldPropertyUICreator(DataBindingContext dbc, IObservableMap modelMap, Eip eip, AbstractCamelModelElement camelModelElement, Parameter parameter,
+	public RouteRefAttributeComboFieldPropertyUICreator(DataBindingContext dbc, IObservableMap<String, String> modelMap, Eip eip, AbstractCamelModelElement camelModelElement, Parameter parameter,
 			Composite parent, TabbedPropertySheetWidgetFactory widgetFactory, ComboParameterPropertyModifyListener listener, IValidator extraValidator) {
 		super(dbc, modelMap, eip, camelModelElement, parameter, parent, widgetFactory, listener, extraValidator);
 		setValues();

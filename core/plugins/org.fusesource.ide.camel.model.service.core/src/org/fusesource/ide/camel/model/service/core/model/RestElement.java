@@ -37,11 +37,6 @@ public class RestElement extends AbstractRestCamelModelElement {
 		setUnderlyingMetaModelObject(new RestElementEIP());
 	}
 	
-	public RestElement(String name) {
-		super(null, null);
-		setUnderlyingMetaModelObject(new RestElementEIP());
-	}
-	
 	/* (non-Javadoc)
 	 * @see org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement#getKind(java.lang.String)
 	 */
@@ -163,7 +158,7 @@ public class RestElement extends AbstractRestCamelModelElement {
 	 * 
 	 * @param def
 	 */
-	public void removeRestOperation(AbstractCamelModelElement def, RestElement parent) {
+	public void removeRestOperation(AbstractCamelModelElement def) {
 		if (this.restOperations.containsKey(def.getId())) {
 			this.restOperations.remove(def.getId());
 			boolean childExists = false;

@@ -13,7 +13,6 @@ package org.fusesource.ide.camel.model.service.core.model;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
 import org.fusesource.ide.camel.model.service.core.internal.CamelModelServiceCoreActivator;
-import org.fusesource.ide.camel.model.service.core.model.eips.GlobalBeanEIP;
 import org.w3c.dom.Node;
 
 /**
@@ -29,12 +28,6 @@ public class RestConfigurationElement extends AbstractRestCamelModelElement {
 	 */
 	public RestConfigurationElement(AbstractCamelModelElement parent, Node underlyingNode) {
 		super(parent, underlyingNode, false);
-//		setUnderlyingMetaModelObject(new GlobalBeanEIP());
-	}
-	
-	public RestConfigurationElement(String name) {
-		super(null, null, false);
-//		setUnderlyingMetaModelObject(new GlobalBeanEIP());
 	}
 	
 	/* (non-Javadoc)

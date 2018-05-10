@@ -16,7 +16,6 @@ import java.util.Map;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.events.SelectionEvent;
@@ -133,13 +132,11 @@ public class RestVerbElementPropertiesSection extends FusePropertySection {
 		return outParm;
 	}
 	
-	// we are comparing the name of a String with the type name of the parameter, so this is 
-	// a false positive
-	@SuppressWarnings("squid:S1872")
 	private AbstractParameterPropertyUICreator createPropertyFieldEditor(final Composite page, Parameter p) {
 		String propName = p.getName();
 		if (RestVerbElementEIP.PROP_TO_URI.equals(propName)) {
 			// do something special for TO
+			@SuppressWarnings("unchecked")
 			AbstractParameterPropertyUICreator creator = new RouteRefAttributeComboFieldPropertyUICreator(dbc, modelMap, eip, selectedEP, p, page, getWidgetFactory());
 			creator.create();
 			Combo comboField = (Combo) creator.getControl();
@@ -156,11 +153,11 @@ public class RestVerbElementPropertiesSection extends FusePropertySection {
 				}
 			});
 			return creator;
-		} else if (String.class.getName().equals(p.getJavaType())) {
+		} else if ("java.lang.String".equals(p.getJavaType())) { //$NON-NLS-1$
 			AbstractTextFieldParameterPropertyUICreator txtFieldCreator = new TextParameterPropertyUICreator(dbc, modelMap, eip, selectedEP, p, getValidatorForField(p), page, getWidgetFactory());
 			txtFieldCreator.create();
 			return txtFieldCreator;
-		} else if (Boolean.class.getName().equals(p.getJavaType())) {
+		} else if ("java.lang.Boolean".equals(p.getJavaType())) { //$NON-NLS-1$
 			AbstractParameterPropertyUICreator creator = new BooleanParameterPropertyUICreatorForAdvanced(dbc, modelMap, eip, selectedEP, p, page, getWidgetFactory());
 			creator.create();
 			return creator;
