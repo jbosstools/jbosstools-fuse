@@ -180,8 +180,7 @@
 		</plugins>
 	</build>
 
-	<!-- Make sure that all these repos are saved in Nexus before we do the 
-		merge to Master -->
+	<!-- These "staging" repositories are "saved". They can be removed when moving to a publicly available release -->
 	<repositories>
 		<repository>
 			<id>Saved staging repo for cxf</id>
