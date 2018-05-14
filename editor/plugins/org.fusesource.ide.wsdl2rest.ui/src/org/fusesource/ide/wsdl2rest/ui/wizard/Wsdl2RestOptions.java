@@ -29,7 +29,7 @@ public class Wsdl2RestOptions {
 	private static final String DESTINATION_JAVA = "destinationJava"; //$NON-NLS-1$
 	private static final String PROJECT_NAME = "projectName"; //$NON-NLS-1$
 	private static final String WSDL_URL = "wsdlURL"; //$NON-NLS-1$
-	
+
 	private String wsdlURL;
 	private String projectName;
 	private String destinationJava;
@@ -52,8 +52,8 @@ public class Wsdl2RestOptions {
 	 * @param wsdlURL
 	 */
 	public void setWsdlURL(String wsdlURL) {
-        String oldValue = this.wsdlURL;
-        this.wsdlURL = wsdlURL;
+		String oldValue = this.wsdlURL;
+		this.wsdlURL = wsdlURL;
 		firePropertyChange(WSDL_URL, oldValue, wsdlURL);
 	}
 
@@ -70,8 +70,8 @@ public class Wsdl2RestOptions {
 	 * @param projectName
 	 */
 	public void setProjectName(String projectName) {
-        String oldValue = this.projectName;
-        this.projectName = projectName;
+		String oldValue = this.projectName;
+		this.projectName = projectName;
 		firePropertyChange(PROJECT_NAME, oldValue,  projectName);
 	}
 
@@ -88,8 +88,8 @@ public class Wsdl2RestOptions {
 	 * @param destinationJava
 	 */
 	public void setDestinationJava(String destinationJava) {
-        String oldValue = this.destinationJava;
-        this.destinationJava = destinationJava;
+		String oldValue = this.destinationJava;
+		this.destinationJava = destinationJava;
 		firePropertyChange(DESTINATION_JAVA, oldValue, destinationJava);
 	}
 
@@ -106,8 +106,8 @@ public class Wsdl2RestOptions {
 	 * @param destinationCamel
 	 */
 	public void setDestinationCamel(String destinationCamel) {
-        String oldValue = this.destinationCamel;
-        this.destinationCamel = destinationCamel;
+		String oldValue = this.destinationCamel;
+		this.destinationCamel = destinationCamel;
 		firePropertyChange(DESTINATION_CAMEL, oldValue, destinationCamel);
 	}
 
@@ -124,8 +124,8 @@ public class Wsdl2RestOptions {
 	 * @param targetServiceAddress
 	 */
 	public void setTargetServiceAddress(String targetServiceAddress) {
-        String oldValue = this.targetServiceAddress;
-        this.targetServiceAddress = targetServiceAddress;
+		String oldValue = this.targetServiceAddress;
+		this.targetServiceAddress = targetServiceAddress;
 		firePropertyChange(TARGET_SERVICE_ADDRESS, oldValue, targetServiceAddress);
 	}
 
@@ -142,8 +142,8 @@ public class Wsdl2RestOptions {
 	 * @param targetServiceAddress
 	 */
 	public void setTargetRestServiceAddress(String targetRestServiceAddress) {
-        String oldValue = this.targetRestServiceAddress;
-        this.targetRestServiceAddress = targetRestServiceAddress;
+		String oldValue = this.targetRestServiceAddress;
+		this.targetRestServiceAddress = targetRestServiceAddress;
 		firePropertyChange(TARGET_REST_SERVICE_ADDRESS, oldValue, targetRestServiceAddress);
 	}
 
@@ -169,7 +169,7 @@ public class Wsdl2RestOptions {
 	protected void firePropertyChange(String propertyName, Object oldValue, Object newValue) {
 		changeSupport.firePropertyChange(propertyName, oldValue, newValue);
 	}
-	
+
 	public IProject getProject() {
 		return ResourcesPlugin.getWorkspace().getRoot().getProject(getProjectName());
 	}
