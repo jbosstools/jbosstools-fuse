@@ -126,15 +126,13 @@ public class Wsdl2RestWizard extends Wizard implements INewWizard {
 
 		// page one
 		IProject initialProject = getSelectedProjectFromSelectionService();
-		Wsdl2RestWizardFirstPage pageOne = new Wsdl2RestWizardFirstPage("page1", //$NON-NLS-1$ 
-				UIMessages.wsdl2RestWizardPageOneTitle);
+		Wsdl2RestWizardFirstPage pageOne = new Wsdl2RestWizardFirstPage(UIMessages.wsdl2RestWizardPageOneTitle);
 		if (initialProject != null) {
 			options.setProjectName(initialProject.getName());
 		}
 		addPage(pageOne);
 
-		pageTwo = new Wsdl2RestWizardSecondPage("page2", //$NON-NLS-1$ 
-				UIMessages.wsdl2RestWizardPageTwoTitle); 
+		pageTwo = new Wsdl2RestWizardSecondPage(UIMessages.wsdl2RestWizardPageTwoTitle); 
 		addPage(pageTwo);
 	}
 

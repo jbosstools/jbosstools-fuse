@@ -32,22 +32,8 @@ import org.fusesource.ide.wsdl2rest.ui.internal.UIMessages;
  */
 public class Wsdl2RestWizardSecondPage extends Wsdl2RestWizardBasePage {
 
-	/**
-	 * Constructor
-	 * @param pageName
-	 */
-	public Wsdl2RestWizardSecondPage(String pageName) {
-		this(pageName, null);
-	}
-
-	/**
-	 * Constructor
-	 * @param pageName
-	 * @param title
-	 * @param titleImage
-	 */
-	public Wsdl2RestWizardSecondPage(String pageName, String title) {
-		super(pageName, title, null);
+	public Wsdl2RestWizardSecondPage(String title) {
+		super(title, title, null);
 		setMessage(UIMessages.wsdl2RestWizardSecondPagePageTwoDescription);
 	}
 
