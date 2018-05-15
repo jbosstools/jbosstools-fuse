@@ -29,6 +29,7 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.m2e.core.internal.IMavenConstants;
 import org.fusesource.ide.camel.model.service.core.io.CamelIOHandler;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
+import org.fusesource.ide.camel.model.service.core.tests.integration.core.CamelModelServiceIntegrationTestActivator;
 import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
 import org.junit.rules.ExternalResource;
 
@@ -95,7 +96,7 @@ public class FuseProject extends ExternalResource {
 		try (BufferedReader buffer = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
             return buffer.lines().collect(Collectors.joining("\n"));
         } catch (IOException e) {
-        	e.printStackTrace();
+        	CamelModelServiceIntegrationTestActivator.getDefault().logError(e);
 			return "";
 		}
 	}
@@ -107,7 +108,7 @@ public class FuseProject extends ExternalResource {
 			try {
 				project.delete(true, new NullProgressMonitor());
 			} catch (CoreException e) {
-				e.printStackTrace();
+				CamelModelServiceIntegrationTestActivator.getDefault().logError(e);
 			}
 		}
 	}
