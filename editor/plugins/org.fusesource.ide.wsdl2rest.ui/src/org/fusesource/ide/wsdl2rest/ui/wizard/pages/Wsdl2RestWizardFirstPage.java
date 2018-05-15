@@ -40,8 +40,8 @@ public class Wsdl2RestWizardFirstPage extends Wsdl2RestWizardBasePage {
 
 	private Text urlTextControl;
 
-	public Wsdl2RestWizardFirstPage(String pageName, String title) {
-		super(pageName, title, null);
+	public Wsdl2RestWizardFirstPage(String title) {
+		super(title, title, null);
 		setMessage(UIMessages.wsdl2RestWizardFirstPagePageOneDescription);
 	}
 
