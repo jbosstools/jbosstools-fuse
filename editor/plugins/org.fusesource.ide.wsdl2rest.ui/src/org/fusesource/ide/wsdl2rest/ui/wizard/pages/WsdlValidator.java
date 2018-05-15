@@ -7,12 +7,13 @@
  * 
  * Contributors: 
  * Red Hat, Inc. - initial API and implementation 
- ******************************************************************************/ 
+ ******************************************************************************/
 package org.fusesource.ide.wsdl2rest.ui.wizard.pages;
 
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
-import org.apache.commons.httpclient.HttpStatus;
+
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IStatus;
@@ -20,38 +21,42 @@ import org.fusesource.ide.wsdl2rest.ui.internal.UIMessages;
 
 /**
  * Validate that the WSDL is an accessible file, whether local or remote.
+ * 
  * @author brianf
  */
 public class WsdlValidator implements IValidator {
 
-	/**
-	 * Test to ensure that the URL is accessible.
-	 * @param urlText
-	 * @return
-	 */
-	private int isURLAccessible(String urlText) {
-		int code = HttpStatus.SC_OK;
-		try {
-			final URL url = new URL(urlText);
-			InputStream testStream = url.openStream();
-			testStream.close();
-		} catch (Exception ex) {
-			code = -1;
-		}
-		return code;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.eclipse.core.databinding.validation.IValidator#validate(java.lang.Object)
-	 */
 	@Override
 	public IStatus validate(Object value) {
 		if (!((value instanceof String) && ((String) value).length() > 0)) {
 			return ValidationStatus.error(UIMessages.wsdl2RestWizardFirstPageValidatorWSDLUrlRequired);
 		}
-		int responseCode = isURLAccessible((String) value);
-		if (responseCode != 200) {
+		if (isURLAccessible((String) value)) {
 			return ValidationStatus.error(UIMessages.wsdl2RestWizardFirstPageValidatorWSDLInaccessible);
 		}
-		return ValidationStatus.ok();   		}
+		return ValidationStatus.ok();
+	}
+	
+	/**
+	 * Test to ensure that the URL represented by urlText String is accessible.
+	 * 
+	 * @param urlText
+	 * @return
+	 */
+	private boolean isURLAccessible(String urlText) {
+		try {
+			URL url = new URL(urlText);
+			return isURLAccessible(url);
+		} catch (MalformedURLException e) {
+			return false;
+		}
+	}
+	
+	private boolean isURLAccessible(URL url) {
+		try (InputStream testStream = url.openStream()) {
+			return true;
+		} catch (Exception ex) {
+			return false;
+		}
+	}
 }
