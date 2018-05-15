@@ -10,10 +10,13 @@
  ******************************************************************************/
 package org.fusesource.ide.camel.model.service.core.tests.integration.core.io;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -35,89 +38,8 @@ import org.junit.rules.ExternalResource;
  */
 public class FuseProject extends ExternalResource {
 
-	private static final String DUMMY_POM_CONTENT = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-			+ "<project xsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd\" xmlns=\"http://maven.apache.org/POM/4.0.0\"\n"
-			+ "    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n"
-			+ "  <modelVersion>4.0.0</modelVersion>\n"
-			+ "  <groupId>com.mycompany</groupId>\n"
-			+ "  <artifactId>testproject</artifactId>\n"
-			+ "  <version>1.0.0-SNAPSHOT</version>\n"
-			+ "  <packaging>bundle</packaging>\n"
-			+ "  <name>Some Dummy Project</name>\n"
-			+ "  <build>\n"
-			+ "    <defaultGoal>install</defaultGoal>\n"
-			+ "    <plugins>\n"
-			+ "      <plugin>\n"
-			+ "        <artifactId>maven-compiler-plugin</artifactId>\n"
-			+ "        <version>3.5.1</version>\n"
-			+ "        <configuration>\n"
-			+ "          <source>1.7</source>\n"
-			+ "          <target>1.7</target>\n"
-			+ "        </configuration>\n"
-			+ "      </plugin>\n"
-			+ "      <plugin>\n"
-			+ "        <artifactId>maven-resources-plugin</artifactId>\n"
-			+ "        <version>2.6</version>\n"
-			+ "        <configuration>\n"
-			+ "          <encoding>UTF-8</encoding>\n"
-			+ "        </configuration>\n"
-			+ "      </plugin>\n"
-			+ "    </plugins>\n"
-			+ "  </build>\n"
-			+ "  <dependencies>\n"
-			+ "    <dependency>\n"
-			+ "      <groupId>org.apache.camel</groupId>\n"
-			+ "      <artifactId>camel-core</artifactId>\n"
-			+ "      <version>%s</version>\n"
-			+ "    </dependency>\n"
-			+ "  </dependencies>\n"
-			+ "</project>";
-
-	private static final String DUMMY_BLUEPRINT_POM_CONTENT = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-			+ "<project xsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd\" xmlns=\"http://maven.apache.org/POM/4.0.0\"\n"
-			+ "    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n"
-			+ "  <modelVersion>4.0.0</modelVersion>\n"
-			+ "  <groupId>com.mycompany</groupId>\n"
-			+ "  <artifactId>testproject.blueprint</artifactId>\n"
-			+ "  <version>1.0.0-SNAPSHOT</version>\n"
-			+ "  <packaging>bundle</packaging>\n"
-			+ "  <name>Some Dummy Blueprint Project</name>\n"
-			+ "  <properties>\n"
-			+ "     <camel.version>%s</camel.version>\n"
-			+ "  </properties>\n"
-			+ "  <build>\n"
-			+ "    <defaultGoal>install</defaultGoal>\n"
-			+ "    <plugins>\n"
-			+ "      <plugin>\n"
-			+ "        <artifactId>maven-compiler-plugin</artifactId>\n"
-			+ "        <version>3.5.1</version>\n"
-			+ "        <configuration>\n"
-			+ "          <source>1.7</source>\n"
-			+ "          <target>1.7</target>\n"
-			+ "        </configuration>\n"
-			+ "      </plugin>\n"
-			+ "      <plugin>\n"
-			+ "        <artifactId>maven-resources-plugin</artifactId>\n"
-			+ "        <version>2.6</version>\n"
-			+ "        <configuration>\n"
-			+ "          <encoding>UTF-8</encoding>\n"
-			+ "        </configuration>\n"
-			+ "      </plugin>\n"
-			+ "    </plugins>\n"
-			+ "  </build>\n"
-			+ "  <dependencies>\n"
-			+ "    <dependency>\n"
-			+ "      <groupId>org.apache.camel</groupId>\n"
-			+ "      <artifactId>camel-core</artifactId>\n"
-			+ "      <version>${camel.version}</version>\n"
-			+ "    </dependency>\n"
-			+ "    <dependency>\n"
-			+ "      <groupId>org.apache.camel</groupId>\n"
-			+ "      <artifactId>camel-blueprint</artifactId>\n"
-			+ "      <version>${camel.version}</version>\n"
-			+ "    </dependency>\n"
-			+ "  </dependencies>\n"
-			+ "</project>";
+	private static final String DUMMY_SPRING_POM_CONTENT = getDummyPomContent("Spring");
+	private static final String DUMMY_BLUEPRINT_POM_CONTENT = getDummyPomContent("Blueprint");
 
 	private IProject project = null;
 	private String projectName;
@@ -156,7 +78,7 @@ public class FuseProject extends ExternalResource {
 		}
 		// Create a fake pom.xml
 		IFile pom = project.getFile(IMavenConstants.POM_FILE_NAME);
-		String pomContent = DUMMY_POM_CONTENT;
+		String pomContent = DUMMY_SPRING_POM_CONTENT;
 		if (isBlueprint) {
 			pomContent = DUMMY_BLUEPRINT_POM_CONTENT;
 		}
@@ -166,6 +88,16 @@ public class FuseProject extends ExternalResource {
 		IFolder srcMainFolder = srcFolder.getFolder("main");
 		srcMainFolder.create(IResource.FORCE, true, new NullProgressMonitor());
 		srcMainFolder.getFolder("java").create(IResource.FORCE, true, new NullProgressMonitor());
+	}
+
+	private static String getDummyPomContent(String type) {
+		InputStream inputStream = FuseProject.class.getResourceAsStream("/dummy"+ type + "Pom.xml");
+		try (BufferedReader buffer = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
+            return buffer.lines().collect(Collectors.joining("\n"));
+        } catch (IOException e) {
+        	e.printStackTrace();
+			return "";
+		}
 	}
 
 	@Override
