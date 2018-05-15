@@ -108,7 +108,7 @@
 		<repository>
 			<id>jbosstools-openshift</id>
 			<layout>p2</layout>
-			<url>${jbosstools-openshift-site}</url>
+			<url>http://download.jboss.org/jbosstools/photon/staging/updates/core/</url>
 		</repository>
 		<!-- End of repository definitions causing a warning (see FUSETOOLS-2547) -->
 
