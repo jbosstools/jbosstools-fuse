@@ -37,6 +37,7 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
+import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.ISelectionService;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
@@ -106,8 +107,7 @@ public class Wsdl2RestWizard extends Wizard implements INewWizard {
 	 */
 	protected IProject getSelectedProjectFromSelectionService() {
 		ISelectionService ss = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService();
-		String projExpID = "org.eclipse.ui.navigator.ProjectExplorer"; //$NON-NLS-1$
-		ISelection sel = ss.getSelection(projExpID);
+		ISelection sel = ss.getSelection(IPageLayout.ID_PROJECT_EXPLORER);
 		Object selectedObject=sel;
 		if(sel instanceof IStructuredSelection) {
 			selectedObject=
