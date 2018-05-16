@@ -236,7 +236,6 @@ public class Wsdl2RestWizard extends Wizard implements INewWizard {
 		if (javaFile != null) {
 			ClassLoader oldLoader = Thread.currentThread().getContextClassLoader();
 			try {
-				// initialize bus using bundle classloader, to prevent project dependencies from leaking in
 				Thread.currentThread().setContextClassLoader(getClass().getClassLoader());
 
 				Path outJavaPath = javaFile.toPath();
@@ -353,5 +352,12 @@ public class Wsdl2RestWizard extends Wizard implements INewWizard {
 	 */
 	public void setInTest(boolean flag) {
 		this.inTest = flag;
+	}
+	
+	/**
+	 * @return page 2 of wizard 
+	 */
+	public Wsdl2RestWizardSecondPage getSecondPage() {
+		return this.pageTwo;
 	}
 }

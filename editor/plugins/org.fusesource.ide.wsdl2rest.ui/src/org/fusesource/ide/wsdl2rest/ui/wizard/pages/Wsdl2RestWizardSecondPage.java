@@ -32,6 +32,9 @@ import org.fusesource.ide.wsdl2rest.ui.internal.UIMessages;
  */
 public class Wsdl2RestWizardSecondPage extends Wsdl2RestWizardBasePage {
 
+	private Binding javaPathBinding;
+	private Binding camelPathBinding;
+
 	public Wsdl2RestWizardSecondPage(String title) {
 		super(title, title, null);
 		setMessage(UIMessages.wsdl2RestWizardSecondPagePageTwoDescription);
@@ -82,11 +85,10 @@ public class Wsdl2RestWizardSecondPage extends Wsdl2RestWizardBasePage {
 		Text targetAddressText = createLabelAndText(composite, UIMessages.wsdl2RestWizardSecondPageTargetServiceAddressLabel, 3);
 		Text targetRestAddressText = createLabelAndText(composite, UIMessages.wsdl2RestWizardSecondPageTargetRESTServiceAddressLabel, 3);
 
-		// define the data bindings
-		Binding javaPathBinding = createBinding(javaPathTextControl, "destinationJava", new PathValidator()); //$NON-NLS-1$
+		javaPathBinding = createBinding(javaPathTextControl, "destinationJava", new PathValidator());
 		ControlDecorationSupport.create(javaPathBinding, SWT.LEFT | SWT.TOP);
 
-		Binding camelPathBinding = createBinding(camelPathTextControl, "destinationCamel", new PathValidator()); //$NON-NLS-1$
+		camelPathBinding = createBinding(camelPathTextControl, "destinationCamel", new PathValidator());
 		ControlDecorationSupport.create(camelPathBinding, SWT.LEFT | SWT.TOP);
 
 		Binding targetAddressBinding = createBinding(targetAddressText, "targetServiceAddress", new TargetURLValidator()); //$NON-NLS-1$
@@ -104,5 +106,10 @@ public class Wsdl2RestWizardSecondPage extends Wsdl2RestWizardBasePage {
 		setControl(composite);
 		setPageComplete(isPageComplete());
 		setErrorMessage(null); // clear any error messages at first
+	}
+	
+	protected void updateFieldsForProjectSelection() {
+		javaPathBinding.updateTargetToModel();
+		camelPathBinding.updateTargetToModel();
 	}
 }
