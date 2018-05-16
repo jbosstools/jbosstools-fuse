@@ -281,7 +281,7 @@ public class SingleFuseProjectTest extends DefaultTest {
 							.contains("spring bean - spring dsl") && project.getRuntimeType().equals(EAP)) {
 				return;
 			}
-			assertTrue("Project '" + project + "' cannot be run as Local Camel Context", canBeRun("test"));
+			assertTrue("Project '" + project + "' cannot be run as Local Camel Context", canBeRun(PROJECT_NAME));
 		}
 
 	}
