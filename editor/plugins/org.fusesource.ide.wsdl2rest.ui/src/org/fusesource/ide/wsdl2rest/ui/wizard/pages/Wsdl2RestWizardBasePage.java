@@ -34,7 +34,6 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.jface.databinding.swt.DisplayRealm;
 import org.eclipse.jface.databinding.swt.WidgetProperties;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -70,7 +69,7 @@ public abstract class Wsdl2RestWizardBasePage extends WizardPage {
 	/**
 	 * Shared Databinding Context for the page.
 	 */
-	protected final DataBindingContext dbc = new DataBindingContext(DisplayRealm.getRealm(Display.getCurrent()));
+	protected final DataBindingContext dbc = new DataBindingContext();
 
 	/**
 	 * Simple Constructor
@@ -134,6 +133,15 @@ public abstract class Wsdl2RestWizardBasePage extends WizardPage {
 	protected Wsdl2RestOptions getOptionsFromWizard() {
 		return ((Wsdl2RestWizard)getWizard()).getOptions();
 	}
+	
+	/**
+	 * Utility method to get the 2nd page of the wizard.
+	 * @return
+	 */
+	protected Wsdl2RestWizardSecondPage getSecondPageFromWizard() {
+		return ((Wsdl2RestWizard)getWizard()).getSecondPage();
+	}
+
 
 	/**
 	 * Creates a databinding Binding between a Text control, a model ID, and validator.

@@ -119,6 +119,7 @@ public class Wsdl2RestWizardFirstPage extends Wsdl2RestWizardBasePage {
 			IProject selectedProject = getOptionsFromWizard().getProject();
 			if (selectedProject != null) {
 				setPathsFromProjectSelection(selectedProject);
+				getSecondPageFromWizard().updateFieldsForProjectSelection();
 			}
 		}
 	}
