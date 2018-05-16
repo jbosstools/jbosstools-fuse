@@ -10,11 +10,12 @@
  ******************************************************************************/
 package org.fusesource.ide.camel.model.service.core.tests.integration.core;
 
-import org.jboss.tools.common.log.BaseUIPlugin;
+import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
-public class CamelModelServiceIntegrationTestActivator extends BaseUIPlugin {
+public class CamelModelServiceIntegrationTestActivator extends AbstractUIPlugin {
 	
+	public static final String ID = "org.fusesource.ide.camel.model.service.core.tests.integration";
 	private static CamelModelServiceIntegrationTestActivator plugin;
 	
 	@Override
