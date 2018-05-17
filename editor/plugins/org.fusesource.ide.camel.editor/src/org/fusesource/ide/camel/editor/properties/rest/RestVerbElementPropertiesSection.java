@@ -15,6 +15,7 @@ import java.util.Map;
 
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.core.databinding.validation.IValidator;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
@@ -27,7 +28,6 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 import org.fusesource.ide.camel.editor.internal.UIMessages;
 import org.fusesource.ide.camel.editor.properties.FusePropertySection;
-import org.fusesource.ide.camel.editor.properties.bean.NewBeanIdPropertyValidator;
 import org.fusesource.ide.camel.editor.properties.bean.PropertyRequiredValidator;
 import org.fusesource.ide.camel.editor.properties.creators.AbstractParameterPropertyUICreator;
 import org.fusesource.ide.camel.editor.properties.creators.AbstractTextFieldParameterPropertyUICreator;
@@ -35,7 +35,6 @@ import org.fusesource.ide.camel.editor.properties.creators.TextParameterProperty
 import org.fusesource.ide.camel.editor.properties.creators.advanced.BooleanParameterPropertyUICreatorForAdvanced;
 import org.fusesource.ide.camel.editor.properties.creators.advanced.UnsupportedParameterPropertyUICreatorForAdvanced;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
-import org.fusesource.ide.camel.model.service.core.model.eips.GlobalBeanEIP;
 import org.fusesource.ide.camel.model.service.core.model.eips.RestElementEIP;
 import org.fusesource.ide.camel.model.service.core.model.eips.RestVerbElementEIP;
 import org.fusesource.ide.camel.model.service.core.util.CamelComponentUtils;
@@ -80,6 +79,7 @@ public class RestVerbElementPropertiesSection extends FusePropertySection {
 		this.tabs.add(contentTab);
 	}
 	
+	@SuppressWarnings("squid:S00112")
 	private AbstractParameterPropertyUICreator handleField(final Parameter p, final Composite page) {
 		createPropertyLabel(toolkit, page, p);
 		AbstractParameterPropertyUICreator creator = createPropertyFieldEditor(page, p);
@@ -93,7 +93,8 @@ public class RestVerbElementPropertiesSection extends FusePropertySection {
 			creator.getControl().setEnabled(false);
 			return creator;
 		}
-		throw new NullPointerException();
+		throw new RuntimeException(
+				NLS.bind(UIMessages.restVerbParameterCannotBeNull, p.getName()));
 	}
 	
 	private void createParameterList() {
@@ -178,8 +179,8 @@ public class RestVerbElementPropertiesSection extends FusePropertySection {
 		IValidator validator = null;
 		String propName = p.getName();
 
-		if (GlobalBeanEIP.PROP_ID.equals(propName)) {
-			validator = new NewBeanIdPropertyValidator(p, selectedEP);
+		if (RestVerbElementEIP.PROP_ID.equals(propName)) {
+			validator = new NewRestIdPropertyValidator(p, selectedEP);
 		}
 		if (validator == null && p.getRequired() != null && "true".contentEquals(p.getRequired())) { //$NON-NLS-1$
 			validator = new PropertyRequiredValidator(p);
@@ -195,8 +196,8 @@ public class RestVerbElementPropertiesSection extends FusePropertySection {
 	 * @param group
 	 */
 	protected void generateTabContents(Map<String, Parameter> props, final Composite page) {
-		handleField(props.get(GlobalBeanEIP.PROP_ID), page);
-		props.remove(GlobalBeanEIP.PROP_ID);
+		handleField(props.get(RestVerbElementEIP.PROP_ID), page);
+		props.remove(RestVerbElementEIP.PROP_ID);
 
 		for (Parameter p : props.values()) {
 			handleField(p, page);

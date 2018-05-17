@@ -41,7 +41,7 @@ public class RestVerbElement extends AbstractRestCamelModelElement {
 	 * @param underlyingNode
 	 */
 	public RestVerbElement(AbstractCamelModelElement parent, Node underlyingNode) {
-		super(parent, underlyingNode);
+		super(parent, underlyingNode, true);
 		setUnderlyingMetaModelObject(new RestVerbElementEIP(getNodeTypeId()));
 	}
 	

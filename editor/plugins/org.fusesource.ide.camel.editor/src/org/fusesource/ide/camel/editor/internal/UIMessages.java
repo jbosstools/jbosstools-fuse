@@ -202,6 +202,8 @@ public class UIMessages extends NLS {
 	public static String preferredLabelsAddButtonText;
 	public static String preferredLabelsEditButtonText;
 	public static String preferredLabelsRemoveButtonText;
+	public static String restVerbParameterCannotBeNull;
+	public static String validationIDAlreadyUsed;
 	
 	static {
 		// initialize resource bundle
