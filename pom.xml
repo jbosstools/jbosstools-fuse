@@ -160,18 +160,6 @@
 			</releases>
 		</repository>
 
-		<repository>
-			<id>fis-internal</id>
-			<name>Fuse Integration Services internal - staging</name>
-			<url>http://download.eng.bos.redhat.com/brewroot/repos/jb-fis-2.0-maven-build/latest/maven/</url>
-		</repository>
-
-		<repository>
-			<id>fuse-early-access</id>
-			<name>Fuse Early Access - staging</name>
-			<url>https://repository.jboss.org/nexus/content/</url>
-		</repository>
-
 	</repositories>
 
 	<pluginRepositories>
