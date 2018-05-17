@@ -142,14 +142,7 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 		this.parent.setLayout(gl);
 
 		CamelFile designEditorModel = parentEditor.getDesignEditor().getModel();
-		if (designEditorModel != null) {
-			designEditorModel.addModelListener(this);
-			
-			if (designEditorModel.getRouteContainer() != null && 
-					designEditorModel.getRouteContainer() instanceof CamelContextElement) {
-				ctx = (CamelContextElement)designEditorModel.getRouteContainer();
-			}		
-		}
+		ctx = getCamelContext(designEditorModel);
 
 		createContents();
 
@@ -157,6 +150,18 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 		if (designEditorModel != null) {
 			designEditorModel.addModelListener(this);
 		}
+	}
+
+	protected CamelContextElement getCamelContext(CamelFile designEditorModel) {
+		if (designEditorModel != null) {
+			designEditorModel.addModelListener(this);
+			
+			if (designEditorModel.getRouteContainer() != null && 
+					designEditorModel.getRouteContainer() instanceof CamelContextElement) {
+				return  (CamelContextElement)designEditorModel.getRouteContainer();
+			}		
+		}
+		return null;
 	}
 
 	@Override
@@ -170,7 +175,7 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 
 	@Override
 	public void modelChanged() {
-		// empty
+		ctx = getCamelContext(parentEditor.getDesignEditor().getModel());
 	}
 
 	@Override
@@ -531,6 +536,7 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 	}	
 	
 	public void reload() {
+		ctx = getCamelContext(parentEditor.getDesignEditor().getModel());
 		refreshRestConfigurationSection();
 		clearUI();
 		refreshRestSection();
