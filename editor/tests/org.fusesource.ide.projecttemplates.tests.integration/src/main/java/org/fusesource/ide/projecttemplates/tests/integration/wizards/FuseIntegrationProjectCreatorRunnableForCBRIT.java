@@ -11,6 +11,7 @@
 package org.fusesource.ide.projecttemplates.tests.integration.wizards;
 
 import static org.junit.Assume.assumeFalse;
+import static org.junit.Assume.assumeTrue;
 
 import java.util.List;
 
@@ -45,6 +46,7 @@ public class FuseIntegrationProjectCreatorRunnableForCBRIT extends FuseIntegrati
 		
 	@Test
 	public void testCBRSpringCreation() throws Exception {
+		assumeTrue("Community version > 2.20.0 are not working with CBR template see https://issues.jboss.org/browse/FUSETOOLS-2963", camelVersion.contains("redhat") || camelVersion.contains("fuse") || isOlderThan220());
 		testProjectCreation("-CBRSpring-"+camelVersion, CamelDSLType.SPRING, "src/main/resources/META-INF/spring/camel-context.xml", null);
 	}
 	
