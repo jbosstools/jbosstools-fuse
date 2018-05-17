@@ -17,7 +17,7 @@ import org.osgi.framework.BundleContext;
 /**
  * The activator class controls the plug-in life cycle
  */
-public class Wsdl2RestUIActivator  extends BaseUIPlugin {
+public class Wsdl2RestUIActivator extends BaseUIPlugin {
 
 	// The plug-in ID
 	public static final String PLUGIN_ID = "org.fusesource.ide.wsdl2rest.ui"; //$NON-NLS-1$
@@ -32,24 +32,20 @@ public class Wsdl2RestUIActivator  extends BaseUIPlugin {
 		// empty
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
-	 */
 	@Override
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
-		Wsdl2RestUIActivator.plugin = this;
+		setInstance(this);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
-	 */
 	@Override
 	public void stop(BundleContext context) throws Exception {
-		Wsdl2RestUIActivator.plugin = null;
+		setInstance(null);
 		super.stop(context);
+	}
+	
+	private static synchronized void setInstance(Wsdl2RestUIActivator wsdl2RestUIActivator) {
+		Wsdl2RestUIActivator.plugin = wsdl2RestUIActivator;
 	}
 
 	/**
