@@ -33,7 +33,7 @@ public class RestElement extends AbstractRestCamelModelElement {
 	 * @param underlyingNode
 	 */
 	public RestElement(AbstractCamelModelElement parent, Node underlyingNode) {
-		super(parent, underlyingNode);
+		super(parent, underlyingNode, true);
 		setUnderlyingMetaModelObject(new RestElementEIP());
 	}
 	

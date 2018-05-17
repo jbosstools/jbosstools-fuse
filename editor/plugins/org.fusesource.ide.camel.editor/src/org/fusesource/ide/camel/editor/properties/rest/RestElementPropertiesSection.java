@@ -24,7 +24,6 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 import org.fusesource.ide.camel.editor.internal.UIMessages;
 import org.fusesource.ide.camel.editor.properties.FusePropertySection;
-import org.fusesource.ide.camel.editor.properties.bean.NewBeanIdPropertyValidator;
 import org.fusesource.ide.camel.editor.properties.bean.PropertyRequiredValidator;
 import org.fusesource.ide.camel.editor.properties.creators.AbstractParameterPropertyUICreator;
 import org.fusesource.ide.camel.editor.properties.creators.AbstractTextFieldParameterPropertyUICreator;
@@ -32,7 +31,6 @@ import org.fusesource.ide.camel.editor.properties.creators.TextParameterProperty
 import org.fusesource.ide.camel.editor.properties.creators.advanced.BooleanParameterPropertyUICreatorForAdvanced;
 import org.fusesource.ide.camel.editor.properties.creators.advanced.UnsupportedParameterPropertyUICreatorForAdvanced;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
-import org.fusesource.ide.camel.model.service.core.model.eips.GlobalBeanEIP;
 import org.fusesource.ide.camel.model.service.core.model.eips.RestElementEIP;
 import org.fusesource.ide.camel.model.service.core.util.CamelComponentUtils;
 import org.fusesource.ide.foundation.core.util.Strings;
@@ -147,8 +145,8 @@ public class RestElementPropertiesSection extends FusePropertySection {
 		IValidator validator = null;
 		String propName = p.getName();
 
-		if (GlobalBeanEIP.PROP_ID.equals(propName)) {
-			validator = new NewBeanIdPropertyValidator(p, selectedEP);
+		if (RestElementEIP.PROP_ID.equals(propName)) {
+			validator = new NewRestIdPropertyValidator(p, selectedEP);
 		}
 		if (validator == null && p.getRequired() != null && "true".contentEquals(p.getRequired())) { //$NON-NLS-1$
 			validator = new PropertyRequiredValidator(p);
@@ -164,8 +162,8 @@ public class RestElementPropertiesSection extends FusePropertySection {
 	 * @param group
 	 */
 	protected void generateTabContents(Map<String, Parameter> props, final Composite page) {
-		handleField(props.get(GlobalBeanEIP.PROP_ID), page);
-		props.remove(GlobalBeanEIP.PROP_ID);
+		handleField(props.get(RestElementEIP.PROP_ID), page);
+		props.remove(RestElementEIP.PROP_ID);
 
 		for (Parameter p : props.values()) {
 			handleField(p, page);
