@@ -41,6 +41,24 @@ public class ImportExportPackageUpdaterTest {
 	}
 	
 	@Test
+	public void testDependencyEqualTo2210() throws Exception {
+		Model pomModel = createModelWithVersion("2.21.0");
+		
+		boolean shouldImport = new ImportExportPackageUpdater(null, null, null).shouldAddImportExportPackage(pomModel);
+		
+		assertThat(shouldImport).isFalse();
+	}
+	
+	@Test
+	public void testDependencyHigherTo2210() throws Exception {
+		Model pomModel = createModelWithVersion("2.22.0");
+		
+		boolean shouldImport = new ImportExportPackageUpdater(null, null, null).shouldAddImportExportPackage(pomModel);
+		
+		assertThat(shouldImport).isFalse();
+	}
+	
+	@Test
 	public void testDependencyHigherTo217() throws Exception {
 		Model pomModel = createModelWithVersion("2.18.0");
 		
@@ -102,6 +120,18 @@ public class ImportExportPackageUpdaterTest {
 		boolean shouldImport = new ImportExportPackageUpdater(null, null, null).shouldAddImportExportPackage(pomModel);
 		
 		assertThat(shouldImport).isTrue();
+	}
+	
+	@Test
+	public void testDependencySpecifiedWithProperty_HigherThan221() throws Exception {
+		Model pomModel = createModelWithVersion("${camel.version}");
+		Properties properties = new Properties();
+		properties.setProperty("camel.version", "2.21.0");
+		pomModel.setProperties(properties);
+		
+		boolean shouldImport = new ImportExportPackageUpdater(null, null, null).shouldAddImportExportPackage(pomModel);
+		
+		assertThat(shouldImport).isFalse();
 	}
 	
 	@Test
