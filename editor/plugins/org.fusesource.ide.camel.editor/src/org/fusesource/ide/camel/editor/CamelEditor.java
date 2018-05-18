@@ -221,10 +221,7 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 		createDesignPage(DESIGN_PAGE_INDEX);
 		createSourcePage(SOURCE_PAGE_INDEX);
 		createGlobalConfPage(GLOBAL_CONF_INDEX);
-		boolean restPageVisible = PreferenceManager.getInstance().loadPreferenceAsBoolean(PreferencesConstants.EDITOR_SHOW_REST_PAGE);
-		if (restPageVisible) {
-			createRestConfPage(REST_CONF_INDEX);
-		}
+		createRestConfPage(REST_CONF_INDEX);
 
 		IDocument document = getDocument();
 		if (document == null) {
@@ -658,6 +655,8 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 			return this.designEditor;
 		} else if (adapter == CamelGlobalConfigEditor.class) {
 			return this.globalConfigEditor;
+		} else if (adapter == RestConfigEditor.class) {
+			return this.restConfigEditor;
 		} else if (adapter == IPropertySheetPage.class) {
 			return new TabbedPropertySheetPage(this);
 //		} else if (adapter == ActionRegistry.class) {
