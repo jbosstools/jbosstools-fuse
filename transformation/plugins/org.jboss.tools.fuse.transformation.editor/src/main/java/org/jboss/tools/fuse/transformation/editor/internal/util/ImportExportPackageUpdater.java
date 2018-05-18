@@ -59,6 +59,7 @@ public class ImportExportPackageUpdater {
 	private static final String DEFAULT_PACKAGE_EXPORT = "."; //$NON-NLS-1$
 	private static final String COM_SUN_EL_VERSION = "com.sun.el;version="; //$NON-NLS-1$
 	private static final String LIMIT_CAMEL_VERSION_FROM_WHICH_NEED_TO_ADD_IMPORT_PACKAGE = "2.17.0"; //$NON-NLS-1$
+	private static final String LIMIT_CAMEL_VERSION_FROM_WHICH_NO_MORE_NEED_TO_ADD_IMPORT_PACKAGE = "2.21.0";  //$NON-NLS-1$
 	private static final String ORG_APACHE_CAMEL = "org.apache.camel"; //$NON-NLS-1$
 	private static final String CAMEL_CORE = "camel-core"; //$NON-NLS-1$
 	private static final String ORG_APACHE_FELIX = "org.apache.felix"; //$NON-NLS-1$
@@ -178,10 +179,10 @@ public class ImportExportPackageUpdater {
 	}
 
 	boolean shouldAddImportExportPackage(Model pomModel) {
-		return !"war".equals(pomModel.getPackaging()) && isCamelDependencyHigherThan63(pomModel); //$NON-NLS-1$
+		return !"war".equals(pomModel.getPackaging()) && isCamelDependencyHigherThan63AndLowerThan70(pomModel); //$NON-NLS-1$
 	}
 
-	private boolean isCamelDependencyHigherThan63(Model pomModel) {
+	private boolean isCamelDependencyHigherThan63AndLowerThan70(Model pomModel) {
 		try{
 			Build build = pomModel.getBuild();
 			Map<String, Plugin> pluginsByName = build.getPluginsAsMap();
@@ -195,17 +196,18 @@ public class ImportExportPackageUpdater {
 				if(camelCoreVersionFromProperty ==  null){
 					return true;
 				}
-				return isVersionHigherThanLimitForImportPackage(camelCoreVersionFromProperty);
+				return isVersionInRangeForImportPackage(camelCoreVersionFromProperty);
 			}
-			return isVersionHigherThanLimitForImportPackage(pluginVersion);
+			return isVersionInRangeForImportPackage(pluginVersion);
 		} catch(IllegalArgumentException e){
 			Activator.log(new Status(IStatus.INFO, Activator.PLUGIN_ID, Messages.ImportExportPackageUpdater_UnresolvedCamelCoreVersion, e));
 			return true;
 		}
 	}
 
-	private boolean isVersionHigherThanLimitForImportPackage(String camelCoreVersion) {
-		return new Version(camelCoreVersion).compareTo(new Version(LIMIT_CAMEL_VERSION_FROM_WHICH_NEED_TO_ADD_IMPORT_PACKAGE)) >= 0;
+	private boolean isVersionInRangeForImportPackage(String camelCoreVersion) {
+		return new Version(camelCoreVersion).compareTo(new Version(LIMIT_CAMEL_VERSION_FROM_WHICH_NEED_TO_ADD_IMPORT_PACKAGE)) >= 0
+				&& new Version(LIMIT_CAMEL_VERSION_FROM_WHICH_NO_MORE_NEED_TO_ADD_IMPORT_PACKAGE).compareTo(new Version(camelCoreVersion)) > 0;
 	}
 
 	private void managePlugins(Model pomModel) throws XmlPullParserException, IOException {
