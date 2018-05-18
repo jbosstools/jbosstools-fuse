@@ -146,7 +146,6 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 
 		createContents();
 
-		reload();
 		if (designEditorModel != null) {
 			designEditorModel.addModelListener(this);
 		}
@@ -156,8 +155,7 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 		if (designEditorModel != null) {
 			designEditorModel.addModelListener(this);
 			
-			if (designEditorModel.getRouteContainer() != null && 
-					designEditorModel.getRouteContainer() instanceof CamelContextElement) {
+			if (designEditorModel.getRouteContainer() instanceof CamelContextElement) {
 				return  (CamelContextElement)designEditorModel.getRouteContainer();
 			}		
 		}
@@ -195,7 +193,7 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 		createRestTabSection();
 		restOpsSection = createRestOperationTabSection();
 
-		form.layout();
+		form.layout(true);
 		toolkit.decorateFormHeading(form.getForm());
 		getSite().setSelectionProvider(this);
 
@@ -351,6 +349,7 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 				clearUI();
 				
 				RestElement acme = (RestElement) event.getStructuredSelection().getFirstElement();
+				setSelection(new StructuredSelection(acme));
 				Iterator<AbstractCamelModelElement> iter = acme.getRestOperations().values().iterator();
 				while (iter.hasNext()) {
 					RestVerbElement rve = (RestVerbElement) iter.next();
@@ -358,10 +357,9 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 					String verbUri = elChild.getAttribute("uri"); //$NON-NLS-1$
 					Composite operation = createVerbComposite(restOpsSection, elChild.getTagName(), verbUri);
 					operation.setData(RestConfigConstants.REST_VERB_FLAG, rve);
+					operation.requestLayout();
 				}
-
-				setSelection(new StructuredSelection(acme));
-				restOpsSection.layout();
+				restOpsSection.layout(true);
 			}
 		});
 
@@ -532,17 +530,19 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 		if (!ctx.getRestElements().isEmpty()) {
 			restList.setInput(ctx.getRestElements().values());
 			restList.setSelection(new StructuredSelection(restList.getElementAt(0)), true);
+		} else {
+			clearUI();
 		}
 	}	
 	
 	public void reload() {
 		ctx = getCamelContext(parentEditor.getDesignEditor().getModel());
 		refreshRestConfigurationSection();
-		clearUI();
 		refreshRestSection();
 		form.layout(true);
 		toolkit.decorateFormHeading(form.getForm());
-		setSelection(StructuredSelection.EMPTY);
+		selection = null;
+		setSelection(new StructuredSelection());
 	}
 
 	@Override
