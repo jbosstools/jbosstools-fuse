@@ -163,18 +163,16 @@ public class ImportExportPackageUpdater {
 		try {
 			File pomFile = project.getFile(IMavenConstants.POM_FILE_NAME).getLocation().toFile();
 			Model pomModel = new CamelMavenUtils().getMavenModel(project);
-			if (!shouldAddImportExportPackage(pomModel)){
-				return;
-			}
-			managePlugins(pomModel);
+			if (shouldAddImportExportPackage(pomModel)){
+				managePlugins(pomModel);
 
-			try (OutputStream out = new BufferedOutputStream(new FileOutputStream(pomFile))) {
-				MavenPlugin.getMaven().writeModel(pomModel, out);
-				project.getFile(IMavenConstants.POM_FILE_NAME).refreshLocal(IResource.DEPTH_ZERO, monitor);
+				try (OutputStream out = new BufferedOutputStream(new FileOutputStream(pomFile))) {
+					MavenPlugin.getMaven().writeModel(pomModel, out);
+					project.getFile(IMavenConstants.POM_FILE_NAME).refreshLocal(IResource.DEPTH_ZERO, monitor);
+				}
 			}
 		} catch (CoreException | XmlPullParserException | IOException e1) {
 			Activator.error(e1);
-			return;
 		}
 	}
 
