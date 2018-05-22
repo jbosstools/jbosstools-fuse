@@ -16,10 +16,10 @@
     </license>
   </licenses>
   <properties>
-    <camel.version>2.17.0.redhat-630310</camel.version>
+    <camel.version>2.17.0.redhat-630343</camel.version>
     <version.maven-bundle-plugin>3.2.0</version.maven-bundle-plugin>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <jboss.fuse.bom.version>6.3.0.redhat-310</jboss.fuse.bom.version>
+    <jboss.fuse.bom.version>6.3.0.redhat-343</jboss.fuse.bom.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
   <dependencyManagement>
