@@ -148,7 +148,11 @@ public class ProjectWithDebugAvailableDeployedHelper {
 			} catch(IOException ioe){
 				Activator.getDefault().getLog().log(new Status(IStatus.WARNING, Activator.ID, "actively awaiting that Camel Route starts, JMX connection attempt failed so Camel route not yet started. ", ioe));
 			}
-			Thread.sleep(500);
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException ie) {
+				Activator.getDefault().getLog().log(new Status(IStatus.WARNING, Activator.ID, "Sleep waiting actively that Camel route starts has been interrupted... Catching interruption and continue...", ie));
+			}
 			currentAwaitedTime += 500;
 		}
 		assertThat(isDeploymentOk).isTrue();
