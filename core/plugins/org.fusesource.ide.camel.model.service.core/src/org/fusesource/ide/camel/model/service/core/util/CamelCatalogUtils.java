@@ -56,7 +56,7 @@ public class CamelCatalogUtils {
 	
 	public static final String CAMEL_VERSION_LATEST_COMMUNITY = "2.21.0";
 	public static final String CAMEL_VERSION_LATEST_PRODUCTIZED_62 = CamelForFuse6ToBomMapper.FUSE_621_R9_CAMEL_VERSION;
-	public static final String CAMEL_VERSION_LATEST_PRODUCTIZED_63 = CamelForFuse6ToBomMapper.FUSE_63_R5_CAMEL_VERSION;
+	public static final String CAMEL_VERSION_LATEST_PRODUCTIZED_63 = CamelForFuse6ToBomMapper.FUSE_63_R7_CAMEL_VERSION;
 	public static final String CAMEL_VERSION_LATEST_FIS_20 = CamelForFIS20ToBomMapper.FIS_20_R3_CAMEL_VERSION;
 	
 	public static final String RUNTIME_PROVIDER_KARAF = "karaf";

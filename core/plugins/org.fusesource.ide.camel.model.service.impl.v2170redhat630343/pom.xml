@@ -11,12 +11,12 @@
     <relativePath>..</relativePath>
   </parent>
 
-  <artifactId>org.fusesource.ide.camel.model.service.impl.v2170redhat630310</artifactId>
+  <artifactId>org.fusesource.ide.camel.model.service.impl.v2170redhat630343</artifactId>
   <packaging>eclipse-plugin</packaging>
-  <name>Red Hat Fuse Tooling :: Core :: Plugins :: Camel Dynamic Service Implementation for 2.17.0.redhat-630310</name>
+  <name>Red Hat Fuse Tooling :: Core :: Plugins :: Camel Dynamic Service Implementation for 2.17.0.redhat-630343</name>
   
   <properties>
-  		<bundle.camel.version>2.17.0.redhat-630310</bundle.camel.version>
+  		<bundle.camel.version>2.17.0.redhat-630343</bundle.camel.version>
   		<bundle.slf4j.version>1.7.22</bundle.slf4j.version>
   </properties>
   <build>
