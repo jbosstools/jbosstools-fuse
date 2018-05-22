@@ -15,15 +15,16 @@ import static org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizar
 import static org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardRuntimeType.KARAF;
 import static org.junit.Assert.assertEquals;
 
+import org.eclipse.reddeer.common.wait.WaitUntil;
 import org.eclipse.reddeer.eclipse.ui.views.markers.ProblemsView;
 import org.eclipse.reddeer.eclipse.ui.views.markers.ProblemsView.ProblemType;
 import org.eclipse.reddeer.junit.runner.RedDeerSuite;
 import org.eclipse.reddeer.requirements.cleanerrorlog.CleanErrorLogRequirement.CleanErrorLog;
 import org.eclipse.reddeer.requirements.cleanworkspace.CleanWorkspaceRequirement.CleanWorkspace;
 import org.eclipse.reddeer.requirements.openperspective.OpenPerspectiveRequirement.OpenPerspective;
+import org.eclipse.reddeer.workbench.condition.EditorWithTitleIsActive;
 import org.jboss.tools.fuse.reddeer.editor.CamelEditor;
 import org.jboss.tools.fuse.reddeer.perspectives.FuseIntegrationPerspective;
-import org.jboss.tools.fuse.reddeer.projectexplorer.CamelProject;
 import org.jboss.tools.fuse.reddeer.utils.ProjectFactory;
 import org.jboss.tools.fuse.ui.bot.tests.utils.EditorManipulator;
 import org.junit.Test;
@@ -65,7 +66,7 @@ public class ProblemsViewTest {
 	public void testProblemsOnGlobalElements() {
 		ProjectFactory.newProject(PROJECT_NAME).deploymentType(STANDALONE).runtimeType(KARAF).template(EMPTY_SPRING)
 				.create();
-		new CamelProject(PROJECT_NAME).openCamelContext(CAMEL_CONTEXT_XML);
+		new WaitUntil(new EditorWithTitleIsActive(CAMEL_CONTEXT_XML));
 		CamelEditor editor = new CamelEditor(CAMEL_CONTEXT_XML);
 		CamelEditor.switchTab(SOURCE_TAB);
 		EditorManipulator.copyFileContentToCamelXMLEditor(ROUTE_WITH_ERRORS);
