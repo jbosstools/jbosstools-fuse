@@ -47,21 +47,21 @@ import org.jboss.tools.fuse.reddeer.editor.CamelEditor;
  */
 public class CamelProject {
 
-	private Project project;
+	private String name;
 
 	public CamelProject(String name) {
-
-		project = new ProjectExplorer().getProject(name);
+		this.name = name;
+		getProject(); //ensure project is available
 		new ConsoleView().open();
 	}
 
 	public void selectProjectItem(String... path) {
-		project.getProjectItem(path).select();
+		getProject().getProjectItem(path).select();
 	}
 
 	public void openFile(String... path) {
 
-		ProjectItem item = project.getProjectItem(path);
+		ProjectItem item = getProject().getProjectItem(path);
 		item.open();
 	}
 
@@ -74,13 +74,12 @@ public class CamelProject {
 	}
 
 	public void selectCamelContext(String name) {
-
-		project.getProjectItem("src/main/resources", "META-INF", "spring", name).select();
+		getProject().getProjectItem("src/main/resources", "META-INF", "spring", name).select();
 	}
 
 	public void runCamelContext() {
 
-		project.getProjectItem("Camel Contexts").getChildren().get(0).select();
+		getProject().getProjectItem("Camel Contexts").getChildren().get(0).select();
 		try {
 			new ContextMenuItem("Run As", "2 Local Camel Context").select();
 		} catch (CoreLayerException ex) {
@@ -112,7 +111,7 @@ public class CamelProject {
 	public void runCamelContextWithoutTests(String name) {
 
 		String id = getCamelContextId("src/main/resources", "META-INF", "spring", name);
-		project.getProjectItem("src/main/resources", "META-INF", "spring", name).select();
+		getProject().getProjectItem("src/main/resources", "META-INF", "spring", name).select();
 		new ContextMenuItem("Run As", "3 Local Camel Context (without tests)").select();
 		new WaitUntil(new ConsoleHasText("(CamelContext: " + id + ") started"), TimePeriod.VERY_LONG);
 	}
@@ -120,7 +119,7 @@ public class CamelProject {
 	public void debugCamelContextWithoutTests(String name) {
 
 		new ProjectExplorer().open();
-		project.getProjectItem("src/main/resources", "META-INF", "spring", name).select();
+		getProject().getProjectItem("src/main/resources", "META-INF", "spring", name).select();
 		new ContextMenuItem("Debug As", "3 Local Camel Context (without tests)").select();
 		closeSecureStorage();
 		new WaitWhile(new JobIsRunning(), TimePeriod.LONG);
@@ -144,7 +143,7 @@ public class CamelProject {
 
 	public void enableCamelNature() {
 
-		project.select();
+		getProject().select();
 		try {
 			new ContextMenuItem("Enable Fuse Camel Nature").select();
 			new WaitWhile(new JobIsRunning());
@@ -172,7 +171,7 @@ public class CamelProject {
 		IWorkspace workspace = ResourcesPlugin.getWorkspace();
 		IWorkspaceRoot root = workspace.getRoot();
 
-		return new File(new File(root.getLocationURI().getPath()), project.getName());
+		return new File(new File(root.getLocationURI().getPath()), getProject().getName());
 	}
 
 	public File getCamelContextFile(String name) throws FileNotFoundException {
@@ -188,7 +187,7 @@ public class CamelProject {
 	}
 
 	public void update() {
-		project.select();
+		getProject().select();
 		new ContextMenuItem("Maven", "Update Project...").select();
 		new DefaultShell("Update Maven Project");
 		new CheckBox("Force Update of Snapshots/Releases").toggle(true);
@@ -219,5 +218,9 @@ public class CamelProject {
 		} catch (CoreException e) {
 			return null;
 		}
+	}
+
+	public Project getProject() {
+		return new ProjectExplorer().getProject(name);
 	}
 }
