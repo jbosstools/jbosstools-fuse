@@ -43,9 +43,9 @@ public class CamelEditorCheckOpeningInSpecialCasesIT extends AbstractCamelEditor
 	}
 	
 	@Test
-	public void openContextFileAndCheckFor3Tabs() throws Exception {
+	public void openContextFileAndCheckFor4Tabs() throws Exception {
 		IEditorPart openEditorOnFileStore = openFileInEditor("/route");
-		assertThat(getAvailableEditorTabCount(openEditorOnFileStore)).isEqualTo(3);
+		assertThat(getAvailableEditorTabCount(openEditorOnFileStore)).isEqualTo(4);
 	}
 	
 	private int getAvailableEditorTabCount(IEditorPart editorPart) {
