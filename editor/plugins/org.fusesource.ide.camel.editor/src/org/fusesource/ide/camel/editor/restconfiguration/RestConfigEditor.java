@@ -542,7 +542,7 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 		form.layout(true);
 		toolkit.decorateFormHeading(form.getForm());
 		selection = null;
-		setSelection(new StructuredSelection());
+		setSelection(StructuredSelection.EMPTY);
 	}
 
 	@Override
