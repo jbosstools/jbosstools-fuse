@@ -56,7 +56,7 @@ public class CamelCatalogUtils {
 	
 	public static final String CAMEL_VERSION_LATEST_COMMUNITY = "2.21.0";
 	public static final String CAMEL_VERSION_LATEST_PRODUCTIZED_62 = CamelForFuse6ToBomMapper.FUSE_621_R9_CAMEL_VERSION;
-	public static final String CAMEL_VERSION_LATEST_PRODUCTIZED_63 = CamelForFuse6ToBomMapper.FUSE_63_R7_CAMEL_VERSION;
+	public static final String CAMEL_VERSION_LATEST_PRODUCTIZED_63 = CamelForFuse6ToBomMapper.FUSE_63_R5_CAMEL_VERSION;
 	public static final String CAMEL_VERSION_LATEST_FIS_20 = CamelForFIS20ToBomMapper.FIS_20_R3_CAMEL_VERSION;
 	
 	public static final String RUNTIME_PROVIDER_KARAF = "karaf";
@@ -382,8 +382,7 @@ public class CamelCatalogUtils {
 	private static boolean hasDependency(List<org.apache.maven.model.Dependency> dependencies, String dependencyToCheck) {
 		return dependencies != null
 				&& dependencies.stream()
-					.filter(dependency -> dependencyToCheck.equals(dependency.getArtifactId()))
-					.findFirst().isPresent();
+					.anyMatch(dependency -> dependencyToCheck.equals(dependency.getArtifactId()));
 	}
 	
 	public static void parseDependencies(List<Dependency> dependencies, Map<String, String> properties) {
