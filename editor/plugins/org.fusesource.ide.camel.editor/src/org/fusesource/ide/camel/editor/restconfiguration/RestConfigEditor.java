@@ -534,9 +534,32 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 			clearUI();
 		}
 	}	
+
+	private void setDirtyIfIDsChanged() {
+		if (!ctx.getRestElements().isEmpty()) {
+			Iterator<?> restElementIter = ctx.getRestElements().values().iterator();
+			while (restElementIter.hasNext()) {
+				RestElement restEl = (RestElement) restElementIter.next();
+				if (restEl.wasUpdated()) {
+					parentEditor.setDirtyFlag(true);					
+				}
+				if (!restEl.getRestOperations().isEmpty()) {
+					Iterator<?> restVerbIter = restEl.getRestOperations().values().iterator();
+					while (restVerbIter.hasNext()) {
+						RestVerbElement restVerb = (RestVerbElement) restVerbIter.next();
+						if (restVerb.wasUpdated()) {
+							parentEditor.setDirtyFlag(true);					
+						}
+					}
+				}
+			}
+		}		
+		
+	}
 	
 	public void reload() {
 		ctx = getCamelContext(parentEditor.getDesignEditor().getModel());
+		setDirtyIfIDsChanged();
 		refreshRestConfigurationSection();
 		refreshRestSection();
 		form.layout(true);
