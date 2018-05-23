@@ -56,12 +56,11 @@ import org.osgi.framework.Version;
  */
 public class ImportExportPackageUpdater {
 
+	private static final String COM_SUN_EL_VERSION_2_3 = "com.sun.el;version=\"[2,3)\"";
 	private static final String DEFAULT_PACKAGE_EXPORT = "."; //$NON-NLS-1$
 	private static final String COM_SUN_EL_VERSION = "com.sun.el;version="; //$NON-NLS-1$
 	private static final String LIMIT_CAMEL_VERSION_FROM_WHICH_NEED_TO_ADD_IMPORT_PACKAGE = "2.17.0"; //$NON-NLS-1$
 	private static final String LIMIT_CAMEL_VERSION_FROM_WHICH_NO_MORE_NEED_TO_ADD_IMPORT_PACKAGE = "2.21.0";  //$NON-NLS-1$
-	private static final String ORG_APACHE_CAMEL = "org.apache.camel"; //$NON-NLS-1$
-	private static final String CAMEL_CORE = "camel-core"; //$NON-NLS-1$
 	private static final String ORG_APACHE_FELIX = "org.apache.felix"; //$NON-NLS-1$
 	private static final String MAVEN_BUNDLE_PLUGIN = "maven-bundle-plugin"; //$NON-NLS-1$
 	private static final String MAVEN_BUNDLE_PLUGIN_VERSION = "3.2.0"; //$NON-NLS-1$
@@ -142,9 +141,11 @@ public class ImportExportPackageUpdater {
 	private void updateImportPackage(WorkspaceBundleModel bundleModel) {
 		String importPackage = bundleModel.getBundle().getHeader(Constants.IMPORT_PACKAGE);
 		if(importPackage == null || !importPackage.contains(COM_SUN_EL_VERSION)){
-			importPackage = addELPackage(importPackage);
-			bundleModel.getBundle().setHeader(Constants.IMPORT_PACKAGE, importPackage);
-			bundleModel.save();
+			importPackage = computePackageToImport(importPackage);
+			if(!importPackage.isEmpty()) {
+				bundleModel.getBundle().setHeader(Constants.IMPORT_PACKAGE, importPackage);
+				bundleModel.save();
+			}
 		}
 	}
 
@@ -177,26 +178,13 @@ public class ImportExportPackageUpdater {
 	}
 
 	boolean shouldAddImportExportPackage(Model pomModel) {
-		return !"war".equals(pomModel.getPackaging()) && isCamelDependencyHigherThan63AndLowerThan70(pomModel); //$NON-NLS-1$
+		return !"war".equals(pomModel.getPackaging()); //$NON-NLS-1$
 	}
 
-	private boolean isCamelDependencyHigherThan63AndLowerThan70(Model pomModel) {
+	private boolean isCamelDependencyBetween63And70() {
 		try{
-			Build build = pomModel.getBuild();
-			Map<String, Plugin> pluginsByName = build.getPluginsAsMap();
-			Plugin plugin = pluginsByName.get(ORG_APACHE_CAMEL+":"+CAMEL_CORE); //$NON-NLS-1$
-			if(plugin == null || plugin.getVersion() == null){
-				return true;
-			}
-			String pluginVersion = plugin.getVersion();
-			if(pluginVersion.startsWith("${") && pluginVersion.endsWith("}") && pomModel.getProperties() != null) { //$NON-NLS-1$ //$NON-NLS-2$
-				String camelCoreVersionFromProperty = pomModel.getProperties().getProperty(pluginVersion.substring(2, pluginVersion.length() -1));
-				if(camelCoreVersionFromProperty ==  null){
-					return true;
-				}
-				return isVersionInRangeForImportPackage(camelCoreVersionFromProperty);
-			}
-			return isVersionInRangeForImportPackage(pluginVersion);
+			String camelVersion = new CamelMavenUtils().getCamelVersionFromMaven(project);
+			return isVersionInRangeForImportPackage(camelVersion);
 		} catch(IllegalArgumentException e){
 			Activator.log(new Status(IStatus.INFO, Activator.PLUGIN_ID, Messages.ImportExportPackageUpdater_UnresolvedCamelCoreVersion, e));
 			return true;
@@ -277,26 +265,41 @@ public class ImportExportPackageUpdater {
 	private void manageImportPkgs(Xpp3Dom importPkg) {
 		String importPkgs = importPkg.getValue().trim();
 		if (!importPkgs.contains(COM_SUN_EL_VERSION)) {
-			importPkgs = addELPackage(importPkgs);
+			importPkgs = computePackageToImport(importPkgs);
 			importPkg.setValue(importPkgs);
 		}
 	}
 
-	private String addELPackage(String importPkgs) {
+	private String computePackageToImport(String importPkgs) {
 		if(importPkgs == null){
 			importPkgs = ""; //$NON-NLS-1$
 		}
-		if (!importPkgs.isEmpty()){
-			importPkgs += ",\n "; //$NON-NLS-1$
-		}
-		if(importPkgs.contains("*")){ //$NON-NLS-1$
-			importPkgs += "com.sun.el;version=\"[2,3)\""; //$NON-NLS-1$
+		if (isCamelDependencyBetween63And70()) {
+			return computePackageToImportBetween63and70(importPkgs);
 		} else {
-			importPkgs += "*,com.sun.el;version=\"[2,3)\""; //$NON-NLS-1$
+			if(!importPkgs.isEmpty()) {
+				if (importPkgs.contains("*")) {
+					return importPkgs;
+				} else {
+					return ",\n" + "*";
+				}
+			} else {
+				return "*";
+			}
 		}
-		return importPkgs;
 	}
 
+	protected String computePackageToImportBetween63and70(String importPkgs) {
+		if(!importPkgs.isEmpty()) {
+			if (importPkgs.contains("*")) {
+				return importPkgs + ",\n " + COM_SUN_EL_VERSION_2_3;
+			} else {
+				return importPkgs + ",\n " + "*," + COM_SUN_EL_VERSION_2_3;
+			}
+		} else {
+			return "*," + COM_SUN_EL_VERSION_2_3;
+		}
+	}
 
 	private String addPackage(String initialPackageList, String packageToAdd) {
 		if(initialPackageList == null){
