@@ -24,6 +24,7 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.WorkbenchException;
 import org.eclipse.ui.internal.ide.IDEInternalPreferences;
@@ -123,9 +124,12 @@ public class CommonTestUtils {
 	 * closes all editors
 	 */
 	public static void closeAllEditors() {
-		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-		if (page != null) {
-			page.closeAllEditors(false);
+		IWorkbenchWindow activeWorkbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+		if (activeWorkbenchWindow != null) {
+			IWorkbenchPage page = activeWorkbenchWindow.getActivePage();
+			if (page != null) {
+				page.closeAllEditors(false);
+			}
 		}
 	}
 	
