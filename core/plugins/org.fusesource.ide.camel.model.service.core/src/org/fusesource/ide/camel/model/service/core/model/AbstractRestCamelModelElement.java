@@ -17,8 +17,6 @@ import org.w3c.dom.Node;
 
 public abstract class AbstractRestCamelModelElement extends AbstractCamelModelElement {
 
-	private boolean updatedId = false;
-	
 	/**
 	 * @param parent The parent in the Camel Model
 	 * @param underlyingNode The XML node that this Object is representing
@@ -28,9 +26,6 @@ public abstract class AbstractRestCamelModelElement extends AbstractCamelModelEl
 		super(parent, underlyingNode);
 		if (generateId) {
 			String id = computeId(underlyingNode);
-			if (!hasId(underlyingNode)) {
-				this.updatedId = true;
-			}
 			this.setId(id);
 		}
 	}
@@ -63,18 +58,8 @@ public abstract class AbstractRestCamelModelElement extends AbstractCamelModelEl
 			return CamelUtils.getTagNameWithoutPrefix(child) + "-" + UUID.randomUUID().toString();
 		}
 	}
-	
-	private boolean hasId(Node child) {
-		Node idNode = child.getAttributes().getNamedItem("id");
-		return idNode != null;
-	}
 
-	
 	private boolean ignoreNode(Node child) {
 		return !CamelUtils.isCamelNamespaceElement(child);
-	}
-	
-	public boolean wasUpdated() {
-		return updatedId;
 	}
 }
