@@ -48,6 +48,13 @@ public class ImportExportPackageUpdaterForManifestIT {
 			"  <version>1.0.0-SNAPSHOT</version>\n" +
 			"  <packaging>bundle</packaging>\n" +
 			"  <name>Some Dummy Project</name>\n" +
+			"  <dependencies>\n" + 
+			"	  <dependency>\n" + 
+			"	    <groupId>org.apache.camel</groupId>\n" + 
+			"	    <artifactId>camel-core</artifactId>\n" + 
+			"	    <version>2.21.0</version>\n" + 
+			"	  </dependency>\n" + 
+			"  </dependencies>" +
 			"  <build>\n" +
 			"    <plugins>\n";
 
@@ -80,12 +87,23 @@ public class ImportExportPackageUpdaterForManifestIT {
 	}
 	
 	@Test
-	public void testImportPackageAdded() {
+	public void testImportPackageELAddedForFuseBetween63And70() throws CoreException {
+		pomIFile.setContents(new ByteArrayInputStream((POM_START + POM_END).replaceAll("2.21.0", "2.17.0").getBytes(StandardCharsets.UTF_8)), IResource.FORCE, new NullProgressMonitor());
+		
 		new ImportExportPackageUpdater(project, null, null).updatePackageImports(new NullProgressMonitor());
 		
 		WorkspaceBundleModel bundleModel = new WorkspaceBundleModel(manifestFile);
 		String importPackage = bundleModel.getBundle().getHeader(Constants.IMPORT_PACKAGE);
 		assertThat(normalize(importPackage)).isEqualTo(normalize("*,com.sun.el;version=\"[2,3)\""));
+	}
+	
+	@Test
+	public void testImportPackageELNotAddedForFuse70() {
+		new ImportExportPackageUpdater(project, null, null).updatePackageImports(new NullProgressMonitor());
+		
+		WorkspaceBundleModel bundleModel = new WorkspaceBundleModel(manifestFile);
+		String importPackage = bundleModel.getBundle().getHeader(Constants.IMPORT_PACKAGE);
+		assertThat(normalize(importPackage)).isEqualTo(normalize("*"));
 	}
 	
 	@Test
@@ -138,7 +156,7 @@ public class ImportExportPackageUpdaterForManifestIT {
 		
 		WorkspaceBundleModel bundleModel = new WorkspaceBundleModel(manifestFile);
 		String importPackage = bundleModel.getBundle().getHeader(Constants.IMPORT_PACKAGE);
-		assertThat(normalize(importPackage)).isEqualTo(normalize("*,com.sun.el;version=\"[2,3)\""));
+		assertThat(normalize(importPackage)).isEqualTo(normalize("*"));
 	}
 	
 	public void prepareFolder(IFolder folder) throws CoreException{

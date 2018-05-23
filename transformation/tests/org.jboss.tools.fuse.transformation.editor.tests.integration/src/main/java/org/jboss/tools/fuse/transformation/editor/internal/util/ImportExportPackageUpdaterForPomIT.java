@@ -30,7 +30,7 @@ public class ImportExportPackageUpdaterForPomIT {
 
 	private static final String VALID_INSTRUCTIONS =
 				"          <instructions>\n" +
-				"		     <Import-Package>*,com.sun.el;version=\"[2,3)\"</Import-Package>\n" +
+				"		     <Import-Package>*</Import-Package>\n" +
 				"		   </instructions>\n";
 
 	private static final String POM_START = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
@@ -42,7 +42,14 @@ public class ImportExportPackageUpdaterForPomIT {
 			"  <artifactId>testproject</artifactId>\n" +
 			"  <version>1.0.0-SNAPSHOT</version>\n" +
 			"  <packaging>bundle</packaging>\n" +
-			"  <name>Some Dummy Project</name>\n" +
+			"  <name>Some Dummy Project</name>\n"+
+			"  <dependencies>\n" + 
+			"	  <dependency>\n" + 
+			"	    <groupId>org.apache.camel</groupId>\n" + 
+			"	    <artifactId>camel-core</artifactId>\n" + 
+			"	    <version>2.21.0</version>\n" + 
+			"	  </dependency>\n" + 
+			"  </dependencies>" +
 			"  <build>\n" +
 			"    <plugins>\n";
 
@@ -112,7 +119,7 @@ public class ImportExportPackageUpdaterForPomIT {
 			"      </plugin>\n" +
 			POM_END;
 
-	private static final String EXPECTED_POM_WITH_EXPORT_PACKAGE = POM_START +
+	private static final String EXPECTED_POM_WITH_EXPORT_PACKAGE_INCLUDING_COMSUNEL = POM_START +
 			"      <plugin>\n" +
 			"		 <groupId>org.apache.felix</groupId>\n" +
 			"        <artifactId>maven-bundle-plugin</artifactId>\n" +
@@ -122,6 +129,21 @@ public class ImportExportPackageUpdaterForPomIT {
 			"          <instructions>\n" +
 			"            <Export-Package>dummy.pack,source.pack,target.pack</Export-Package>\n" +
 			"		     <Import-Package>*,com.sun.el;version=\"[2,3)\"</Import-Package>\n" +
+			"		   </instructions>\n" +
+			"        </configuration>\n" +
+			"      </plugin>\n" +
+			POM_END;
+	
+	private static final String EXPECTED_POM_WITH_EXPORT_PACKAGE = POM_START +
+			"      <plugin>\n" +
+			"		 <groupId>org.apache.felix</groupId>\n" +
+			"        <artifactId>maven-bundle-plugin</artifactId>\n" +
+			"        <version>3.2.0</version>\n" +
+			"		 <extensions>true</extensions>\n" +
+			"        <configuration>\n" +
+			"          <instructions>\n" +
+			"            <Export-Package>dummy.pack,source.pack,target.pack</Export-Package>\n" +
+			"		     <Import-Package>*</Import-Package>\n" +
 			"		   </instructions>\n" +
 			"        </configuration>\n" +
 			"      </plugin>\n" +
@@ -196,7 +218,12 @@ public class ImportExportPackageUpdaterForPomIT {
 	}
 	
 	@Test
-	public void shouldAddExportedPackageIfExportPackageConfigured() throws Exception {
+	public void shouldAddExportedPackageIfExportPackageConfiguredAndImportPackageWithComSunElwhenVersionFuse63() throws Exception {
+		updatePom(POM_WITH_SOME_EXPORT_PACKAGE.replace("2.21.0", "2.17.3"), EXPECTED_POM_WITH_EXPORT_PACKAGE_INCLUDING_COMSUNEL.replace("2.21.0", "2.17.3"), "source.pack.MyClass", "target.pack.MyOtherClass");
+	}
+	
+	@Test
+	public void shouldAddExportedPackageIfExportPackageConfiguredAndNotImportPackageWithComSunElwhenVersionFuse70() throws Exception {
 		updatePom(POM_WITH_SOME_EXPORT_PACKAGE, EXPECTED_POM_WITH_EXPORT_PACKAGE, "source.pack.MyClass", "target.pack.MyOtherClass");
 	}
 
