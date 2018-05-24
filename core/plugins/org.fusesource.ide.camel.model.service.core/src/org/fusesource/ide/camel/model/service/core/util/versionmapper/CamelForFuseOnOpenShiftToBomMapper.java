@@ -20,7 +20,7 @@ public class CamelForFuseOnOpenShiftToBomMapper extends OnlineVersionMapper {
 	private static final String FUSE_ON_OPENSHIFT_MAPPING_PROPERTY = "org.jboss.tools.fuse.fismarker.url";
 	private static final String FUSE_ON_OPENSHIFT_MAPPING_DEFAULT_URL = BASE_REPO_CONFIG_URI+"camel2bom.fuse7onOpenShift.properties";
 	
-	public static final String FUSE_700_TP3_CAMEL_VERSION = "2.21.0.000033-fuse-000001-redhat-1";
+	public static final String FUSE_700_CAMEL_VERSION = "2.21.0.fuse-000077-redhat-1";
 
 	public CamelForFuseOnOpenShiftToBomMapper() {
 		super(FUSE_ON_OPENSHIFT_MAPPING_PROPERTY, FUSE_ON_OPENSHIFT_MAPPING_DEFAULT_URL);
@@ -29,7 +29,7 @@ public class CamelForFuseOnOpenShiftToBomMapper extends OnlineVersionMapper {
 	@Override
 	protected Map<String, String> createFallbackMapping() {
 		Map<String, String> mapping = new HashMap<>();
-		mapping.put(FUSE_700_TP3_CAMEL_VERSION, "2.3.7.fuse-000036-redhat-2");
+		mapping.put(FUSE_700_CAMEL_VERSION, "3.0.11.fuse-000039-redhat-1");
 		return mapping;
 	}
 

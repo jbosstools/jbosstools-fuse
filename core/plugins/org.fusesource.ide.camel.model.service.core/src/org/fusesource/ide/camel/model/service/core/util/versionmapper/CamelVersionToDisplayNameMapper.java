@@ -45,7 +45,8 @@ public class CamelVersionToDisplayNameMapper extends OnlineVersionMapper {
 		mapping.put(CamelForFIS20ToBomMapper.FIS_20_R1_CAMEL_VERSION, CamelForFIS20ToBomMapper.FIS_20_R1_CAMEL_VERSION + " (FIS 2.0 R1)");
 		mapping.put(CamelForFIS20ToBomMapper.FIS_20_R2_CAMEL_VERSION, CamelForFIS20ToBomMapper.FIS_20_R2_CAMEL_VERSION + " (FIS 2.0 R2)");
 		mapping.put(CamelForFIS20ToBomMapper.FIS_20_R3_CAMEL_VERSION, CamelForFIS20ToBomMapper.FIS_20_R3_CAMEL_VERSION + " (FIS 2.0 R3)");
-		mapping.put(CamelForFuseOnOpenShiftToBomMapper.FUSE_700_TP3_CAMEL_VERSION, "2.21.0.000033-fuse-000001-redhat-1 (Fuse 7.0.0 Tech Preview 3)");
+		
+		mapping.put(CamelForFuseOnOpenShiftToBomMapper.FUSE_700_CAMEL_VERSION, CamelForFuseOnOpenShiftToBomMapper.FUSE_700_CAMEL_VERSION + " (Fuse 7.0.0 GA)");
 		return mapping;
 	}
 }
