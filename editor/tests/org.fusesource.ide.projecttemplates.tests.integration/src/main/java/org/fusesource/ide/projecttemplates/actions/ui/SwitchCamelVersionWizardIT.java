@@ -30,7 +30,7 @@ public class SwitchCamelVersionWizardIT {
 	
 	@Test
 	public void testSwitchValidateExistingVersionWhenAlreadyDefaultVersionChooseLatestVersionByDefault() throws Exception {
-		testSwitchFromExistingSelectByDefault(CamelCatalogUtils.DEFAULT_CAMEL_VERSION, getLatestCamelVersion());
+		testSwitchFromExistingSelectByDefault(CamelCatalogUtils.DEFAULT_CAMEL_VERSION, getLatestCamelVersionExcluding(CamelCatalogUtils.DEFAULT_CAMEL_VERSION));
 	}
 
 	private void testSwitchFromExistingSelectByDefault(String existingVersion, String expectedDefaultVersion) {
@@ -42,8 +42,9 @@ public class SwitchCamelVersionWizardIT {
 		assertThat(switchCamelVersionWizard.getSelectedCamelVersion()).isEqualTo(expectedDefaultVersion);
 	}
 
-	private String getLatestCamelVersion() {
+	private String getLatestCamelVersionExcluding(String excludedCamelVersion) {
 		List<String> allCamelCatalogVersions = new ArrayList<>(CamelCatalogUtils.getAllCamelCatalogVersions());
+		allCamelCatalogVersions.remove(excludedCamelVersion);
 		allCamelCatalogVersions.sort(Comparator.reverseOrder());
 		return allCamelCatalogVersions.get(0);
 	}
