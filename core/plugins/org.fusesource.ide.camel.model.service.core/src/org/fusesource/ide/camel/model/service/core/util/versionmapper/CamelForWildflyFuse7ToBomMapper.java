@@ -26,7 +26,7 @@ public class CamelForWildflyFuse7ToBomMapper extends OnlineVersionMapper {
 
 	@Override
 	protected Map<String, String> createFallbackMapping() {
-		return Collections.singletonMap(CamelForFuseOnOpenShiftToBomMapper.FUSE_700_TP3_CAMEL_VERSION,"5.1.0.000014-fuse-000001-redhat-1");
+		return Collections.singletonMap(CamelForFuseOnOpenShiftToBomMapper.FUSE_700_CAMEL_VERSION,"5.1.0.fuse-000063-redhat-1");
 	}
 
 }
