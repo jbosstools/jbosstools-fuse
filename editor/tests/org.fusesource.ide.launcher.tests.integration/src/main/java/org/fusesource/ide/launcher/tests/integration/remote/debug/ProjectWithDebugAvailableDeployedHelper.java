@@ -152,6 +152,7 @@ public class ProjectWithDebugAvailableDeployedHelper {
 				Thread.sleep(500);
 			} catch (InterruptedException ie) {
 				Activator.getDefault().getLog().log(new Status(IStatus.WARNING, Activator.ID, "Sleep waiting actively that Camel route starts has been interrupted... Catching interruption and continue...", ie));
+				Thread.currentThread().interrupt();
 			}
 			currentAwaitedTime += 500;
 		}
