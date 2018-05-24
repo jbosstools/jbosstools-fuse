@@ -44,6 +44,7 @@ public class ProviderHelper {
 		categoryMap.put("aop", CATEGORY_MISC);
 		categoryMap.put("bean", CATEGORY_COMPONENTS);
 		categoryMap.put("choice", CATEGORY_ROUTING);
+		categoryMap.put("claimCheck", CATEGORY_ROUTING);
 		categoryMap.put("convertBodyTo", CATEGORY_TRANSFORMATION);
 		categoryMap.put("delay",CATEGORY_CONTROL_FLOW);
 		categoryMap.put("doCatch",CATEGORY_CONTROL_FLOW);
@@ -79,6 +80,7 @@ public class ProviderHelper {
 		categoryMap.put("rollback",CATEGORY_CONTROL_FLOW);
 		categoryMap.put("route",CATEGORY_ROUTING);
 		categoryMap.put("routingSlip", CATEGORY_ROUTING);
+		categoryMap.put("saga", CATEGORY_ROUTING);
 		categoryMap.put("sample", CATEGORY_MISC);
 		categoryMap.put("setBody", CATEGORY_TRANSFORMATION);
 		categoryMap.put("setExchangePattern", CATEGORY_TRANSFORMATION);
