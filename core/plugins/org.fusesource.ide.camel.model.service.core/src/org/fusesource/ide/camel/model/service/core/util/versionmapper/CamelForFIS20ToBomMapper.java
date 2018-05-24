@@ -31,7 +31,7 @@ public class CamelForFIS20ToBomMapper extends OnlineVersionMapper {
 	@Override
 	protected Map<String, String> createFallbackMapping() {
 		Map<String, String> mapping = new HashMap<>();
-		mapping.put(FIS_20_R1_CAMEL_VERSION, "2.2.170.redhat-000010");			
+		mapping.put(FIS_20_R1_CAMEL_VERSION, "2.2.170.redhat-000010");
 		mapping.put(FIS_20_R2_CAMEL_VERSION, "2.2.170.redhat-000013");
 		mapping.put(FIS_20_R3_CAMEL_VERSION, "2.2.170.redhat-000019");
 		return mapping;
