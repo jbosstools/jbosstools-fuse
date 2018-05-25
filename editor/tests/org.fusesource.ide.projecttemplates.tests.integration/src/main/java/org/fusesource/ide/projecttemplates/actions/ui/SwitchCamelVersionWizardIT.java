@@ -19,9 +19,19 @@ import java.util.List;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Display;
 import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
+import org.junit.After;
 import org.junit.Test;
 
 public class SwitchCamelVersionWizardIT {
+
+	private WizardDialog wizardDialog;
+	
+	@After
+	public void teardown() {
+		if (wizardDialog != null) {
+			wizardDialog.close();
+		}
+	}
 
 	@Test
 	public void testSwitchValidateExistingVersion() throws Exception {
@@ -35,7 +45,7 @@ public class SwitchCamelVersionWizardIT {
 
 	private void testSwitchFromExistingSelectByDefault(String existingVersion, String expectedDefaultVersion) {
 		SwitchCamelVersionWizard switchCamelVersionWizard = new SwitchCamelVersionWizard(existingVersion);
-		WizardDialog wizardDialog = new WizardDialog(Display.getDefault().getActiveShell(), switchCamelVersionWizard);
+		wizardDialog = new WizardDialog(Display.getDefault().getActiveShell(), switchCamelVersionWizard);
 		wizardDialog.setBlockOnOpen(false);
 		wizardDialog.open();
 		assertThat(switchCamelVersionWizard.performFinish()).isTrue();
