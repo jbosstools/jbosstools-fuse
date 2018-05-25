@@ -95,6 +95,7 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 	private IObservableValue<FuseDeploymentPlatform> environmentPlatformObservable;
 	private IObservableValue<FuseRuntimeKind> environmentRuntimeObservable;
 	private ISideEffect sideEffect;
+	private WritableList<String> camelVersionsProposed;
 	
 	public FuseIntegrationProjectWizardRuntimeAndCamelPage(EnvironmentData environment) {
 		super(Messages.newProjectWizardRuntimePageName);
@@ -155,7 +156,8 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 		GridData camelComboData = new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1);
 		camelVersionCombo.setLayoutData(camelComboData);
 		camelVersionComboViewer.setContentProvider(new ObservableListContentProvider());
-		camelVersionComboViewer.setInput(new WritableList<String>(new ArrayList<String>(CamelCatalogUtils.getAllCamelCatalogVersions()), String.class));
+		camelVersionsProposed = new WritableList<>(new ArrayList<String>(CamelCatalogUtils.getAllCamelCatalogVersions()), String.class);
+		camelVersionComboViewer.setInput(camelVersionsProposed);
 		camelVersionComboViewer.setSelection(new StructuredSelection(CamelCatalogUtils.getLatestCamelVersion()));
 		camelVersionCombo.setToolTipText(Messages.newProjectWizardRuntimePageCamelDescription);
 		camelVersionCombo.addSelectionListener(new SelectionAdapter() {
@@ -381,12 +383,10 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 		if (UNKNOWN_CAMEL_VERSION.equals(runtimeCamelVersion)) {
 			camelVersionComboViewer.getCombo().setEnabled(true);
 		} else {
-			if(((List<?>)camelVersionComboViewer.getInput()).contains(runtimeCamelVersion)) {
-				camelVersionComboViewer.setSelection(new StructuredSelection(runtimeCamelVersion));
-			} else {
-				camelVersionComboViewer.setSelection(StructuredSelection.EMPTY);
-				camelVersionComboViewer.getCombo().setText(runtimeCamelVersion);
+			if(!((List<?>)camelVersionComboViewer.getInput()).contains(runtimeCamelVersion)) {
+				camelVersionsProposed.add(runtimeCamelVersion);
 			}
+			camelVersionComboViewer.setSelection(new StructuredSelection(runtimeCamelVersion));
 		}		
 	}
 
