@@ -1,8 +1,9 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Fuse wsdl2rest UI Plugin
+Bundle-Name: %Bundle-Name
 Bundle-SymbolicName: org.fusesource.ide.wsdl2rest.ui;singleton:=true
 Bundle-Version: 11.0.0.qualifier
+Bundle-Vendor: %Bundle-Vendor
 Bundle-Activator: org.fusesource.ide.wsdl2rest.ui.internal.Wsdl2RestUIActivator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
