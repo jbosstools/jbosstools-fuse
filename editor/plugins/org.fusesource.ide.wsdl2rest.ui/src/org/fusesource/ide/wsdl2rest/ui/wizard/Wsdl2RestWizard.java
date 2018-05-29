@@ -11,6 +11,7 @@
 package org.fusesource.ide.wsdl2rest.ui.wizard;
 
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
 import java.net.URL;
 import java.nio.file.Path;
@@ -28,11 +29,13 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.dialogs.IMessageProvider;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
@@ -71,31 +74,55 @@ public class Wsdl2RestWizard extends Wizard implements INewWizard {
 	
 	private boolean inTest = false;
 	
+	/**
+	 * Constructor
+	 */
 	public Wsdl2RestWizard() {
 		options = new Wsdl2RestOptions();
 	}
 	
+	/**
+	 * Constructor with passed-in options
+	 * @param options
+	 */
 	public Wsdl2RestWizard(Wsdl2RestOptions options) {
 		this.options = options;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.eclipse.ui.IWorkbenchWizard#init(org.eclipse.ui.IWorkbench, org.eclipse.jface.viewers.IStructuredSelection)
+	 */
 	@Override
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 		setWindowTitle(UIMessages.wsdl2RestWizardWindowTitle);
 		setNeedsProgressMonitor(true);
 	}
 
+	/* (non-Javadoc)
+	 * @see org.eclipse.jface.wizard.Wizard#performFinish()
+	 */
 	@Override
 	public boolean performFinish() {
 		try {
-			generate();
-		} catch (Exception e) {
+			getContainer().run(false, false, new IRunnableWithProgress() {
+
+				@Override
+				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+					try {
+						generate(monitor);
+					} catch (Exception e) {
+						Wsdl2RestUIActivator.pluginLog().logError(e);
+						ErrorDialog.openError(
+								getShell(),
+								UIMessages.wsdl2RestWizardErrorWindowTitle,
+								UIMessages.wsdl2RestWizardErrorMessage,
+								new Status(IStatus.ERROR, Wsdl2RestUIActivator.PLUGIN_ID, e.getMessage(), e));
+						throw new InvocationTargetException(e);
+					}
+				}
+			});
+		} catch (InvocationTargetException | InterruptedException e) {
 			Wsdl2RestUIActivator.pluginLog().logError(e);
-			ErrorDialog.openError(
-					getShell(),
-					UIMessages.wsdl2RestWizardErrorWindowTitle,
-					UIMessages.wsdl2RestWizardErrorMessage,
-					new Status(IStatus.ERROR, Wsdl2RestUIActivator.PLUGIN_ID, e.getMessage(), e));
 			return false;
 		}
 		return true;
@@ -120,6 +147,9 @@ public class Wsdl2RestWizard extends Wizard implements INewWizard {
 		return null;
 	}	
 
+	/* (non-Javadoc)
+	 * @see org.eclipse.jface.wizard.Wizard#addPages()
+	 */
 	@Override
 	public void addPages() {
 		super.addPages();
@@ -136,6 +166,11 @@ public class Wsdl2RestWizard extends Wizard implements INewWizard {
 		addPage(pageTwo);
 	}
 
+	/**
+	 * Checks for blueprint dependency
+	 * @param project
+	 * @return
+	 */
 	public boolean isProjectBlueprint(IProject project) {
 		CamelMavenUtils cmu = new CamelMavenUtils();
 		List<Dependency> projectDependencies = cmu.getDependencyList(project);
@@ -150,13 +185,21 @@ public class Wsdl2RestWizard extends Wizard implements INewWizard {
 		return false;
 	}
 	
+	/**
+	 * Checks for spring boot
+	 * @param project
+	 * @return
+	 */
 	public boolean isProjectSpringBoot(IProject project) {
 		CamelMavenUtils cmu = new CamelMavenUtils();
 		List<Dependency> projectDependencies = cmu.getDependencyList(project);
 		return CamelCatalogUtils.hasSpringBootDependency(projectDependencies);
 	}
 
-	private void updateDependencies() {
+	/**
+	 * Add JAX-RS dependency
+	 */
+	private void updateDependencies(IProgressMonitor monitor) {
 		List<org.fusesource.ide.camel.model.service.core.catalog.Dependency> deps = new ArrayList<>();
 		org.fusesource.ide.camel.model.service.core.catalog.Dependency one = 
 				new org.fusesource.ide.camel.model.service.core.catalog.Dependency();
@@ -165,17 +208,30 @@ public class Wsdl2RestWizard extends Wizard implements INewWizard {
 		one.setVersion("1.0.0.Final-redhat-1"); //$NON-NLS-1$
 		deps.add(one);
 		IProject project = options.getProject();
-		new MavenUtils().updateMavenDependencies(deps, project);
+		new MavenUtils().updateMavenDependencies(deps, project, monitor);
 	}
 
-	private void prepare(IFolder folder) throws CoreException {
+	/*
+	 * @param folder
+	 * @param monitor
+	 * @throws CoreException
+	 */
+	private void prepare(IFolder folder, IProgressMonitor monitor) throws CoreException {
+		SubMonitor subMon = SubMonitor.convert(monitor, 2);
 		if (!folder.exists() && folder.getParent() instanceof IFolder) {
-			prepare((IFolder) folder.getParent());
-			folder.create(false, true, null);
+			prepare((IFolder) folder.getParent(), subMon.split(1));
+			folder.create(false, true, subMon.split(1));
 		}
 	}
 	
-	private IResource getResourceForPath(IProject project, IPath path) throws CoreException {
+	/*
+	 * @param project
+	 * @param path
+	 * @param monitor
+	 * @return
+	 * @throws CoreException
+	 */
+	private IResource getResourceForPath(IProject project, IPath path, IProgressMonitor monitor) throws CoreException {
 		IResource resource = ResourcesPlugin.getWorkspace().getRoot().findMember(path);
 		if (resource == null) {
 			if (!path.isEmpty() && path.segment(0).equals(options.getProjectName())) {
@@ -183,16 +239,24 @@ public class Wsdl2RestWizard extends Wizard implements INewWizard {
 			}
 			IFolder folder = project.getFolder(path);
 			if (!folder.exists()) {
-				prepare(folder);
+				prepare(folder, monitor);
 			}
 			resource = folder;
 		}
 		return resource;
 	}
 	
-	private IResource getFileForPath(IProject project, IPath path) throws CoreException {
+	/*
+	 * @param project
+	 * @param path
+	 * @param monitor
+	 * @return
+	 * @throws CoreException
+	 */
+	private IResource getFileForPath(IProject project, IPath path, IProgressMonitor monitor) throws CoreException {
+		SubMonitor subMon = SubMonitor.convert(monitor, 2);
 		if (path.getFileExtension() == null) {
-			return getResourceForPath(project, path);
+			return getResourceForPath(project, path, subMon.split(2));
 		}
 		IResource resource = ResourcesPlugin.getWorkspace().getRoot().findMember(path);
 		if (resource == null) {
@@ -204,35 +268,36 @@ public class Wsdl2RestWizard extends Wizard implements INewWizard {
 				IPath absolute = ResourcesPlugin.getWorkspace().getRoot().getLocation().append(path).makeAbsolute();
 				java.io.File ioFile = absolute.removeLastSegments(1).makeAbsolute().toFile();
 				ioFile.mkdirs();
-				project.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
+				project.refreshLocal(IResource.DEPTH_INFINITE, subMon.split(1));
 				IFile newFile = ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(absolute);
-				new CamelIOHandler().loadCamelModel(newFile, new NullProgressMonitor());				
+				new CamelIOHandler().loadCamelModel(newFile, subMon.split(1));				
 				resource = newFile;
 			}
 		}
 		return resource;
 	}
 	
-	/**
+	/*
 	 * Use the settings collected and call the wsdl2rest utility.
 	 *
+	 * @param monitor
 	 * @throws Exception
 	 */
-	private void generate() throws Exception {
+	private void generate(IProgressMonitor monitor) throws Exception {
+		SubMonitor subMon = SubMonitor.convert(monitor, 5);
 		URL wsdlLocation = new URL(options.getWsdlURL());
 		IPath javaPath = new org.eclipse.core.runtime.Path(options.getDestinationJava());
 		IProject project = options.getProject();
-		IResource resource = getResourceForPath(project, javaPath);
-		File javaFile = findFileInEFS(resource);
+		IResource resource = getResourceForPath(project, javaPath, subMon.split(1));
+		File javaFile = findFileInEFS(resource, subMon.split(1));
 
 		// use project to determine if we are building a spring or blueprint project
 		boolean isBlueprint = isProjectBlueprint(project);
 		boolean isSpringBoot = isProjectSpringBoot(project);
 		
 		IPath camelPath = new org.eclipse.core.runtime.Path(options.getDestinationCamel());
-		IResource camelResource = getFileForPath(project, camelPath);
-		File camelFile = findFileInEFS(camelResource);
-		
+		IResource camelResource = getFileForPath(project, camelPath, subMon.split(1));
+		File camelFile = findFileInEFS(camelResource, subMon.split(1));
 		if (javaFile != null) {
 			ClassLoader oldLoader = Thread.currentThread().getContextClassLoader();
 			try {
@@ -256,12 +321,13 @@ public class Wsdl2RestWizard extends Wizard implements INewWizard {
 				ClassLoader loader = tool.getClass().getClassLoader();
 				Thread.currentThread().setContextClassLoader(loader);
 				tool.process();
-				updateDependencies();
+				updateDependencies(subMon.split(1));
 			}  finally {
 				Thread.currentThread().setContextClassLoader(oldLoader);
-				project.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
+				project.refreshLocal(IResource.DEPTH_INFINITE, subMon.split(1));
 			}
 		}
+		subMon.setWorkRemaining(0);
 	}
 
 	/**
@@ -309,9 +375,7 @@ public class Wsdl2RestWizard extends Wizard implements INewWizard {
 	 * @return
 	 * @throws CoreException
 	 */
-	protected File findFileInEFS(IResource resource) throws CoreException {
-		File fileFound = null;
-
+	protected File findFileInEFS(IResource resource, IProgressMonitor monitor) throws CoreException {
 		// gets URI for EFS.
 		URI uri = resource.getLocationURI();
 
@@ -321,9 +385,7 @@ public class Wsdl2RestWizard extends Wizard implements INewWizard {
 		}
 
 		// Gets native File using EFS
-		fileFound = EFS.getStore(uri).toLocalFile(0, new NullProgressMonitor());			
-
-		return fileFound;
+		return EFS.getStore(uri).toLocalFile(0, monitor);			
 	}
 
 	/**
@@ -334,6 +396,9 @@ public class Wsdl2RestWizard extends Wizard implements INewWizard {
 		return options;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.eclipse.jface.wizard.Wizard#canFinish()
+	 */
 	@Override
 	public boolean canFinish() {
 		boolean flag = super.canFinish();
