@@ -62,6 +62,7 @@ public class Wsdl2RestWizardFirstPage extends Wsdl2RestWizardBasePage {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				selectWSDL();
+				urlTextControl.setText(getOptionsFromWizard().getWsdlURL());
 				setTargetAddressFromWsdlSelection();
 				urlTextControl.notifyListeners(SWT.Modify, new Event());
 			}
@@ -76,6 +77,7 @@ public class Wsdl2RestWizardFirstPage extends Wsdl2RestWizardBasePage {
 				IProject selectedProject = selectProject();
 				if (selectedProject != null) {
 					getOptionsFromWizard().setProjectName(selectedProject.getName());
+					projectTextControl.setText(getOptionsFromWizard().getProjectName());
 					setPathsFromProjectSelection(selectedProject);
 					projectTextControl.notifyListeners(SWT.Modify, new Event());				
 				}
@@ -83,7 +85,7 @@ public class Wsdl2RestWizardFirstPage extends Wsdl2RestWizardBasePage {
 		});
 
 		// define the data bindings
-		Binding wsdlBinding = createBinding(urlTextControl, "wsdlURL", new WsdlValidator()); //$NON-NLS-1$
+		Binding wsdlBinding = createBindingWithTypeDelay(urlTextControl, "wsdlURL", new WsdlValidator()); //$NON-NLS-1$
 		wsdlBinding.getModel().addChangeListener(new WsdlChangeListener());
 		ControlDecorationSupport.create(wsdlBinding, SWT.LEFT | SWT.TOP);
 
@@ -172,10 +174,7 @@ public class Wsdl2RestWizardFirstPage extends Wsdl2RestWizardBasePage {
 	 * Use the selected wsdl to determine a default target address URL for the generated REST service. 
 	 */
 	private void setTargetAddressFromWsdlSelection() {
-		String address = getLocationFromWSDL();
-		if (!Strings.isEmpty(address)) {
-			getOptionsFromWizard().setTargetServiceAddress(address);
-		}
+		getOptionsFromWizard().setTargetServiceAddress(getLocationFromWSDL());
 	}
 
 }

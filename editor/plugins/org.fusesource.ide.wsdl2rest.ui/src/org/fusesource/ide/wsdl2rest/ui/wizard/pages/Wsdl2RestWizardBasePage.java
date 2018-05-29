@@ -160,6 +160,25 @@ public abstract class Wsdl2RestWizardBasePage extends WizardPage {
 				new UpdateValueStrategy().setBeforeSetValidator(validator),
 				null);
 	}
+	
+	/**
+	 * Creates a databinding Binding between a Text control, a model ID, and validator that employs a
+	 * 500ms delay when typing so we wait until there's a pause in typing.
+	 * @param control
+	 * @param modelID
+	 * @param validator
+	 * @return
+	 */
+	protected Binding createBindingWithTypeDelay(Text control, String modelID, IValidator validator) {
+		IObservableValue<?> wsdlTarget = WidgetProperties.text(SWT.Modify).observeDelayed(500, control);
+		@SuppressWarnings("unchecked")
+		IObservableValue<?> wsdlModel = BeanProperties.value(Wsdl2RestOptions.class, modelID).observe(getOptionsFromWizard());		
+		return dbc.bindValue(
+				wsdlTarget,
+				wsdlModel,
+				new UpdateValueStrategy().setBeforeSetValidator(validator),
+				null);
+	}
 
 	/**
 	 * Opens a simple dialog to allow selection of a project.
@@ -188,7 +207,7 @@ public abstract class Wsdl2RestWizardBasePage extends WizardPage {
 	 */
 	protected void selectWSDL() {
 		FileDialog fileDialog = new FileDialog(getShell());
-		fileDialog.setFilterExtensions(new String[] {"*.wsdl"});
+		fileDialog.setFilterExtensions(new String[] {"*.wsdl"}); //$NON-NLS-1$
 		String selectedFile = fileDialog.open();
 		if (selectedFile != null) {
 			try {
@@ -257,6 +276,15 @@ public abstract class Wsdl2RestWizardBasePage extends WizardPage {
 				testStream = url.openStream();
 
 				DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+				
+				// turn off validation since we're just trying to parse and grab the value of one attribute
+				factory.setNamespaceAware(false);
+				factory.setValidating(false);
+				factory.setFeature("http://xml.org/sax/features/namespaces", false); //$NON-NLS-1$
+				factory.setFeature("http://xml.org/sax/features/validation", false); //$NON-NLS-1$
+				factory.setFeature("http://apache.org/xml/features/nonvalidating/load-dtd-grammar", false); //$NON-NLS-1$
+				factory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false); //$NON-NLS-1$
+				
 				DocumentBuilder builder = factory.newDocumentBuilder();
 
 				// Load the input XML document, parse it and return an instance of the
@@ -267,7 +295,8 @@ public abstract class Wsdl2RestWizardBasePage extends WizardPage {
 				XPathFactory xpf = XPathFactory.newInstance();
 				XPath xpath = xpf.newXPath();
 				Object rawLocation = 
-						xpath.evaluate("/definitions/service/port/address/@location", document, XPathConstants.STRING);
+						xpath.evaluate("/definitions/service/port/address/@location",  //$NON-NLS-1$
+								document, XPathConstants.STRING);
 
 				// if we found it, stash it!
 				if (rawLocation != null) {

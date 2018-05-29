@@ -31,7 +31,7 @@ public class WsdlValidator implements IValidator {
 		if (!((value instanceof String) && ((String) value).length() > 0)) {
 			return ValidationStatus.error(UIMessages.wsdl2RestWizardFirstPageValidatorWSDLUrlRequired);
 		}
-		if (isURLAccessible((String) value)) {
+		if (!isURLAccessible((String) value)) {
 			return ValidationStatus.error(UIMessages.wsdl2RestWizardFirstPageValidatorWSDLInaccessible);
 		}
 		return ValidationStatus.ok();
