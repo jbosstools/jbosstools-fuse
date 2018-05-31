@@ -95,7 +95,8 @@ public class RestElementPropertiesSection extends FusePropertySection {
 
 		// define the properties we're handling here
 		Parameter idParam = createParameter(RestElementEIP.PROP_ID, String.class.getName());
-		idParam.setRequired("true"); //$NON-NLS-1$
+		//TODO Enable this once the properties are writable 
+		//idParam.setRequired("true"); //$NON-NLS-1$
 		parameterList.put(RestElementEIP.PROP_ID, idParam);
 		
 		parameterList.put(RestElementEIP.PROP_PATH,
