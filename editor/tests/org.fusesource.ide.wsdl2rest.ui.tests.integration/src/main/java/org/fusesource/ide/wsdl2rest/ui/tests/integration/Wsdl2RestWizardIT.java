@@ -27,11 +27,14 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.jface.wizard.WizardDialog;
+import org.eclipse.ui.PlatformUI;
 import org.fusesource.ide.camel.editor.utils.BuildAndRefreshJobWaiterUtil;
 import org.fusesource.ide.camel.editor.utils.JobWaiterUtil;
 import org.fusesource.ide.camel.model.service.core.tests.integration.core.io.FuseProject;
 import org.fusesource.ide.wsdl2rest.ui.wizard.Wsdl2RestOptions;
 import org.fusesource.ide.wsdl2rest.ui.wizard.Wsdl2RestWizard;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
@@ -63,6 +66,7 @@ public class Wsdl2RestWizardIT {
 
 	@Rule
 	public FuseProject fuseProject5 = new FuseProject(Wsdl2RestWizardIT.class.getName() + '5', true);
+	private WizardDialog wizardDialog;
 
 	@Before
 	public void setup() throws CoreException, IOException {
@@ -72,6 +76,13 @@ public class Wsdl2RestWizardIT {
 		fuseProject4.createEmptyBlueprintCamelFile();
 		fuseProject5.createEmptyCamelFile();
 		waitJob();
+	}
+	
+	@After
+	public void tearDown() {
+		if (wizardDialog != null) {
+			wizardDialog.close();
+		}
 	}
 
 	protected void waitJob() {
@@ -98,11 +109,19 @@ public class Wsdl2RestWizardIT {
 		options.setWsdlURL(wsdlFile.toURI().toURL().toExternalForm());
 		options.setProjectName(project.getProject().getName());
 		options.setDestinationJava(outpath.toString());
-		options.setDestinationCamel(camelPath);
 		options.setTargetRestServiceAddress(new URL("http://localhost:8083/myjaxrs").toExternalForm()); //$NON-NLS-1$
 		options.setTargetServiceAddress(new URL("http://localhost:8080/doclit").toExternalForm()); //$NON-NLS-1$
+		
 		Wsdl2RestWizard wizard = new Wsdl2RestWizard(options);
 		wizard.setInTest(true);
+		wizardDialog = new WizardDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), wizard);
+		wizardDialog.setBlockOnOpen(false);
+		wizardDialog.open();
+		/* Update the destination Camel only here otherwise it is overridden when UI is initializing with the project selected
+		 * As it is used only in test, applying just a workaround.
+		 * */
+		options.setDestinationCamel(camelPath);
+		
 		assertThat(wizard.performFinish()).isTrue();
 
 		IProject pr = project.getProject();
