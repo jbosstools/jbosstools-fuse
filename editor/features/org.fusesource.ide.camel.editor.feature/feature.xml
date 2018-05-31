@@ -91,6 +91,7 @@
       <import plugin="org.jboss.ide.eclipse.as.wtp.core" version="3.0.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.wst.server.core"/>
       <import plugin="org.eclipse.m2e.core" version="1.5.0" match="greaterOrEqual"/>
+      <import feature="com.github.cameltooling.lsp.eclipse.client.feature" version="1.0.0.201804251003" match="greaterOrEqual"/>
    </requires>
 
    <plugin
