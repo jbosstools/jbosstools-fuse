@@ -102,7 +102,8 @@ public class RestVerbElementPropertiesSection extends FusePropertySection {
 
 		// define the properties we're handling here
 		Parameter idParam = createParameter(RestElementEIP.PROP_ID, String.class.getName());
-		idParam.setRequired("true"); //$NON-NLS-1$
+		//TODO Enable this once the properties are writable 
+		//idParam.setRequired("true"); //$NON-NLS-1$
 		parameterList.put(RestVerbElementEIP.PROP_ID, idParam);
 		
 		parameterList.put(RestVerbElementEIP.PROP_URI,
