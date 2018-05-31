@@ -2,6 +2,18 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension
+         point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension
+            targetID="*">
+         <newWizardShortcut
+               id="org.fusesource.ide.wsdl2rest.wizard">
+         </newWizardShortcut>
+         <perspectiveShortcut
+               id="org.fusesource.ide.branding.perspective">
+         </perspectiveShortcut>
+      </perspectiveExtension>
+   </extension>
+   <extension
          point="org.eclipse.ui.newWizards">
       <wizard
             category="org.fusesource.ide.newwizards"
@@ -13,7 +25,45 @@
          <description>
             %wsdl2rest-wizard-description
          </description>
+         <keywordReference
+               id="org.eclipse.jdt.ui.wizards.java">
+         </keywordReference>
       </wizard>
+   </extension>
+   <extension
+         point="org.eclipse.ui.navigator.navigatorContent">
+         
+      <commonWizard
+            menuGroupId="org.eclipse.jdt.ui.java"
+            type="new"
+            wizardId="org.fusesource.ide.wsdl2rest.wizard">
+         <enablement>
+            <with
+                  variable="selection">
+               <iterate
+                     ifEmpty="true"
+                     operator="or">
+                  <or>
+                     <instanceof
+                           value="org.eclipse.jdt.core.IPackageFragmentRoot">
+                     </instanceof>
+                     <instanceof
+                           value="org.eclipse.jdt.core.IPackageFragment">
+                     </instanceof>
+                     <instanceof
+                           value="org.eclipse.jdt.core.ICompilationUnit">
+                     </instanceof>
+                     <instanceof
+                           value="org.eclipse.jdt.core.IJavaElement">
+                     </instanceof>
+                     <instanceof
+                           value="org.eclipse.core.resources.IResource">
+                     </instanceof>
+                  </or>
+               </iterate>
+            </with>
+         </enablement>
+      </commonWizard>
    </extension>
 
 </plugin>
