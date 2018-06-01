@@ -172,6 +172,14 @@ public class FuseIntegrationProjectWizardTemplatePage extends WizardPage {
 		}
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.eclipse.jface.wizard.WizardPage#canFlipToNextPage()
+	 */
+	@Override
+	public boolean canFlipToNextPage() {
+		return false;
+	}
+	
 	/**
 	 * returns the selected template or null if none selected
 	 * 

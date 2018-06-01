@@ -204,6 +204,14 @@ public class SyndesisExtensionProjectWizardExtensionDetailsPage extends WizardPa
 		return createBinding(dbc, control, property, null);
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.eclipse.jface.wizard.WizardPage#canFlipToNextPage()
+	 */
+	@Override
+	public boolean canFlipToNextPage() {
+		return false;
+	}
+	
 	private Binding createBinding(DataBindingContext dbc, Widget control, String property, UpdateValueStrategy updateStrategy) {
 		IObservableValue target = null;
 		if (control instanceof Combo) {

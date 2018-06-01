@@ -16,7 +16,9 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
+import org.fusesource.ide.foundation.ui.wizard.ProjectCreationInfoPage;
 import org.fusesource.ide.foundation.ui.wizard.ProjectWizardLocationPage;
+import org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator;
 import org.fusesource.ide.syndesis.extensions.core.model.SyndesisExtension;
 import org.fusesource.ide.syndesis.extensions.ui.internal.Messages;
 import org.fusesource.ide.syndesis.extensions.ui.internal.SyndesisExtensionsUIActivator;
@@ -32,6 +34,7 @@ public class SyndesisExtensionProjectWizard extends Wizard implements INewWizard
 
 	protected ProjectWizardLocationPage locationPage;
 	protected SyndesisExtensionProjectWizardExtensionDetailsPage extensionDetailsPage;
+	protected ProjectCreationInfoPage infoPage;
 
 	private SyndesisExtension extensionModel = new SyndesisExtension();
 	
@@ -49,6 +52,9 @@ public class SyndesisExtensionProjectWizard extends Wizard implements INewWizard
 
 	@Override
 	public boolean performFinish() {
+		// show the info page
+		ProjectCreationInfoPage.showProjectCreationInformationPage(this, infoPage);
+		
 		try {
 			getContainer().run(false, true, new SyndesisExtensionProjectCreatorRunnable(getProjectMetaData()));
 		} catch (InterruptedException iex) {
@@ -71,6 +77,9 @@ public class SyndesisExtensionProjectWizard extends Wizard implements INewWizard
 
 		extensionDetailsPage = new SyndesisExtensionProjectWizardExtensionDetailsPage();
 		addPage(extensionDetailsPage);
+		
+		infoPage = new ProjectCreationInfoPage(ProjectTemplatesActivator.imageDescriptorFromPlugin(ProjectTemplatesActivator.PLUGIN_ID, ProjectTemplatesActivator.IMAGE_CAMEL_PROJECT_ICON));
+		addPage(infoPage);
 	}
 
 	private NewSyndesisExtensionProjectMetaData getProjectMetaData() {

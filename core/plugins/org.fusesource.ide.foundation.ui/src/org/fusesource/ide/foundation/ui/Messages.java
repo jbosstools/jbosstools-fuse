@@ -36,6 +36,11 @@ public class Messages extends NLS {
 	public static String newProjectWizardLocationPageDuplicateProjectNameText;
 	public static String newProjectWizardLocationPageInvalidProjectLocationText;
 	
+	public static String newProjectWizardInfoPageName;
+	public static String newProjectWizardInfoPageTitle;
+	public static String newProjectWizardInfoPageText;
+	public static String newProjectWizardInfoPageDescription;
+	
 	static {
         // initialize resource bundle
         NLS.initializeMessages(BASE_NAME, Messages.class);

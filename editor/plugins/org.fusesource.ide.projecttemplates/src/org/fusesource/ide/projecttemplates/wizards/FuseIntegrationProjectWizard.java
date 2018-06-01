@@ -17,6 +17,7 @@ import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
+import org.fusesource.ide.foundation.ui.wizard.ProjectCreationInfoPage;
 import org.fusesource.ide.foundation.ui.wizard.ProjectWizardLocationPage;
 import org.fusesource.ide.projecttemplates.internal.Messages;
 import org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator;
@@ -38,6 +39,7 @@ public class FuseIntegrationProjectWizard extends Wizard implements INewWizard {
 	protected ProjectWizardLocationPage locationPage;
 	protected FuseIntegrationProjectWizardRuntimeAndCamelPage runtimeAndCamelVersionPage;
 	protected FuseIntegrationProjectWizardTemplatePage templateSelectionPage;
+	protected ProjectCreationInfoPage infoPage;
 
 	public FuseIntegrationProjectWizard() {
 		super();
@@ -53,6 +55,9 @@ public class FuseIntegrationProjectWizard extends Wizard implements INewWizard {
 
 	@Override
 	public boolean performFinish() {
+		// show the info page
+		ProjectCreationInfoPage.showProjectCreationInformationPage(this, infoPage);
+		
 		final NewFuseIntegrationProjectMetaData metadata = getProjectMetaData();
 		try {
 			getContainer().run(false, true, new FuseIntegrationProjectCreatorRunnable(metadata));
@@ -73,12 +78,16 @@ public class FuseIntegrationProjectWizard extends Wizard implements INewWizard {
 
 		locationPage = new ProjectWizardLocationPage(ProjectTemplatesActivator.imageDescriptorFromPlugin(ProjectTemplatesActivator.PLUGIN_ID, ProjectTemplatesActivator.IMAGE_CAMEL_PROJECT_ICON));
 		addPage(locationPage);
+
 		EnvironmentData environmentData = new EnvironmentData(CamelCatalogUtils.getLatestCamelVersion(), FuseDeploymentPlatform.OPENSHIFT, FuseRuntimeKind.SPRINGBOOT);
 		runtimeAndCamelVersionPage = new FuseIntegrationProjectWizardRuntimeAndCamelPage(environmentData);
 		addPage(runtimeAndCamelVersionPage);
 
 		templateSelectionPage = new FuseIntegrationProjectWizardTemplatePage(environmentData);
 		addPage(templateSelectionPage);
+		
+		infoPage = new ProjectCreationInfoPage(ProjectTemplatesActivator.imageDescriptorFromPlugin(ProjectTemplatesActivator.PLUGIN_ID, ProjectTemplatesActivator.IMAGE_CAMEL_PROJECT_ICON));
+		addPage(infoPage);
 	}
 
 	private NewFuseIntegrationProjectMetaData getProjectMetaData() {
