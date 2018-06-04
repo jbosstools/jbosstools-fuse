@@ -529,11 +529,80 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 		restList.setInput(null);
 		if (!ctx.getRestElements().isEmpty()) {
 			restList.setInput(ctx.getRestElements().values());
-			restList.setSelection(new StructuredSelection(restList.getElementAt(0)), true);
+			if (selection == null) {
+				restList.setSelection(new StructuredSelection(restList.getElementAt(0)), true);
+			} else if (selection instanceof RestElement) {
+				RestElement relement = (RestElement) selection;
+				selectRestElement(relement);
+			} else if (selection instanceof RestVerbElement) {
+				RestVerbElement verbElement = (RestVerbElement) selection;
+				selectRestVerbElement(verbElement);
+			}
 		} else {
 			clearUI();
 		}
 	}	
+	
+	private void selectRestElement(RestElement relement) {
+		String id = relement.getId();
+		AbstractCamelModelElement acme = ctx.getRestElements().get(id);
+		if (acme != null) {
+			restList.setSelection(new StructuredSelection(relement), true);
+			selection = acme;
+			setSelection(new StructuredSelection(selection));
+		} else {
+			if (restList.getList().getItemCount() > 0) {
+				restList.setSelection(new StructuredSelection(restList.getElementAt(0)), true);
+				selection = restList.getElementAt(0);
+			} else {
+				restList.setSelection(StructuredSelection.EMPTY);
+				selection = null;
+			}
+			if (selection != null) {
+				setSelection(new StructuredSelection(selection));
+			} else {
+				setSelection(StructuredSelection.EMPTY);
+			}
+		}
+	}
+
+	private void selectRestVerbElement(RestVerbElement rve) {
+		RestElement re = (RestElement) rve.getParent();
+		selectRestElement(re);
+		String restId = re.getId();
+		String restVerbId = rve.getId();
+		AbstractCamelModelElement acme = ctx.getRestElements().get(restId);
+		if (acme != null) {
+			RestElement relement = (RestElement) acme;
+			RestVerbElement selRve = (RestVerbElement) relement.getRestOperations().get(restVerbId);
+			if (selRve != null) {
+				updateRestVerbDisplayForSelection(selRve);
+				selection = selRve;
+				setSelection(new StructuredSelection(selRve));
+			}
+		}
+	}
+	
+	private void clearSelection() {
+		selection = null;
+		setSelection(StructuredSelection.EMPTY);
+	}
+	
+	private void reselect() {
+		if (selection != null) {
+			if (selection instanceof RestVerbElement) {
+				RestVerbElement rve = (RestVerbElement) selection;
+				selectRestVerbElement(rve);
+			} else if (selection instanceof RestElement) {
+				RestElement relement = (RestElement) selection;
+				selectRestElement(relement);
+			} else {
+				clearSelection();
+			}
+		} else {
+			clearSelection();
+		}
+	}
 	
 	public void reload() {
 		ctx = getCamelContext(parentEditor.getDesignEditor().getModel());
@@ -541,8 +610,7 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 		refreshRestSection();
 		form.layout(true);
 		toolkit.decorateFormHeading(form.getForm());
-		selection = null;
-		setSelection(StructuredSelection.EMPTY);
+		reselect();
 	}
 
 	@Override
@@ -571,6 +639,40 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 		}
 	}
 
+	private void updateSelectionDisplay(Control oldControl, Control newControl) {
+		if (oldControl != null && getDataFromSelectedUIElement(oldControl) != null) {
+			AbstractRestCamelModelElement node = (AbstractRestCamelModelElement) getDataFromSelectedUIElement(oldControl);
+			Color background = colorManager.getBackgroundColorForType(""); //$NON-NLS-1$
+			if (node != null && node.getXmlNode() != null) {
+				background = colorManager.getBackgroundColorForType(node.getXmlNode().getNodeName());
+			}
+			updateBorder(oldControl, background);
+		}
+		updateBorder(newControl, newControl.getDisplay().getSystemColor(SWT.COLOR_LIST_SELECTION));
+	}
+	
+	private void updateBorder(Control control, Color color) {
+		if (control instanceof Composite) {
+			Composite composite = (Composite) control;
+			composite.setBackground(color);
+		} else if (control.getParent() != null) {
+			updateBorder(control.getParent(), color);
+		}
+	}
+
+	private void updateRestVerbDisplayForSelection(RestVerbElement rve) {
+		Control[] verbComposites = restOpsSection.getChildren();
+		for (int i=0; i < verbComposites.length; i++) {
+			Composite operation = (Composite) verbComposites[i];
+			Object data = getDataFromSelectedUIElement(operation);
+			if (data != null && data.equals(rve)) {
+				selectedControl = operation;
+				updateSelectionDisplay(selectedControl, operation);
+				break;
+			}
+		}
+	}
+	
 	class RestVerbSelectionListener implements Listener {
 		@Override
 		public void handleEvent(Event event) {
@@ -580,27 +682,6 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 			selection = getDataFromSelectedUIElement(newControl);
 			if (selection != null) {
 				setSelection(new StructuredSelection(selection));
-			}
-		}
-
-		private void updateSelectionDisplay(Control oldControl, Control newControl) {
-			if (oldControl != null && getDataFromSelectedUIElement(oldControl) != null) {
-				AbstractRestCamelModelElement node = (AbstractRestCamelModelElement) getDataFromSelectedUIElement(oldControl);
-				Color background = colorManager.getBackgroundColorForType(""); //$NON-NLS-1$
-				if (node != null && node.getXmlNode() != null) {
-					background = colorManager.getBackgroundColorForType(node.getXmlNode().getNodeName());
-				}
-				updateBorder(oldControl, background);
-			}
-			updateBorder(newControl, newControl.getDisplay().getSystemColor(SWT.COLOR_LIST_SELECTION));
-		}
-		
-		private void updateBorder(Control control, Color color) {
-			if (control instanceof Composite) {
-				Composite composite = (Composite) control;
-				composite.setBackground(color);
-			} else if (control.getParent() != null) {
-				updateBorder(control.getParent(), color);
 			}
 		}
 	}
