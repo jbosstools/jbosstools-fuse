@@ -61,10 +61,10 @@ public class LicenseTest {
 	 */
 	@Parameters
 	public static Collection<String> setupData() {
-		new ShellMenuItem(new WorkbenchShell(), "Help", "About Red Hat JBoss Developer Studio").select();
-		Shell shell = new DefaultShell("About Red Hat JBoss Developer Studio");
+		new ShellMenuItem(new WorkbenchShell(), "Help", "About Red Hat Developer Studio").select();
+		Shell shell = new DefaultShell("About Red Hat Developer Studio");
 		new PushButton(shell, "Installation Details").click();
-		shell = new DefaultShell("Red Hat JBoss Developer Studio Installation Details");
+		shell = new DefaultShell("Red Hat Developer Studio Installation Details");
 		new DefaultTabItem(shell, "Installed Software").activate();
 		List<String> fusePlugins = new ArrayList<String>();
 		for (TreeItem item : new DefaultTree(shell).getItems()) {
@@ -73,7 +73,7 @@ public class LicenseTest {
 			}
 		}
 		new PushButton(shell, "Close").click();
-		shell = new DefaultShell("About Red Hat JBoss Developer Studio");
+		shell = new DefaultShell("About Red Hat Developer Studio");
 		new PushButton(shell, "Close").click();
 		return fusePlugins;
 	}
@@ -91,19 +91,19 @@ public class LicenseTest {
 	@Before
 	public void setupOpenInstallationDetails() {
 
-		new ShellMenuItem(new WorkbenchShell(), "Help", "About Red Hat JBoss Developer Studio").select();
-		Shell shell = new DefaultShell("About Red Hat JBoss Developer Studio");
+		new ShellMenuItem(new WorkbenchShell(), "Help", "About Red Hat Developer Studio").select();
+		Shell shell = new DefaultShell("About Red Hat Developer Studio");
 		new PushButton(shell, "Installation Details").click();
-		shell = new DefaultShell("Red Hat JBoss Developer Studio Installation Details");
+		shell = new DefaultShell("Red Hat Developer Studio Installation Details");
 	}
 
 	@After
 	public void setupCloseShells() {
 		Shell shell = new DefaultShell(new WithTextMatcher(new RegexMatcher("Properties for.*")));
 		new PushButton(shell, "Apply and Close").click();
-		shell = new DefaultShell("Red Hat JBoss Developer Studio Installation Details");
+		shell = new DefaultShell("Red Hat Developer Studio Installation Details");
 		new PushButton(shell, "Close").click();
-		shell = new DefaultShell("About Red Hat JBoss Developer Studio");
+		shell = new DefaultShell("About Red Hat Developer Studio");
 		new PushButton(shell, "Close").click();
 	}
 
