@@ -686,6 +686,10 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 		return sourceEditor;
 	}
 
+	public RestConfigEditor getRestEditor() {
+		return restConfigEditor;
+	}
+
 	public CamelDesignEditor getDesignEditor() {
 		return designEditor;
 	}

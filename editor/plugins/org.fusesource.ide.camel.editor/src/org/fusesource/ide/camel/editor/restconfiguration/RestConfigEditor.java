@@ -150,6 +150,11 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 			designEditorModel.addModelListener(this);
 		}
 	}
+	
+	// made public for testing only
+	public CamelContextElement getCtx() {
+		return ctx;
+	}
 
 	protected CamelContextElement getCamelContext(CamelFile designEditorModel) {
 		if (designEditorModel != null) {
@@ -349,6 +354,7 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 				clearUI();
 				
 				RestElement acme = (RestElement) event.getStructuredSelection().getFirstElement();
+				selection = acme;
 				setSelection(new StructuredSelection(acme));
 				Iterator<AbstractCamelModelElement> iter = acme.getRestOperations().values().iterator();
 				while (iter.hasNext()) {
@@ -543,7 +549,8 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 		}
 	}	
 	
-	private void selectRestElement(RestElement relement) {
+	// made public for testing purposes
+	public void selectRestElement(RestElement relement) {
 		String id = relement.getId();
 		AbstractCamelModelElement acme = ctx.getRestElements().get(id);
 		if (acme != null) {
@@ -566,7 +573,8 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 		}
 	}
 
-	private void selectRestVerbElement(RestVerbElement rve) {
+	// made public for testing purposes
+	public void selectRestVerbElement(RestVerbElement rve) {
 		RestElement re = (RestElement) rve.getParent();
 		selectRestElement(re);
 		String restId = re.getId();

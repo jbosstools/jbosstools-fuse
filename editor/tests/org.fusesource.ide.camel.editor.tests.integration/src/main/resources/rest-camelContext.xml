@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd        http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+    <bean class="com.mycompany.GreeterService" id="GreeterService" scope="singleton"/>
+	<camelContext xmlns="http://camel.apache.org/schema/spring" autoStartup="true" streamCache="false" id="context1">
+          <restConfiguration component="netty-http" host="localhost" port="10000"/>
+        <rest id="rest1" path="/say">
+            <get id="hello" uri="hello/{name}">
+                <to uri="direct:service-hello"/>
+            </get>
+            <get id="bye" consumes="application/json" uri="/bye">
+                <to uri="direct:service-bye"/>
+            </get>
+            <get id="greeter" consumes="application/json" uri="/greeter/{name}">
+                <to uri="direct:service-greeter"/>
+            </get>
+        </rest>
+        <rest id="rest2" path="/repeat">
+            <get id="echo" uri="echo/{name}">
+                <to uri="direct:service-echo"/>
+            </get>
+        </rest>
+        <route id="service-hello">
+            <from id="_from1" uri="direct:service-hello"/>
+            <setBody id="_setBody1">
+                <simple>Hello ${header.name}</simple>
+            </setBody>
+        </route>
+        <route id="service-bye">
+            <from id="_from2" uri="direct:service-bye"/>
+            <transform id="_transform1">
+                <constant>Bye World</constant>
+            </transform>
+        </route>
+        <route id="service-greeter">
+            <from id="_from3" uri="direct:service-greeter"/>
+            <unmarshal id="_unmarshal1">
+                <json library="Jackson" unmarshalTypeName="com.mycompany.HelloRequest"/>
+            </unmarshal>
+            <to id="_to1" uri="bean:GreeterService?method=createHello"/>
+            <marshal id="_marshal1">
+                <json library="Jackson"/>
+            </marshal>
+        </route>
+        <route id="service-echo">
+            <from id="_from1" uri="direct:service-echo"/>
+            <setBody id="_setBody1">
+                <simple>Echo ${header.name}</simple>
+            </setBody>
+        </route>
+   </camelContext>
+</beans>
