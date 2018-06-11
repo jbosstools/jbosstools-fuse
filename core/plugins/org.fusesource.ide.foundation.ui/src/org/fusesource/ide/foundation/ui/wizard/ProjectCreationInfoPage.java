@@ -31,7 +31,6 @@ public class ProjectCreationInfoPage extends WizardPage {
 		setTitle(Messages.newProjectWizardInfoPageTitle);
 		setDescription(Messages.newProjectWizardInfoPageDescription);
 		setImageDescriptor(wizBan);
-		setPageComplete(true);
 	}
 	
 	@Override
@@ -57,6 +56,7 @@ public class ProjectCreationInfoPage extends WizardPage {
 	
 	public static void showProjectCreationInformationPage(Wizard wizard, ProjectCreationInfoPage infoPageInstance) {
 		wizard.getContainer().showPage(infoPageInstance);
+		infoPageInstance.setPageComplete(true);
 		// this call is needed for Linux to make the info page appear right after click on Finish
 		processUIEvents();
 	}
