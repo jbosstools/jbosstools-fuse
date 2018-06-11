@@ -83,13 +83,6 @@
          unpack="false"/>
 
    <plugin
-         id="org.fusesource.ide.camel.model.service.impl"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="org.fusesource.ide.cheatsheets"
          download-size="0"
          install-size="0"
@@ -145,32 +138,11 @@
          version="0.0.0"
          unpack="false"/>
 
-   <plugin
-         id="org.fusesource.ide.camel.model.service.impl.v2151redhat621216"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.fusesource.ide.camel.model.service.impl.v2170redhat630343"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.fusesource.ide.camel.model.service.impl.v2181redhat000021"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.fusesource.ide.camel.model.service.impl.v2203"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+   <plugin id="org.fusesource.ide.camel.model.service.impl" download-size="0" install-size="0" version="0.0.0" unpack="false"/>
+   <plugin id="org.fusesource.ide.camel.model.service.impl.v2151redhat621216" download-size="0" install-size="0" version="0.0.0" unpack="false"/>
+   <plugin id="org.fusesource.ide.camel.model.service.impl.v2170redhat630343" download-size="0" install-size="0" version="0.0.0" unpack="false"/>
+   <plugin id="org.fusesource.ide.camel.model.service.impl.v2181redhat000021" download-size="0" install-size="0" version="0.0.0" unpack="false"/>
+   <plugin id="org.fusesource.ide.camel.model.service.impl.v2203" download-size="0" install-size="0" version="0.0.0" unpack="false"/>
+   <plugin id="org.fusesource.ide.camel.model.service.impl.v2210fuse000077redhat1" download-size="0" install-size="0" version="0.0.0" unpack="false"/>
 
 </feature>
