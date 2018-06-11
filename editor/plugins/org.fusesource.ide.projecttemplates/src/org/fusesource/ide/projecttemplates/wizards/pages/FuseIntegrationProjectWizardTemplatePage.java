@@ -17,7 +17,6 @@ import java.util.Set;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.resource.JFaceResources;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -129,19 +128,16 @@ public class FuseIntegrationProjectWizardTemplatePage extends WizardPage {
 				compatibleEnvironmentFilter);
 		listTemplates.getViewer().setInput(getTemplates());
 		listTemplates.getViewer().expandAll();
-		listTemplates.getViewer().addSelectionChangedListener(new ISelectionChangedListener() {
-			@Override
-			public void selectionChanged(SelectionChangedEvent event) {
-				if (!event.getSelection().isEmpty()) {
-					Object selObj = Selections.getFirstSelection(event.getSelection());
-					if (selObj instanceof TemplateItem) {
-						updateTemplateInfo((TemplateItem)selObj);
-						validate();
-						return;
-					}
-				} 
-				updateTemplateInfo(null);
-			}
+		listTemplates.getViewer().addSelectionChangedListener( (SelectionChangedEvent event) -> {
+			if (!event.getSelection().isEmpty()) {
+				Object selObj = Selections.getFirstSelection(event.getSelection());
+				if (selObj instanceof TemplateItem) {
+					updateTemplateInfo((TemplateItem)selObj);
+					validate();
+					return;
+				}
+			} 
+			updateTemplateInfo(null);
 		});
 		return listTemplates;
 	}
