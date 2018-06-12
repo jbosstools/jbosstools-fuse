@@ -362,10 +362,6 @@
         <description>Azure Storage Queue Service Component Options</description>
         <topic href="azure-queue-component.html" label="Azure Storage Queue Service"/>
     </context>
-    <context id="beanEIP">
-        <description>Bean EIP</description>
-        <topic href="bean.html" label="Bean EIP"/>
-    </context>
     <context id="bean">
         <description>Bean Component Options</description>
         <topic href="bean-component.html" label="Bean"/>
@@ -1447,6 +1443,11 @@
         <description>ZooKeeper Master Component Options</description>
         <topic href="zookeeper-master-component.html" label="ZooKeeper Master"/>
     </context>
+      <!-- REST tab in Route Editor -->
+        <context id="rest-tab">
+            <description>Rest DSL tab</description>
+            <topic href="RESTdsl.html" label="Rest DSL tab"/>
+        </context>
 
     <!-- Wizard pages -->
   <!--  <context id="newCamelXML" title="New Camel Context File">
