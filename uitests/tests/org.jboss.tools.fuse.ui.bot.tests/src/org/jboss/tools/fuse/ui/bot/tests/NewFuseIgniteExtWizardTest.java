@@ -15,18 +15,18 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
+import org.eclipse.reddeer.common.wait.TimePeriod;
 import org.eclipse.reddeer.common.wait.WaitUntil;
 import org.eclipse.reddeer.eclipse.ui.views.log.LogView;
 import org.eclipse.reddeer.jface.dialogs.MessageTypeEnum;
 import org.eclipse.reddeer.junit.runner.RedDeerSuite;
 import org.eclipse.reddeer.requirements.openperspective.OpenPerspectiveRequirement.OpenPerspective;
 import org.eclipse.reddeer.swt.condition.ControlIsEnabled;
-import org.eclipse.reddeer.swt.impl.button.PushButton;
+import org.eclipse.reddeer.swt.impl.button.FinishButton;
 import org.jboss.tools.fuse.reddeer.LogGrapper;
 import org.jboss.tools.fuse.reddeer.perspectives.FuseIntegrationPerspective;
-import org.jboss.tools.fuse.reddeer.wizard.NewFuseIgniteExtensionProjectDependenciesPage;
-import org.jboss.tools.fuse.reddeer.wizard.NewFuseIgniteExtensionProjectDetailsPage;
 import org.jboss.tools.fuse.reddeer.wizard.NewFuseIgniteExtensionProjectFirstPage;
+import org.jboss.tools.fuse.reddeer.wizard.NewFuseIgniteExtensionProjectSecondPage;
 import org.jboss.tools.fuse.reddeer.wizard.NewFuseIgniteExtensionProjectWizard;
 import org.junit.After;
 import org.junit.Before;
@@ -107,7 +107,6 @@ public class NewFuseIgniteExtWizardTest {
 		firstPage.toggleUseDefaultWorkspaceLocationGroup(true);
 
 		assertTrue(wizard.isNextEnabled());
-		assertFalse(wizard.isFinishEnabled());
 		assertTrue(wizard.isBackEnabled());
 		assertNotEquals(MessageTypeEnum.ERROR, wizard.getMessageType());
 		assertTrue("There are some errors in Error Log", LogGrapper.getPluginErrors("fuse").size() == 0);
@@ -115,15 +114,15 @@ public class NewFuseIgniteExtWizardTest {
 
 	/**
 	 * <p>
-	 * Tests the second page (dependencies) of <i>New Fuse Ignite Extension Project</i> wizard
+	 * Tests the second page of <i>New Fuse Ignite Extension Project</i> wizard
 	 * </p>
 	 * <b>Steps:</b>
 	 * <ol>
 	 * <li>Open <i>New Fuse Ignite Extension Project</i> wizard</li>
 	 * <li>Set a project name</li>
-	 * <li>Try to delete each version and check whether user can proceed to another page (UNACCESSIBLE)</li>
+	 * <li>Try to delete Ifnite version and check whether user can finish the wizard (UNACCESSIBLE)</li>
 	 * <li>Try to set the latest versions</li>
-	 * <li>Go to the next page</li>
+	 * <li>Check whether a user can finish the wizard</li>
 	 * </ol>
 	 */
 	@Test
@@ -132,28 +131,13 @@ public class NewFuseIgniteExtWizardTest {
 		firstPage.setTextProjectName("MyNewIgniteExt");
 		wizard.next();
 
-		assertTrue(wizard.isNextEnabled());
-		assertFalse(wizard.isFinishEnabled());
+		new WaitUntil(new ControlIsEnabled(new FinishButton(wizard)), TimePeriod.MEDIUM, false);
+		assertFalse(wizard.isNextEnabled());
+		assertTrue(wizard.isFinishEnabled());
 		assertTrue(wizard.isBackEnabled());
 		assertNotEquals(MessageTypeEnum.ERROR, wizard.getMessageType());
 
-		NewFuseIgniteExtensionProjectDependenciesPage secondPage = new NewFuseIgniteExtensionProjectDependenciesPage(wizard);
-		secondPage.setTextSpringBootVersion("");
-
-		assertFalse(wizard.isNextEnabled());
-		assertFalse(wizard.isFinishEnabled());
-		assertTrue(wizard.isBackEnabled());
-		assertEquals(MessageTypeEnum.ERROR, wizard.getMessageType());
-
-		secondPage.setTextSpringBootVersion(secondPage.getItemsSpringBootVersion().get(0));
-		secondPage.setTextCamelVersion("");
-
-		assertFalse(wizard.isNextEnabled());
-		assertFalse(wizard.isFinishEnabled());
-		assertTrue(wizard.isBackEnabled());
-		assertEquals(MessageTypeEnum.ERROR, wizard.getMessageType());
-
-		secondPage.setTextCamelVersion(secondPage.getItemsCamelVersion().get(0));
+		NewFuseIgniteExtensionProjectSecondPage secondPage = new NewFuseIgniteExtensionProjectSecondPage(wizard);
 		secondPage.setTextFuseIgniteVersion("");
 
 		assertFalse(wizard.isNextEnabled());
@@ -163,8 +147,8 @@ public class NewFuseIgniteExtWizardTest {
 
 		secondPage.setTextFuseIgniteVersion(secondPage.getItemsFuseIgniteVersion().get(0));
 
-		assertTrue(wizard.isNextEnabled());
-		assertFalse(wizard.isFinishEnabled());
+		assertFalse(wizard.isNextEnabled());
+		assertTrue(wizard.isFinishEnabled());
 		assertTrue(wizard.isBackEnabled());
 		assertNotEquals(MessageTypeEnum.ERROR, wizard.getMessageType());
 		assertTrue("There are some errors in Error Log", LogGrapper.getPluginErrors("fuse").size() == 0);
@@ -172,63 +156,13 @@ public class NewFuseIgniteExtWizardTest {
 
 	/**
 	 * <p>
-	 * Tests Camel version verify button on the second page (dependencies) of <i>New Fuse Ignite Extension Project</i> wizard
-	 * </p>
-	 * <b>Steps:</b>
-	 * <ol>
-	 * <li>Open <i>New Fuse Ignite Extension Project</i> wizard</li>
-	 * <li>Set a project name</li>
-	 * <li>Set an invalid Camel version and verify it</li>
-	 * <li>Check wizard message</li>
-	 * <li>Check whether a user can go to the next page (FAIL)</li>
-	 * <li>Set a valid Camel version and verify it</li>
-	 * <li>Check wizard message</li>
-	 * <li>Check whether a user can go to the next page (SUCCESS)</li>
-	 * </ol>
-	 */
-	@Test
-	public void testCamelVersionVerify() {
-		NewFuseIgniteExtensionProjectFirstPage firstPage = new NewFuseIgniteExtensionProjectFirstPage(wizard);
-		firstPage.setTextProjectName("MyNewIgniteExt");
-		wizard.next();
-		NewFuseIgniteExtensionProjectDependenciesPage secondPage = new NewFuseIgniteExtensionProjectDependenciesPage(wizard);
-		secondPage.setTextCamelVersion("2.20.1aaa");
-		secondPage.clickVerifyBTN();
-		new WaitUntil(new ControlIsEnabled(new PushButton(wizard, secondPage.getVerifyBTN().getText())));
-
-		assertFalse(wizard.isNextEnabled());
-		assertFalse(wizard.isFinishEnabled());
-		assertTrue(wizard.isBackEnabled());
-		assertTrue(wizard.getMessage().contains(CAMEL_VERSION_ERROR_MSG));
-
-		secondPage.setTextCamelVersion(secondPage.getItemsCamelVersion().get(0));
-		secondPage.clickVerifyBTN();
-		new WaitUntil(new ControlIsEnabled(new PushButton(wizard, secondPage.getVerifyBTN().getText())));
-
-		assertTrue(wizard.isNextEnabled());
-		assertFalse(wizard.isFinishEnabled());
-		assertTrue(wizard.isBackEnabled());
-		assertTrue(wizard.getMessage().contains(CAMEL_VERSION_OK_MSG));
-		assertTrue("There are some errors in Error Log", LogGrapper.getPluginErrors("fuse").size() == 0);
-	}
-
-	/**
-	 * <p>
-	 * Tests Camel the last page (details) of <i>New Fuse Ignite Extension Project</i> wizard
+	 * Tests <i>Version</i> of <i>New Fuse Ignite Extension Project</i>
 	 * </p>
 	 * <b>Steps:</b>
 	 * <ol>
 	 * <li>Open <i>New Fuse Ignite Extension Project</i> wizard</li>
 	 * <li>Set a project name</li>
 	 * <li>Go to the last page</li>
-	 * <li>Check wizard message - ERROR</li>
-	 * <li>Check whether a user can finish the wizard (FAIL)</li>
-	 * <li>Set an "Extension ID"</li>
-	 * <li>Check wizard message - ERROR</li>
-	 * <li>Check whether a user can finish the wizard (FAIL)</li>
-	 * <li>Set an "Name"</li>
-	 * <li>Check wizard message - ERROR</li>
-	 * <li>Check whether a user can finish the wizard (FAIL)</li>
 	 * <li>Set an invalid "Version"</li>
 	 * <li>Check wizard message - ERROR</li>
 	 * <li>Check whether a user can finish the wizard (FAIL)</li>
@@ -241,28 +175,11 @@ public class NewFuseIgniteExtWizardTest {
 		NewFuseIgniteExtensionProjectFirstPage firstPage = new NewFuseIgniteExtensionProjectFirstPage(wizard);
 		firstPage.setTextProjectName("MyNewIgniteExt");
 		wizard.next();
-		wizard.next();
 
 		assertFalse(wizard.isNextEnabled());
-		assertFalse(wizard.isFinishEnabled());
 		assertTrue(wizard.isBackEnabled());
-		assertEquals(MessageTypeEnum.ERROR, wizard.getMessageType());
 
-		NewFuseIgniteExtensionProjectDetailsPage lastPage = new NewFuseIgniteExtensionProjectDetailsPage(wizard);
-		lastPage.setTextExtensionId("my-new-ext-01");
-	
-		assertFalse(wizard.isNextEnabled());
-		assertFalse(wizard.isFinishEnabled());
-		assertTrue(wizard.isBackEnabled());
-		assertEquals(MessageTypeEnum.ERROR, wizard.getMessageType());
-
-		lastPage.setTextName("My Super Extension");
-
-		assertFalse(wizard.isNextEnabled());
-		assertFalse(wizard.isFinishEnabled());
-		assertTrue(wizard.isBackEnabled());
-		assertEquals(MessageTypeEnum.ERROR, wizard.getMessageType());
-
+		NewFuseIgniteExtensionProjectSecondPage lastPage = new NewFuseIgniteExtensionProjectSecondPage(wizard);
 		lastPage.setTextVersion("1.0-SNAPSHOT");
 
 		assertFalse(wizard.isNextEnabled());
@@ -281,6 +198,7 @@ public class NewFuseIgniteExtWizardTest {
 		assertFalse(wizard.isFinishEnabled());
 
 		lastPage.setTextVersion("1.0.0");
+		new WaitUntil(new ControlIsEnabled(new FinishButton(wizard)), TimePeriod.MEDIUM, false);
 
 		assertFalse(wizard.isNextEnabled());
 		assertTrue(wizard.isFinishEnabled());
