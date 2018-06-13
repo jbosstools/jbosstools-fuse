@@ -23,8 +23,8 @@ import org.eclipse.reddeer.junit.runner.RedDeerSuite;
 import org.eclipse.reddeer.requirements.openperspective.OpenPerspectiveRequirement.OpenPerspective;
 import org.eclipse.reddeer.swt.condition.ControlIsEnabled;
 import org.eclipse.reddeer.swt.impl.button.FinishButton;
-import org.jboss.tools.fuse.reddeer.LogGrapper;
 import org.jboss.tools.fuse.reddeer.perspectives.FuseIntegrationPerspective;
+import org.jboss.tools.fuse.reddeer.utils.LogChecker;
 import org.jboss.tools.fuse.reddeer.wizard.NewFuseIgniteExtensionProjectFirstPage;
 import org.jboss.tools.fuse.reddeer.wizard.NewFuseIgniteExtensionProjectSecondPage;
 import org.jboss.tools.fuse.reddeer.wizard.NewFuseIgniteExtensionProjectWizard;
@@ -109,7 +109,7 @@ public class NewFuseIgniteExtWizardTest {
 		assertTrue(wizard.isNextEnabled());
 		assertTrue(wizard.isBackEnabled());
 		assertNotEquals(MessageTypeEnum.ERROR, wizard.getMessageType());
-		assertTrue("There are some errors in Error Log", LogGrapper.getPluginErrors("fuse").size() == 0);
+		LogChecker.assertNoFuseError();
 	}
 
 	/**
@@ -120,7 +120,7 @@ public class NewFuseIgniteExtWizardTest {
 	 * <ol>
 	 * <li>Open <i>New Fuse Ignite Extension Project</i> wizard</li>
 	 * <li>Set a project name</li>
-	 * <li>Try to delete Ifnite version and check whether user can finish the wizard (UNACCESSIBLE)</li>
+	 * <li>Try to delete Ignite version and check whether user can finish the wizard (UNACCESSIBLE)</li>
 	 * <li>Try to set the latest versions</li>
 	 * <li>Check whether a user can finish the wizard</li>
 	 * </ol>
@@ -151,7 +151,7 @@ public class NewFuseIgniteExtWizardTest {
 		assertTrue(wizard.isFinishEnabled());
 		assertTrue(wizard.isBackEnabled());
 		assertNotEquals(MessageTypeEnum.ERROR, wizard.getMessageType());
-		assertTrue("There are some errors in Error Log", LogGrapper.getPluginErrors("fuse").size() == 0);
+		LogChecker.assertNoFuseError();
 	}
 
 	/**
@@ -204,6 +204,6 @@ public class NewFuseIgniteExtWizardTest {
 		assertTrue(wizard.isFinishEnabled());
 		assertTrue(wizard.isBackEnabled());
 		assertNotEquals(MessageTypeEnum.ERROR, wizard.getMessageType());
-		assertTrue("There are some errors in Error Log", LogGrapper.getPluginErrors("fuse").size() == 0);
+		LogChecker.assertNoFuseError();
 	}
 }
