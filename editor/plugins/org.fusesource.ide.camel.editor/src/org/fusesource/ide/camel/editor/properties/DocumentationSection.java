@@ -8,7 +8,6 @@
  * Contributors:
  *     Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
-
 package org.fusesource.ide.camel.editor.properties;
 
 import java.net.URL;
@@ -33,9 +32,12 @@ import org.eclipse.ui.forms.widgets.Form;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.help.IWorkbenchHelpSystem;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
+import org.fusesource.ide.camel.editor.CamelEditor;
 import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 import org.fusesource.ide.camel.editor.internal.UIMessages;
+import org.fusesource.ide.camel.editor.utils.CamelUtils;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
+import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.foundation.ui.util.Widgets;
 
 /**
@@ -43,7 +45,11 @@ import org.fusesource.ide.foundation.ui.util.Widgets;
  */
 public class DocumentationSection extends NodeSectionSupport {
 
-	private FormToolkit toolkit;
+	private static final String HELP_CONTEXT_ID_PREFIX = "org.fusesource.ide.camel.editor.";
+	private static final String ALL_EIPS_INFO = "allEIPs";
+	private static final String ENDPOINT_GENERAL_INFO = "endpoint";
+	private static final String REST_INFO_PAGE = "restdsl";
+	
 	private Form form;
 	private Browser browser;
 
@@ -78,53 +84,58 @@ public class DocumentationSection extends NodeSectionSupport {
 
 	protected void showDocumentationPage() {
 		if (node != null) {
-			boolean loadedPage = false;
+			boolean loadedPage = false;			
 			// lets see if we can find the docs for an endpoints URI...
-			if (node.getNodeTypeId().equalsIgnoreCase("from") || node.getNodeTypeId().equalsIgnoreCase("to")) {
-				String uri = (String)node.getParameter("uri");
-				if (uri != null) {
-					int idx = uri.indexOf(':');
-					if (idx > 0) {
-						String scheme = uri.substring(0, idx);
-						String contextId = "org.fusesource.ide.camel.editor." + scheme;
-						loadedPage = resolvePage(contextId, true);
-						if (CamelEditorUIActivator.getDefault().isDebugging()) {
-							CamelEditorUIActivator.pluginLog().logInfo("Loaded page " + contextId + " " + loadedPage);
-						}
-					}
+			if (node.isEndpointElement()) {
+				String scheme = getUriScheme(node);
+				String contextId;
+				if (isRestEditorTabSelected()) {
+					contextId = HELP_CONTEXT_ID_PREFIX + REST_INFO_PAGE;
+				} else {
+					contextId = HELP_CONTEXT_ID_PREFIX + scheme;
+				}
+				loadedPage = resolvePage(contextId, true);
+				if (CamelEditorUIActivator.getDefault().isDebugging()) {
+					CamelEditorUIActivator.pluginLog().logInfo("Loaded page " + contextId + " " + loadedPage);
 				}
 			}
 			if (!loadedPage) {
 				String text = node.getDocumentationFileName();
-				String uri = "org.fusesource.ide.camel.editor.allEIPs";
+				String uri = HELP_CONTEXT_ID_PREFIX + ALL_EIPS_INFO;
 				if (text != null) {
-					uri = "org.fusesource.ide.camel.editor." + text;
+					uri = HELP_CONTEXT_ID_PREFIX + text;
 				}
-				// Activator.getLogger().debug("Resolving context ID:" + uri);
 				resolvePage(uri, false);
 			}
-			// browser.layout();
-		} else {
-			// lets zap the old form
 		}
-		/*
-		 * browser.layout(); browser.pack(); parent.pack();
-		 */
 	}
-
+	
+	private boolean isRestEditorTabSelected() {
+		CamelEditor editor = CamelUtils.getDiagramEditor().getParent(); 
+		return editor != null && editor.getActiveEditor().equals(editor.getRestEditor());
+	}
+	
+	private String getUriScheme(AbstractCamelModelElement node) {
+		String uri = (String)node.getParameter("uri");
+		if (!Strings.isBlank(uri)) {
+			int idx = uri.indexOf(':');
+			if (idx > 0) {
+				return uri.substring(0, idx);
+			}
+		}
+		return ENDPOINT_GENERAL_INFO;
+	}
+	
 	protected boolean resolvePage(String contextId, boolean endpoint) {
 		String contextName = contextId;
 		IContext context = HelpSystem.getContext(contextName);
 		if (context == null) {
 			if (endpoint) {
-				contextName = "org.fusesource.ide.camel.editor.endpoint";
+				contextName = HELP_CONTEXT_ID_PREFIX + ENDPOINT_GENERAL_INFO;
 			} else {
-				contextName = "org.fusesource.ide.camel.editor.allEIPs";
+				contextName = HELP_CONTEXT_ID_PREFIX + ALL_EIPS_INFO;
 			}
 			context = HelpSystem.getContext(contextName);
-
-			// Activator.getLogger().debug("Context ID " + contextId +
-			// " is bad using default.");
 		}
 		if (context == null) {
 			CamelEditorUIActivator.pluginLog().logWarning("Could not find context: " + contextName);
@@ -145,33 +156,9 @@ public class DocumentationSection extends NodeSectionSupport {
 		return false;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see
-	 * org.eclipse.ui.views.properties.tabbed.AbstractPropertySection#refresh()
-	 */
-	@Override
-	public void refresh() {
-		/*
-		 * labelText.removeModifyListener(listener); if (node != null) {
-		 * labelText.setText(node.getDisplayToolTip()); }
-		 * labelText.addModifyListener(listener);
-		 */
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see
-	 * org.eclipse.ui.views.properties.tabbed.AbstractPropertySection#createControls
-	 * (org.eclipse.swt.widgets.Composite,
-	 * org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage)
-	 */
 	@Override
 	public void createControls(final Composite parent, TabbedPropertySheetPage aTabbedPropertySheetPage) {
-
-		this.toolkit = new FormToolkit(parent.getDisplay());
+		FormToolkit toolkit = new FormToolkit(parent.getDisplay());
 		super.createControls(parent, aTabbedPropertySheetPage);
 
 		if (!Widgets.isDisposed(form)) {
@@ -188,7 +175,6 @@ public class DocumentationSection extends NodeSectionSupport {
 		}
 
 		parent.setLayout(new GridLayout());
-		// parent.setLayout(new GridLayout(1, false));
 		parent.setLayoutData(new GridData(GridData.FILL_BOTH));
 
 		form = toolkit.createForm(parent);
@@ -227,13 +213,14 @@ public class DocumentationSection extends NodeSectionSupport {
 		final LocationListener locationListener = new LocationListener() {
 			@Override
 			public void changed(LocationEvent event) {
-				Browser browser = (Browser) event.widget;
-				back.setEnabled(browser.isBackEnabled());
-				forward.setEnabled(browser.isForwardEnabled());
+				Browser b = (Browser) event.widget;
+				back.setEnabled(b.isBackEnabled());
+				forward.setEnabled(b.isForwardEnabled());
 			}
 
 			@Override
 			public void changing(LocationEvent event) {
+				// not needed
 			}
 		};
 
@@ -247,21 +234,16 @@ public class DocumentationSection extends NodeSectionSupport {
 			browser.addLocationListener(locationListener);
 		}
 
-		// section.pack();
-		// form.pack();
 		form.layout(true, true);
 		parent.layout(true, true);
 
 		// in case of timing issues, lets do another layout just in case...
-		Display.getCurrent().asyncExec(new Runnable() {
-			@Override
-			public void run() {
-				if (form != null && !form.isDisposed()) {
-					form.layout(true, true);
-				}
-				if (parent != null && !parent.isDisposed()) {
-					parent.layout(true, true);
-				}
+		Display.getCurrent().asyncExec( () -> {
+			if (form != null && !form.isDisposed()) {
+				form.layout(true, true);
+			}
+			if (parent != null && !parent.isDisposed()) {
+				parent.layout(true, true);
 			}
 		});
 	}
