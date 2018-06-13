@@ -84,28 +84,30 @@ public class DocumentationSection extends NodeSectionSupport {
 
 	protected void showDocumentationPage() {
 		if (node != null) {
-			boolean loadedPage = false;			
-			// lets see if we can find the docs for an endpoints URI...
-			if (node.isEndpointElement()) {
-				String scheme = getUriScheme(node);
-				String contextId;
-				if (isRestEditorTabSelected()) {
-					contextId = HELP_CONTEXT_ID_PREFIX + REST_INFO_PAGE;
-				} else {
+			boolean loadedPage = false;
+			String contextId = HELP_CONTEXT_ID_PREFIX + ALL_EIPS_INFO;
+			
+			if (isRestEditorTabSelected()) {
+				contextId = HELP_CONTEXT_ID_PREFIX + REST_INFO_PAGE;
+			} else {
+				// lets see if we can find the docs for an endpoints URI...
+				if (node.isEndpointElement()) {
+					String scheme = getUriScheme(node);
 					contextId = HELP_CONTEXT_ID_PREFIX + scheme;
 				}
-				loadedPage = resolvePage(contextId, true);
-				if (CamelEditorUIActivator.getDefault().isDebugging()) {
-					CamelEditorUIActivator.pluginLog().logInfo("Loaded page " + contextId + " " + loadedPage);
-				}
 			}
+			
+			loadedPage = resolvePage(contextId, true);
+			if (CamelEditorUIActivator.getDefault().isDebugging()) {
+				CamelEditorUIActivator.pluginLog().logInfo("Loaded page " + contextId + " " + loadedPage);
+			}
+
 			if (!loadedPage) {
 				String text = node.getDocumentationFileName();
-				String uri = HELP_CONTEXT_ID_PREFIX + ALL_EIPS_INFO;
 				if (text != null) {
-					uri = HELP_CONTEXT_ID_PREFIX + text;
+					contextId = HELP_CONTEXT_ID_PREFIX + text;
 				}
-				resolvePage(uri, false);
+				resolvePage(contextId, false);
 			}
 		}
 	}
