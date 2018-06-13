@@ -85,7 +85,7 @@ public class DocumentationSection extends NodeSectionSupport {
 	protected void showDocumentationPage() {
 		if (node != null) {
 			boolean loadedPage = false;
-			String contextId = HELP_CONTEXT_ID_PREFIX + ALL_EIPS_INFO;
+			String contextId = null;
 			
 			if (isRestEditorTabSelected()) {
 				contextId = HELP_CONTEXT_ID_PREFIX + REST_INFO_PAGE;
@@ -97,17 +97,20 @@ public class DocumentationSection extends NodeSectionSupport {
 				}
 			}
 			
-			loadedPage = resolvePage(contextId, true);
-			if (CamelEditorUIActivator.getDefault().isDebugging()) {
-				CamelEditorUIActivator.pluginLog().logInfo("Loaded page " + contextId + " " + loadedPage);
+			if (contextId != null) {
+				loadedPage = resolvePage(contextId, true);
+				if (CamelEditorUIActivator.getDefault().isDebugging()) {
+					CamelEditorUIActivator.pluginLog().logInfo("Loaded page " + contextId + " " + loadedPage);
+				}
 			}
 
 			if (!loadedPage) {
 				String text = node.getDocumentationFileName();
+				String uri = HELP_CONTEXT_ID_PREFIX + ALL_EIPS_INFO;
 				if (text != null) {
-					contextId = HELP_CONTEXT_ID_PREFIX + text;
+					uri = HELP_CONTEXT_ID_PREFIX + text;
 				}
-				resolvePage(contextId, false);
+				resolvePage(uri, false);
 			}
 		}
 	}
