@@ -30,7 +30,7 @@ public class SapLibrariesFeatureArchive extends SAPArchive {
 
 	private static final String FEATURE_DESCRIPTION = "Provides SAP JCo3 and IDoc3 Libraries for Red Hat Fuse SAP Tooling Suite installations.";
 
-	private static final String FEATURE_PROVIDER_NAME = "JBoss by Red Hat";
+	private static final String FEATURE_PROVIDER_NAME = "Red Hat";
 
 	private static final String FEATURE_VERSION = "3.0.0";
 
@@ -50,7 +50,7 @@ public class SapLibrariesFeatureArchive extends SAPArchive {
 			"# http://www.eclipse.org/legal/epl-v10.html\n" +
 			"# \n" +
 			"# Contributors:\n" +
-			"#     JBoss by Red Hat - Initial implementation.\n" +
+			"#     Red Hat - Initial implementation.\n" +
 			"##############################################################################\n" +
 			"# feature.properties\n" +
 			"# contains externalized strings for feature.xml\n" +
@@ -62,7 +62,7 @@ public class SapLibrariesFeatureArchive extends SAPArchive {
 			"featureName=SAP Libraries\n" +
 			"\n" +
 			"# \"providerName\" property - name of the company that provides the feature\n" +
-			"providerName=JBoss by Red Hat\n" +
+			"providerName=Red Hat\n" +
 			"\n" +
 			"# \"updateSiteName\" property - label for the update site\n" +
 			"updateSiteName=SAP Libraries Update Site\n" +

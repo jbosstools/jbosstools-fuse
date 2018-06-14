@@ -5,7 +5,7 @@
  * accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors: JBoss by Red Hat - Initial implementation.
+ * Contributors: Red Hat - Initial implementation.
  *****************************************************************************/
 
 package org.jboss.tools.fuse.transformation.editor.internal;
