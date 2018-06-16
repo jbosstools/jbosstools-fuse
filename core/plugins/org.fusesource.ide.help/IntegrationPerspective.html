@@ -1,0 +1,72 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>Fuse Integration Perspective</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><link rel="home" href="index.html" title="Red Hat Fuse Tooling"><link rel="up" href="RiderUG.html" title="Part&nbsp;II.&nbsp;Fuse Tooling User Guide"><link rel="prev" href="RiderDeployPart.html" title="Publishing Applications to a Container"><link rel="next" href="DebugPerspective.html" title="Debug Perspective"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="appendix"><div class="titlepage"><div><div><h2 class="title"><a name="IntegrationPerspective"></a>Fuse Integration Perspective</h2></div></div></div><p>Use the <span class="strong"><strong>Fuse Integration</strong></span> perspective to design, monitor, test, and publish your integration
+application.</p><div class="informalfigure"><div class="mediaobject"><img src="./images/nfpTemplateProjectOpen.png" alt="Fuse Integration perspective"></div></div><p>You can open the <span class="strong"><strong>Fuse Integration</strong></span> perspective in the following ways:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">When you create a new Fuse
+Integration project (see <a class="xref" href="RiderNewProject.html" title="Creating a New Fuse Integration Project">Creating a New Fuse Integration Project</a>), the tooling switches to the <span class="strong"><strong>Fuse
+Integration</strong></span> perspective.</li><li class="listitem">Click
+<span class="inlinemediaobject"><img src="./images/integration_perspective.png" alt="integration perspective"></span> on the right side of the Developer Studio
+tool bar. If the
+<span class="inlinemediaobject"><img src="./images/integration_perspective.png" alt="integration perspective"></span> icon is not available on the tool bar, click
+<span class="inlinemediaobject"><img src="./images/new_persp.png" alt="new persp"></span> and then select <span class="strong"><strong>Fuse
+Integration</strong></span> from the list of available
+perspectives.</li><li class="listitem">Select <span class="strong"><strong>Window</strong></span> &#8594; <span class="strong"><strong>Perspective</strong></span> &#8594; <span class="strong"><strong>Open Perspective</strong></span> &#8594; <span class="strong"><strong>Fuse Integration</strong></span>.</li></ul></div><p>The <span class="strong"><strong>Fuse Integration</strong></span> perspective consists of nine main
+areas:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p class="simpara"><span class="strong"><strong>Project Explorer</strong></span> view</p><p class="simpara">Displays all projects known to the tooling. You can view all artifacts that make up each project. The
+<span class="strong"><strong>Project Explorer</strong></span> view also displays all routing context
+<code class="literal">.xml</code>. files for a project under its <code class="literal">Camel
+Contexts</code> node. This enables you to find and open a routing
+context file included in a project. Under each routing context
+<code class="literal">.xml</code> file, the <span class="strong"><strong>Project Explorer</strong></span> view
+displays all routes defined within the context. For multiroute contexts, this
+lets you focus on a specific route on the canvas.</p><div class="informalfigure"><div class="mediaobject"><img src="./images/ProjectExplorerFIP.png" alt="ProjectExplorerFIP"></div></div></li><li class="listitem"><p class="simpara">The route editor</p><p class="simpara">Provides the main design-time tooling and consists of three tabs:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; "><li class="listitem"><p class="simpara"><span class="strong"><strong>Design</strong></span>&#8201;&#8212;&#8201;Displays a large grid area on which routes are
+constructed and a palette from which Enterprise Integration Patterns
+(EIPs) and Camel components are selected and then connected on the
+canvas to form routes.</p><div class="informalfigure"><div class="mediaobject"><img src="./images/CanvasPalette.png" alt="CanvasPalette"></div></div><p class="simpara">The canvas is the route editor&#8217;s workbench and where you do most
+of your work. It displays a graphical representation of one or more
+routes, which are made up of connected EIPs and Camel components (called
+nodes once they are placed on the canvas).</p><p class="simpara">Selecting a node on the canvas populates the
+<span class="strong"><strong>Properties</strong></span> view with the properties that
+apply to the selected node, so you can edit them.</p><p class="simpara">The <span class="strong"><strong>Palette</strong></span> contains all of the patterns and
+Camel components needed to construct a route and groups them according
+to function&#8201;&#8212;&#8201;<span class="strong"><strong>Components</strong></span>,
+<span class="strong"><strong>Routing</strong></span>, <span class="strong"><strong>Control Flow</strong></span>,
+<span class="strong"><strong>Transformation</strong></span>, and
+<span class="strong"><strong>Miscellaneous</strong></span>.</p></li><li class="listitem"><p class="simpara"><span class="strong"><strong>Source</strong></span></p><p class="simpara">Displays the contents of the .xml file for the routes constructed on the route editor&#8217;s canvas.</p><p class="simpara">You can edit the routing context in the <span class="strong"><strong>Source</strong></span> tab as well as in the <span class="strong"><strong>Design</strong></span> tab. The <span class="strong"><strong>Source</strong></span> tab is useful for editing and adding any configuration, comments, or beans to the routing context file. The content assist feature helps you when working with configuration files. In the <span class="strong"><strong>Source</strong></span> tab, press <span class="keycap"><strong>Ctrl</strong></span>+<span class="keycap"><strong>Space</strong></span> to see a list of possible values that can be inserted into your project.</p><div class="informalfigure"><div class="mediaobject"><img src="./images/SourceView.png" alt="SourceView"></div></div></li><li class="listitem"><p class="simpara"><span class="strong"><strong>Configurations</strong></span>&#8201;&#8212;&#8201;Provides an easy way to add shared
+configuration (global endpoints, data formats, beans) to a multi-route,
+routing context. For details see <a class="xref" href="RiderEditRoute.html#RiderAddGlobalCnfg" title="Adding global endpoints, data formats, or beans">Adding global endpoints, data formats, or beans</a>.</p><div class="informalfigure"><div class="mediaobject"><img src="images/CnfigsVAddButton.png" alt="CnfigsVAddButton"></div></div></li></ul></div></li><li class="listitem"><p class="simpara"><span class="strong"><strong>Properties</strong></span> view</p><p class="simpara">Displays the properties of
+the node selected on the canvas.</p></li><li class="listitem"><p class="simpara"><span class="strong"><strong>JMX Navigator</strong></span> view</p><p class="simpara">Lists the JMX servers and
+the infrastructure they monitor. It enables you to browse JMX servers and the
+pocesses they are monitoring. It also identifies instances of Red Hat
+processes.</p><p class="simpara">The <span class="strong"><strong>JMX Navigator</strong></span> view drives all monitoring and
+testing activities in the <span class="strong"><strong>Fuse Integration</strong></span> perspective. It
+determines which routes are displayed in the <span class="strong"><strong>Diagram View</strong></span>,
+the <span class="strong"><strong>Properties</strong></span> view, and the <span class="strong"><strong>Messages View</strong></span>. It is also provides menu commands for activating route
+tracing, adding and deleting JMS destinations, and starting and suspending
+routes. It is also the target for dragging and dropping messages onto a
+route.</p><p class="simpara">By default, the <span class="strong"><strong>JMX Navigator</strong></span> view shows all Java
+processes that are running on your local machine. You can add JMX servers as
+needed to view infrastructure on other machines.</p></li><li class="listitem"><p class="simpara"><span class="strong"><strong>Diagram View</strong></span></p><p class="simpara">Displays a graphical tree
+representing the node selected in the <span class="strong"><strong>JMX Navigator</strong></span> view.
+When you select a process, server, endpoint, or other node, the
+<span class="strong"><strong>Diagram View</strong></span> shows the selected node as the root with
+branches down to its children and grandchildren.</p><p class="simpara">When you select a broker, the <span class="strong"><strong>Diagram View</strong></span> displays
+up to three children: connections, topics, and queues. It also shows configured
+connections and destinations as grandchildren.</p><p class="simpara">When you select a route, the <span class="strong"><strong>Diagram View</strong></span> displays
+all nodes in the route and shows the different paths that messages can take
+through the route. It also displays timing metrics for each processing step in
+the route when route tracing is enabled.</p></li><li class="listitem"><p class="simpara"><span class="strong"><strong>Messages View</strong></span></p><p class="simpara">Lists the messages that have
+passed through the selected JMS destination or through Apache Camel endpoints
+when route tracing is enabled.</p><p class="simpara">When a JMS destination is selected in the <span class="strong"><strong>JMX
+Navigator</strong></span> view, the view lists all messages that are at the
+destination.</p><p class="simpara">When route tracing is enabled, the <span class="strong"><strong>Messages View</strong></span>
+lists all messages that passed through the nodes in the route since tracing
+started. You can configure the <span class="strong"><strong>Messages View</strong></span> to display
+only the data in which you are interested and in your preferred sequence.</p><p class="simpara">When a message trace in the <span class="strong"><strong>Messages View</strong></span> is
+selected, its details (message body and all message headers) appear in the
+<span class="strong"><strong>Properties</strong></span> view. In the <span class="strong"><strong>Diagram
+View</strong></span>, the step in the route associated with the selected message
+trace is highlighted.</p></li><li class="listitem"><p class="simpara"><span class="strong"><strong>Servers</strong></span> view</p><p class="simpara">Displays a list of servers managed
+by the tooling. It displays their runtime status and provides controls for
+adding, starting and stopping them and for publishing projects to them.</p></li><li class="listitem"><p class="simpara"><span class="strong"><strong>Terminal</strong></span> view</p><p class="simpara">Displays the command console of
+the connected container. You can control the container by entering commands in
+the <span class="strong"><strong>Terminal</strong></span> view.</p></li><li class="listitem"><p class="simpara"><span class="strong"><strong>Console</strong></span> view</p><p class="simpara">Displays the console output for
+recently executed actions.</p></li></ul></div></div></body></html>

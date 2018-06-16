@@ -1,0 +1,252 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>Getting Started with Data Transformation</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><link rel="home" href="index.html" title="Red Hat Fuse Tooling"><link rel="up" href="RiderDevPart.html" title="Developing Applications"><link rel="prev" href="RiderDevPart.html" title="Developing Applications"><link rel="next" href="RiderCamelDebugger.html" title="Debugging Routing Contexts"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="TransTools"></a>Getting Started with Data Transformation</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="TransTools.html#_fuse_transformation_tooling">Fuse Transformation Tooling</a></span></dt><dt><span class="section"><a href="TransTools.html#_data_transformation_tutorial">Data Transformation Tutorial</a></span></dt></dl></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="_fuse_transformation_tooling"></a>Fuse Transformation Tooling</h3></div></div></div><p>One of the challenges that comes with system and data integration is that the
+component systems often work with different data formats. You cannot simply send
+messages from one system to another without translating it into a format (or language)
+recognized by the receiving system. Data transformation is the term given to this
+translation.</p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="_data_transformation_tutorial"></a>Data Transformation Tutorial</h3></div></div></div><p>In this tutorial you will learn how to use the data transformation tooling to include
+data transformation in a predefined Camel route. The Camel route directs messages from a
+source endpoint that produces XML data to a target endpoint that consumes JSON data. You
+will add and define a data transformation component that maps the source&#8217;s XML data
+format to the target&#8217;s JSON data format.</p><div class="simplesect"><div class="titlepage"><div><div><h4 class="title"><a name="_prerequisites_13"></a>Prerequisites</h4></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">Install Fuse tooling in Red Hat Developer Studio. See <a class="link" href="https://access.redhat.com/documentation/en/red-hat-jboss-developer-studio" target="_top">the Developer Studio documentation page</a>, select the Developer
+Studio version and click the link for the installation guide.</li><li class="listitem">Install and configure Maven. See <a class="link" href="https://access.redhat.com/documentation/en-us/red_hat_fuse/7.0/html-single/deploying_into_apache_karaf/index" target="_top">Deploying into Apache Karaf</a>.</li><li class="listitem">Download and install the <a class="link" href="https://github.com/Fusesource/Fuseide/tree/8.0.0.Final/examples/transformation" target="_top">transformation quickstart applications</a>.</li></ul></div></div><div class="simplesect"><div class="titlepage"><div><div><h4 class="title"><a name="_importing_the_literal_starter_literal_quickstart_application"></a>Importing the <code class="literal">starter</code> quickstart application</h4></div></div></div><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem">Right-click in the <span class="strong"><strong>Project Explorer</strong></span> view to open the
+context menu.</li><li class="listitem">Select <span class="strong"><strong>Import</strong></span> &#8594; <span class="strong"><strong>Import</strong></span>.</li><li class="listitem">Expand the <span class="strong"><strong>Maven</strong></span> folder, and select
+<span class="strong"><strong>Existing Maven Projects</strong></span>.</li><li class="listitem"><p class="simpara">Click <span class="strong"><strong>Next</strong></span> to open the <span class="strong"><strong>Maven
+Projects</strong></span> wizard.</p><div class="informalfigure"><div class="mediaobject"><img src="./images/DTimportMvnProjects1.png" alt="Description"></div></div></li><li class="listitem"><p class="simpara">Click <span class="strong"><strong>Browse</strong></span> to find and select the root directory
+of the <code class="literal">starter</code> quickstart application.</p><p class="simpara">If the browse operation finds multiple projects, make sure you select the
+<code class="literal">starter</code> quickstart application. The full path to the
+<code class="literal">starter</code> quickstart application appears in the
+<span class="strong"><strong>Projects</strong></span> pane.</p></li><li class="listitem"><p class="simpara">Click <span class="strong"><strong>Finish</strong></span>.</p><p class="simpara">After the import operation finishes, the <code class="literal">starter</code> project
+appears in the <span class="strong"><strong>Project Explorer</strong></span> view.</p></li><li class="listitem">In the <span class="strong"><strong>Project Explorer</strong></span> view, expand the
+<code class="literal">starter</code> project.</li><li class="listitem"><p class="simpara">Double-click
+<code class="literal">starter/src/main/resources/META-INF/spring/camel-context.xml</code>
+to open the route in the route editor&#8217;s <span class="strong"><strong>Design</strong></span>
+tab.</p><div class="informalfigure"><div class="mediaobject"><img src="./images/camel_context.png" alt="Description"></div></div></li><li class="listitem"><p class="simpara">Click the <span class="strong"><strong>Source</strong></span> tab to view the underlying XML.</p><p class="simpara">You can see that an XML file is produced from a source endpoint and a JSON
+file is consumed by a target endpoint.</p><pre class="screen">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:camel="http://camel.apache.org/schema/spring"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd        http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd"&gt;
+
+    &lt;camelContext id="camelContext-272d04f8-e498-466d-b34b-3c24d01a4e10" xmlns="http://camel.apache.org/schema/spring"
+        &lt;route id="_route1"&gt;
+            &lt;from id="_from1" uri="file:src/data?fileName=abc-order.xml&amp;noop=true"/&gt;
+            &lt;to id="_to1" uri="file:target/messages?fileName=xyz-order.json"/&gt;
+        &lt;/route&gt;
+    &lt;/camelContext&gt;
+&lt;/beans&gt;</pre></li><li class="listitem">Click the <span class="strong"><strong>Design</strong></span> tab to return to the graphical
+display of the route.</li><li class="listitem">Remove the arrow that connects the source and target endpoints.</li><li class="listitem">If the <span class="strong"><strong>Console</strong></span> view is not already open, open it now
+by selecting <span class="strong"><strong>Window</strong></span> &#8594; <span class="strong"><strong>Show View</strong></span> &#8594; <span class="strong"><strong>Console</strong></span>.</li></ol></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>Although the following mini tutorials are written to be run in consecutive order, you can run
+them in any order. If you change the order then the console output for a
+tutorial will differ from that shown here.</p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h4 class="title"><a name="_adding_a_data_transformation_node_to_the_camel_route"></a>Adding a data transformation node to the Camel route</h4></div></div></div><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem">In the <span class="strong"><strong>Palette</strong></span>, expand the <span class="strong"><strong>Transformation</strong></span>
+<span class="emphasis"><em>drawer</em></span>.</li><li class="listitem"><p class="simpara">Drag a <span class="strong"><strong>Data Transformation</strong></span> pattern over the canvas and drop it on the
+<code class="literal">Route_route1</code> container.</p><p class="simpara">The <span class="strong"><strong>New Transformation</strong></span> wizard opens with the
+<span class="strong"><strong>Project</strong></span>, <span class="strong"><strong>Dozer File Path</strong></span>, and
+<span class="strong"><strong>Camel File Path</strong></span> fields auto filled.</p><div class="informalfigure"><div class="mediaobject"><img src="./images/DTnewTransform1.png" alt="Description"></div></div></li><li class="listitem"><p class="simpara">Fill in the remaining fields:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">In the <span class="strong"><strong>Transformation ID</strong></span> field, enter <code class="literal"><span class="strong"><strong>xml2json</strong></span></code>.</li><li class="listitem">For <span class="strong"><strong>Source Type</strong></span>, select <span class="strong"><strong>XML</strong></span> from the drop-down
+menu.</li><li class="listitem">For <span class="strong"><strong>Target Type</strong></span>, select <span class="strong"><strong>JSON</strong></span> from the drop-down
+menu.</li></ul></div></li><li class="listitem"><p class="simpara">Click <span class="strong"><strong>Next</strong></span>.</p><p class="simpara">The <span class="strong"><strong>Source Type (XML)</strong></span> definition page opens, where
+you specify either an <span class="strong"><strong>XML Schema</strong></span> (default) or an
+example <span class="strong"><strong>XML Instance Document</strong></span> to provide the type
+definition of the source data:</p><div class="informalfigure"><div class="mediaobject"><img src="./images/DTsourceType1.png" alt="Description"></div></div></li><li class="listitem">Leave <span class="strong"><strong>XML Schema</strong></span> enabled.</li><li class="listitem"><p class="simpara">For <span class="strong"><strong>Source file</strong></span>, browse to the location of the XML schema file or the XML
+instance file to use for the type definition of the source data, and select
+it (in this case, <code class="literal">abc-order.xsd</code>).</p><p class="simpara">The <span class="strong"><strong>XML Structure Preview</strong></span> pane displays a preview of
+the XML structure.</p></li><li class="listitem"><p class="simpara">In the <span class="strong"><strong>Element root</strong></span> field, enter
+<code class="literal"><span class="strong"><strong>ABCOrder</strong></span></code>.</p><p class="simpara">The tooling uses this text to label the pane that displays the source
+data items to map.</p><p class="simpara">The <span class="strong"><strong>Source Type (XML)</strong></span> definition page should now look
+like this:</p><div class="informalfigure"><div class="mediaobject"><img src="./images/DTsourceType2.png" alt="Description"></div></div></li><li class="listitem"><p class="simpara">Click <span class="strong"><strong>Next</strong></span> to open the <span class="strong"><strong>Target Type (JSON)</strong></span>
+definition page. This is where you specify the type definition for the
+target data.</p><div class="informalfigure"><div class="mediaobject"><img src="./images/DTtargetType1.png" alt="Description"></div></div></li><li class="listitem"><p class="simpara">Click <span class="strong"><strong>JSON Instance Document</strong></span>.</p><p class="simpara">In the <span class="strong"><strong>Target File</strong></span> field, enter the path to the
+<code class="literal">xyz-order.json</code> instance document, or browse to it.
+The <span class="strong"><strong>JSON Structure Preview</strong></span> pane displays a preview of
+the JSON data structure:</p><div class="informalfigure"><div class="mediaobject"><img src="./images/DTtargetType2.png" alt="Description"></div></div></li><li class="listitem">Click <span class="strong"><strong>Finish</strong></span>.</li></ol></div><p>The transformation editor opens. This is where you can map data items in your XML
+source to data items in your JSON target.</p><div class="informalfigure"><div class="mediaobject"><img src="./images/DTtransfomEditor1.png" alt="Description"></div></div><p>The transformation editor is composed of three panels:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><span class="strong"><strong>Source</strong></span>&#8201;&#8212;&#8201;lists the available data items of the source</li><li class="listitem"><span class="strong"><strong>Mappings</strong></span>&#8201;&#8212;&#8201;displays the mappings between the source and target
+data items</li><li class="listitem"><span class="strong"><strong>Target</strong></span>&#8201;&#8212;&#8201;lists the available data items of the target</li></ul></div><p>In addition, the editor&#8217;s details pane, located just below the editor&#8217;s three
+panels (once the first mapping has been made), graphically displays the hierarchical
+ancestors for both the mapped source and target data items currently selected. For
+example:</p><div class="informalfigure"><div class="mediaobject"><img src="./images/DTdetailsView1.png" alt="Details pane with source property customerNum mapped to target property role=&#34;italic&#34;&gt;custId"></div></div><p>Using the details pane, you can customize the mapping for the selected source and
+target data items:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><span class="strong"><strong>Set property</strong></span>&#8201;&#8212;&#8201;Modify an existing mapping or
+map a simple data item to one in a collection (see <a class="xref" href="TransTools.html#mapToCollection" title="Mapping a simple data item to a data item in a collection">Mapping a simple data item to a data item in a collection</a>).</li><li class="listitem"><span class="strong"><strong>Set variable</strong></span>&#8201;&#8212;&#8201;Specify a constant value for a
+data item (see <a class="xref" href="TransTools.html#mapVariable" title="Mapping a constant variable to a data item">Mapping a constant variable to a data item</a>).</li><li class="listitem"><span class="strong"><strong>Set expression</strong></span>&#8201;&#8212;&#8201;Map a data item to the
+dynamic evaluation of a specified expression (see <a class="xref" href="TransTools.html#mapExpression" title="Mapping an expression to a data item">Mapping an expression to a data item</a>).</li><li class="listitem"><span class="strong"><strong>Add transformation</strong></span>&#8201;&#8212;&#8201;Modify the value of a
+mapped data item using a built-in function (see <a class="xref" href="TransTools.html#addBuiltinFunc" title="Adding a built-in function to a mapped data item">Adding a built-in function to a mapped data item</a>).</li><li class="listitem"><span class="strong"><strong>Add custom transformation</strong></span>&#8201;&#8212;&#8201;Modify the value
+of a mapped data item using the Java method you create or one you
+previously created (see <a class="xref" href="TransTools.html#addCustomFunc" title="Adding a custom transformation to a mapped data item">Adding a  custom transformation to a mapped data item</a>).</li></ul></div></div><div class="simplesect"><div class="titlepage"><div><div><h4 class="title"><a name="_mapping_source_data_items_to_target_data_items"></a>Mapping source data items to target data items</h4></div></div></div><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p class="simpara">Expand all items in the <span class="strong"><strong>Source</strong></span> and <span class="strong"><strong>Target</strong></span> panels
+located on left and right sides of the <span class="strong"><strong>Mappings</strong></span>
+panel.</p><div class="informalfigure"><div class="mediaobject"><img src="./images/DTtransformEditor2.png" alt="Description"></div></div></li><li class="listitem"><p class="simpara">Drag a data item from the <span class="strong"><strong>Source</strong></span> panel and drop it on its corresponding
+data item in the <span class="strong"><strong>Target</strong></span> panel.</p><p class="simpara">For example, drag the <code class="literal">customerNum</code> data item from the
+<span class="strong"><strong>Source</strong></span> panel and drop it on the <code class="literal">custId</code>
+data item in the <span class="strong"><strong>Target</strong></span> panel.</p><div class="informalfigure"><div class="mediaobject"><img src="./images/DTtransformEditor3.png" alt="Description"></div></div><p class="simpara">The mapping appears in the <span class="strong"><strong>Mappings</strong></span> panel, and the
+details of both the <span class="strong"><strong>Source</strong></span> and
+<span class="strong"><strong>Target</strong></span> data items appear below in the details
+pane.</p></li><li class="listitem"><p class="simpara">Continue dragging and dropping source data items onto their corresponding target data items
+until you have completed all basic mappings.</p><p class="simpara">In the <code class="literal">starter</code> example, the remaining data items to
+map are:</p><div class="informaltable"><table border="1"><colgroup><col width="50%" class="col_1"><col width="50%" class="col_2"></colgroup><thead><tr><th align="left" valign="top">Source</th><th align="left" valign="top">Target
++</th></tr></thead><tbody><tr><td align="left" valign="top"><p><code class="literal">orderNum</code></p></td><td align="left" valign="top"><p><code class="literal">orderId</code></p>
+<p>+</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">status</code></p></td><td align="left" valign="top"><p><code class="literal">priority</code></p>
+<p>+</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">id</code></p></td><td align="left" valign="top"><p><code class="literal">itemId</code></p>
+<p>+</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">price</code></p></td><td align="left" valign="top"><p><code class="literal">cost</code></p>
+<p>+</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">quantity</code></p></td><td align="left" valign="top"><p><code class="literal">amount</code></p>
+<p>+</p></td></tr></tbody></table></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>You can map collections (data items containing lists or sets) to noncollection data items and
+vice versa, but you cannot map collections to other collections.</p></td></tr></table></div></li><li class="listitem"><p class="simpara">Click
+<span class="inlinemediaobject"><img src="./images/hideMapdFsIcon.png" alt="Hide mapped fields icon"></span> on both the <span class="strong"><strong>Source</strong></span> and
+<span class="strong"><strong>Target</strong></span> panels to quickly determine whether all data
+items have been mapped.</p><div class="informalfigure"><div class="mediaobject"><img src="./images/DTtransformEditor5.png" alt="Description"></div></div><p class="simpara">Only data items that have not been mapped are listed in the
+<span class="strong"><strong>Source</strong></span> and <span class="strong"><strong>Target</strong></span>
+panels.</p><p class="simpara">In the <code class="literal">starter</code> example, the remaining unmapped
+<span class="strong"><strong>Target</strong></span> attributes are
+<code class="literal">approvalCode</code> and
+<code class="literal">origin</code>.</p></li><li class="listitem">Click the <span class="strong"><strong>camel-context.xml</strong></span> tab to return to the
+graphical display of the route.</li><li class="listitem"><p class="simpara">Hover your cursor over each endpoint to reveal its connecter arrow.</p><div class="informalfigure"><div class="mediaobject"><img src="./images/map_transformations.png" alt="Description"></div></div></li><li class="listitem"><p class="simpara">Selecting the <code class="literal">file:src/data?fil&#8230;&#8203;</code> node, drag and drop its connector arrow
+onto the <code class="literal">ref:xml2json</code> node. Likewise drag and drop the connector arrow from
+the <code class="literal">ref:xml2json</code> node onto the
+<code class="literal">file:target/messa&#8230;&#8203;</code> node.</p><div class="informalfigure"><div class="mediaobject"><img src="./images/map_complete.png" alt="Description"></div></div><p class="simpara">Connecting the nodes on the canvas creates a valid Camel route, which you
+can now save.</p></li><li class="listitem">Click <span class="strong"><strong>File</strong></span> &#8594; <span class="strong"><strong>Save</strong></span>.</li></ol></div><p>You can run a JUnit test on your transformation file after you create the
+transformation test. For details, see <a class="xref" href="TransTools.html#DTtestCreate" title="Creating the transformation test file and running the JUnit test">Creating the transformation test file and running the JUnit test</a>. If you do so
+at this point, you will see this output in the <span class="strong"><strong>Console</strong></span>
+view:</p><pre class="screen">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;ABCOrder xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:java="http://java.sun.com"&gt;
+    &lt;header&gt;
+        &lt;status&gt;GOLD&lt;/status&gt;
+        &lt;customer-num&gt;ACME-123&lt;/customer-num&gt;
+        &lt;order-num&gt;ORDER1&lt;/order-num&gt;
+    &lt;/header&gt;
+    &lt;order-items&gt;
+        &lt;item id="PICKLE"&gt;
+            &lt;price&gt;2.25&lt;/price&gt;
+            &lt;quantity&gt;1000&lt;/quantity&gt;
+        &lt;/item&gt;
+        &lt;item id="BANANA"&gt;
+            &lt;price&gt;1.25&lt;/price&gt;
+            &lt;quantity&gt;400&lt;/quantity&gt;
+        &lt;/item&gt;
+    &lt;/order-items&gt;
+&lt;/ABCOrder&gt;</pre><p>for the source XML data, and</p><pre class="screen">{"custId":"ACME-123","priority":"GOLD","orderId":"ORDER1","lineItems":[{"itemId":"PICKLE",
+"amount":1000,"cost":2.25},{"itemId":"BANANA","amount":400,"cost":1.25</pre><p>for the target JSON data.</p></div><div class="simplesect"><div class="titlepage"><div><div><h4 class="title"><a name="DTtestCreate"></a>Creating the transformation test file and running the JUnit test</h4></div></div></div><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem">Right-click the <code class="literal">starter</code> project in the
+<span class="strong"><strong>Project Explorer</strong></span> view, and select <span class="strong"><strong>New</strong></span> &#8594; <span class="strong"><strong>Other</strong></span> &#8594; <span class="strong"><strong>Fuse Tooling</strong></span> &#8594; <span class="strong"><strong>Fuse Transformation Test</strong></span>.</li><li class="listitem">Select <span class="strong"><strong>Next</strong></span> to open the
+<span class="strong"><strong>New Transformation Test</strong></span> wizard.</li><li class="listitem"><p class="simpara">In the <span class="strong"><strong>New Transformation Test</strong></span> wizard, set the
+following values:</p><div class="informaltable"><table border="1"><colgroup><col width="50%" class="col_1"><col width="50%" class="col_2"></colgroup><thead><tr><th align="left" valign="top">Field</th><th align="left" valign="top">Value
++</th></tr></thead><tbody><tr><td align="left" valign="top"><p><span class="strong"><strong>Package</strong></span></p></td><td align="left" valign="top"><p><code class="literal">example</code></p>
+<p>+</p></td></tr><tr><td align="left" valign="top"><p><span class="strong"><strong>Transformation ID</strong></span></p></td><td align="left" valign="top"><p><code class="literal">xml2json</code></p>
+<p>+</p></td></tr></tbody></table></div></li><li class="listitem">Click <span class="strong"><strong>Finish</strong></span>.</li><li class="listitem">In the <span class="strong"><strong>Project Explorer</strong></span> view, navigate to
+<code class="literal">starter/src/test/java/example</code>, and open the
+<code class="literal">TransformationTest.java</code> file.</li><li class="listitem"><p class="simpara">Add the following code to the <code class="literal">transform</code> method:</p><pre class="screen">startEndpoint.sendBodyAndHeader(readFile("src/data/abc-order.xml"), "approvalID", "AUTO_OK");</pre></li><li class="listitem"><p class="simpara">Click <span class="strong"><strong>File</strong></span> &#8594; <span class="strong"><strong>Save</strong></span>.</p><p class="simpara">You can now run a JUnit test on your transformation file at any point in
+these tutorials.</p></li><li class="listitem">In the <span class="strong"><strong>Project Explorer</strong></span> view, expand the
+<code class="literal">starter</code> project to expose the
+<code class="literal">/src/test/java/example/TransformationTest.java</code>
+file.</li><li class="listitem"><p class="simpara">Right click it to open the context menu, and select
+<span class="strong"><strong>Run as JUnit Test</strong></span>.</p><p class="simpara">The JUnit Test pane opens to display the status of the test. To avoid
+cluttering your workspace, drag and drop the pane in the bottom panel near
+the <span class="strong"><strong>Console</strong></span> view.</p><div class="informalfigure"><div class="mediaobject"><img src="./images/DTjunitTest.png" alt="Description"></div></div></li><li class="listitem">Open the <span class="strong"><strong>Console</strong></span> view to see the log output.</li></ol></div></div><div class="simplesect"><div class="titlepage"><div><div><h4 class="title"><a name="mapVariable"></a>Mapping a constant variable to a data item</h4></div></div></div><p>When a source/target data item has no corresponding target/source data
+item, you can map a constant variable to the existing data item.</p><p>In the <code class="literal">starter</code> example, the target data item
+<code class="literal">origin</code> does not have a corresponding source data item. To
+map the <code class="literal">origin</code> attribute to a constant variable:</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p class="simpara">In the <span class="strong"><strong>Source</strong></span> panel, click the <span class="strong"><strong>Variables</strong></span>
+view.</p><div class="informalfigure"><div class="mediaobject"><img src="./images/DTaddNewVarView1.png" alt="Description"></div></div></li><li class="listitem"><p class="simpara">In the <span class="strong"><strong>Variables</strong></span> view, click
+<span class="inlinemediaobject"><img src="./images/DTaddNewVarIcon.png" alt="Add a new variable icon"></span> to open the <span class="strong"><strong>Enter a new variable
+name</strong></span> dialog.</p><div class="informalfigure"><div class="mediaobject"><img src="./images/DTnewVarName.png" alt="Description"></div></div></li><li class="listitem"><p class="simpara">Enter a name for the variable you want to create.</p><p class="simpara">For the <code class="literal">starter</code> example, enter
+<code class="literal"><span class="strong"><strong>ORIGIN</strong></span></code>.</p></li><li class="listitem"><p class="simpara">Click <span class="strong"><strong>OK</strong></span>.</p><p class="simpara">The newly created variable <code class="literal">ORIGIN</code> appears in the
+<span class="strong"><strong>Variables</strong></span> view in the <span class="strong"><strong>Name</strong></span>
+column and the default value <code class="literal">ORIGIN</code> in the <span class="strong"><strong>Value</strong></span>
+column.</p></li><li class="listitem">Click the default value to edit it, and change the value to <code class="literal">Web</code>.</li><li class="listitem">Press <span class="strong"><strong>Enter</strong></span>.</li><li class="listitem"><p class="simpara">Drag and drop the new variable <code class="literal">ORIGIN</code> onto the
+<code class="literal">origin</code> data item in the
+<span class="strong"><strong>Target</strong></span> panel.</p><div class="informalfigure"><div class="mediaobject"><img src="./images/DTnewVarMapToTarget.png" alt="Description"></div></div><p class="simpara">The new mapping of the variable <code class="literal">$(ORIGIN)</code> appears in
+the <span class="strong"><strong>Mappings</strong></span> panel and in the details pane.</p></li><li class="listitem"><p class="simpara">Run a JUnit test on your
+<code class="literal">TransformationTest.java</code> file. For details, see
+<a class="xref" href="TransTools.html#DTtestCreate" title="Creating the transformation test file and running the JUnit test">Creating the transformation test file and running the JUnit test</a>.</p><p class="simpara">The <span class="strong"><strong>Console</strong></span> view displays the JSON-formatted output
+data:</p><pre class="screen">{"custId":"ACME-123","priority":"GOLD","orderId":"ORDER1","<span class="strong"><strong>origin":"Web</strong></span>",
+"approvalCode":"AUTO_OK","lineItems":[{"itemId":"PICKLE","amount":1000,"cost":2.25},
+{"itemId":"BANANA","amount":400,"cost":1.25}]}</pre></li></ol></div></div><div class="simplesect"><div class="titlepage"><div><div><h4 class="title"><a name="mapExpression"></a>Mapping an expression to a data item</h4></div></div></div><p>This feature enables you, for example, to map a target data item to the dynamic
+evaluation of a Camel language expression.</p><p>Use the target <code class="literal">approvalCode</code> data item, which lacks a
+corresponding source data item:</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p class="simpara">Click
+<span class="inlinemediaobject"><img src="./images/DTaddNewMapIcon.png" alt="Add a new mapping icon"></span> to add an empty transformation map to the
+<span class="strong"><strong>Mappings</strong></span> panel.</p><div class="informalfigure"><div class="mediaobject"><img src="./images/DTtransformEditor6.png" alt="Description"></div></div></li><li class="listitem"><p class="simpara">From the <span class="strong"><strong>Target</strong></span> panel, drag and drop the
+<code class="literal">approvalCode</code> data item to the target field of the
+newly created mapping in the <span class="strong"><strong>Mappings</strong></span>
+panel.</p><div class="informalfigure"><div class="mediaobject"><img src="./images/DTtransformEditor7.png" alt="Description"></div></div><p class="simpara">The <code class="literal">approvalCode</code> data item also appears in the
+details pane&#8217;s target box.</p></li><li class="listitem"><p class="simpara">In the details pane, click
+<span class="inlinemediaobject"><img src="./images/menu10x5.gif" alt="drop-down menu access"></span> on the <code class="literal">ABCOrder</code> source box to open
+the drop-down menu.</p><div class="informalfigure"><div class="mediaobject"><img src="./images/DTdetailsViewMenu.png" alt="Description"></div></div><p class="simpara">Menu options depend on the selected data item&#8217;s data type. The available
+options are bolded.</p></li><li class="listitem"><p class="simpara">Select <span class="strong"><strong>Set expression</strong></span> to open the <span class="strong"><strong>Expression</strong></span>
+dialog.</p><div class="informalfigure"><div class="mediaobject"><img src="./images/DTsetExpressPage.png" alt="Description"></div></div></li><li class="listitem"><p class="simpara">In <span class="strong"><strong>Language</strong></span>, select the expression language to use from the list of those
+available. Available options depend on the data item&#8217;s data type.</p><p class="simpara">For the <code class="literal">starter</code> example, select
+<span class="strong"><strong>Header</strong></span>.</p></li><li class="listitem"><p class="simpara">In the details pane, select the source of the expression to use.</p><p class="simpara">The options are <span class="strong"><strong>Value</strong></span> and
+<span class="strong"><strong>Script</strong></span>.</p><p class="simpara">For the <code class="literal">starter</code> example, click
+<span class="strong"><strong>Value</strong></span>, and then enter
+<code class="literal">ApprovalID</code>.</p></li><li class="listitem"><p class="simpara">Click <span class="strong"><strong>OK</strong></span>.</p><div class="informalfigure"><div class="mediaobject"><img src="./images/DTtransformEditor8.png" alt="Description"></div></div><p class="simpara">Both the <span class="strong"><strong>Mappings</strong></span> panel and the details pane display
+the new mapping for the target data item
+<code class="literal">approvalCode</code>.</p></li><li class="listitem"><p class="simpara">Run a JUnit test on your <code class="literal">TransformationTest.java</code>
+file. For details, see <a class="xref" href="TransTools.html#DTtestCreate" title="Creating the transformation test file and running the JUnit test">Creating the transformation test file and running the JUnit test</a>.</p><p class="simpara">The <span class="strong"><strong>Console</strong></span> view displays the JSON-formatted output
+data:</p><pre class="screen">{"custId":"ACME-123","priority":"GOLD","orderId":"ORDER1","origin":"Web",
+"<span class="strong"><strong>approvalCode":"AUTO_OK</strong></span>","lineItems":[{"itemId":"PICKLE","amount":1000,"cost":2.25},
+{"itemId":"BANANA","amount":400,"cost":1.25}]}</pre></li></ol></div></div><div class="simplesect"><div class="titlepage"><div><div><h4 class="title"><a name="addCustomFunc"></a>Adding a  custom transformation to a mapped data item</h4></div></div></div><p>You may need to modify the formatting of source data items when they do not
+satisfy the requirements of the target system.</p><p>For example, to satisfy the target system&#8217;s requirement that all customer IDs be
+enclosed in brackets:</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p class="simpara">In the <span class="strong"><strong>Mappings</strong></span> panel, select the <code class="literal">customerNum</code>
+mapping to populate the details pane.</p><div class="informalfigure"><div class="mediaobject"><img src="./images/DTaddCustFunc1.png" alt="Description"></div></div></li><li class="listitem"><p class="simpara">In the details pane, click
+<span class="inlinemediaobject"><img src="./images/menu10x5.gif" alt="drop-down menu access"></span> on the <code class="literal">ABCOrder</code> source box to open
+the drop-down menu.</p><div class="informalfigure"><div class="mediaobject"><img src="./images/DTaddCustFunc2.png" alt="Description"></div></div></li><li class="listitem"><p class="simpara">Select <span class="strong"><strong>Add custom transformation</strong></span> to open the <span class="strong"><strong>Add
+Custom Transformation</strong></span> page.</p><div class="informalfigure"><div class="mediaobject"><img src="./images/DTaddCustFuncDialog.png" alt="Description"></div></div></li><li class="listitem"><p class="simpara">Click
+<span class="inlinemediaobject"><img src="./images/DTcreateCustFuncIcon.png" alt="create new function button"></span> next to the <span class="strong"><strong>Class</strong></span> field to open
+the <span class="strong"><strong>Create a New Java Class</strong></span> wizard.</p><div class="informalfigure"><div class="mediaobject"><img src="./images/DTcreateNewJavaClass1.png" alt="Description"></div></div></li><li class="listitem"><p class="simpara">Modify the following fields:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><span class="strong"><strong>Package</strong></span>&#8201;&#8212;&#8201;Enter
+<code class="literal">example</code>.</li><li class="listitem"><span class="strong"><strong>Name</strong></span>&#8201;&#8212;&#8201;Enter
+<code class="literal">MyCustomMapper</code>.</li><li class="listitem"><p class="simpara"><span class="strong"><strong>Method Name</strong></span>&#8201;&#8212;&#8201;Change
+<code class="literal">map</code> to
+<code class="literal">brackets</code>.</p><p class="simpara">Leave all other fields as is.</p></li></ul></div></li><li class="listitem"><p class="simpara">Click <span class="strong"><strong>Finish</strong></span>.</p><p class="simpara">The <span class="strong"><strong>Add Custom Transformation</strong></span> page opens with the
+<span class="strong"><strong>Class</strong></span> and <span class="strong"><strong>Method</strong></span> fields auto
+filled:</p><div class="informalfigure"><div class="mediaobject"><img src="./images/DTSelNewJavaClassMethod.png" alt="Description"></div></div></li><li class="listitem"><p class="simpara">Click <span class="strong"><strong>OK</strong></span> to open the
+<code class="literal">MyCustomMapper.java</code> file in the
+Java editor:</p><div class="informalfigure"><div class="mediaobject"><img src="./images/DTmyCustMapperJavaFile1.png" alt="Description"></div></div></li><li class="listitem"><p class="simpara">Edit the <code class="literal">brackets</code> method to change the last line <code class="literal">return null;</code>
+to this:</p><pre class="screen">return "[" + input + "]";</pre></li><li class="listitem"><p class="simpara">Click the <span class="strong"><strong>transformation.xml</strong></span> tab to switch back to
+the transformation editor.</p><div class="informalfigure"><div class="mediaobject"><img src="./images/DTcustFuncMapped.png" alt="Description"></div></div><p class="simpara">The details pane shows that the <code class="literal">brackets</code> method
+has been associated with the <code class="literal">customerNum</code> data
+item.</p><p class="simpara">The <code class="literal">brackets</code> method is executed on the source
+input before it is sent to the target system.</p></li><li class="listitem"><p class="simpara">Run a JUnit test on your <code class="literal">TransformationTest.java</code>
+file. For details, see <a class="xref" href="TransTools.html#DTtestCreate" title="Creating the transformation test file and running the JUnit test">Creating the transformation test file and running the JUnit test</a>.</p><p class="simpara">The <span class="strong"><strong>Console</strong></span> view displays the JSON-formatted output
+data:</p><pre class="screen">{"custId":"[ACME-123]","priority":"GOLD","orderId":"ORDER1","origin":"Web",
+"approvalCode":"AUTO_OK","lineItems":[{"itemId":"PICKLE","amount":1000,"cost":2.25},
+{"itemId":"BANANA","amount":400,"cost":1.25}]}</pre></li></ol></div></div><div class="simplesect"><div class="titlepage"><div><div><h4 class="title"><a name="mapToCollection"></a>Mapping a simple data item to a data item in a collection</h4></div></div></div><p>In this tutorial, you will modify an existing mapping that maps all
+<code class="literal">id</code>s in the Source to the <code class="literal">itemId</code>s in
+the Target. The new mapping will map the <code class="literal">customerNum</code> data item
+in the Source to the <code class="literal">itemId</code> of the second item in the
+<code class="literal">lineItems</code> collection in the Target.</p><p>With this change, no <code class="literal">id</code>s in the Source will be mapped to
+<code class="literal">itemId</code>s in the Target.</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p class="simpara">In the <span class="strong"><strong>Mappings</strong></span> panel, select the mapping <code class="literal">id</code>
+&#8201;&#8212;&#8201;&gt; <code class="literal">itemId</code> to display the mapping in the details
+pane.</p><div class="informalfigure"><div class="mediaobject"><img src="./images/set_property_details.png" alt="Description"></div></div></li><li class="listitem"><p class="simpara">On the Source box, click
+<span class="inlinemediaobject"><img src="./images/menu10x5.gif" alt="drop-down menu access"></span> to open the drop-down menu, and select <span class="strong"><strong>Set
+property</strong></span>.</p><div class="informalfigure"><div class="mediaobject"><img src="./images/set_property_drpdwn_menu.png" alt="Description"></div></div></li><li class="listitem"><p class="simpara">In the <span class="strong"><strong>Select a property</strong></span> page, expand the
+<code class="literal">header</code> node and select
+<code class="literal">customerNum</code>. Click <span class="strong"><strong>OK</strong></span> to save the changes.</p><div class="informalfigure"><div class="mediaobject"><img src="./images/select_a_property.png" alt="select a property"></div></div></li><li class="listitem"><p class="simpara">The details pane now shows that <code class="literal">XyzOrder</code> has a
+<code class="literal">lineItems</code> field. Click the toggle button next to
+<code class="literal">lineItems</code> to increase its value to
+<code class="literal">1</code>.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>Indexes are zero-based, so a value of <code class="literal">1</code> selects the
+second instance of <code class="literal">itemId</code> in the collection.</p></td></tr></table></div><div class="informalfigure"><div class="mediaobject"><img src="./images/DTsetProperty6.png" alt="Description"></div></div><p class="simpara">Notice that the details pane shows <code class="literal">customerNum</code> mapped
+to the <code class="literal">itemId</code> of the second item in the
+<code class="literal">lineItems</code> collection.</p></li><li class="listitem"><p class="simpara">Run a JUnit test on your <code class="literal">TransformationTest.java</code>
+file. For details, see <a class="xref" href="TransTools.html#DTtestCreate" title="Creating the transformation test file and running the JUnit test">Creating the transformation test file and running the JUnit test</a>.</p><p class="simpara">The <span class="strong"><strong>Console</strong></span> view displays the JSON-formatted output
+data:</p><pre class="screen">{"custId":"[ACME-123]","priority":"GOLD","orderId":"ORDER1","origin":"Web",
+"approvalCode":"AUTO_OK","lineItems":[{"amount":1000,"cost":2.25},
+{"<span class="strong"><strong>itemId":"ACME-123</strong></span>","amount":400,"cost":1.25}]}</pre></li></ol></div></div><div class="simplesect"><div class="titlepage"><div><div><h4 class="title"><a name="addBuiltinFunc"></a>Adding a built-in function to a mapped data item</h4></div></div></div><p>You can use the built-in string-related functions to apply transformations to
+mapped data items.</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p class="simpara">In the <span class="strong"><strong>Transformations</strong></span> panel, select the
+<code class="literal">status</code> to <code class="literal">priority</code> mapping to
+populate the details pane.</p><div class="informalfigure"><div class="mediaobject"><img src="./images/built_in1.png" alt="Description"></div></div></li><li class="listitem"><p class="simpara">In the Source box, click
+<span class="inlinemediaobject"><img src="./images/menu10x5.gif" alt="drop-down menu access"></span> to open the drop-down menu, and select <span class="strong"><strong>Add
+transformation</strong></span>.</p><div class="informalfigure"><div class="mediaobject"><img src="./images/new_trans.png" alt="Description"></div></div></li><li class="listitem"><p class="simpara">In the <span class="strong"><strong>Transformations</strong></span> pane, select
+<code class="literal">append</code>, and in the <span class="strong"><strong>Arguments</strong></span>
+pane, enter <code class="literal">-level</code> for the value of
+<span class="strong"><strong>suffix</strong></span>.</p><p class="simpara">This <code class="literal">append</code> function adds the specified suffix to the
+end of the <code class="literal">status</code> string before mapping it to the
+target <code class="literal">priority</code> data item.</p><div class="informalfigure"><div class="mediaobject"><img src="./images//DTaddFuncAppnd.png" alt="Description"></div></div></li><li class="listitem"><p class="simpara">Click <span class="strong"><strong>OK</strong></span>.</p><div class="informalfigure"><div class="mediaobject"><img src="./images//DTaddFuncStatusSrc.png" alt="Description"></div></div><p class="simpara">By default, the details pane displays the results of adding the
+<code class="literal">append</code> function to the <code class="literal">status</code>
+data item in a user-friendly format. You can change this formatting by
+clicking the right-most
+<span class="inlinemediaobject"><img src="./images/menu10x5.gif" alt="drop-down menu access"></span> on the Source box, and selecting <span class="strong"><strong>Show
+standard formatting</strong></span>.</p><div class="informalfigure"><div class="mediaobject"><img src="./images//DTaddFuncAppndStd.png" alt="Description"></div></div></li><li class="listitem"><p class="simpara">Run a JUnit test on your <code class="literal">TransformationTest.java</code>
+file. For details, see <a class="xref" href="TransTools.html#DTtestCreate" title="Creating the transformation test file and running the JUnit test">Creating the transformation test file and running the JUnit test</a>.</p><p class="simpara">The <span class="strong"><strong>Console</strong></span> view displays the JSON-formatted output
+data:</p><pre class="screen">{"custId":"[ACME-123]","priority":"<span class="strong"><strong>GOLD-level</strong></span>","orderId":"ORDER1","origin":"Web",
+"approvalCode":"AUTO_OK","lineItems":[{"amount":1000,"cost":2.25},{"itemId":"ACME-123",
+"amount":400,"cost":1.25}]}</pre></li></ol></div></div><div class="simplesect"><div class="titlepage"><div><div><h4 class="title"><a name="_publishing_a_fuse_integration_project_with_data_transformation_to_a_red_hat_fuse"></a>Publishing a Fuse Integration project with data transformation to a Red Hat Fuse</h4></div></div></div><pre class="literallayout">server</pre><p>Before you publish your data transformation project to a Fuse server (see
+<a class="xref" href="RiderDeployPart.html#FIDEDeployingContainer" title="Publishing Fuse Integration Projects to a Server">Publishing Fuse Integration Projects to a Server</a>), you need to install the following
+features in the Fuse runtime:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><code class="literal">camel-dozer</code></li><li class="listitem"><code class="literal">camel-jackson</code></li><li class="listitem"><code class="literal">camel-jaxb</code></li></ul></div><p>To install the required features on the Fuse runtime:</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem">If not already there, switch to the <span class="strong"><strong>Fuse Integration</strong></span> perspective.</li><li class="listitem">If necessary, add the Fuse server to the <span class="strong"><strong>Servers</strong></span> list (see <a class="xref" href="RiderDeployPart.html#FIDEAddServer" title="Adding a Server">Adding a Server</a>).</li><li class="listitem">Start the Fuse Server (see <a class="xref" href="RiderDeployPart.html#FIDEStartServer" title="Starting a Server">Starting a Server</a>), and wait for the JBoss
+Fuse shell to appear in the <span class="strong"><strong>Terminal</strong></span> view.</li><li class="listitem"><p class="simpara">For each of the required <code class="literal">camel-</code> features, at the
+<code class="literal">JBossFuse:admin@root&gt;</code> prompt type:</p><p class="simpara"><code class="literal"><span class="strong"><strong>features:install camel-&lt;featureName&gt;</strong></span></code></p><p class="simpara">Where <span class="emphasis"><em>featureName</em></span> is one of
+<code class="literal">dozer</code>, <code class="literal">jackson</code>, or
+<code class="literal">jaxb</code>.</p></li><li class="listitem"><p class="simpara">To verify that each of the features was successfully installed, at the
+<code class="literal">JBossFuse:admin@root&gt;</code> prompt type:</p><p class="simpara"><code class="literal"><span class="strong"><strong>features:list --ordered --installed</strong></span></code></p><p class="simpara">You should see the camel features you just installed in the output
+listing:</p><div class="informalfigure"><div class="mediaobject"><img src="./images/DTCamFeatsInstalled.png" alt="DTCamFeatsInstalled"></div></div></li></ol></div></div></div></div></body></html>

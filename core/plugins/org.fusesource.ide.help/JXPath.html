@@ -1,6 +1,6 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>JXPath</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><link rel="home" href="index.html" title="Red Hat Fuse Tooling for Eclipse"><link rel="up" href="RiderExLang.html" title="Part&nbsp;III.&nbsp;Expression and Predicates Languages"><link rel="prev" href="JsonPath.html" title="JsonPath"><link rel="next" href="MVEL.html" title="MVEL"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h2 class="title"><a name="JXPath"></a>JXPath</h2></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="topic-34047"></a>Overview</h2></div></div></div><p>The JXPath language enables you to invoke Java beans using the <a class="link" href="http://commons.apache.org/jxpath/" target="_top">Apache Commons JXPath</a> language. The
+   <title>JXPath</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><link rel="home" href="index.html" title="Red Hat Fuse Tooling"><link rel="up" href="RiderExLang.html" title="Part&nbsp;III.&nbsp;Expression and Predicates Languages"><link rel="prev" href="JsonPath.html" title="JsonPath"><link rel="next" href="MVEL.html" title="MVEL"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h2 class="title"><a name="JXPath"></a>JXPath</h2></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="topic-34047"></a>Overview</h2></div></div></div><p>The JXPath language enables you to invoke Java beans using the <a class="link" href="http://commons.apache.org/jxpath/" target="_top">Apache Commons JXPath</a> language. The
 JXPath language has a similar syntax to XPath, but instead of selecting element or attribute
 nodes from an XML document, it invokes methods on an object graph of Java beans. If one of the
 bean attributes returns an XML document (a DOM/JDOM instance), however, the remaining portion
@@ -9,7 +9,7 @@ document. In other words, the JXPath language provides a hybrid of object graph 
 XML node selection.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="topic-34048"></a>Adding JXPath package</h2></div></div></div><p>To use JXPath in your routes you need to add a dependency on
 <code class="literal">camel-jxpath</code> to your project as shown in <a class="xref" href="JXPath.html#JXPath-ExDEP" title="Example&nbsp;8.&nbsp;Adding the camel-jxpath dependency">Example&nbsp;8, &#8220;Adding the camel-jxpath dependency&#8221;</a>.</p><div class="example"><a name="JXPath-ExDEP"></a><p class="title"><b>Example&nbsp;8.&nbsp;Adding the camel-jxpath dependency</b></p><div class="example-contents"><pre class="screen">&lt;!-- Maven POM File --&gt;
 &lt;properties&gt;
-  &lt;camel-version&gt;2.21.0.000033-Fuse-000001-redhat-1&lt;/camel-version&gt;
+  &lt;camel-version&gt;2.21.0.fuse-000077-redhat-1&lt;/camel-version&gt;
   ...
 &lt;/properties&gt;
 
