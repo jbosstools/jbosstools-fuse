@@ -1,0 +1,14 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>Changing the Camel version</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><link rel="home" href="index.html" title="Red Hat Fuse Tooling"><link rel="up" href="RiderDevPart.html" title="Developing Applications"><link rel="prev" href="RiderDevPart.html" title="Developing Applications"><link rel="next" href="RiderCamelDebugger.html" title="Debugging Routing Contexts"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="ChangeCamelVersion"></a>Changing the Camel version</h2></div></div></div><p>As you work with a Fuse tooling project, you might want to change the Camel
+version that it uses. This can be helpful, for example, if you want to use a
+feature supported in a more recent Camel version or if you want to use a
+community version.</p><p>To change the Camel version that a project uses:</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem">In <span class="strong"><strong>Project Explorer</strong></span>, right-click the project for which you want to
+change the Camel version and select <span class="strong"><strong>Configure</strong></span> &#8594; <span class="strong"><strong>Change Camel Version</strong></span>.</li><li class="listitem"><p class="simpara">In the <span class="strong"><strong>Change Camel Version</strong></span> window, to the right of the
+<span class="strong"><strong>Camel Version</strong></span> field, click the down caret to display
+available Camel versions.</p><p class="simpara">To use a community version of Apache Camel, you enter its version number,
+for example, <code class="literal"><span class="strong"><strong>2.19.2</strong></span></code>.</p></li><li class="listitem">Select or enter the version you want and click <span class="strong"><strong>Finish</strong></span>.</li></ol></div><p>Fuse Tooling checks whether the version you selected is available and
+supported by Fuse Tooling. If it is then Fuse Tooling changes the Camel
+version and saves the project&#8217;s updated <code class="literal">pom.xml</code> file. You receive an error
+message if the Camel version that you select is not available or not supported.</p><p>You can check the project&#8217;s Camel version in its <code class="literal">pom.xml</code> file,
+in the <code class="literal">&lt;camel.version&gt;</code> element.</p></div></body></html>

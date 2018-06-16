@@ -1,0 +1,185 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>Developing extensions for Ignite integrations</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><link rel="home" href="index.html" title="Red Hat Fuse Tooling"><link rel="up" href="RiderDevPart.html" title="Developing Applications"><link rel="prev" href="RiderDevPart.html" title="Developing Applications"><link rel="next" href="RiderCamelDebugger.html" title="Debugging Routing Contexts"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IgniteExtension"></a>Developing extensions for Ignite integrations</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="IgniteExtension.html#Overview">Overview of tasks</a></span></dt><dt><span class="section"><a href="IgniteExtension.html#Prerequisites">Prerequisites</a></span></dt><dt><span class="section"><a href="IgniteExtension.html#CreateCustomConnector">Creating a custom connector</a></span></dt><dt><span class="section"><a href="IgniteExtension.html#CreateCustomStep">Creating custom steps</a></span></dt><dt><span class="section"><a href="IgniteExtension.html#BuildJar">Building the Ignite extension JAR file</a></span></dt><dt><span class="section"><a href="IgniteExtension.html#ProvideJar">Providing the JAR file to the Ignite user</a></span></dt></dl></div><p>Ignite is a Red Hat Fuse feature that provides a web interface for integrating applications. Without writing code, a business expert can use Ignite to connect to applications and optionally operate on data between connections to different applications. If Ignite does not provide a feature that an integrator needs, then a developer can create an extension that defines the needed behavior.</p><p>You can use Fuse Tooling to develop extensions that provide features for use in Ignite. An extension defines:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p class="simpara">One or more custom <span class="strong"><strong>steps</strong></span> that operate on data between connections in an integration</p><p class="simpara">or</p></li><li class="listitem">One custom <span class="strong"><strong>connector</strong></span></li></ul></div><p>In Ignite, a <span class="strong"><strong>connector</strong></span> represents a specific application to obtain data from or send data to. Each connector is a template for creating a connection to that specific application. For example, the Salesforce connector is the template for creating  a connection to Salesforce. If Ignite does not provide a connector that the Ignite user needs, you can develop an extension that defines a custom connector.</p><p>In Ignite, a data operation that happens between connections in an integration is referred to as a <span class="strong"><strong>step</strong></span>. Ignite provides steps for operations such as filtering and mapping data. To operate on data between connections in ways that are not provided by Ignite built-in steps, you can develop an Ignite extension that defines one or more custom steps.</p><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="Overview"></a>Overview of tasks</h3></div></div></div><p>Here is an overview of the tasks for developing an Ignite extension:</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem">In Red Hat Developer Studio, create an Ignite extension project and select <span class="strong"><strong>Custom Connector</strong></span> or <span class="strong"><strong>Custom Step</strong></span> as the extension type.</li><li class="listitem"><p class="simpara">Depending on the extension type, write the code for the extension:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">For a <span class="strong"><strong>Custom Connector</strong></span>: Define the base Camel component, the connector icon, global connector properties, and the connector actions.</li><li class="listitem">For a <span class="strong"><strong>Custom Step</strong></span>: Add routes, define actions, and specify any dependencies.</li></ul></div></li><li class="listitem">Build a <code class="literal">.jar</code> file.</li><li class="listitem">Provide the <code class="literal">.jar</code> file to the Ignite user.</li></ol></div><p>The Ignite user uploads the <code class="literal">.jar</code> file to Ignite and can then add the custom connector or custom step defined in the extension to an integration. The Ignite user uploads the .jar file to Ignite, which makes the custom connector or custom step(s) available for use. For information about Ignite and how to create integrations, see <a class="link" href="https://access.redhat.com/documentation/en-us/red_hat_jbossfuse/7.0-tp/html-single/integrating_applications_with_ignite" target="_top">Integrating Applications with Ignite</a>.</p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="Prerequisites"></a>Prerequisites</h3></div></div></div><p>Before you begin, you need the following information and knowledge:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">A description of the required functionality for the Ignite custom connector or step (from the Ignite user).</li><li class="listitem">The Ignite version number for the extension.</li><li class="listitem">For a custom connector, an icon image file in PNG or SVG format. Ignite uses this icon when it displays the flow of an integration. If you do not provide an icon, then Ignite generates one when the .jar that contains the extension is uploaded.</li><li class="listitem"><p class="simpara">You should be familiar with:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; "><li class="listitem">Ignite</li><li class="listitem">Spring Boot XML or Java</li><li class="listitem">Apache Camel routes (if you want to create a route-based step extension)</li><li class="listitem">JSON</li><li class="listitem">Maven</li></ul></div></li></ul></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="CreateCustomConnector"></a>Creating a custom connector</h3></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="IgniteExtension.html#CreateIgniteProjectConnector">Creating an Ignite Extension project for a custom connector</a></span></dt><dt><span class="section"><a href="IgniteExtension.html#WriteCodeConnector">Writing code for the custom connector</a></span></dt></dl></div><p>In Ignite, a custom connector consists of one or more connection configuration parameters, one or more connection actions, and optional configuration parameters for each action.</p><p>Here is an overview of the tasks for developing a custom connector:</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem">In Red Hat Developer Studio, create an Ignite extension project and select <span class="strong"><strong>Custom Connector</strong></span> as the extension type.</li><li class="listitem">Write the code for the extension. Define the base Camel component, the connector icon, global connector properties, and the connector actions.</li></ol></div><div class="section"><div class="titlepage"><div><div><h4 class="title"><a name="CreateIgniteProjectConnector"></a>Creating an Ignite Extension project for a custom connector</h4></div></div></div><p>A Fuse Tooling Ignite extension project provides a starting point for a custom connector.</p><p>To create a Fuse Tooling Ignite extension project, follow these steps:</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p class="simpara">In Red Hat Developer Studio, select <span class="strong"><strong>New</strong></span> &#8594; <span class="strong"><strong>Project</strong></span> &#8594; <span class="strong"><strong>Red Hat Fuse</strong></span> &#8594; <span class="strong"><strong>Fuse Ignite Extension Project</strong></span>.</p><p class="simpara">The <span class="strong"><strong>New Fuse Ignite Extension Project</strong></span> wizard opens.</p><div class="informalfigure"><div class="mediaobject"><img src="./images/IgniteExtWiz_page1.png" alt="IgniteExtWiz page1"></div></div></li><li class="listitem"><p class="simpara">Enter the name and location for the project, then click <span class="strong"><strong>Next</strong></span>.</p><div class="informalfigure"><div class="mediaobject"><img src="./images/IgniteExtWiz_page2.png" alt="IgniteExtWiz page2"></div></div></li><li class="listitem">Select the Fuse Ignite version.</li><li class="listitem"><p class="simpara">Specify the following extension details:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><span class="strong"><strong>ID</strong></span>&#8201;&#8212;&#8201;A value that you define and that is unique in the Ignite environment. This value will be visible in Ignite when the Ignite user imports the extension <code class="literal">.jar</code> file.</li><li class="listitem"><span class="strong"><strong>Name</strong></span>&#8201;&#8212;&#8201;The name of the extension. This value will be visible in Ignite as the extension name. In Ignite, on the <span class="strong"><strong>Customizations</strong></span> &#8594; <span class="strong"><strong>Extensions</strong></span> tab, the user can see a list of the names and descriptions of extensions that have been uploaded to Ignite.</li><li class="listitem"><span class="strong"><strong>Description</strong></span>&#8201;&#8212;&#8201;An optional description of the extension content.</li><li class="listitem"><span class="strong"><strong>Version</strong></span>&#8201;&#8212;&#8201;The version of the extension. For example, if this is the initial version, you could type <span class="strong"><strong><code class="literal">1.0</code></strong></span>. If you are updating a version, you could type <span class="strong"><strong><code class="literal">1.1</code></strong></span> or <span class="strong"><strong><code class="literal">2.0</code></strong></span>.</li></ul></div></li><li class="listitem"><p class="simpara">Select <span class="strong"><strong>Custom Connector</strong></span> for the kind of Fuse Ignite extension that you want to create.</p><div class="informalfigure"><div class="mediaobject"><img src="./images/IgniteExtWiz_connector.png" alt="IgniteExtWiz connector"></div></div></li><li class="listitem">Click <span class="strong"><strong>Finish</strong></span>.</li></ol></div><p>The new project appears in the Red Hat Developer Studio <span class="strong"><strong>Project Explorer</strong></span> view. It includes the following files for a custom connector extension:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p class="simpara">In the <code class="literal">src/main/resources/META-INF/syndesis</code> folder:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; "><li class="listitem"><p class="simpara">A descriptor file: <code class="literal">syndesis-extension-definition.json</code></p><p class="simpara">This is the file that you edit to:
+<span class="strong"><strong>* Add top-level global properties, connector actions, and action properties.
+</strong></span>* Change the Extension Id, Name, Version, or Description values.</p></li><li class="listitem"><p class="simpara">A default icon image file: <code class="literal">icon.png</code></p><p class="simpara">You can optionally replace this file with your own icon image (PNG or SVG) file.</p></li></ul></div></li><li class="listitem"><p class="simpara">A Maven Project Object Model file: <code class="literal">pom.xml</code></p><p class="simpara">This file contains information about the project and configuration details used by Maven to build the project, including default extension dependencies. You edit this file to add custom dependencies. The scope for any dependency that Red Hat ships is provided, for example:</p><pre class="screen">&lt;dependency&gt;
+    &lt;groupId&gt;io.syndesis.extension&lt;/groupId&gt;
+    &lt;artifactId&gt;extension-api&lt;/artifactId&gt;
+    &lt;scope&gt;provided&lt;/scope&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.apache.camel&lt;/groupId&gt;
+    &lt;artifactId&gt;camel-core&lt;/artifactId&gt;
+    &lt;scope&gt;provided&lt;/scope&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter&lt;/artifactId&gt;
+    &lt;scope&gt;provided&lt;/scope&gt;
+&lt;/dependency&gt;</pre></li></ul></div></div><div class="section"><div class="titlepage"><div><div><h4 class="title"><a name="WriteCodeConnector"></a>Writing code for the custom connector</h4></div></div></div><p>After you create the Ignite extension project, you write the code that defines the custom connector elements based on the description of the required functionality provided to you by the Ignite user.
+The <a class="xref" href="IgniteExtension.html#ConnectorMappingTbl" title="Table&nbsp;2.&nbsp;Custom connector elements">Table&nbsp;2, &#8220;Custom connector elements&#8221;</a> table shows how the elements of the custom connector that you create in Fuse Tooling correspond to elements in Ignite.</p><div class="table"><a name="ConnectorMappingTbl"></a><p class="title"><b>Table&nbsp;2.&nbsp;Custom connector elements</b></p><div class="table-contents"><table summary="Custom connector elements" border="1"><colgroup><col width="33%" class="col_1"><col width="33%" class="col_2"><col width="34%" class="col_3"></colgroup><thead><tr><th align="left" valign="top">Fuse Tooling element</th><th align="left" valign="top">Ignite element</th><th align="left" valign="top">Description</th></tr></thead><tbody><tr><td align="left" valign="top"><p>Global (top-level) property</p></td><td align="left" valign="top"><p>Connection configuration parameter</p></td><td align="left" valign="top"><p>When an Ignite user creates a connection from this connector, the user specifies a value for this property as part of the configuration of the connection.</p></td></tr><tr><td align="left" valign="top"><p>Action</p></td><td align="left" valign="top"><p>Connection action</p></td><td align="left" valign="top"><p>In Ignite, for a connection created from this connector, an Ignite user selects one of these actions.</p></td></tr><tr><td align="left" valign="top"><p>Property defined in an action</p></td><td align="left" valign="top"><p>An action configuration parameter</p></td><td align="left" valign="top"><p>When an Ignite user configures the action that the connection performs, the Ignite user specifies a value for this property as part of the configuration of the action.</p></td></tr></tbody></table></div></div><br class="table-break"><p>To write the code that implements a custom connector for Ignite:</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p class="simpara">Open the syndesis-extension-definition.json file in the Editor view and write the code that defines the global properties, the actions that the custom connector can perform, and each action&#8217;s properties.</p><p class="simpara">Each <span class="strong"><strong>global property</strong></span> corresponds to a connection configuration parameter in Ignite. Each action property corresponds to an Ignite connection actionconfiguration parameter. In Ignite, when the user selects a custom connector, Ignite prompts for values for each connection configuration parameter. A custom connector can be for an application that uses the OAuth protocol. In this case, be sure to specify a global property for the OAuth client ID and another global property for the OAuth client secret. The Ignite user will need to specify values for these parameters for a connection created from this connector to work.</p><p class="simpara">Each <span class="strong"><strong>connector action</strong></span>  declares a base Camel component scheme.</p><p class="simpara">The example provided by the New Fuse Ignite Extension Project wizard uses the <code class="literal">telegram</code> Camel component scheme:</p><pre class="screen">{
+  "schemaVersion" : "v1",
+  "name" : "Example Ignite Extension",
+  "extensionId" : "ignite.extension.example",
+  "version" : "1.0.0",
+  "actions" : [ {
+    "id" : "io.syndesis:telegram-chat-from-action",
+    "name" : "Chat Messages",
+    "description" : "Receive all messages sent to the chat bot",
+    "descriptor" : {
+      "componentScheme" : "telegram",
+      "inputDataShape" : {
+        "kind" : "none"
+      },
+      "outputDataShape" : {
+        "kind" : "java",
+        "type" : "org.apache.camel.component.telegram.model.IncomingMessage"
+      },
+      "configuredProperties" : {
+        "type" : "bots"
+      }
+    },
+    "actionType" : "connector",
+    "pattern" : "From"
+  }, {
+    "id" : "io.syndesis:telegram-chat-to-action",
+    "name" : "Send a chat Messages",
+    "description" : "Send a messages to the chat (through the bot).",
+    "descriptor" : {
+      "componentScheme" : "telegram",
+      "inputDataShape" : {
+        "kind" : "java",
+        "type" : "java.lang.String"
+      },
+      "outputDataShape" : {
+        "kind" : "none"
+      },
+      "propertyDefinitionSteps" : [ {
+        "description" : "Chat id",
+        "name" : "chatId",
+        "properties" : {
+          "chatId" : {
+            "kind" : "parameter",
+            "displayName" : "Chat Id",
+            "type" : "string",
+            "javaType" : "String",
+            "description" : "The telegram's Chat Id, if not set will use CamelTelegramChatId from the incoming exchange."
+          }
+        }
+      } ],
+      "configuredProperties" : {
+        "type" : "bots"
+      }
+    },
+    "actionType" : "connector",
+    "pattern" : "To"
+  } ],
+  "properties" : {
+    "authorizationToken" : {
+      "kind" : "property",
+      "displayName" : "Authorization Token",
+      "group" : "security",
+      "label" : "security",
+      "required" : true,
+      "type" : "string",
+      "javaType" : "java.lang.String",
+      "secret" : true,
+      "description" : "Telegram Bot Authorization Token"
+    }
+  }
+}</pre></li><li class="listitem"><p class="simpara">If the custom connector requires additional dependencies, add them to the project&#8217;s <code class="literal">pom.xml</code> file. The default scope for dependencies is runtime.  If you add a dependency that Red Hat ships, define its scope as provided, for example:</p><pre class="screen">&lt;dependencies&gt;
+    &lt;dependency&gt;
+          &lt;groupId&gt;org.apache.camel&lt;/groupId&gt;
+          &lt;artifactId&gt;camel-telegram&lt;/artifactId&gt;
+          &lt;scope&gt;provided&lt;/scope&gt;
+    &lt;/dependency&gt;
+      &lt;/dependencies&gt;</pre></li></ol></div><p>When you finish writing the code for the custom connector, build the <code class="literal">.jar</code> file as described in <a class="xref" href="IgniteExtension.html#BuildJar" title="Building the Ignite extension JAR file">Building the Ignite extension JAR file</a>.</p></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="CreateCustomStep"></a>Creating custom steps</h3></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="IgniteExtension.html#CreateIgniteProjectStep">Creating an Ignite Extension project for custom steps</a></span></dt><dt><span class="section"><a href="IgniteExtension.html#WriteCodeStep">Writing code for the custom step</a></span></dt></dl></div><p>After you create the Ignite extension project, you write the code that defines the custom steps based on the description of the required functionality provided to you by the Ignite user. Within a single extension, you can define more than one custom step and you can define each custom step with Camel routes or with Java beans.</p><div class="section"><div class="titlepage"><div><div><h4 class="title"><a name="CreateIgniteProjectStep"></a>Creating an Ignite Extension project for custom steps</h4></div></div></div><p>To create a Fuse Tooling Ignite extension project, follow these steps:</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p class="simpara">In Red Hat Developer Studio, select <span class="strong"><strong>New</strong></span> &#8594; <span class="strong"><strong>Project</strong></span> &#8594; <span class="strong"><strong>Red Hat Fuse</strong></span> &#8594; <span class="strong"><strong>Fuse Ignite Extension Project</strong></span>.</p><p class="simpara">The <span class="strong"><strong>New Fuse Ignite Extension Project</strong></span> wizard opens.</p><div class="informalfigure"><div class="mediaobject"><img src="./images/IgniteExtWiz_page1.png" alt="IgniteExtWiz page1"></div></div></li><li class="listitem"><p class="simpara">Enter the name and location for the project, then click <span class="strong"><strong>Next</strong></span>.</p><div class="informalfigure"><div class="mediaobject"><img src="./images/IgniteExtWiz_page2.png" alt="IgniteExtWiz page2"></div></div></li><li class="listitem">Select the Fuse Ignite version.</li><li class="listitem"><p class="simpara">Specify the following extension details:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><span class="strong"><strong>ID</strong></span>&#8201;&#8212;&#8201;A value that you define and that is unique in the Ignite environment. This value will be visible in Ignite when the Ignite user imports the extension <code class="literal">.jar</code> file.</li><li class="listitem"><span class="strong"><strong>Name</strong></span>&#8201;&#8212;&#8201;The name of the extension. This value will be visible in Ignite as the extension name. In Ignite, on the <span class="strong"><strong>Customizations</strong></span> &#8594; <span class="strong"><strong>Extensions</strong></span> tab, the user can see a list of the names and descriptions of extensions that have been uploaded to Ignite.</li><li class="listitem"><span class="strong"><strong>Description</strong></span>&#8201;&#8212;&#8201;An optional description of the extension content.</li><li class="listitem"><span class="strong"><strong>Version</strong></span>&#8201;&#8212;&#8201;The version of the extension. For example, if this is the initial version, you could type <span class="strong"><strong><code class="literal">1.0</code></strong></span>. If you are updating a version, you could type <span class="strong"><strong><code class="literal">1.1</code></strong></span> or <span class="strong"><strong><code class="literal">2.0</code></strong></span>.</li></ul></div></li><li class="listitem">Select <span class="strong"><strong>Custom Step</strong></span> for the kind of Fuse Ignite extension that you want to create.</li><li class="listitem"><p class="simpara">Select the template for the custom step:</p><div class="informalfigure"><div class="mediaobject"><img src="./images/IgniteExtWiz_step.png" alt="IgniteExtWiz step"></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><span class="strong"><strong>Camel route</strong></span>&#8201;&#8212;&#8201;Provides a sample Camel route.</li><li class="listitem"><p class="simpara"><span class="strong"><strong>Java bean</strong></span>&#8201;&#8212;&#8201;Provides a sample Java bean.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>The template that you select provides a starting point for your project. If you want to create one or more custom steps based on Camel routes and one or more other custom steps based on Java beans within the same extension, start with one of the templates and then add the needed file and dependencies for the other type of custom step.</p></td></tr></table></div></li></ul></div></li><li class="listitem">Click <span class="strong"><strong>Finish</strong></span>.</li></ol></div><p>The new project appears in the Red Hat Developer Studio <span class="strong"><strong>Project Explorer</strong></span> view.  It includes the following files depending on the template that you selected for the custom step:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p class="simpara">In the <code class="literal">src/main/resources/META-INF/syndesis</code> folder:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; "><li class="listitem"><p class="simpara">A descriptor file: <code class="literal">syndesis-extension-definition.json</code></p><p class="simpara">This is the file that you edit to:
+<span class="strong"><strong>* Add one or more actions. An action in the `.json `file becomes a custom step in Ignite. In an action element, a property in the `.json `file becomes a step configuration  parameter in Ignite.
+</strong></span>* Change the Extension Id, Name, Version, or Description values.</p></li><li class="listitem"><p class="simpara">For a Camel route template, a Camel context file: <code class="literal">extensions/log-body-action.xml</code></p><p class="simpara">This file contains a sample route with a log component. You customize the Camel routes in this file.</p></li><li class="listitem"><p class="simpara">For a Java bean template, a Java file: <code class="literal">extensions/extension.java</code></p><p class="simpara">This file contains a sample POJO-based logging extension.</p></li></ul></div></li><li class="listitem"><p class="simpara">A Maven Project Object Model file: <code class="literal">pom.xml</code></p><p class="simpara">This file contains information about the project and configuration details used by Maven to build the project, including default extension dependencies. You edit this file to add custom dependencies. The scope for any dependency that Red Hat ships is provided, for example:</p><pre class="screen">&lt;dependency&gt;
+    &lt;groupId&gt;io.syndesis.extension&lt;/groupId&gt;
+    &lt;artifactId&gt;extension-api&lt;/artifactId&gt;
+    &lt;scope&gt;provided&lt;/scope&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.apache.camel&lt;/groupId&gt;
+    &lt;artifactId&gt;camel-core&lt;/artifactId&gt;
+    &lt;scope&gt;provided&lt;/scope&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter&lt;/artifactId&gt;
+    &lt;scope&gt;provided&lt;/scope&gt;
+&lt;/dependency&gt;</pre></li></ul></div></div><div class="section"><div class="titlepage"><div><div><h4 class="title"><a name="WriteCodeStep"></a>Writing code for the custom step</h4></div></div></div><p>After you create the Ignite extension project, you write the code that defines the custom step(s)based on the description of the required functionality provided to you by the Ignite user.</p><p><a class="xref" href="IgniteExtension.html#StepMappingTbl" title="Table&nbsp;3.&nbsp;Custom step elements">Table&nbsp;3, &#8220;Custom step elements&#8221;</a> shows how the elements of the custom step that you create in Fuse Tooling correspond to elements in Ignite.</p><div class="table"><a name="StepMappingTbl"></a><p class="title"><b>Table&nbsp;3.&nbsp;Custom step elements</b></p><div class="table-contents"><table summary="Custom step elements" border="1"><colgroup><col width="33%" class="col_1"><col width="33%" class="col_2"><col width="34%" class="col_3"></colgroup><thead><tr><th align="left" valign="top">Fuse Tooling element</th><th align="left" valign="top">Ignite element</th><th align="left" valign="top">Description</th></tr></thead><tbody><tr><td align="left" valign="top"><p>Action</p></td><td align="left" valign="top"><p>Custom Step</p></td><td align="left" valign="top"><p>In Ignite, after the user imports the step extension, the custom step(s) appear(s) on the <span class="strong"><strong>Choose a step</strong></span> page.</p></td></tr><tr><td align="left" valign="top"><p>Property defined in an action</p></td><td align="left" valign="top"><p>A custom step configuration parameter</p></td><td align="left" valign="top"><p>In Ignite, when the user selects a custom step, Ignite prompts for values for configuration parameters.</p></td></tr></tbody></table></div></div><br class="table-break"><p>To write the code that implements a custom step for Ignite:</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p class="simpara">For a Camel route-based step, in the <code class="literal">extension.xml</code> file, create routes that address the purpose of the extension. The entrypoint of each route must match the entrypoint that you define in the <code class="literal">syndesis-extension-definition.json</code> file, as described in Step 2.</p><p class="simpara">For a Java bean-based step, edit the <code class="literal">java</code> file.</p></li><li class="listitem"><p class="simpara">In the <code class="literal">syndesis-extension-definition.json</code> file, write the code that defines the actions and their properties. You need a new action for each entrypoint.</p><p class="simpara">Each action that you create corresponds to a custom step in Ignite. You can use different types of code for each action. That is, you can use a Camel route for one action and a Java bean for another action.</p><p class="simpara">Each property corresponds to an Ignite step configuration parameter. In Ignite, when the user selects a custom step, Ignite prompts for values for configuration parameters. For example, a custom log step might have a level parameter that indicates how much information to send to the log.</p><p class="simpara">Here is the template for the <code class="literal">.json</code> file that contains the extension metadata, including properties that will be filled in by the user in Ignite after uploading the extension and adding its custom step to an integration:</p><pre class="screen">{
+  "actions": [
+    {
+      "actionType": "extension",
+      "id": "${actionId}",
+      "name": "Action Name",
+      "description": "Action Description",
+      "tags": [
+           "xml"
+      ],
+      "descriptor": {
+        "kind": "ENDPOINT|BEAN|STEP",
+        "entrypoint": "direct:${actionId}",
+        "inputDataShape": {
+          "kind": "any"
+        },
+        "outputDataShape": {
+          "kind": "any"
+        },
+        "propertyDefinitionSteps": []
+      }
+    }
+  ],
+  "tags": [
+    "feature",
+    "experimental"
+  ]
+}</pre><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>The tags are ignored in this release. They are reserved for future use.</p></td></tr></table></div></li><li class="listitem">To edit the extension dependencies, open the `pom.xml `file in the editor. If you add a dependency, you must define its scope.</li></ol></div><p>When you finish writing the code for the custom step(s), build the <code class="literal">.jar</code> file as described in <a class="xref" href="IgniteExtension.html#BuildJar" title="Building the Ignite extension JAR file">Building the Ignite extension JAR file</a>.</p></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="BuildJar"></a>Building the Ignite extension JAR file</h3></div></div></div><p>To build the <code class="literal">.jar</code> file for the extension:</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem">In the <span class="strong"><strong>Project Explorer</strong></span> view, right-click the project.</li><li class="listitem">From the context menu, select <span class="strong"><strong>Run As</strong></span> &#8594; <span class="strong"><strong>Maven clean verify</strong></span>.</li><li class="listitem">In the <span class="strong"><strong>Console</strong></span> view, you can monitor the progress of the build.</li><li class="listitem">When the build is complete, refresh the target folder in the <span class="strong"><strong>Project Explorer</strong></span> view (select the project and then press <span class="strong"><strong>F5</strong></span>).</li><li class="listitem"><p class="simpara">In the <span class="strong"><strong>Project Explorer</strong></span> view, open the target folder to see the generated <code class="literal">.jar</code> file:</p><p class="simpara">The name of the .jar file follows Maven defaults: <code class="literal">${artifactId}-${version}.jar</code></p><p class="simpara">For example: <code class="literal">custom:step-camel-1.0.0.jar</code></p><p class="simpara">This <code class="literal">.jar</code> file defines the extension, its required dependencies, and its metadata: Extension Id, Name, Version, Tags, and Description. For example:</p><pre class="screen">{
+    "schemaVersion" : "v1",
+    "name" : "Example Ignite Extension",
+    "description" : "Logs a message body with a prefix",
+    "extensionId" : "ignite.extension.example",
+    "version" : "1.0.0",
+    "actions" : [ {
+        "id" : "Log-body",
+        "name" : "Log Body",
+        "description" : "A simple xml Body Log with a prefix",
+        "descriptor" : {
+            "kind" : "ENDPOINT",
+            "entrypoint" : "direct:log-xml",
+            "resource" : "classpath:META-INF/syndesis/extensions/log-body-action.xml",
+            "inputDataShape" : {
+                "kind" : "any"
+            },
+            "outputDataShape" : {
+                "kind" : "any"
+            },
+            "propertyDefinitionSteps" : [ {
+                "description" : "Define your Log message",
+                "name" : "Log Body",
+                "properties" : {
+                    "prefix" : {
+                        "componentProperty" : false,
+                        "deprecated" : false,
+                        "description" : "The Log body prefix message",
+                        "displayName" : "Log Prefix",
+                        "javaType" : "String",
+                        "kind" : "parameter",
+                        "required" : false,
+                        "secret" : false,
+                        "type" : "string"
+                    }
+                }
+            } ]
+        },
+        "tags" : [ "xml" ],
+        "actionType" : "step"
+    } ],
+    "dependencies" : [ {
+        "type" : "MAVEN",
+        "id" : "io.syndesis.extension:extension-api:jar:1.3.0.fuse-000014"
+    } ],
+    "extensionType" : "Steps"
+}</pre></li></ol></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="ProvideJar"></a>Providing the JAR file to the Ignite user</h3></div></div></div><p>Provide the following to the Ignite user:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">The <code class="literal">.jar</code> file</li><li class="listitem">A document that describes the extension. For a step extension, include information about data shapes that each action in the step extension requires as input or provides as output (for data mapping).</li></ul></div><p>In Ignite, the user uploads the <code class="literal">.jar</code> file as described in <a class="link" href="https://access.redhat.com/documentation/en-us/red_hat_jbossfuse/7.0-tp/html-single/integrating_applications_with_ignite" target="_top">Integrating Applications with Ignite</a>.</p></div></div></body></html>
