@@ -39,7 +39,7 @@ public class SourceEditor extends DefaultEditor {
 	 * @param text
 	 *            text to be inserted
 	 */
-	public void insertTest(String text) {
+	public void insertText(String text) {
 
 		editor.insertText(text);
 	}
@@ -52,5 +52,13 @@ public class SourceEditor extends DefaultEditor {
 	public String getText() {
 
 		return editor.getText();
+	}
+
+	public int getPosition(String text) {
+		return editor.getPositionOfText(text);
+	}
+
+	public void selectText(int from, int to) {
+		editor.setSelection(from, to);
 	}
 }

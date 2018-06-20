@@ -61,8 +61,11 @@ public class CamelEditor extends GEFEditor {
 	private static Logger log = Logger.getLogger(CamelEditor.class);
 
 	public CamelEditor(String title) {
-
 		super(title);
+	}
+
+	public CamelEditor() {
+		super();
 	}
 
 	@Override

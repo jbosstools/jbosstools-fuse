@@ -247,7 +247,7 @@ public class CamelEditorTest extends DefaultTest {
 		assertFalse("Content Assistent does contain 'uri' value. The attribute is already set",
 				proposals.contains("uri"));
 		assistent.close();
-		editor.insertTest("id=\"test\" ");
+		editor.insertText("id=\"test\" ");
 		assistent = editor.openContentAssistant();
 		proposals = assistent.getProposals();
 		assertFalse("Content Assistent does contain 'id' value", proposals.contains("id"));
@@ -258,7 +258,7 @@ public class CamelEditorTest extends DefaultTest {
 		assertTrue("Editor does not contain generated text", editor.getText().contains("<to></to>"));
 		i = editor.getText().indexOf("<to");
 		editor.setCursorPosition(i + 3);
-		editor.insertTest(" ");
+		editor.insertText(" ");
 		editor.setCursorPosition(i + 4);
 		assistent = editor.openContentAssistant();
 		proposals = assistent.getProposals();
