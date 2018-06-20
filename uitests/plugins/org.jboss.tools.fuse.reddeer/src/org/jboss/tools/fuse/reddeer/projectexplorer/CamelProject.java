@@ -88,6 +88,10 @@ public class CamelProject {
 		getProject().getProjectItem("src/main/resources", "META-INF", "spring", name).select();
 	}
 
+	public void selectFirstCamelContext() {
+		getProject().getProjectItem("Camel Contexts").getTreeItem().getItems().get(0).select();
+	}
+
 	public void runCamelContext() {
 
 		getProject().getProjectItem("Camel Contexts").getChildren().get(0).select();

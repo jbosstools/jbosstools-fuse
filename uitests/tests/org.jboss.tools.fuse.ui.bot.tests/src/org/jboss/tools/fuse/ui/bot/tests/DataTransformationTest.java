@@ -13,7 +13,11 @@ package org.jboss.tools.fuse.ui.bot.tests;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
+import java.io.IOException;
+
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.reddeer.common.exception.WaitTimeoutExpiredException;
+import org.eclipse.reddeer.common.wait.AbstractWait;
 import org.eclipse.reddeer.common.wait.TimePeriod;
 import org.eclipse.reddeer.common.wait.WaitUntil;
 import org.eclipse.reddeer.eclipse.condition.ConsoleHasText;
@@ -29,27 +33,37 @@ import org.eclipse.reddeer.swt.impl.table.DefaultTableItem;
 import org.eclipse.reddeer.workbench.impl.editor.TextEditor;
 import org.eclipse.reddeer.workbench.impl.shell.WorkbenchShell;
 import org.jboss.tools.fuse.reddeer.JiraIssue;
-import org.jboss.tools.fuse.reddeer.ResourceHelper;
-import org.jboss.tools.fuse.reddeer.editor.CamelEditor;
-import org.jboss.tools.fuse.reddeer.editor.DataTransformationEditor;
 import org.jboss.tools.fuse.reddeer.perspectives.FuseIntegrationPerspective;
 import org.jboss.tools.fuse.reddeer.projectexplorer.CamelProject;
-import org.jboss.tools.fuse.reddeer.utils.ProjectFactory;
 import org.jboss.tools.fuse.reddeer.wizard.NewFuseTransformationTestWizard;
-import org.jboss.tools.fuse.reddeer.wizard.NewFuseTransformationWizard;
-import org.jboss.tools.fuse.reddeer.wizard.NewFuseTransformationWizard.TransformationType;
-import org.jboss.tools.fuse.reddeer.wizard.NewFuseTransformationWizard.TypeDefinition;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 /**
  * Test covers Data Transformation Tooling
+ * <p>
+ * Use the following arguments to specify Fuse Integration Project:
+ * <ul>
+ * <li>-DfuseDeploymentType=... --- OpenShift / Standalone</li>
+ * <li>-DfuseRuntimeType=... --- SpringBoot / Karaf / EAP</li>
+ * <li>-DfuseCamelVersion=... --- e.g. 2.18.1.redhat-000012</li>
+ * <li>-DfuseDSL=... --- Blueprint / Spring</li> --> applicable only for Standalone / Karaf combination
+ * </ul>
+ * </p>
  * 
  * @author tsedmik
  */
 @RunWith(RedDeerSuite.class)
 @OpenPerspective(FuseIntegrationPerspective.class)
-public class DataTransformationTest extends DefaultTest {
+public class DataTransformationTest extends DataTransformationDefaultTest {
+
+	@Before
+	public void setupEnvironment() throws IOException, CoreException {
+		createProject(PROJECT_NAME);
+		copyResources(PROJECT_NAME);
+		configureRoute();
+	}
 
 	/**
 	 * <p>
@@ -57,7 +71,7 @@ public class DataTransformationTest extends DefaultTest {
 	 * </p>
 	 * <b>Steps</b>
 	 * <ol>
-	 * <li>import 'starter' project from 'resources/projects/starter'</li>
+	 * <li>create a new Fuse Integration Project</li>
 	 * <li>create a new Data Transformation</li>
 	 * <li>modify the Camel Route (connect Data Transformation node)</li>
 	 * <li>create a new Data Transformation test</li>
@@ -66,52 +80,14 @@ public class DataTransformationTest extends DefaultTest {
 	 */
 	@Test
 	public void testBasics() {
+		addDataTransformation();
+		createMapping();
+		createAndRunTest();
+	}
 
-		ProjectFactory.importExistingProject(
-				ResourceHelper.getResourceAbsolutePath(Activator.PLUGIN_ID, "resources/projects/starter"), "starter",
-				true);
-		new CamelProject("starter").openCamelContext("camel-context.xml");
-		CamelEditor editor = new CamelEditor("camel-context.xml");
-		editor.activate();
-		editor.deleteCamelComponent("file:target/messages?fileName=xyz-order.json");
-		editor.save();
-		editor.addCamelComponent("Data Transformation", "file:src/data?fileName=abc-order.xml&noop=true");
-		NewFuseTransformationWizard wizard = new NewFuseTransformationWizard();
-		wizard.setTransformationID("xml2json");
-		wizard.setSourceType(TransformationType.XML);
-		wizard.setTargetType(TransformationType.JSON);
-		wizard.next();
-		wizard.setXMLTypeDefinition(TypeDefinition.Schema);
-		wizard.setXMLSourceFile("abc-order.xsd");
-		wizard.next();
-		wizard.setJSONTypeDefinition(TypeDefinition.Schema);
-		wizard.setJSONTargetFile("xyz-order.json");
-		wizard.finish();
-		editor.activate();
-		editor.addCamelComponent("File", "ref:xml2json");
-		editor.setProperty("file:directoryName", "Uri", "file:target/messages?fileName=xyz-order.json");
-		editor.close(true);
-
-		DataTransformationEditor transEditor = new DataTransformationEditor("transformation.xml");
-		transEditor.createNewVariable("ORIGIN");
-		transEditor.createVariableTransformation("ABCOrder", "ORIGIN", "XyzOrder",
-				new String[] { "XyzOrder", "origin" });
-		transEditor.createExpressionTransformation("ABCOrder", "Header", "approvalID", "XyzOrder",
-				new String[] { "XyzOrder", "approvalCode" });
-		transEditor.createTransformation("ABCOrder", new String[] { "ABCOrder", "header", "customerNum" }, "XyzOrder",
-				new String[] { "XyzOrder", "custId" });
-		transEditor.createTransformation("ABCOrder", new String[] { "ABCOrder", "header", "orderNum" }, "XyzOrder",
-				new String[] { "XyzOrder", "orderId" });
-		transEditor.createTransformation("ABCOrder", new String[] { "ABCOrder", "header", "status" }, "XyzOrder",
-				new String[] { "XyzOrder", "priority" });
-		transEditor.createTransformation("ABCOrder", new String[] { "ABCOrder", "orderItems", "item[ ]", "id" },
-				"XyzOrder", new String[] { "XyzOrder", "lineItems[ ]", "itemId" });
-		transEditor.createTransformation("ABCOrder", new String[] { "ABCOrder", "orderItems", "item[ ]", "price" },
-				"XyzOrder", new String[] { "XyzOrder", "lineItems[ ]", "cost" });
-		transEditor.createTransformation("ABCOrder", new String[] { "ABCOrder", "orderItems", "item[ ]", "quantity" },
-				"XyzOrder", new String[] { "XyzOrder", "lineItems[ ]", "amount" });
-
-		new CamelProject("starter").selectProjectItem("src/main/resources", "META-INF", "spring", "camel-context.xml");
+	private void createAndRunTest() throws JiraIssue {
+		new CamelProject(PROJECT_NAME).selectFirstCamelContext();
+		AbstractWait.sleep(TimePeriod.SHORT);
 		NewFuseTransformationTestWizard test = new NewFuseTransformationTestWizard();
 		test.open();
 		try {
@@ -129,7 +105,7 @@ public class DataTransformationTest extends DefaultTest {
 			}
 		}
 		TextEditor javaEditor = new TextEditor("TransformationTest.java");
-		javaEditor.insertLine(25,
+		javaEditor.insertLine(javaEditor.getLineOfText("transform()") + 1,
 				"startEndpoint.sendBodyAndHeader(readFile(\"src/data/abc-order.xml\"), \"approvalID\", \"AUTO_OK\");");
 		javaEditor.save();
 		new ShellMenuItem(new WorkbenchShell(), "Run", "Run").select();

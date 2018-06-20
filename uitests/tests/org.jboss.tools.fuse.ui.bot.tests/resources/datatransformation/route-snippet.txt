@@ -1,0 +1,6 @@
+		<route id="_route1">
+			<from id="_from1" uri="file:src/data?fileName=abc-order.xml&amp;noop=true" />
+			<setHeader headerName="approvalID" id="_setHeader1">
+				<simple>AUTO_OK</simple>
+			</setHeader>
+		</route>
