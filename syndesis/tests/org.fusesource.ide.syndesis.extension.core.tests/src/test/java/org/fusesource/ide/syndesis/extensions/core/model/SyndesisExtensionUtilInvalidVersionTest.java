@@ -30,10 +30,7 @@ public class SyndesisExtensionUtilInvalidVersionTest {
 		return new String[] {
 				"1",
 				"1-SNAPSHOT",
-				"1.1.SNAPSHOT",
 				"1.1-SNAPSHOT",
-				"1.1.0-SNAPSHOT",
-				"1.1.v20180108",
 				"1.b",
 				"1.1.",
 				".1.1",
