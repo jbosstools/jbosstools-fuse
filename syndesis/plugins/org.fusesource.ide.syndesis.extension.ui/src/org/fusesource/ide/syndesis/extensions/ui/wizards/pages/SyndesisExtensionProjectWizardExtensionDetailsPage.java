@@ -244,6 +244,7 @@ public class SyndesisExtensionProjectWizardExtensionDetailsPage extends WizardPa
 		syndesisVersionCombo.setContentProvider(ArrayContentProvider.getInstance());
 		UpdateValueStrategy updateStrategy = UpdateValueStrategy.create(null);
 		updateStrategy.setConverter(IConverter.create(String.class, String.class, o1 -> translateDisplayTextToVersion((String) o1)));
+		updateStrategy.setBeforeSetValidator(new SyndesisExtensionVersionValidator());
 		createBinding(dbc, syndesisVersionCombo.getCombo(), "syndesisVersion", updateStrategy);
 		
 		Display.getDefault().asyncExec( () -> {

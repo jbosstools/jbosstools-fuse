@@ -31,11 +31,15 @@ public class SyndesisExtensionsUtil {
 		if (parts.length<2 || version.trim().endsWith(".") || version.trim().startsWith(".")) {
 			valid = false;
 		} else {
+			int foundNumbers = 0;
 			for (String part : parts) {
 				try {
 					Integer.parseInt(part);
+					foundNumbers++;
 				} catch (NumberFormatException ex) {
-					valid = false;
+					if (foundNumbers<2) {
+						valid = false;
+					}
 					break;
 				}
 			}			
