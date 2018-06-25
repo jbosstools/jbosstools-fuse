@@ -33,7 +33,12 @@ public class SyndesisExtensionUtilValidVersionTest {
 		return new String[] {
 				"1.0",
 				"1.0.0",
-				"1.1.20180108"};
+				"1.1.20180108",
+				"1.3-SNAPSHOT",
+				"1.3.10-SNAPSHOT",
+				"1.3.0.fuse-1",
+				"1.3.10.fuse-000001-redhat-1"
+		};
 	}
 	
 	@Test
