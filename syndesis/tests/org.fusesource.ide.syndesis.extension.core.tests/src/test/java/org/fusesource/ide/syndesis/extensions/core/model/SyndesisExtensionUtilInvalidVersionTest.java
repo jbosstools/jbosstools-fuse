@@ -36,6 +36,13 @@ public class SyndesisExtensionUtilInvalidVersionTest {
 				".1.",
 				".1.1.",
 				".1.1-",
+				"a",
+				"a.b",
+				"a.b.c",
+				"a-SNAPSHOT",
+				"a.1-SNAPSHOT",
+				"1.a-SNAPSHOT",
+				".-."
 				};
 	}
 	
