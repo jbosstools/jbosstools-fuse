@@ -32,6 +32,7 @@ public class SyndesisExtensionUtilInvalidVersionTest {
 				"1-SNAPSHOT",
 				"1.b",
 				"1.1.",
+				"1.1.SNAPSHOT",
 				".1.1",
 				".1.",
 				".1.1.",
@@ -42,7 +43,8 @@ public class SyndesisExtensionUtilInvalidVersionTest {
 				"a-SNAPSHOT",
 				"a.1-SNAPSHOT",
 				"1.a-SNAPSHOT",
-				".-."
+				".-.",
+				""
 				};
 	}
 	
