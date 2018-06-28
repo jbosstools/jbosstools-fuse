@@ -13,6 +13,7 @@ package org.fusesource.ide.camel.model.service.core.model;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
 import org.fusesource.ide.camel.model.service.core.internal.CamelModelServiceCoreActivator;
+import org.fusesource.ide.camel.model.service.core.model.eips.RestConfigurationElementEIP;
 import org.w3c.dom.Node;
 
 /**
@@ -28,6 +29,7 @@ public class RestConfigurationElement extends AbstractRestCamelModelElement {
 	 */
 	public RestConfigurationElement(AbstractCamelModelElement parent, Node underlyingNode) {
 		super(parent, underlyingNode, false);
+		setUnderlyingMetaModelObject(new RestConfigurationElementEIP());
 	}
 	
 	/* (non-Javadoc)
@@ -51,7 +53,7 @@ public class RestConfigurationElement extends AbstractRestCamelModelElement {
 				initAttribute(param.getName());
 			}
 		} else {
-			CamelModelServiceCoreActivator.pluginLog().logWarning("ParseAttributes: Missing EIP for REST. Ignored.");
+			CamelModelServiceCoreActivator.pluginLog().logWarning("ParseAttributes: Missing EIP for REST Configuration. Ignored.");
 		}
 	}
 	
@@ -77,5 +79,51 @@ public class RestConfigurationElement extends AbstractRestCamelModelElement {
 	protected boolean shouldParseNode() {
 		// we do want to parse REST contents
 		return true;
+	}
+	
+	/**
+	 * retrieves the host for the configuration
+	 * 
+	 * @return
+	 */
+	public String getHost() {
+		return (String)getParameter(RestConfigurationElementEIP.PROP_HOST);
+	}
+	
+	/**
+	 * sets the host for the configuration
+	 * 
+	 * @param uri
+	 */
+	public void setHost(String host) {
+		setParameter(RestConfigurationElementEIP.PROP_HOST, host);
+	}
+	
+	public String getPort() {
+		return (String)getParameter(RestConfigurationElementEIP.PROP_PORT);
+	}
+	public void setPort(String port) {
+		setParameter(RestConfigurationElementEIP.PROP_PORT, port);
+	}
+
+	public String getComponent() {
+		return (String)getParameter(RestConfigurationElementEIP.PROP_COMPONENT);
+	}
+	public void setComponent(String component) {
+		setParameter(RestConfigurationElementEIP.PROP_COMPONENT, component);
+	}
+
+	public String getContextPath() {
+		return (String)getParameter(RestConfigurationElementEIP.PROP_CONTEXTPATH);
+	}
+	public void setContextPath(String contextPath) {
+		setParameter(RestConfigurationElementEIP.PROP_CONTEXTPATH, contextPath);
+	}
+
+	public String getBindingMode() {
+		return (String)getParameter(RestConfigurationElementEIP.PROP_BINDINGMODE);
+	}
+	public void setBindingMode(String bindingMode) {
+		setParameter(RestConfigurationElementEIP.PROP_BINDINGMODE, bindingMode);
 	}
 }
