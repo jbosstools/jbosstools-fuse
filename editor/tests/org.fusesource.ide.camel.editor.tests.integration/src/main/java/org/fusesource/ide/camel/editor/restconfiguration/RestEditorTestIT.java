@@ -14,7 +14,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.IEditorPart;
+import org.fusesource.ide.camel.editor.CamelDesignEditor;
 import org.fusesource.ide.camel.editor.CamelEditor;
+import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
+import org.fusesource.ide.camel.model.service.core.model.CamelFile;
+import org.fusesource.ide.camel.model.service.core.model.RestConfigurationElement;
 import org.fusesource.ide.camel.model.service.core.model.RestElement;
 import org.fusesource.ide.camel.model.service.core.model.RestVerbElement;
 import org.fusesource.ide.camel.test.util.editor.AbstractCamelEditorIT;
@@ -116,5 +120,42 @@ public class RestEditorTestIT extends AbstractCamelEditorIT {
 		// Now make sure we have re-selected the second rest element properly
 		RestElement thirdSelection = (RestElement) thirdSsel.getFirstElement();
 		assertThat(thirdSelection.getId()).isEqualTo(secondRestElement.getId());
+	}
+
+	@Test
+	public void openCamelFileAddRestConfigurationTest() throws Exception {
+		IEditorPart openEditorOnFileStore = openFileInEditor("/route");
+		assertThat(openEditorOnFileStore).isNotNull();
+		assertThat(openEditorOnFileStore).isInstanceOf(CamelEditor.class);
+
+		readAndDispatch(20);
+
+		// ensure that the REST tab is available and select it
+		assertThat(((CamelEditor)openEditorOnFileStore).getRestEditor()).isNotNull();
+		CamelEditor camelEditor = (CamelEditor)openEditorOnFileStore;
+		camelEditor.setActiveEditor(camelEditor.getRestEditor());
+		assertThat(camelEditor.getActivePage()).isEqualTo(CamelEditor.REST_CONF_INDEX);
+		RestConfigEditor restEditor = camelEditor.getRestEditor();
+		camelEditor.setActiveEditor(restEditor);
+		
+		CamelDesignEditor ed = ((CamelEditor)openEditorOnFileStore).getDesignEditor();
+		CamelFile model = ed.getModel();
+		CamelContextElement context = (CamelContextElement)model.getRouteContainer();
+
+		// add a REST Configuration element
+		restEditor.addRestConfigurationElement();
+		readAndDispatch(20);
+		
+		// test for new component
+		assertThat(context.getRestConfigurations().isEmpty()).isNotEqualTo(true);
+		RestConfigurationElement rce = 
+				(RestConfigurationElement) context.getRestConfigurations().values().iterator().next();
+		assertThat(rce.getHost()).isEqualTo("localhost");
+		assertThat(rce.getBindingMode()).isEqualTo("off");
+
+		//test to make sure it's removed
+		restEditor.removeRestConfigurationElement();
+		readAndDispatch(20);
+		assertThat(context.getRestConfigurations().isEmpty()).isNotEqualTo(false);
 	}
 }
