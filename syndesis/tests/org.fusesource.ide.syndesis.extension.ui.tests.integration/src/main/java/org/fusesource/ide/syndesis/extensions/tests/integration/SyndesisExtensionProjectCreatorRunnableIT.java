@@ -46,12 +46,10 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.WorkbenchException;
 import org.fusesource.ide.camel.editor.CamelEditor;
 import org.fusesource.ide.camel.tests.util.AbstractProjectCreatorRunnableIT;
 import org.fusesource.ide.camel.tests.util.CommonTestUtils;
 import org.fusesource.ide.foundation.ui.util.ScreenshotUtil;
-import org.fusesource.ide.preferences.initializer.StagingRepositoriesPreferenceInitializer;
 import org.fusesource.ide.projecttemplates.adopters.AbstractProjectTemplate;
 import org.fusesource.ide.syndesis.extensions.core.model.SyndesisExtension;
 import org.fusesource.ide.syndesis.extensions.core.util.IgniteVersionMapper;
@@ -75,8 +73,6 @@ public abstract class SyndesisExtensionProjectCreatorRunnableIT extends Abstract
 		String projectName = project != null ? project.getName() : String.format("%s", getClass().getSimpleName());
 		ScreenshotUtil.saveScreenshotToFile(
 				String.format("%s/MavenLaunchOutput-%s_BEFORE.png", SCREENSHOT_FOLDER, projectName), SWT.IMAGE_PNG);
-
-		new StagingRepositoriesPreferenceInitializer().setStagingRepositoriesEnablement(true);
 
 		versions = new IgniteVersionMapper().getMapping();
 		
