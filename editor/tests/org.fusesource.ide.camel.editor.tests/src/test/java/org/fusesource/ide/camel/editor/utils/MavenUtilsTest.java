@@ -23,7 +23,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.maven.model.Build;
 import org.apache.maven.model.Model;
+import org.apache.maven.model.Plugin;
+import org.apache.maven.model.PluginManagement;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -43,7 +46,6 @@ import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.runners.MockitoJUnitRunner;
 
-@Ignore("Disabled test because its broken due to the model rework FUSETOOLS-2290")
 @RunWith(MockitoJUnitRunner.class)
 public class MavenUtilsTest {
 
@@ -71,6 +73,7 @@ public class MavenUtilsTest {
 	}
 
 	@Test
+	@Ignore("Disabled test because its broken due to the model rework FUSETOOLS-2290")
 	public void testUpdateMavenDependencyWithNullVersion() throws Exception {
 		doReturn(null).when(camelMavenUtils).getMavenProjectFacade(project);
 		final Model mavenModel = new Model();
@@ -91,6 +94,7 @@ public class MavenUtilsTest {
 	}
 
 	@Test
+	@Ignore("Disabled test because its broken due to the model rework FUSETOOLS-2290")
 	public void testUpdateMavenDependencyWithManagedDependency() throws Exception {
 		// so retrieved from the MavenprojectFacade
 		final ArrayList<org.apache.maven.model.Dependency> m2eDependencies = new ArrayList<org.apache.maven.model.Dependency>();
@@ -119,6 +123,7 @@ public class MavenUtilsTest {
 	}
 
 	@Test
+	@Ignore("Disabled test because its broken due to the model rework FUSETOOLS-2290")
 	public void testUpdateMavenDependencyForMissingDependency() throws Exception {
 		// so retrieved from the MavenprojectFacade
 		final ArrayList<org.apache.maven.model.Dependency> m2eDependencies = new ArrayList<org.apache.maven.model.Dependency>();
@@ -140,5 +145,61 @@ public class MavenUtilsTest {
 		mavenUtils.updateMavenDependencies(compDeps, project, new NullProgressMonitor());
 		verify(mavenUtils).addDependency(eq(mavenModel), captor.capture(), eq((String) null));
 		assertThat(captor.getValue().get(0).getArtifactId()).isEqualTo("test-artifactID");
+	}
+	
+	@Test
+	public void testIsSyndesisPluginExistingWithNullModel() throws Exception {
+		assertThat(mavenUtils.isSyndesisPluginExisting(null)).isFalse();
+	}
+	
+	@Test
+	public void testIsSyndesisPluginExistingWithNullBuildSection() throws Exception {
+		Model mavenModel = new Model();
+		mavenModel.setBuild(null);
+		assertThat(mavenUtils.isSyndesisPluginExisting(mavenModel)).isFalse();
+	}
+	
+	@Test
+	public void testIsSyndesisPluginExistingWithNullPluginsSection() throws Exception {
+		Model mavenModel = new Model();
+		Build build = new Build();
+		build.setPlugins(null);
+		mavenModel.setBuild(build);
+		assertThat(mavenUtils.isSyndesisPluginExisting(mavenModel)).isFalse();
+	}
+	
+	@Test
+	public void testIsSyndesisPluginExistingWithNullPluginsManagementSection() throws Exception {
+		Model mavenModel = new Model();
+		Build build = new Build();
+		build.setPluginManagement(null);
+		mavenModel.setBuild(build);
+		assertThat(mavenUtils.isSyndesisPluginExisting(mavenModel)).isFalse();
+	}
+	
+	@Test
+	public void testIsSyndesisPluginExistingWithFilledPluginsSection() throws Exception {
+		Model mavenModel = new Model();
+		Build build = new Build();
+		Plugin p = new Plugin();
+		p.setGroupId(MavenUtils.SYNDESIS_PLUGIN_GROUPID);
+		p.setArtifactId(MavenUtils.SYNDESIS_PLUGIN_ARTIFACTID);
+		build.addPlugin(p);
+		mavenModel.setBuild(build);
+		assertThat(mavenUtils.isSyndesisPluginExisting(mavenModel)).isTrue();
+	}
+	
+	@Test
+	public void testIsSyndesisPluginExistingWithFilledPluginsManagementSection() throws Exception {
+		Model mavenModel = new Model();
+		Build build = new Build();
+		Plugin p = new Plugin();
+		p.setGroupId(MavenUtils.SYNDESIS_PLUGIN_GROUPID);
+		p.setArtifactId(MavenUtils.SYNDESIS_PLUGIN_ARTIFACTID);
+		PluginManagement pm = new PluginManagement();
+		pm.addPlugin(p);
+		build.setPluginManagement(pm);
+		mavenModel.setBuild(build);
+		assertThat(mavenUtils.isSyndesisPluginExisting(mavenModel)).isTrue();
 	}
 }
