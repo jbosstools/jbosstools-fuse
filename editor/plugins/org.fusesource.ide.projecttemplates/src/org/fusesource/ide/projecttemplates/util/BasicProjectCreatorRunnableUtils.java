@@ -69,7 +69,11 @@ public class BasicProjectCreatorRunnableUtils {
 	}
 	
 	public static void openCamelFile(IFile file, IProgressMonitor monitor, boolean isJavaEditorToOpen) {
-		Display.getDefault().asyncExec( () -> {
+		openCamelFile(file, monitor, isJavaEditorToOpen, true); // default is async exec
+	}
+	
+	public static void openCamelFile(IFile file, IProgressMonitor monitor, boolean isJavaEditorToOpen, boolean async) {
+		Runnable r = () -> {
 			try {
 				if (!file.exists()) {
 					new BuildAndRefreshJobWaiterUtil().waitJob(monitor);
@@ -84,7 +88,13 @@ public class BasicProjectCreatorRunnableUtils {
 			} catch (PartInitException e) {
 				ProjectTemplatesActivator.pluginLog().logError("Cannot open camel context file in editor", e); //$NON-NLS-1$
 			}
-		});
+		};
+		
+		if (async) {
+			Display.getDefault().asyncExec(r);
+		} else {
+			Display.getDefault().syncExec(r);
+		};
 	}
 	
 	public static boolean isCamelVersionBiggerThan220(String camelVersion) {
