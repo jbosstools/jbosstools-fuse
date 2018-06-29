@@ -4,7 +4,7 @@
 
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.mycompany.ignite.extensions</groupId>
+	<groupId>com.mycompany.fuse.online.extensions</groupId>
 	<artifactId>custom-connector-telegram</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
 	<name>Telegram Connector</name>

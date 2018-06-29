@@ -61,15 +61,15 @@ This file is currently used by older versions of the tooling to map versions for
 
 
 ## igniteVersionToDisplayName.properties
-This file maps the Fuse Ignite version to a human readable name to be displayed in the New Fuse Ignite Wizard. It replaces the old ignite.properties.
+This file maps the Fuse Online version to a human readable name to be displayed in the New Fuse Online Extension Wizard. It replaces the old ignite.properties.
 
 Syntax:
 
-	<ignite.version>=<human readable name of this version>
+	<fuse.online.version>=<human readable name of this version>
 
 Example:
 	
-	1.3-SNAPSHOT=1.3-SNAPSHOT (Fuse Ignite TP4)
+	1.3-SNAPSHOT=1.3-SNAPSHOT (Fuse Online TP4)
 	
 
-You can also put SNAPSHOT versions into the ignite.version field (see above example) which will make the Wizard look for the latest available version of that SNAPSHOT in an EA repository.
+You can also put SNAPSHOT versions into the <fuse.online.version> field (see above example) which will make the Wizard look for the latest available version of that SNAPSHOT in the repositories.

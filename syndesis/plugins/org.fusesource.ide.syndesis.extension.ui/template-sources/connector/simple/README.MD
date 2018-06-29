@@ -1,6 +1,6 @@
 # Telegram Connector Extension
 
-This is a simple Fuse Ignite Extension for communicating with the Telegram service.
+This is a simple Fuse Online Extension for communicating with the Telegram service.
 
 
 

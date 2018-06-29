@@ -4,10 +4,10 @@
 
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.mycompany.ignite.extensions</groupId>
+	<groupId>com.mycompany.fuse.online.extensions</groupId>
 	<artifactId>custom-step-camel</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
-	<name>Fuse Ignite Custom Step Log Message Body</name>
+	<name>Fuse Online Custom Step Log Message Body</name>
 	<description>Logs a message body with a prefix</description>
 	<packaging>jar</packaging>
 

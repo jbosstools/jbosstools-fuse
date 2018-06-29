@@ -70,8 +70,8 @@ import org.fusesource.ide.syndesis.extensions.ui.wizards.validation.SyndesisExte
  */
 public class SyndesisExtensionProjectWizardExtensionDetailsPage extends WizardPage {
 
-	private static final String DEFAULT_EXTENSION_ID = "ignite.extension.example";
-	private static final String DEFAULT_EXTENSION_NAME = "Example Ignite Extension";
+	private static final String DEFAULT_EXTENSION_ID = "fuse.online.extension.example";
+	private static final String DEFAULT_EXTENSION_NAME = "Example Fuse Online Extension";
 	private static final String DEFAULT_EXTENSION_VERSION = "1.0.0";
 	
 	private SelectionListener btnGroupSelectionListener = new SelectionAdapter() {
