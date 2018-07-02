@@ -94,7 +94,7 @@ public class BasicProjectCreatorRunnableUtils {
 			Display.getDefault().asyncExec(r);
 		} else {
 			Display.getDefault().syncExec(r);
-		};
+		}
 	}
 	
 	public static boolean isCamelVersionBiggerThan220(String camelVersion) {
