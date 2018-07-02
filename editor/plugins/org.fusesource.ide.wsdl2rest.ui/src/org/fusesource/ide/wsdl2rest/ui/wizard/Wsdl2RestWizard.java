@@ -46,12 +46,14 @@ import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.ISelectionService;
 import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.fusesource.ide.camel.editor.CamelEditor;
 import org.fusesource.ide.camel.editor.utils.CamelUtils;
 import org.fusesource.ide.camel.editor.utils.MavenUtils;
 import org.fusesource.ide.camel.model.service.core.io.CamelIOHandler;
+import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
 import org.fusesource.ide.camel.model.service.core.util.CamelMavenUtils;
 import org.fusesource.ide.foundation.core.util.Strings;
@@ -123,6 +125,8 @@ public class Wsdl2RestWizard extends Wizard implements INewWizard {
 							UIMessages.wsdl2RestWizardErrorMessage,
 							new Status(IStatus.ERROR, Wsdl2RestUIActivator.PLUGIN_ID, e.getMessage(), e));
 					throw new InvocationTargetException(e);
+				} finally {
+					done = true;
 				}
 			});
 		} catch (InvocationTargetException e) {
@@ -310,7 +314,6 @@ public class Wsdl2RestWizard extends Wizard implements INewWizard {
 			doWsdl2RestMigration(project, javaFile, wsdlLocation, isBlueprint, isSpringBoot, camelFile, subMon.split(2));
 		}
 		subMon.setWorkRemaining(0);
-		done = true;
 	}
 
 	private void doWsdl2RestMigration(IProject project, File javaFile, URL wsdlLocation, boolean isBlueprint, boolean isSpringBoot, File camelFile, IProgressMonitor monitor) throws IOException, CoreException, URISyntaxException  {
@@ -360,7 +363,7 @@ public class Wsdl2RestWizard extends Wizard implements INewWizard {
 							Thread.currentThread().interrupt();
 						}
 					}
-					Display.getDefault().asyncExec( () -> updateIDValueInCamelFile(contextPath, subMon.split(1)));
+					Display.getDefault().syncExec( () -> updateIDValueInCamelFile(contextPath, subMon.split(1)));
 					return Status.OK_STATUS;
 				}
 			};
@@ -414,11 +417,21 @@ public class Wsdl2RestWizard extends Wizard implements INewWizard {
 	 * @param monitor
 	 */
 	protected void updateIDValueInCamelFile(Path path, IProgressMonitor monitor) {
-		SubMonitor subMon = SubMonitor.convert(monitor, 2);
+		SubMonitor subMon = SubMonitor.convert(monitor, 6);
 		IProject project = options.getProject();
 		File f = path.toFile();
+
+		// close editor if opened		
 		try {
-			// open the file in our editor
+			closeEditorForCamelContextFile(project, f, subMon.split(1));
+		} catch (PartInitException e) {
+			Wsdl2RestUIActivator.pluginLog().logError(e);
+		}
+
+		try {
+			// we need to refresh the resources to prevent popup asking for reload
+			project.refreshLocal(IProject.DEPTH_INFINITE, subMon.split(1));
+			// then we open the file in our editor to make sure all IDs are set and formatting is applied on save
 			IFile camelFile = openCamelContextFile(project, f, subMon.split(1));
 			// save it as there were formattings and id values applied to it
 			// that would mark the editor dirty on opening
@@ -438,6 +451,21 @@ public class Wsdl2RestWizard extends Wizard implements INewWizard {
 		subMonitor.setWorkRemaining(0);
 	}
 	
+	private void closeEditorForCamelContextFile(IProject project, File f, IProgressMonitor monitor) throws PartInitException {
+		SubMonitor subMonitor = SubMonitor.convert(monitor, 1);
+		IFile camelFile = getResourceFromProject(project, f);
+		if (camelFile != null) {
+			CamelEditor editor = CamelUtils.getCamelEditorForFile(camelFile, subMonitor.split(1));
+			if (editor != null) {
+				IWorkbenchWindow w = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+				if (w != null && w.getActivePage() != null) {
+					w.getActivePage().closeEditor(editor, false);
+				}
+			}
+		}
+		subMonitor.setWorkRemaining(0);
+	}
+	
 	/**
 	 * 
 	 * @param project
@@ -447,17 +475,22 @@ public class Wsdl2RestWizard extends Wizard implements INewWizard {
 	 */
 	private IFile openCamelContextFile(IProject project, File f, IProgressMonitor monitor) {
 		SubMonitor subMonitor = SubMonitor.convert(monitor, 1);
+		IFile camelFile = getResourceFromProject(project, f);
+		if (camelFile != null) {
+			BasicProjectCreatorRunnableUtils.openCamelFile(camelFile, subMonitor.split(1), false, false);
+			return camelFile;
+		}
+		subMonitor.setWorkRemaining(0);
+		return null;
+	}
+	
+	private IFile getResourceFromProject(IProject project, File f) {
 		if (project != null && f != null && f.exists()) {
 			IFile[] files = project.getWorkspace().getRoot().findFilesForLocationURI(f.toURI());
 			if (files.length>0) {
-				IFile camelFile = files[0];
-				if (camelFile != null) {
-					BasicProjectCreatorRunnableUtils.openCamelFile(camelFile, subMonitor.split(1), false, false);
-					return camelFile;
-				}
+				return files[0];
 			}
 		}
-		subMonitor.setWorkRemaining(0);
 		return null;
 	}
 	
