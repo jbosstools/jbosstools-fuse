@@ -395,8 +395,19 @@ public class CamelContextElement extends CamelRouteContainerElement {
 			def.updateXMLNode();
 		}
 		if (!childExists) {
-			getXmlNode().insertBefore(def.getXmlNode(), getFirstChild(getXmlNode()));
+			getXmlNode().insertBefore(def.getXmlNode(), getRestConfigurationEntryPoint());
 		}
+	}
+	
+	private Node getRestConfigurationEntryPoint() {
+		final NodeList childNodes = getXmlNode().getChildNodes();
+		for (int i = 0; i < childNodes.getLength(); i++) {
+			Node currentNode = childNodes.item(i);
+			if (currentNode instanceof Element && !DATA_FORMATS_NODE_NAME.equals(currentNode.getLocalName())) {
+				return currentNode;
+			}
+		}
+		return getFirstChild(getXmlNode());
 	}
 	
 	/**

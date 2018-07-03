@@ -10,6 +10,7 @@
  ******************************************************************************/
 package org.fusesource.ide.camel.editor.restconfiguration;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -31,8 +32,8 @@ import org.eclipse.jface.viewers.ListViewer;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -56,6 +57,8 @@ import org.eclipse.ui.part.EditorPart;
 import org.fusesource.ide.camel.editor.CamelEditor;
 import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 import org.fusesource.ide.camel.editor.internal.UIMessages;
+import org.fusesource.ide.camel.editor.restconfiguration.actions.AddRestConfigurationAction;
+import org.fusesource.ide.camel.editor.restconfiguration.actions.DeleteRestConfigurationAction;
 import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.AbstractRestCamelModelElement;
@@ -76,6 +79,8 @@ import org.w3c.dom.Node;
  */
 public class RestConfigEditor extends EditorPart implements ICamelModelListener, ISelectionProvider {
 
+	private static final String OFF = "off";
+	
 	private CamelEditor parentEditor;
 	private Composite parent;
 	private ScrolledForm form;
@@ -292,21 +297,6 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 		}
 	}
 
-	class AddRestConfigurationAction extends PushAction {
-		@Override
-		public void run() {
-			addRestConfigurationElement();
-		}
-		@Override
-		public String getToolTipText() {
-			return "Add REST Configuration..."; //$NON-NLS-1$
-		}
-		@Override
-		public ImageDescriptor getImageDescriptor() {
-			return mImageRegistry.getDescriptor(RestConfigConstants.IMG_DESC_ADD);
-		}
-	}
-
 	class DeleteAction extends PushAction {
 		@Override
 		public void run() {
@@ -318,27 +308,6 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 		@Override
 		public String getToolTipText() {
 			return "Delete..."; //$NON-NLS-1$
-		}
-		@Override
-		public ImageDescriptor getImageDescriptor() {
-			return mImageRegistry.getDescriptor(RestConfigConstants.IMG_DESC_DELETE);
-		}
-	}
-
-	class DeleteRestConfigurationAction extends PushAction {
-		@Override
-		public void run() {
-			MessageBox box = new MessageBox(Display.getCurrent().getActiveShell(), SWT.YES | SWT.NO);
-			box.setText("Delete All REST Configuration Elements from Camel File?"); //$NON-NLS-1$
-			box.setMessage("This option removes ALL REST Configuration elements from the Camel File, along with any REST Elements and their associated operations. Are you sure you want to do this?"); //$NON-NLS-1$
-			int result = box.open();
-			if (result == SWT.YES) {
-				removeRestConfigurationElement();
-			}
-		}
-		@Override
-		public String getToolTipText() {
-			return "Delete REST Configuration..."; //$NON-NLS-1$
 		}
 		@Override
 		public ImageDescriptor getImageDescriptor() {
@@ -378,10 +347,10 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 		ToolBar toolbar = toolBarManager.createControl(parent);
 		toolbar.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WHITE));
 
-		addRestConfigAction = new AddRestConfigurationAction();
+		addRestConfigAction = new AddRestConfigurationAction(this, mImageRegistry);
 		toolBarManager.add(addRestConfigAction);
 
-		deleteRestConfigAction = new DeleteRestConfigurationAction();
+		deleteRestConfigAction = new DeleteRestConfigurationAction(this, mImageRegistry);
 		toolBarManager.add(deleteRestConfigAction);
 
 		toolBarManager.update(true);
@@ -503,18 +472,13 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 		componentCombo.add("spark-rest"); //$NON-NLS-1$
 		componentCombo.add("undertow"); //$NON-NLS-1$
 		componentCombo.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
-		componentCombo.addSelectionListener(new SelectionListener() {
+		componentCombo.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				if (rce != null) {
 					rce.setComponent(componentCombo.getText());
 				}
-			}
-
-			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
-				// empty
 			}
 		});
 		
@@ -541,22 +505,17 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 		bindingModeCombo.add("auto"); //$NON-NLS-1$
 		bindingModeCombo.add("json"); //$NON-NLS-1$
 		bindingModeCombo.add("json_xml"); //$NON-NLS-1$
-		bindingModeCombo.add("off"); //$NON-NLS-1$
+		bindingModeCombo.add(OFF); //$NON-NLS-1$
 		bindingModeCombo.add("xml"); //$NON-NLS-1$
-		bindingModeCombo.setText("off"); //$NON-NLS-1$
+		bindingModeCombo.setText(OFF); //$NON-NLS-1$
 		bindingModeCombo.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
-		bindingModeCombo.addSelectionListener(new SelectionListener() {
+		bindingModeCombo.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				if (rce != null) {
 					rce.setBindingMode(bindingModeCombo.getText());
 				}
-			}
-
-			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
-				// empty
 			}
 		});
 
@@ -608,7 +567,7 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 			value = "";
 		}
 		if (RestConfigurationElementEIP.PROP_BINDINGMODE.equals(attrName) && Strings.isEmpty(value)) {
-			value = "off"; // set default 
+			value = OFF; // set default 
 		}
 		if (control instanceof Text) {
 			((Text)control).setText(value);
@@ -815,7 +774,7 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 			RestConfigurationElement newrce = util.createRestConfigurationNode(ctx.getCamelFile());
 			newrce.initialize();
 			newrce.setHost("localhost");
-			newrce.setBindingMode("off");
+			newrce.setBindingMode(OFF);
 			if (ctx.getRestConfigurations().isEmpty()) {
 				ctx.addRestConfiguration(newrce);
 				ctx.getCamelFile().fireModelChanged();
@@ -832,12 +791,18 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 			// delete everything
 			if (!ctx.getRestConfigurations().isEmpty()) {
 				ctx.removeRestConfiguration(rce);
+				ctx.clearRestConfigurations();
 			}
 			if (!ctx.getRestElements().isEmpty()) {
+				ArrayList<AbstractCamelModelElement> toDelete = new ArrayList<>();
 				Iterator<AbstractCamelModelElement> iter = ctx.getRestElements().values().iterator();
 				while (iter.hasNext()) {
-					ctx.removeRestElement(iter.next());
+					toDelete.add(iter.next());
 				}
+				for (AbstractCamelModelElement cme : toDelete) {
+					ctx.removeRestElement(cme);
+				}
+				ctx.clearRestElements();
 			}
 			reload();
 		});
