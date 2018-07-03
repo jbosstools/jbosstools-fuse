@@ -35,7 +35,6 @@ public class RestConfigUtil {
 		return outParm;
 	}
 
-
 	public Object getAttributeValue(AbstractCamelModelElement element, String attrName) {
 		if (element.getXmlNode() != null) {
 			return getAttributeValue(element.getXmlNode(), attrName);
