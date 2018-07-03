@@ -152,10 +152,32 @@ public class RestEditorTestIT extends AbstractCamelEditorIT {
 				(RestConfigurationElement) context.getRestConfigurations().values().iterator().next();
 		assertThat(rce.getHost()).isEqualTo("localhost");
 		assertThat(rce.getBindingMode()).isEqualTo("off");
+	}
+
+	@Test
+	public void openCamelFileRemoveRestConfigurationTest() throws Exception {
+		IEditorPart openEditorOnFileStore = openFileInEditor("/rest");
+		assertThat(openEditorOnFileStore).isNotNull();
+		assertThat(openEditorOnFileStore).isInstanceOf(CamelEditor.class);
+
+		readAndDispatch(20);
+
+		// ensure that the REST tab is available and select it
+		assertThat(((CamelEditor)openEditorOnFileStore).getRestEditor()).isNotNull();
+		CamelEditor camelEditor = (CamelEditor)openEditorOnFileStore;
+		camelEditor.setActiveEditor(camelEditor.getRestEditor());
+		assertThat(camelEditor.getActivePage()).isEqualTo(CamelEditor.REST_CONF_INDEX);
+		RestConfigEditor restEditor = camelEditor.getRestEditor();
+		camelEditor.setActiveEditor(restEditor);
+		
+		CamelDesignEditor ed = ((CamelEditor)openEditorOnFileStore).getDesignEditor();
+		CamelFile model = ed.getModel();
+		CamelContextElement context = (CamelContextElement)model.getRouteContainer();
 
 		//test to make sure it's removed
 		restEditor.removeRestConfigurationElement();
 		readAndDispatch(20);
 		assertThat(context.getRestConfigurations().isEmpty()).isNotEqualTo(false);
+		assertThat(context.getRestElements().isEmpty()).isNotEqualTo(false);
 	}
 }
