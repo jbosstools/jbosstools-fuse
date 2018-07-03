@@ -98,16 +98,6 @@ public class RestConfigUtil {
 		return null;
 	}
 	
-	public boolean isBlueprintConfig(Node node) {
-		if (node != null) {
-			String nsURI = getNamespace(node);
-			if(!Strings.isEmpty(nsURI) && nsURI != null) {
-				return nsURI.contains("blueprint"); //$NON-NLS-1$
-			}
-		}
-		return false;
-	}
-	
 	private String getFirstNSPrefixForURI(Node rootNode, String namespaceUri) {
 		NamedNodeMap atts = rootNode.getAttributes();
 		for (int i = 0; i < atts.getLength(); i++) {
@@ -143,8 +133,6 @@ public class RestConfigUtil {
 				getCamelNSPrefix(camelFile.getRouteContainer().getXmlNode().getOwnerDocument().getDocumentElement());
 		Node newXMLNode = 
 				camelFile.createElement(RestConfigurationElement.REST_CONFIGURATION_TAG, prefixNS);
-		RestConfigurationElement rce = new RestConfigurationElement(camelFile, newXMLNode);
-		return rce;
+		return new RestConfigurationElement(camelFile, newXMLNode);
 	}
-
 }

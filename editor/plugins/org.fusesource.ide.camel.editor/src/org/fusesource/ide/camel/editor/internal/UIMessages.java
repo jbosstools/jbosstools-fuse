@@ -205,6 +205,12 @@ public class UIMessages extends NLS {
 	public static String restVerbParameterCannotBeNull;
 	public static String validationIDAlreadyUsed;
 	
+	/* rest editor tab actions */
+	public static String restEditorAddRestConfigurationActionButtonTooltip;
+	public static String restEditorDeleteRestConfigurationActionButtonTooltip;
+	public static String restEditorDeleteRestConfigurationActionDialogTitle;
+	public static String restEditorDeleteRestConfigurationActionDialogMessage;
+	
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, UIMessages.class);
