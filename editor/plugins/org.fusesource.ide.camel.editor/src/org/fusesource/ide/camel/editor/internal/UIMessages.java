@@ -24,6 +24,8 @@ public class UIMessages extends NLS {
 	public static String addGlobalBeanWizardBeanPageTitle;
 	public static String addGlobalBeanWizardWindowTitle;
 	public static String addGlobalEndpointWizardWindowTitle;
+
+	public static String addRestElementActionTooltip;
 	public static String advancedBeanPropertiesSectionTitle;
 	public static String argumentInputDialogDialogMessage;
 	public static String argumentInputDialogDialogTitle;
@@ -111,6 +113,8 @@ public class UIMessages extends NLS {
 	public static String dataFormatSelectionPageDataFormatSelectionPageTitle;
 	public static String dataFormatSelectionPageIdLabel;
 	public static String dataFormatSelectionPageDescriptionLabel;
+
+	public static String deleteRestElementActionTooltip;
 	public static String editGlobalBeanWizardBeanEditPageMessage;
 	public static String editGlobalBeanWizardBeanEditPageTitle;
 	public static String editGlobalBeanWizardWindowTitle;
