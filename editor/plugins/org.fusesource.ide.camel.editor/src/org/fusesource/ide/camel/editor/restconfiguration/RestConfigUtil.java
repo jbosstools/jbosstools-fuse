@@ -10,10 +10,14 @@
  ******************************************************************************/
 package org.fusesource.ide.camel.editor.restconfiguration;
 
+import java.util.UUID;
+
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
-import org.fusesource.ide.camel.model.service.core.model.CamelFile;
+import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
 import org.fusesource.ide.camel.model.service.core.model.RestConfigurationElement;
+import org.fusesource.ide.camel.model.service.core.model.RestElement;
+import org.fusesource.ide.foundation.core.util.CamelUtils;
 import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.foundation.core.xml.namespace.BlueprintNamespaceHandler;
 import org.w3c.dom.Element;
@@ -126,12 +130,33 @@ public class RestConfigUtil {
 		return null;
 	}
 
-	public RestConfigurationElement createRestConfigurationNode(final CamelFile camelFile) {
+	public RestConfigurationElement createRestConfigurationNode(final CamelContextElement ctx) {
 		// get NS prefix from parent document, not route container node
 		final String prefixNS = 
-				getCamelNSPrefix(camelFile.getRouteContainer().getXmlNode().getOwnerDocument().getDocumentElement());
+				getCamelNSPrefix(ctx.getRouteContainer().getXmlNode().getOwnerDocument().getDocumentElement());
 		Node newXMLNode = 
-				camelFile.createElement(RestConfigurationElement.REST_CONFIGURATION_TAG, prefixNS);
-		return new RestConfigurationElement(camelFile, newXMLNode);
+				ctx.createElement(RestConfigurationElement.REST_CONFIGURATION_TAG, prefixNS);
+		return new RestConfigurationElement(ctx, newXMLNode);
+	}
+
+	public RestElement createRestElementNode(final CamelContextElement ctx) {
+		// get NS prefix from parent document, not route container node
+		final String prefixNS = 
+				getCamelNSPrefix(ctx.getRouteContainer().getXmlNode().getOwnerDocument().getDocumentElement());
+		Node newXMLNode = 
+				ctx.createElement(RestElement.REST_TAG, prefixNS);
+		String id = computeId(newXMLNode);
+		RestElement restElement = new RestElement(ctx, newXMLNode);
+		restElement.setId(id);
+		return restElement;
+	}
+
+	private String computeId(Node child) {
+		Node idNode = child.getAttributes().getNamedItem(AbstractCamelModelElement.ID_ATTRIBUTE);
+		if (idNode != null){
+			return idNode.getNodeValue();
+		} else {
+			return CamelUtils.getTagNameWithoutPrefix(child) + "-" + UUID.randomUUID().toString(); //$NON-NLS-1$
+		}
 	}
 }
