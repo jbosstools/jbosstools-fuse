@@ -18,7 +18,6 @@ import org.fusesource.ide.camel.editor.restconfiguration.RestConfigEditor;
 
 /**
  * @author brianf
- *
  */
 public class DeleteRestElementAction extends RestEditorAction {
 	
