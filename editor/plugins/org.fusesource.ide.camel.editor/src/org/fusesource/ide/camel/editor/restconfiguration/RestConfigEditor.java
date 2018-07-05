@@ -616,7 +616,6 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 		addRestElementAction.setEnabled(!ctx.getRestConfigurations().isEmpty());
 		deleteRestElementAction.setEnabled(
 				!ctx.getRestElements().isEmpty() && !restList.getStructuredSelection().isEmpty());
-		
 		addRestOperationAction.setEnabled(
 				!ctx.getRestElements().isEmpty() && !restList.getStructuredSelection().isEmpty());
 		deleteRestOperationAction.setEnabled(selection instanceof RestVerbElement);
@@ -807,7 +806,7 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 			newre.initialize();
 			ctx.addRestElement(newre);
 			reload();
-			
+			selectRestElement(newre);
 		});
 	}
 
@@ -822,7 +821,6 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 			newrce.setBindingMode(OFF);
 			if (ctx.getRestConfigurations().isEmpty()) {
 				ctx.addRestConfiguration(newrce);
-				ctx.getCamelFile().fireModelChanged();
 			}
 			reload();
 		});
@@ -880,6 +878,12 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 				setSelection(StructuredSelection.EMPTY);
 				reload();
 			}
+			// delete everything
+			if (!restList.getStructuredSelection().isEmpty()) {
+				RestElement re = (RestElement) restList.getStructuredSelection().getFirstElement();
+				ctx.removeRestElement(re);
+			}
+			reload();
 		});
 	}
 }

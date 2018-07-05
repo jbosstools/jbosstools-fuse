@@ -123,7 +123,6 @@ public class UIMessages extends NLS {
 	public static String dataFormatSelectionPageDescriptionLabel;
 
 	public static String deleteRestElementActionTooltip;
-
 	public static String deleteRestOperationActionTooltip;
 	public static String editGlobalBeanWizardBeanEditPageMessage;
 	public static String editGlobalBeanWizardBeanEditPageTitle;
