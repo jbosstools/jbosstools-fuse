@@ -396,6 +396,10 @@ public class CamelContextElement extends CamelRouteContainerElement {
 		}
 		if (!childExists) {
 			getXmlNode().insertBefore(def.getXmlNode(), getRestConfigurationEntryPoint());
+		} else {
+			// if it's already there, it's probably in the wrong place - have to move it
+			getXmlNode().removeChild(def.getXmlNode());
+			getXmlNode().insertBefore(def.getXmlNode(), getRestConfigurationEntryPoint());
 		}
 	}
 	
@@ -410,8 +414,19 @@ public class CamelContextElement extends CamelRouteContainerElement {
 		return getFirstChild(getXmlNode());
 	}
 	
+	private Node getRestElementEntryPoint() {
+		final NodeList childNodes = getXmlNode().getChildNodes();
+		for (int i = 0; i < childNodes.getLength(); i++) {
+			Node currentNode = childNodes.item(i);
+			if (currentNode instanceof Element && REST_CONFIGURATION_NODE_NAME.equals(currentNode.getLocalName())) {
+				return currentNode;
+			}
+		}
+		return getFirstChild(getXmlNode());
+	}
+
 	/**
-	 * removes the rest configuratino from the context
+	 * removes the rest configuration from the context
 	 * 
 	 * @param def
 	 */
@@ -476,7 +491,11 @@ public class CamelContextElement extends CamelRouteContainerElement {
 			def.updateXMLNode();
 		}
 		if (!childExists) {
-			getXmlNode().insertBefore(def.getXmlNode(), getFirstChild(getXmlNode()));
+			getXmlNode().insertBefore(def.getXmlNode(), getRestElementEntryPoint().getNextSibling());
+		} else {
+			// if it's already there, it's probably in the wrong place - have to move it
+			getXmlNode().removeChild(def.getXmlNode());
+			getXmlNode().insertBefore(def.getXmlNode(), getRestElementEntryPoint().getNextSibling());
 		}
 	}
 
