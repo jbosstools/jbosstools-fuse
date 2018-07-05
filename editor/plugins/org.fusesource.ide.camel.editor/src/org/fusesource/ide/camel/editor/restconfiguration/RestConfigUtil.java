@@ -159,4 +159,25 @@ public class RestConfigUtil {
 			return CamelUtils.getTagNameWithoutPrefix(child) + "-" + UUID.randomUUID().toString(); //$NON-NLS-1$
 		}
 	}
+
+	public RestElement createRestElementNode(final CamelFile camelFile) {
+		// get NS prefix from parent document, not route container node
+		final String prefixNS = 
+				getCamelNSPrefix(camelFile.getRouteContainer().getXmlNode().getOwnerDocument().getDocumentElement());
+		Node newXMLNode = 
+				camelFile.createElement(RestElement.REST_TAG, prefixNS);
+		String id = computeId(newXMLNode);
+		RestElement restElement = new RestElement(camelFile, newXMLNode);
+		restElement.setId(id);
+		return restElement;
+	}
+
+	private String computeId(Node child) {
+		Node idNode = child.getAttributes().getNamedItem(AbstractCamelModelElement.ID_ATTRIBUTE);
+		if (idNode != null){
+			return idNode.getNodeValue();
+		} else {
+			return CamelUtils.getTagNameWithoutPrefix(child) + "-" + UUID.randomUUID().toString(); //$NON-NLS-1$
+		}
+	}
 }
