@@ -58,7 +58,9 @@ import org.fusesource.ide.camel.editor.CamelEditor;
 import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 import org.fusesource.ide.camel.editor.internal.UIMessages;
 import org.fusesource.ide.camel.editor.restconfiguration.actions.AddRestConfigurationAction;
+import org.fusesource.ide.camel.editor.restconfiguration.actions.AddRestElementAction;
 import org.fusesource.ide.camel.editor.restconfiguration.actions.DeleteRestConfigurationAction;
+import org.fusesource.ide.camel.editor.restconfiguration.actions.DeleteRestElementAction;
 import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.AbstractRestCamelModelElement;
@@ -103,6 +105,10 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 	private AddRestConfigurationAction addRestConfigAction;
 	private RestConfigUtil util = new RestConfigUtil();
 	private DeleteRestConfigurationAction deleteRestConfigAction;
+
+	private AddRestElementAction addRestElementAction;
+
+	private DeleteRestElementAction deleteRestElementAction;
 	
 	/**
 	 *
@@ -357,6 +363,21 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 		return toolbar;
 	}
 
+	private ToolBar createRestTabToolbar(Composite parent) {
+		ToolBarManager toolBarManager = new ToolBarManager(SWT.FLAT);
+		ToolBar toolbar = toolBarManager.createControl(parent);
+		toolbar.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WHITE));
+
+		addRestElementAction = new AddRestElementAction(this, mImageRegistry);
+		toolBarManager.add(addRestElementAction);
+
+		deleteRestElementAction = new DeleteRestElementAction(this, mImageRegistry);
+		toolBarManager.add(deleteRestElementAction);
+
+		toolBarManager.update(true);
+		return toolbar;
+	}
+
 	private Composite createRestTabSection() {
 		Section section = toolkit.createSection(form.getBody(), Section.EXPANDED | Section.TWISTIE | Section.TITLE_BAR | Section.DESCRIPTION);
 		section.setText(UIMessages.restConfigEditorRestSectionLabelText);
@@ -364,7 +385,7 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 		section.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).span(1, 5).create());
 		section.setLayout(new GridLayout(2, false));
 
-		ToolBar toolbar = createToolbar(section);
+		ToolBar toolbar = createRestTabToolbar(section);
 		section.setTextClient(toolbar);
 		
 		Composite client=toolkit.createComposite(section,SWT.NONE);
@@ -383,6 +404,9 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 				RestElement acme = (RestElement) event.getStructuredSelection().getFirstElement();
 				selection = acme;
 				setSelection(new StructuredSelection(acme));
+				deleteRestElementAction.setEnabled(
+						!ctx.getRestElements().isEmpty() && !restList.getStructuredSelection().isEmpty());
+
 				Iterator<AbstractCamelModelElement> iter = acme.getRestOperations().values().iterator();
 				while (iter.hasNext()) {
 					RestVerbElement rve = (RestVerbElement) iter.next();
@@ -619,6 +643,9 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 		} else {
 			clearUI();
 		}
+		addRestElementAction.setEnabled(!ctx.getRestConfigurations().isEmpty());
+		deleteRestElementAction.setEnabled(
+				!ctx.getRestElements().isEmpty() && !restList.getStructuredSelection().isEmpty());
 	}	
 	
 	// made public for testing purposes
@@ -769,6 +796,19 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 	/**
 	 * Public for tests.
 	 */
+	public void addRestElement() {
+		Display.getDefault().syncExec(() -> {
+			RestElement newre = util.createRestElementNode(ctx.getCamelFile());
+			newre.initialize();
+			ctx.addRestElement(newre);
+			ctx.getCamelFile().fireModelChanged();
+			reload();
+		});
+	}
+
+	/**
+	 * Public for tests.
+	 */
 	public void addRestConfigurationElement() {
 		Display.getDefault().syncExec(() -> {
 			RestConfigurationElement newrce = util.createRestConfigurationNode(ctx.getCamelFile());
@@ -803,6 +843,20 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 					ctx.removeRestElement(cme);
 				}
 				ctx.clearRestElements();
+			}
+			reload();
+		});
+	}
+
+	/**
+	 * Public for tests.
+	 */
+	public void removeRestElement() {
+		Display.getDefault().syncExec(() -> {
+			// delete everything
+			if (!restList.getStructuredSelection().isEmpty()) {
+				RestElement re = (RestElement) restList.getStructuredSelection().getFirstElement();
+				ctx.removeRestElement(re);
 			}
 			reload();
 		});
