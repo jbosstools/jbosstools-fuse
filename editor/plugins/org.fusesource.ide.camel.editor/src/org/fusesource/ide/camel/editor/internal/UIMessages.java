@@ -26,6 +26,14 @@ public class UIMessages extends NLS {
 	public static String addGlobalEndpointWizardWindowTitle;
 
 	public static String addRestElementActionTooltip;
+
+	public static String addRestOperationActionTooltip;
+	public static String addRESTOperationWizardErrorMessage;
+
+	public static String addRESTOperationWizardErrorTitle;
+
+	public static String addRESTOperationWizardWindowTitle;
+
 	public static String advancedBeanPropertiesSectionTitle;
 	public static String argumentInputDialogDialogMessage;
 	public static String argumentInputDialogDialogTitle;
@@ -115,6 +123,8 @@ public class UIMessages extends NLS {
 	public static String dataFormatSelectionPageDescriptionLabel;
 
 	public static String deleteRestElementActionTooltip;
+
+	public static String deleteRestOperationActionTooltip;
 	public static String editGlobalBeanWizardBeanEditPageMessage;
 	public static String editGlobalBeanWizardBeanEditPageTitle;
 	public static String editGlobalBeanWizardWindowTitle;
@@ -206,6 +216,20 @@ public class UIMessages extends NLS {
 	public static String preferredLabelsAddButtonText;
 	public static String preferredLabelsEditButtonText;
 	public static String preferredLabelsRemoveButtonText;
+	public static String restVerbDefinitionPageIDCannotBeNullError;
+
+	public static String restVerbDefinitionPageIDField;
+
+	public static String restVerbDefinitionPageMessage;
+
+	public static String restVerbDefinitionPageTitle;
+
+	public static String restVerbDefinitionPageURICannotBeNull;
+
+	public static String restVerbDefinitionPageURIField;
+
+	public static String restVerbDefinitionPageVerbField;
+
 	public static String restVerbParameterCannotBeNull;
 	public static String validationIDAlreadyUsed;
 	
