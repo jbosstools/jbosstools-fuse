@@ -10,10 +10,6 @@
  ******************************************************************************/
 package org.fusesource.ide.camel.editor.properties.rest;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.observable.map.IObservableMap;
 import org.eclipse.core.databinding.validation.IValidator;
@@ -21,18 +17,18 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetWidgetFactory;
 import org.fusesource.ide.camel.editor.properties.creators.ComboParameterPropertyUICreator;
 import org.fusesource.ide.camel.editor.properties.creators.modifylisteners.text.ComboParameterPropertyModifyListener;
+import org.fusesource.ide.camel.editor.restconfiguration.RestConfigUtil;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
-import org.fusesource.ide.camel.model.service.core.model.CamelFile;
-import org.fusesource.ide.camel.model.service.core.model.CamelRouteContainerElement;
-import org.fusesource.ide.camel.model.service.core.model.CamelRouteElement;
 
 /**
  * @author brianf
  *
  */
 public class RouteRefAttributeComboFieldPropertyUICreator extends ComboParameterPropertyUICreator {
+	
+	private RestConfigUtil util = new RestConfigUtil();
 
 	public RouteRefAttributeComboFieldPropertyUICreator(DataBindingContext dbc, IObservableMap<String, String> modelMap, Eip eip, AbstractCamelModelElement camelModelElement, Parameter parameter,
 			Composite parent, TabbedPropertySheetWidgetFactory widgetFactory) {
@@ -53,38 +49,20 @@ public class RouteRefAttributeComboFieldPropertyUICreator extends ComboParameter
 		setValues();
 	}
 
-	private String getURI(AbstractCamelModelElement element) {
-		if (element != null && element.getParameter(AbstractCamelModelElement.URI_PARAMETER_KEY) != null) {
-			return (String) element.getParameter(AbstractCamelModelElement.URI_PARAMETER_KEY);
-		}
-		return null;
-	}
-	
-	private String[] getRoutes(CamelFile cf) {
-		List<String> routeURIs = new ArrayList<>();
-		routeURIs.add("");
-		if (cf.getRouteContainer() != null) {
-			final CamelRouteContainerElement crce = cf.getRouteContainer();
-			Iterator<AbstractCamelModelElement> childIter = crce.getChildElements().iterator();
-			while (childIter.hasNext()) {
-				AbstractCamelModelElement child = childIter.next();
-				if (child instanceof CamelRouteElement) {
-					CamelRouteElement cre = (CamelRouteElement) child;
-					if (!cre.getInputs().isEmpty()) {
-						AbstractCamelModelElement firstInFlow = cre.getInputs().get(0);
-						String routeURI = getURI(firstInFlow);
-						if (routeURI != null) {
-							routeURIs.add(routeURI);
-						}
-					}
-				}
-			}
-		}
-		return routeURIs.toArray(new String[routeURIs.size()]);
-	}
-	
 	private void setValues() {
-		String[] routeRefs = getRoutes(this.camelModelElement.getCamelFile());
+		String[] routeRefs = util.getRoutes(this.camelModelElement.getCamelFile(), ""); //$NON-NLS-1$
 		super.setValues(routeRefs);
+	}
+
+	@Override
+	public String getInitialValue() {
+		final String parameterName = parameter.getName();
+		final Object parameterValue = camelModelElement.getParameter(parameterName);
+		final Parameter param = eip.getParameter(parameterName);
+		String defaultValue = ""; //$NON-NLS-1$
+		if (param != null && param.getDefaultValue() != null) {
+			defaultValue = param.getDefaultValue();
+		}
+		return findInitialValue(parameterValue, defaultValue);
 	}
 }

@@ -10,13 +10,21 @@
  ******************************************************************************/
 package org.fusesource.ide.camel.editor.restconfiguration;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.UUID;
 
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.CamelBasicModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
+import org.fusesource.ide.camel.model.service.core.model.CamelFile;
+import org.fusesource.ide.camel.model.service.core.model.CamelRouteContainerElement;
+import org.fusesource.ide.camel.model.service.core.model.CamelRouteElement;
 import org.fusesource.ide.camel.model.service.core.model.RestConfigurationElement;
 import org.fusesource.ide.camel.model.service.core.model.RestElement;
+import org.fusesource.ide.camel.model.service.core.model.RestVerbElement;
 import org.fusesource.ide.foundation.core.util.CamelUtils;
 import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.foundation.core.xml.namespace.BlueprintNamespaceHandler;
@@ -151,25 +159,37 @@ public class RestConfigUtil {
 		return restElement;
 	}
 
-	private String computeId(Node child) {
-		Node idNode = child.getAttributes().getNamedItem(AbstractCamelModelElement.ID_ATTRIBUTE);
-		if (idNode != null){
-			return idNode.getNodeValue();
-		} else {
-			return CamelUtils.getTagNameWithoutPrefix(child) + "-" + UUID.randomUUID().toString(); //$NON-NLS-1$
-		}
-	}
-
-	public RestElement createRestElementNode(final CamelFile camelFile) {
+	public AbstractCamelModelElement createInnerToNode(final CamelContextElement ctx, final String toUri, final AbstractCamelModelElement parent) {
 		// get NS prefix from parent document, not route container node
 		final String prefixNS = 
-				getCamelNSPrefix(camelFile.getRouteContainer().getXmlNode().getOwnerDocument().getDocumentElement());
+				getCamelNSPrefix(ctx.getRouteContainer().getXmlNode().getOwnerDocument().getDocumentElement());
+
+		Element newToNode = 
+				ctx.createElement(AbstractCamelModelElement.ENDPOINT_TYPE_TO, prefixNS);
+		newToNode.setAttribute(AbstractCamelModelElement.URI_PARAMETER_KEY, toUri);
+		return new CamelBasicModelElement(parent, newToNode);
+	}
+	
+	public RestVerbElement createRestVerbElementNode(final CamelContextElement ctx, final String verb) {
+		// get NS prefix from parent document, not route container node
+		final String prefixNS = 
+				getCamelNSPrefix(ctx.getRouteContainer().getXmlNode().getOwnerDocument().getDocumentElement());
+		
+		// create operation node
 		Node newXMLNode = 
-				camelFile.createElement(RestElement.REST_TAG, prefixNS);
+				ctx.createElement(verb, prefixNS);
+		
+		// ensure that we have an ID from the start
 		String id = computeId(newXMLNode);
-		RestElement restElement = new RestElement(camelFile, newXMLNode);
-		restElement.setId(id);
-		return restElement;
+		
+		RestVerbElement restVerbElement = new RestVerbElement(ctx, newXMLNode);
+		restVerbElement.setId(id);
+
+		// create inner TO node
+		AbstractCamelModelElement cme = createInnerToNode(ctx, "", restVerbElement); //$NON-NLS-1$
+		ctx.addChildElement(cme);
+
+		return restVerbElement;
 	}
 
 	private String computeId(Node child) {
@@ -179,5 +199,39 @@ public class RestConfigUtil {
 		} else {
 			return CamelUtils.getTagNameWithoutPrefix(child) + "-" + UUID.randomUUID().toString(); //$NON-NLS-1$
 		}
+	}
+	
+	public String generateRestOperationId() {
+		return UUID.randomUUID().toString(); //$NON-NLS-1$
+	}
+
+	private String getURI(AbstractCamelModelElement element) {
+		if (element != null && element.getParameter(AbstractCamelModelElement.URI_PARAMETER_KEY) != null) {
+			return (String) element.getParameter(AbstractCamelModelElement.URI_PARAMETER_KEY);
+		}
+		return null;
+	}
+
+	public String[] getRoutes(final CamelFile cf, final String defaultVal) {
+		List<String> routeURIs = new ArrayList<>();
+		routeURIs.add(defaultVal);
+		if (cf.getRouteContainer() != null) {
+			final CamelRouteContainerElement crce = cf.getRouteContainer();
+			Iterator<AbstractCamelModelElement> childIter = crce.getChildElements().iterator();
+			while (childIter.hasNext()) {
+				AbstractCamelModelElement child = childIter.next();
+				if (child instanceof CamelRouteElement) {
+					CamelRouteElement cre = (CamelRouteElement) child;
+					if (!cre.getInputs().isEmpty()) {
+						AbstractCamelModelElement firstInFlow = cre.getInputs().get(0);
+						String routeURI = getURI(firstInFlow);
+						if (!Strings.isEmpty(routeURI)) {
+							routeURIs.add(routeURI);
+						}
+					}
+				}
+			}
+		}
+		return routeURIs.toArray(new String[routeURIs.size()]);
 	}
 }

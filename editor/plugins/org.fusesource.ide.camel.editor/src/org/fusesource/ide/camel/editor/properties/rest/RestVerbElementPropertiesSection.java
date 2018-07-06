@@ -123,7 +123,7 @@ public class RestVerbElementPropertiesSection extends FusePropertySection {
 		parameterList.put(RestVerbElementEIP.PROP_APIDOCS,
 				createParameter(RestVerbElementEIP.PROP_APIDOCS, Boolean.class.getName()));
 		parameterList.put(RestVerbElementEIP.PROP_TO_URI,
-				createParameter(RestVerbElementEIP.PROP_TO_URI, Boolean.class.getName()));
+				createParameter(RestVerbElementEIP.PROP_TO_URI, String.class.getName()));
 	}
 
 	public Parameter createParameter(String name, String jType) {

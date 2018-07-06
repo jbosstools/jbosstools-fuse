@@ -49,13 +49,13 @@ public abstract class AbstractRestCamelModelElement extends AbstractCamelModelEl
 	}
 
 	private String computeId(Node child) {
-		Node idNode = child.getAttributes().getNamedItem("id");
+		Node idNode = child.getAttributes().getNamedItem(ID_ATTRIBUTE);
 		if (idNode != null){
 			return idNode.getNodeValue();
 		} else if (ignoreNode(child)) {
 			return null;
 		} else {
-			return CamelUtils.getTagNameWithoutPrefix(child) + "-" + UUID.randomUUID().toString();
+			return CamelUtils.getTagNameWithoutPrefix(child) + "-" + UUID.randomUUID().toString(); //$NON-NLS-1$
 		}
 	}
 
