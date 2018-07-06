@@ -79,6 +79,7 @@ public class RestVerbElementPropertiesSection extends FusePropertySection {
 		this.tabs.add(contentTab);
 	}
 	
+	@SuppressWarnings("squid:S00112")
 	private AbstractParameterPropertyUICreator handleField(final Parameter p, final Composite page) {
 		createPropertyLabel(toolkit, page, p);
 		AbstractParameterPropertyUICreator creator = createPropertyFieldEditor(page, p);
