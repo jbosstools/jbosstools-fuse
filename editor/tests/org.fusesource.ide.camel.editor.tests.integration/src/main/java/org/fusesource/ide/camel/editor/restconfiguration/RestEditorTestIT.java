@@ -13,6 +13,7 @@ package org.fusesource.ide.camel.editor.restconfiguration;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorPart;
 import org.fusesource.ide.camel.editor.CamelDesignEditor;
 import org.fusesource.ide.camel.editor.CamelEditor;
@@ -21,6 +22,7 @@ import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.camel.model.service.core.model.RestConfigurationElement;
 import org.fusesource.ide.camel.model.service.core.model.RestElement;
 import org.fusesource.ide.camel.model.service.core.model.RestVerbElement;
+import org.fusesource.ide.camel.model.service.core.model.eips.RestVerbElementEIP;
 import org.fusesource.ide.camel.test.util.editor.AbstractCamelEditorIT;
 import org.junit.Test;
 
@@ -40,6 +42,9 @@ import org.junit.Test;
  */
 public class RestEditorTestIT extends AbstractCamelEditorIT {
 
+	private static final String NON_REST_PROJECT = "/route";
+	private static final String REST_PROJECT = "/rest";
+
 	public RestEditorTestIT() {
 		this.routeContainerType = "camelContext";
 	}
@@ -54,7 +59,7 @@ public class RestEditorTestIT extends AbstractCamelEditorIT {
 	
 	@Test
 	public void openCamelFileMoveToRESTPage() throws Exception {
-		IEditorPart openEditorOnFileStore = openFileInEditor("/rest");
+		IEditorPart openEditorOnFileStore = openFileInEditor(REST_PROJECT);
 		assertThat(openEditorOnFileStore).isNotNull();
 		assertThat(openEditorOnFileStore).isInstanceOf(CamelEditor.class);
 
@@ -124,7 +129,7 @@ public class RestEditorTestIT extends AbstractCamelEditorIT {
 
 	@Test
 	public void openCamelFileAddRestConfigurationTest() throws Exception {
-		IEditorPart openEditorOnFileStore = openFileInEditor("/route");
+		IEditorPart openEditorOnFileStore = openFileInEditor(NON_REST_PROJECT);
 		assertThat(openEditorOnFileStore).isNotNull();
 		assertThat(openEditorOnFileStore).isInstanceOf(CamelEditor.class);
 
@@ -156,7 +161,7 @@ public class RestEditorTestIT extends AbstractCamelEditorIT {
 
 	@Test
 	public void openCamelFileAddRestElementTest() throws Exception {
-		IEditorPart openEditorOnFileStore = openFileInEditor("/route");
+		IEditorPart openEditorOnFileStore = openFileInEditor(NON_REST_PROJECT);
 		assertThat(openEditorOnFileStore).isNotNull();
 		assertThat(openEditorOnFileStore).isInstanceOf(CamelEditor.class);
 
@@ -191,7 +196,7 @@ public class RestEditorTestIT extends AbstractCamelEditorIT {
 
 	@Test
 	public void openCamelFileRemoveRestConfigurationTest() throws Exception {
-		IEditorPart openEditorOnFileStore = openFileInEditor("/rest");
+		IEditorPart openEditorOnFileStore = openFileInEditor(REST_PROJECT);
 		assertThat(openEditorOnFileStore).isNotNull();
 		assertThat(openEditorOnFileStore).isInstanceOf(CamelEditor.class);
 
@@ -218,7 +223,7 @@ public class RestEditorTestIT extends AbstractCamelEditorIT {
 
 	@Test
 	public void openCamelFileRemoveRestElementTest() throws Exception {
-		IEditorPart openEditorOnFileStore = openFileInEditor("/rest");
+		IEditorPart openEditorOnFileStore = openFileInEditor(REST_PROJECT);
 		assertThat(openEditorOnFileStore).isNotNull();
 		assertThat(openEditorOnFileStore).isInstanceOf(CamelEditor.class);
 
@@ -244,5 +249,78 @@ public class RestEditorTestIT extends AbstractCamelEditorIT {
 		readAndDispatch(20);
 		
 		assertThat(context.getRestElements().isEmpty()).isNotEqualTo(false);
+	}
+
+	@Test
+	public void openCamelFileAddRestOperationTest() throws Exception {
+		IEditorPart openEditorOnFileStore = openFileInEditor(NON_REST_PROJECT);
+		assertThat(openEditorOnFileStore).isNotNull();
+		assertThat(openEditorOnFileStore).isInstanceOf(CamelEditor.class);
+
+		readAndDispatch(20);
+
+		// ensure that the REST tab is available and select it
+		assertThat(((CamelEditor)openEditorOnFileStore).getRestEditor()).isNotNull();
+		CamelEditor camelEditor = (CamelEditor)openEditorOnFileStore;
+		camelEditor.setActiveEditor(camelEditor.getRestEditor());
+		assertThat(camelEditor.getActivePage()).isEqualTo(CamelEditor.REST_CONF_INDEX);
+		RestConfigEditor restEditor = camelEditor.getRestEditor();
+		camelEditor.setActiveEditor(restEditor);
+		
+		CamelDesignEditor ed = ((CamelEditor)openEditorOnFileStore).getDesignEditor();
+		CamelFile model = ed.getModel();
+		CamelContextElement context = (CamelContextElement)model.getRouteContainer();
+
+		// add a REST Element
+		restEditor.addRestElement();
+		readAndDispatch(20);
+
+		// add a REST Configuration element (without the wizard)
+		Display.getDefault().syncExec(() -> 
+			restEditor.createRestOperation(RestVerbElement.GET_VERB, "test", "myTestID")
+		);
+		readAndDispatch(20);
+
+		// test for new component
+		assertThat(context.getRestElements().isEmpty()).isNotEqualTo(true);
+		RestElement re = 
+				(RestElement) context.getRestElements().values().iterator().next();
+		assertThat(re.getRestOperations().isEmpty()).isNotEqualTo(true);
+		
+		RestVerbElement restVerbElement = 
+				(RestVerbElement) re.getRestOperations().values().iterator().next();
+		assertThat(restVerbElement.getId()).isEqualTo("myTestID");
+		assertThat(restVerbElement.getParameter(RestVerbElementEIP.PROP_URI)).isEqualTo("test");
+		assertThat(restVerbElement.getTagNameWithoutPrefix()).isEqualTo(RestVerbElement.GET_VERB);
+	}
+	
+	@Test
+	public void openCamelFileRemoveRestOperationTest() throws Exception {
+		IEditorPart openEditorOnFileStore = openFileInEditor(REST_PROJECT);
+		assertThat(openEditorOnFileStore).isNotNull();
+		assertThat(openEditorOnFileStore).isInstanceOf(CamelEditor.class);
+
+		readAndDispatch(20);
+
+		// ensure that the REST tab is available and select it
+		assertThat(((CamelEditor)openEditorOnFileStore).getRestEditor()).isNotNull();
+		CamelEditor camelEditor = (CamelEditor)openEditorOnFileStore;
+		camelEditor.setActiveEditor(camelEditor.getRestEditor());
+		assertThat(camelEditor.getActivePage()).isEqualTo(CamelEditor.REST_CONF_INDEX);
+		RestConfigEditor restEditor = camelEditor.getRestEditor();
+		camelEditor.setActiveEditor(restEditor);
+		
+		// grab first rest element and its first operation
+		StructuredSelection ssel = (StructuredSelection) restEditor.getSelection();
+		RestElement restElement = (RestElement) ssel.getFirstElement();
+		RestVerbElement restVerbElement = 
+				(RestVerbElement) restElement.getRestOperations().values().iterator().next();
+		restEditor.selectRestVerbElement(restVerbElement);
+		
+		//test to make sure it's removed (there are two REST elements in the sample)
+		restEditor.removeRestOperation();
+		readAndDispatch(20);
+
+		assertThat(restElement.getRestOperations().get(restVerbElement.getId())).isNull();
 	}
 }

@@ -17,6 +17,7 @@ import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelEleme
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.camel.model.service.core.model.RestConfigurationElement;
 import org.fusesource.ide.camel.model.service.core.model.RestElement;
+import org.fusesource.ide.camel.model.service.core.model.RestVerbElement;
 import org.fusesource.ide.foundation.core.util.CamelUtils;
 import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.foundation.core.xml.namespace.BlueprintNamespaceHandler;
@@ -151,6 +152,28 @@ public class RestConfigUtil {
 		return restElement;
 	}
 
+	public RestVerbElement createRestVerbElementNode(final CamelFile camelFile, final String verb) {
+		// get NS prefix from parent document, not route container node
+		final String prefixNS = 
+				getCamelNSPrefix(camelFile.getRouteContainer().getXmlNode().getOwnerDocument().getDocumentElement());
+		
+		// create operation node
+		Node newXMLNode = 
+				camelFile.createElement(verb, prefixNS);
+		
+		// create inner TO node
+		Node newToNode = 
+				camelFile.createElement(AbstractCamelModelElement.ENDPOINT_TYPE_TO, prefixNS);
+		newXMLNode.appendChild(newToNode);
+		
+		// ensure that we have an ID from the start
+		String id = computeId(newXMLNode);
+		
+		RestVerbElement restVerbElement = new RestVerbElement(camelFile, newXMLNode);
+		restVerbElement.setId(id);
+		return restVerbElement;
+	}
+
 	private String computeId(Node child) {
 		Node idNode = child.getAttributes().getNamedItem(AbstractCamelModelElement.ID_ATTRIBUTE);
 		if (idNode != null){
@@ -158,5 +181,9 @@ public class RestConfigUtil {
 		} else {
 			return CamelUtils.getTagNameWithoutPrefix(child) + "-" + UUID.randomUUID().toString(); //$NON-NLS-1$
 		}
+	}
+	
+	public String generateRestOperationId() {
+		return UUID.randomUUID().toString(); //$NON-NLS-1$
 	}
 }
