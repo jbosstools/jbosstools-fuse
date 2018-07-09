@@ -801,8 +801,8 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 			RestElement newre = util.createRestElementNode(ctx.getCamelFile());
 			newre.initialize();
 			ctx.addRestElement(newre);
-			ctx.getCamelFile().fireModelChanged();
 			reload();
+			
 		});
 	}
 
