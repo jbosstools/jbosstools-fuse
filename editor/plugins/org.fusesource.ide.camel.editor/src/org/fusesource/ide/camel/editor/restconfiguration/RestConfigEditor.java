@@ -878,12 +878,6 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 				setSelection(StructuredSelection.EMPTY);
 				reload();
 			}
-			// delete everything
-			if (!restList.getStructuredSelection().isEmpty()) {
-				RestElement re = (RestElement) restList.getStructuredSelection().getFirstElement();
-				ctx.removeRestElement(re);
-			}
-			reload();
 		});
 	}
 }
