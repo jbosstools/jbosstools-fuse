@@ -136,6 +136,7 @@ public class RestElement extends AbstractRestCamelModelElement {
 			return;
 		}
 		restOperations.put(def.getId(), def);
+		def.setParent(this);
 		boolean childExists = false;
 		for (int i=0; i<getXmlNode().getChildNodes().getLength(); i++) {
 			if(def.getXmlNode() != null && getXmlNode().getChildNodes().item(i).isEqualNode(def.getXmlNode())) {
