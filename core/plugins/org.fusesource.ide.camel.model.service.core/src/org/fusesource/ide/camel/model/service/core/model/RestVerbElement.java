@@ -10,9 +10,6 @@
  ******************************************************************************/ 
 package org.fusesource.ide.camel.model.service.core.model;
 
-import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
-import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
-import org.fusesource.ide.camel.model.service.core.internal.CamelModelServiceCoreActivator;
 import org.fusesource.ide.camel.model.service.core.model.eips.RestVerbElementEIP;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -55,45 +52,6 @@ public class RestVerbElement extends AbstractRestCamelModelElement {
 		return NODE_KIND_ATTRIBUTE;
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement#parseAttributes()
-	 */
-	@Override
-	protected void parseAttributes() {
-		Eip eip = getUnderlyingMetaModelObject();
-		if (eip != null) {
-			for (Parameter param : getUnderlyingMetaModelObject().getParameters()) {
-				initAttribute(param.getName());
-			}
-		} else {
-			CamelModelServiceCoreActivator.pluginLog().logWarning("ParseAttributes: Missing EIP for REST Verb. Ignored.");
-		}
-	}
-	
-	private void initAttribute(String paramName) {
-		String value = parseAttribute(paramName);
-		if (value != null) {
-			setParameter(paramName, value);
-		}
-	}	
-	
-	private String parseAttribute(String name) {
-		Node tmp = getXmlNode().getAttributes().getNamedItem(name);
-		if (tmp != null) {
-			return tmp.getNodeValue();
-		}
-		return null;
-	}
-	
-	/* (non-Javadoc)
-	 * @see org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement#shouldParseNode()
-	 */
-	@Override
-	protected boolean shouldParseNode() {
-		// we do want to parse REST Verb contents
-		return true;
-	}
-
 	public String getToUri() {
 		NodeList list = getXmlNode().getChildNodes();
 		if (list != null && list.getLength() > 0) {
@@ -148,23 +106,4 @@ public class RestVerbElement extends AbstractRestCamelModelElement {
 			getXmlNode().appendChild(toElement);
 		}
 	}
-
-	@Override
-	public void setParameter(String name, Object value) {
-		if (RestVerbElementEIP.PROP_TO_URI.equals(name)) {
-			setToUri((String) value);
-		} else {
-			setParameter(name, value, false);
-		}
-	}
-	
-	@Override
-	public Object getParameter(String name) {
-		if (RestVerbElementEIP.PROP_TO_URI.equals(name)) {
-			return getToUri();
-		} else {
-			return super.getParameter(name);
-		}
-	}
-
 }

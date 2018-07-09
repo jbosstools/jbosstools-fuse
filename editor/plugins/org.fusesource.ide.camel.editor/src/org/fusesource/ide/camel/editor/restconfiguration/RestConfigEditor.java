@@ -17,8 +17,6 @@ import java.util.Map;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.jface.action.Action;
-import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -88,12 +86,13 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 	private static final String OFF = "off"; //$NON-NLS-1$
 	
 	private CamelEditor parentEditor;
+	private RestConfigUtil util = new RestConfigUtil();
+	private FormToolkit toolkit;
+	private ImageRegistry mImageRegistry;
+	private RestEditorColorManager colorManager = new RestEditorColorManager();
+	
 	private Composite parent;
 	private ScrolledForm form;
-	private FormToolkit toolkit;
-	private ImageRegistry mImageRegistry;	
-	private ListenerList<ISelectionChangedListener> listeners = new ListenerList<>();
-	private Object selection;
 	private Control selectedControl;
 	private Combo componentCombo;
 	private Text contextPathText;
@@ -102,20 +101,19 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 	private Text hostText;
 	private Composite restOpsSection;
 	private ListViewer restList;
-	private RestEditorColorManager colorManager = new RestEditorColorManager();
+	
 	private Map<String, Eip> restModel;
+	private RestConfigurationElement rce;
+
 	private CamelContextElement ctx;
-	private RestConfigurationElement rce = null;
+	private ListenerList<ISelectionChangedListener> listeners = new ListenerList<>();
+	private Object selection;
+	
 	private AddRestConfigurationAction addRestConfigAction;
-	private RestConfigUtil util = new RestConfigUtil();
 	private DeleteRestConfigurationAction deleteRestConfigAction;
-
 	private AddRestElementAction addRestElementAction;
-
 	private DeleteRestElementAction deleteRestElementAction;
-
 	private AddRestOperationAction addRestOperationAction;
-
 	private DeleteRestOperationAction deleteRestOperationAction;
 	
 	/**
@@ -183,13 +181,9 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 	}
 
 	protected CamelContextElement getCamelContext(CamelFile designEditorModel) {
-		if (designEditorModel != null) {
-			designEditorModel.addModelListener(this);
-			
-			if (designEditorModel.getRouteContainer() instanceof CamelContextElement) {
-				return  (CamelContextElement)designEditorModel.getRouteContainer();
-			}		
-		}
+		if (designEditorModel.getRouteContainer() instanceof CamelContextElement) {
+			return  (CamelContextElement)designEditorModel.getRouteContainer();
+		}		
 		return null;
 	}
 
@@ -204,12 +198,20 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 
 	@Override
 	public void modelChanged() {
-		ctx = getCamelContext(parentEditor.getDesignEditor().getModel());
+		Display.getDefault().asyncExec( () -> {
+			if (RestConfigEditor.this.parentEditor != null
+					&& RestConfigEditor.this.equals(RestConfigEditor.this.parentEditor.getActiveEditor())) {
+				reload();
+				parentEditor.setDirtyFlag(true);
+			}
+		});
 	}
 
 	@Override
 	public void setFocus() {
-		// empty
+		if (componentCombo != null && !componentCombo.isDisposed()) {
+			componentCombo.setFocus();
+		}
 	}
 
 	private void createContents() {
@@ -285,12 +287,6 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 			}
 		}
 		return null;
-	}
-
-	class PushAction extends Action {
-		public PushAction ( ) {
-			super(null, IAction.AS_PUSH_BUTTON);
-		}
 	}
 
 	private void getImages() {
@@ -374,10 +370,10 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 				RestElement acme = (RestElement) event.getStructuredSelection().getFirstElement();
 				selection = acme;
 				setSelection(new StructuredSelection(acme));
-				deleteRestElementAction.setEnabled(
-						!ctx.getRestElements().isEmpty() && !restList.getStructuredSelection().isEmpty());
-
-				Iterator<AbstractCamelModelElement> iter = acme.getRestOperations().values().iterator();
+				deleteRestElementAction.setEnabled(!ctx.getRestElements().isEmpty() && !restList.getStructuredSelection().isEmpty());
+				addRestOperationAction.setEnabled(!ctx.getRestElements().isEmpty() && !restList.getStructuredSelection().isEmpty());
+				
+				Iterator<AbstractCamelModelElement> iter = acme.getChildElements().iterator();
 				while (iter.hasNext()) {
 					RestVerbElement rve = (RestVerbElement) iter.next();
 					Element elChild = (Element) rve.getXmlNode();
@@ -612,11 +608,8 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 			clearUI();
 		}
 		addRestElementAction.setEnabled(!ctx.getRestConfigurations().isEmpty());
-		deleteRestElementAction.setEnabled(
-				!ctx.getRestElements().isEmpty() && !restList.getStructuredSelection().isEmpty());
-		
-		addRestOperationAction.setEnabled(
-				!ctx.getRestElements().isEmpty() && !restList.getStructuredSelection().isEmpty());
+		deleteRestElementAction.setEnabled(!ctx.getRestElements().isEmpty() && !restList.getStructuredSelection().isEmpty());
+		addRestOperationAction.setEnabled(!ctx.getRestElements().isEmpty() && !restList.getStructuredSelection().isEmpty());
 		deleteRestOperationAction.setEnabled(selection instanceof RestVerbElement);
 	}	
 	
@@ -653,11 +646,13 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 		AbstractCamelModelElement acme = ctx.getRestElements().get(restId);
 		if (acme != null) {
 			RestElement relement = (RestElement) acme;
-			RestVerbElement selRve = (RestVerbElement) relement.getRestOperations().get(restVerbId);
-			if (selRve != null) {
-				updateRestVerbDisplayForSelection(selRve);
-				selection = selRve;
-				setSelection(new StructuredSelection(selRve));
+			for (AbstractCamelModelElement cme : relement.getChildElements()) {
+				if (cme instanceof RestVerbElement && ((RestVerbElement)cme).getId().equals(restVerbId)) {
+					RestVerbElement selRve = (RestVerbElement)cme; 
+					updateRestVerbDisplayForSelection(selRve);
+					selection = selRve;
+					setSelection(new StructuredSelection(selRve));
+				}
 			}
 		}
 	}
@@ -690,6 +685,7 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 		form.layout(true);
 		toolkit.decorateFormHeading(form.getForm());
 		reselect();
+		setFocus();
 	}
 
 	@Override
@@ -771,26 +767,22 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 	 * Public for tests and wizard.
 	 */
 	public void addRestOperation() {
-		Display.getDefault().syncExec(() -> {
-			if (!restList.getStructuredSelection().isEmpty()) {
-				AddRestOperationWizard wizard = new AddRestOperationWizard(this);
-				WizardDialog wizdlg = new WizardDialog(Display.getCurrent().getActiveShell(), wizard);
-				wizdlg.setBlockOnOpen(true);
-				wizdlg.open();
-			}
-		});
+		if (!restList.getStructuredSelection().isEmpty()) {
+			AddRestOperationWizard wizard = new AddRestOperationWizard(this);
+			WizardDialog wizdlg = new WizardDialog(Display.getCurrent().getActiveShell(), wizard);
+			wizdlg.setBlockOnOpen(true);
+			wizdlg.open();
+		}
 	}
 	
 	public void createRestOperation(String verbType, String uri, String id) {
 		RestElement re = (RestElement) restList.getStructuredSelection().getFirstElement();
-		
 		// must select which type of verb to create - defaulting to GET for now
-		RestVerbElement newrve = 
-				util.createRestVerbElementNode(ctx.getCamelFile(), verbType);
+		RestVerbElement newrve = util.createRestVerbElementNode(ctx.getCamelFile(), re, verbType);
 		newrve.initialize();
 		newrve.setId(id);
 		newrve.setParameter(RestVerbElementEIP.PROP_URI, uri);
-		re.addRestOperation(newrve);
+		re.addChildElement(newrve);
 		reload();
 		selectRestElement(re);
 		selectRestVerbElement(newrve);
@@ -800,83 +792,74 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 	 * Public for tests.
 	 */
 	public void addRestElement() {
-		Display.getDefault().syncExec(() -> {
-			RestElement newre = util.createRestElementNode(ctx.getCamelFile());
-			newre.initialize();
-			ctx.addRestElement(newre);
-			reload();
-			selectRestElement(newre);
-		});
+		RestElement newre = util.createRestElementNode(ctx.getCamelFile());
+		newre.initialize();
+		ctx.addRestElement(newre);
+		reload();
+		selectRestElement(newre);
 	}
 
 	/**
 	 * Public for tests.
 	 */
 	public void addRestConfigurationElement() {
-		Display.getDefault().syncExec(() -> {
-			RestConfigurationElement newrce = util.createRestConfigurationNode(ctx.getCamelFile());
-			newrce.initialize();
-			newrce.setHost("localhost"); //$NON-NLS-1$
-			newrce.setBindingMode(OFF);
-			if (ctx.getRestConfigurations().isEmpty()) {
-				ctx.addRestConfiguration(newrce);
-			}
-			reload();
-		});
+		RestConfigurationElement newrce = util.createRestConfigurationNode(ctx.getCamelFile());
+		newrce.initialize();
+		newrce.setHost("localhost"); //$NON-NLS-1$
+		newrce.setBindingMode(OFF);
+		if (ctx.getRestConfigurations().isEmpty()) {
+			ctx.addRestConfiguration(newrce);
+		}
+		reload();
 	}
 	
 	/**
 	 * Public for tests.
 	 */
 	public void removeRestConfigurationElement() {
-		Display.getDefault().syncExec(() -> {
-			// delete everything
-			if (!ctx.getRestConfigurations().isEmpty()) {
-				ctx.removeRestConfiguration(rce);
-				ctx.clearRestConfigurations();
+		// delete everything
+		if (!ctx.getRestConfigurations().isEmpty()) {
+			ctx.removeRestConfiguration(rce);
+			ctx.clearRestConfigurations();
+		}
+		if (!ctx.getRestElements().isEmpty()) {
+			ArrayList<AbstractCamelModelElement> toDelete = new ArrayList<>();
+			Iterator<AbstractCamelModelElement> iter = ctx.getRestElements().values().iterator();
+			while (iter.hasNext()) {
+				toDelete.add(iter.next());
 			}
-			if (!ctx.getRestElements().isEmpty()) {
-				ArrayList<AbstractCamelModelElement> toDelete = new ArrayList<>();
-				Iterator<AbstractCamelModelElement> iter = ctx.getRestElements().values().iterator();
-				while (iter.hasNext()) {
-					toDelete.add(iter.next());
-				}
-				for (AbstractCamelModelElement cme : toDelete) {
-					ctx.removeRestElement(cme);
-				}
-				ctx.clearRestElements();
+			for (AbstractCamelModelElement cme : toDelete) {
+				ctx.removeRestElement(cme);
 			}
-			reload();
-		});
+			ctx.clearRestElements();
+		}
+		reload();
 	}
 
 	/**
 	 * Public for tests.
 	 */
 	public void removeRestElement() {
-		Display.getDefault().syncExec(() -> {
-			// delete selected rest element
-			if (!restList.getStructuredSelection().isEmpty()) {
-				RestElement re = (RestElement) restList.getStructuredSelection().getFirstElement();
-				ctx.removeRestElement(re);
-			}
-			reload();
-		});
+		// delete selected rest element
+		if (!restList.getStructuredSelection().isEmpty()) {
+			RestElement re = (RestElement) restList.getStructuredSelection().getFirstElement();
+			ctx.removeRestElement(re);
+		}
+		reload();
 	}
 
 	/**
 	 * Public for tests.
 	 */
 	public void removeRestOperation() {
-		Display.getDefault().syncExec(() -> {
-			// delete selected rest operation
-			if (selection instanceof RestVerbElement) {
-				RestVerbElement rve = (RestVerbElement)selection;
-				RestElement re = (RestElement) rve.getParent();
-				re.removeRestOperation(rve);
-				setSelection(StructuredSelection.EMPTY);
-				reload();
-			}
-		});
+		// delete selected rest operation
+		if (selection instanceof RestVerbElement) {
+			RestVerbElement rve = (RestVerbElement)selection;
+			RestElement re = (RestElement) rve.getParent();
+			re.removeChildElement(rve);
+			selection = null;
+			setSelection(StructuredSelection.EMPTY);
+			reload();
+		}
 	}
 }

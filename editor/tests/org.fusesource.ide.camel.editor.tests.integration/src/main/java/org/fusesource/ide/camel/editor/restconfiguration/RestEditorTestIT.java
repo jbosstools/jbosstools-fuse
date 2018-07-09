@@ -17,6 +17,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorPart;
 import org.fusesource.ide.camel.editor.CamelDesignEditor;
 import org.fusesource.ide.camel.editor.CamelEditor;
+import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.camel.model.service.core.model.RestConfigurationElement;
@@ -94,7 +95,7 @@ public class RestEditorTestIT extends AbstractCamelEditorIT {
 		assertThat(secondSelection.getId()).isEqualTo(initialSelection.getId());
 		
 		// now try with operations
-		restEditor.selectRestVerbElement((RestVerbElement) secondSelection.getRestOperations().values().toArray()[0]);
+		restEditor.selectRestVerbElement((RestVerbElement) secondSelection.getChildElements().toArray()[0]);
 		StructuredSelection opSsel1 = (StructuredSelection) restEditor.getSelection();
 		assertThat(opSsel1.isEmpty()).isFalse();
 		assertThat(opSsel1.getFirstElement()).isInstanceOf(RestVerbElement.class);
@@ -285,10 +286,10 @@ public class RestEditorTestIT extends AbstractCamelEditorIT {
 		assertThat(context.getRestElements().isEmpty()).isNotEqualTo(true);
 		RestElement re = 
 				(RestElement) context.getRestElements().values().iterator().next();
-		assertThat(re.getRestOperations().isEmpty()).isNotEqualTo(true);
+		assertThat(re.getChildElements().isEmpty()).isNotEqualTo(true);
 		
 		RestVerbElement restVerbElement = 
-				(RestVerbElement) re.getRestOperations().values().iterator().next();
+				(RestVerbElement) re.getChildElements().iterator().next();
 		assertThat(restVerbElement.getId()).isEqualTo("myTestID");
 		assertThat(restVerbElement.getParameter(RestVerbElementEIP.PROP_URI)).isEqualTo("test");
 		assertThat(restVerbElement.getTagNameWithoutPrefix()).isEqualTo(RestVerbElement.GET_VERB);
@@ -314,13 +315,15 @@ public class RestEditorTestIT extends AbstractCamelEditorIT {
 		StructuredSelection ssel = (StructuredSelection) restEditor.getSelection();
 		RestElement restElement = (RestElement) ssel.getFirstElement();
 		RestVerbElement restVerbElement = 
-				(RestVerbElement) restElement.getRestOperations().values().iterator().next();
+				(RestVerbElement) restElement.getChildElements().iterator().next();
 		restEditor.selectRestVerbElement(restVerbElement);
 		
 		//test to make sure it's removed (there are two REST elements in the sample)
 		restEditor.removeRestOperation();
 		readAndDispatch(20);
 
-		assertThat(restElement.getRestOperations().get(restVerbElement.getId())).isNull();
+		for (AbstractCamelModelElement cme : restElement.getChildElements()) {
+			assertThat(cme.getId()).isNotEqualTo(restVerbElement.getId());
+		}
 	}
 }

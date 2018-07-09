@@ -366,7 +366,8 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 	public void doSave(IProgressMonitor monitor) {
 		try {
 			if (getActivePage() == DESIGN_PAGE_INDEX || 
-				getActivePage() == GLOBAL_CONF_INDEX) {
+				getActivePage() == GLOBAL_CONF_INDEX ||
+				getActivePage() == REST_CONF_INDEX) {
 				// we need to generate the source from our model
 				updateSourceFromModel(false);
 				this.sourceEditor.doSave(monitor);
@@ -388,7 +389,8 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 	public void doSaveAs() {
 		try {
 			if (getActivePage() == DESIGN_PAGE_INDEX || 
-				getActivePage() == GLOBAL_CONF_INDEX) {
+				getActivePage() == GLOBAL_CONF_INDEX ||
+				getActivePage() == REST_CONF_INDEX) {
 				// we need to generate the source from our model
 				updateSourceFromModel(false); 
 				this.sourceEditor.doSaveAs();

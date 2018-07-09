@@ -10,9 +10,6 @@
  ******************************************************************************/ 
 package org.fusesource.ide.camel.model.service.core.model;
 
-import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
-import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
-import org.fusesource.ide.camel.model.service.core.internal.CamelModelServiceCoreActivator;
 import org.fusesource.ide.camel.model.service.core.model.eips.RestConfigurationElementEIP;
 import org.w3c.dom.Node;
 
@@ -40,45 +37,6 @@ public class RestConfigurationElement extends AbstractRestCamelModelElement {
 		// due to the missing EIP as underlying meta model we have to tell AbstractCamelModelElement what
 		// kind the attribute is ... so if we got other than ATTRIBUTE please adapt this methods logic!
 		return NODE_KIND_ATTRIBUTE;
-	}
-	
-	/* (non-Javadoc)
-	 * @see org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement#parseAttributes()
-	 */
-	@Override
-	protected void parseAttributes() {
-		Eip eip = getUnderlyingMetaModelObject();
-		if (eip != null) {
-			for (Parameter param : getUnderlyingMetaModelObject().getParameters()) {
-				initAttribute(param.getName());
-			}
-		} else {
-			CamelModelServiceCoreActivator.pluginLog().logWarning("ParseAttributes: Missing EIP for REST Configuration. Ignored.");
-		}
-	}
-	
-	private void initAttribute(String paramName) {
-		String value = parseAttribute(paramName);
-		if (value != null) {
-			setParameter(paramName, value);
-		}
-	}	
-	
-	private String parseAttribute(String name) {
-		Node tmp = getXmlNode().getAttributes().getNamedItem(name);
-		if (tmp != null) {
-			return tmp.getNodeValue();
-		}
-		return null;
-	}
-	
-	/* (non-Javadoc)
-	 * @see org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement#shouldParseNode()
-	 */
-	@Override
-	protected boolean shouldParseNode() {
-		// we do want to parse REST contents
-		return true;
 	}
 	
 	/**

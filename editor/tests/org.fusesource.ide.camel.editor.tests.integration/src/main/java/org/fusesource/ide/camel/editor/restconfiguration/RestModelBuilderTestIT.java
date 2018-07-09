@@ -52,10 +52,10 @@ public class RestModelBuilderTestIT {
 		assertThat(rElement).isNotNull();
 		String pathAttrValue = rElement.getParameter("path").toString();
 		assertThat(pathAttrValue).contains("/say");
-		assertThat(rElement.getRestOperations()).isNotEmpty();
+		assertThat(rElement.getChildElements()).isNotEmpty();
 
 		RestVerbElement rvElement = 
-				(RestVerbElement) rElement.getRestOperations().values().iterator().next();
+				(RestVerbElement) rElement.getChildElements().iterator().next();
 		assertThat(rvElement).isNotNull();
 		String uriAttrValue = rvElement.getParameter("uri").toString();
 		assertThat(uriAttrValue).contains("hello/{name}");

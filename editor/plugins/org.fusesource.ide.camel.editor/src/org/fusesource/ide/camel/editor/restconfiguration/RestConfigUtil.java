@@ -142,34 +142,29 @@ public class RestConfigUtil {
 
 	public RestElement createRestElementNode(final CamelFile camelFile) {
 		// get NS prefix from parent document, not route container node
-		final String prefixNS = 
-				getCamelNSPrefix(camelFile.getRouteContainer().getXmlNode().getOwnerDocument().getDocumentElement());
-		Node newXMLNode = 
-				camelFile.createElement(RestElement.REST_TAG, prefixNS);
+		final String prefixNS = getCamelNSPrefix(camelFile.getRouteContainer().getXmlNode().getOwnerDocument().getDocumentElement());
+		Node newXMLNode = camelFile.createElement(RestElement.REST_TAG, prefixNS);
 		String id = computeId(newXMLNode);
-		RestElement restElement = new RestElement(camelFile, newXMLNode);
+		RestElement restElement = new RestElement(camelFile.getRouteContainer(), newXMLNode);
 		restElement.setId(id);
 		return restElement;
 	}
 
-	public RestVerbElement createRestVerbElementNode(final CamelFile camelFile, final String verb) {
+	public RestVerbElement createRestVerbElementNode(final CamelFile camelFile, RestElement restElement, final String verb) {
 		// get NS prefix from parent document, not route container node
-		final String prefixNS = 
-				getCamelNSPrefix(camelFile.getRouteContainer().getXmlNode().getOwnerDocument().getDocumentElement());
+		final String prefixNS = getCamelNSPrefix(camelFile.getRouteContainer().getXmlNode().getOwnerDocument().getDocumentElement());
 		
 		// create operation node
-		Node newXMLNode = 
-				camelFile.createElement(verb, prefixNS);
+		Node newXMLNode = camelFile.createElement(verb, prefixNS);
 		
 		// create inner TO node
-		Node newToNode = 
-				camelFile.createElement(AbstractCamelModelElement.ENDPOINT_TYPE_TO, prefixNS);
+		Node newToNode = camelFile.createElement(AbstractCamelModelElement.ENDPOINT_TYPE_TO, prefixNS);
 		newXMLNode.appendChild(newToNode);
 		
 		// ensure that we have an ID from the start
 		String id = computeId(newXMLNode);
 		
-		RestVerbElement restVerbElement = new RestVerbElement(camelFile, newXMLNode);
+		RestVerbElement restVerbElement = new RestVerbElement(restElement, newXMLNode);
 		restVerbElement.setId(id);
 		return restVerbElement;
 	}
