@@ -32,8 +32,8 @@ import org.fusesource.ide.camel.editor.properties.bean.PropertyRequiredValidator
 import org.fusesource.ide.camel.editor.properties.creators.AbstractParameterPropertyUICreator;
 import org.fusesource.ide.camel.editor.properties.creators.AbstractTextFieldParameterPropertyUICreator;
 import org.fusesource.ide.camel.editor.properties.creators.TextParameterPropertyUICreator;
-import org.fusesource.ide.camel.editor.properties.creators.advanced.BooleanParameterPropertyUICreatorForAdvanced;
-import org.fusesource.ide.camel.editor.properties.creators.advanced.UnsupportedParameterPropertyUICreatorForAdvanced;
+import org.fusesource.ide.camel.editor.properties.creators.details.BooleanParameterPropertyUICreatorForDetails;
+import org.fusesource.ide.camel.editor.properties.creators.details.UnsupportedParameterPropertyUICreatorForDetails;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.fusesource.ide.camel.model.service.core.model.eips.RestElementEIP;
 import org.fusesource.ide.camel.model.service.core.model.eips.RestVerbElementEIP;
@@ -88,9 +88,6 @@ public class RestVerbElementPropertiesSection extends FusePropertySection {
 			IObservableValue<?> targetValue = (IObservableValue<?>) creator.getUiObservable();
 			modelValueMap.put(p.getName(), modelValue);
 			targetValueMap.put(p.getName(), targetValue);
-			
-			// read only for now
-			creator.getControl().setEnabled(false);
 			return creator;
 		}
 		throw new RuntimeException(
@@ -102,8 +99,7 @@ public class RestVerbElementPropertiesSection extends FusePropertySection {
 
 		// define the properties we're handling here
 		Parameter idParam = createParameter(RestElementEIP.PROP_ID, String.class.getName());
-		//TODO Enable this once the properties are writable 
-		//idParam.setRequired("true"); //$NON-NLS-1$
+		idParam.setRequired("true"); //$NON-NLS-1$
 		parameterList.put(RestVerbElementEIP.PROP_ID, idParam);
 		
 		parameterList.put(RestVerbElementEIP.PROP_URI,
@@ -163,12 +159,12 @@ public class RestVerbElementPropertiesSection extends FusePropertySection {
 			txtFieldCreator.create();
 			return txtFieldCreator;
 		} else if ("java.lang.Boolean".equals(p.getJavaType())) { //$NON-NLS-1$
-			AbstractParameterPropertyUICreator creator = new BooleanParameterPropertyUICreatorForAdvanced(dbc, modelMap, eip, selectedEP, p, page, getWidgetFactory());
+			AbstractParameterPropertyUICreator creator = new BooleanParameterPropertyUICreatorForDetails(dbc, modelMap, eip, selectedEP, p, page, getWidgetFactory());
 			creator.create();
 			return creator;
 		} else if (CamelComponentUtils.isUnsupportedProperty(p)) { 
 			// handle unsupported props
-			AbstractParameterPropertyUICreator creator = new UnsupportedParameterPropertyUICreatorForAdvanced(
+			AbstractParameterPropertyUICreator creator = new UnsupportedParameterPropertyUICreatorForDetails(
 					dbc, modelMap, eip, selectedEP, p, page,getWidgetFactory());
 			creator.create();
 			return creator;
@@ -203,6 +199,5 @@ public class RestVerbElementPropertiesSection extends FusePropertySection {
 		for (Parameter p : props.values()) {
 			handleField(p, page);
 		}
-		
 	}
 }

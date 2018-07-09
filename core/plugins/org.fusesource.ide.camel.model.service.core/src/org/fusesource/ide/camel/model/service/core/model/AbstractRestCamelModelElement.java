@@ -38,16 +38,6 @@ public abstract class AbstractRestCamelModelElement extends AbstractCamelModelEl
 		this(parent, underlyingNode, false);
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement#shouldParseNode()
-	 */
-	@Override
-	protected boolean shouldParseNode() {
-		// we don't want to parse global config nodes and just reuse the xml node 
-		// directly - see FUSETOOLS-1884 (except for Beans and REST elements)
-		return false;
-	}
-
 	private String computeId(Node child) {
 		Node idNode = child.getAttributes().getNamedItem("id");
 		if (idNode != null){

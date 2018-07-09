@@ -14,6 +14,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.nio.charset.StandardCharsets;
 
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -101,6 +102,8 @@ public class CamelIOHandler {
 	 * @return the camel file object representation or null on errors
 	 */
 	public CamelFile loadCamelModel(File xmlFile, IProgressMonitor monitor) {
+		SubMonitor subMonitor = SubMonitor.convert(monitor, 2);
+		
 		if (xmlFile == null || !xmlFile.isFile() || !xmlFile.exists() || xmlFile.length() == 0) {
 			return null;
 		}
@@ -109,14 +112,14 @@ public class CamelIOHandler {
 		try {
 			DocumentBuilder docBuilder = createDocumentBuilder();
 			document = docBuilder.parse(xmlFile);
-
-			IFile documentLocation = ResourcesPlugin.getWorkspace().getRoot()
-					.getFileForLocation(new Path(xmlFile.getCanonicalPath()));
-			cf = readDocumentToModel(document, documentLocation);
+			subMonitor.setWorkRemaining(1);
+			IFile documentLocation = ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(new Path(xmlFile.getCanonicalPath()));
+			cf = readDocumentToModel(document, documentLocation, subMonitor.split(1));
 		} catch (Exception ex) {
 			CamelModelServiceCoreActivator.pluginLog()
 					.logError("Error loading Camel XML file from " + xmlFile.getPath(), ex);
 		}
+		subMonitor.setWorkRemaining(0);
 
 		return cf;
 	}
@@ -129,14 +132,17 @@ public class CamelIOHandler {
 	 * @return the camel file object representation or null on errors
 	 */
 	public CamelFile loadCamelModel(String text, IProgressMonitor monitor, CamelFile cf) {
+		SubMonitor subMon = SubMonitor.convert(monitor, 2);
 		CamelFile reloadedModel = null;
 		try {
 			DocumentBuilder db = createDocumentBuilder();
 			document = db.parse(new ByteArrayInputStream(text.getBytes(StandardCharsets.UTF_8)));
-			reloadedModel = readDocumentToModel(document, cf.getResource());
+			subMon.setWorkRemaining(1);
+			reloadedModel = readDocumentToModel(document, cf.getResource(), subMon.split(1));
 		} catch (Exception ex) {
 			CamelModelServiceCoreActivator.pluginLog().logError("Error loading Camel XML from string", ex);
 		}
+		subMon.setWorkRemaining(0);
 
 		return reloadedModel;
 	}
@@ -146,13 +152,16 @@ public class CamelIOHandler {
 	 * 
 	 * @param document
 	 * @param res
+	 * @param monitor
 	 * @return
 	 */
-	protected CamelFile readDocumentToModel(Document document, IResource res) {
+	protected CamelFile readDocumentToModel(Document document, IResource res, IProgressMonitor monitor) {
+		SubMonitor subMon = SubMonitor.convert(monitor, 1);
 		CamelFile cf = new CamelFile(null);
 		cf.setResource(res);
 		cf.setDocument(document);
 		cf.initialize();
+		subMon.setWorkRemaining(0);
 		return cf;
 	}
 
@@ -171,6 +180,7 @@ public class CamelIOHandler {
 		try {
 			// now the real save logic
 			TransformerFactory tf = TransformerFactory.newInstance();
+			tf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
 			tf.setAttribute("indent-number", INDENTION_VALUE);
 
 			Transformer transformer = tf.newTransformer();
@@ -183,8 +193,8 @@ public class CamelIOHandler {
 			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
 			transformer.setOutputProperty(OutputKeys.METHOD, "xml");
 			transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
-			transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount",
-					Integer.toString(INDENTION_VALUE));
+			transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", Integer.toString(INDENTION_VALUE));
+			
 			transformer.transform(input, output);
 		} catch (Exception ex) {
 			CamelModelServiceCoreActivator.pluginLog()
@@ -200,8 +210,7 @@ public class CamelIOHandler {
 	 * @param monitor
 	 */
 	public void saveCamelModel(CamelFile camelFile, IResource res, IProgressMonitor monitor) {
-		File outputFile = getFileFromResource(
-				(res != null && res != camelFile.getResource()) ? res : camelFile.getResource());
+		File outputFile = getFileFromResource((res != null && res != camelFile.getResource()) ? res : camelFile.getResource());
 		saveCamelModel(camelFile, outputFile, monitor);
 	}
 
@@ -246,8 +255,7 @@ public class CamelIOHandler {
 		try {
 			return dbf.newDocumentBuilder();
 		} catch (ParserConfigurationException e) {
-			CamelModelServiceCoreActivator.pluginLog()
-					.logError("Unable to create a document builder for loading the camel file.", e);
+			CamelModelServiceCoreActivator.pluginLog().logError("Unable to create a document builder for loading the camel file.", e);
 		}
 		return null;
 	}

@@ -23,6 +23,7 @@ import org.eclipse.reddeer.junit.runner.RedDeerSuite;
 import org.eclipse.reddeer.requirements.openperspective.OpenPerspectiveRequirement.OpenPerspective;
 import org.eclipse.reddeer.swt.condition.ControlIsEnabled;
 import org.eclipse.reddeer.swt.impl.button.FinishButton;
+import org.jboss.tools.fuse.reddeer.LogGrapper;
 import org.jboss.tools.fuse.reddeer.perspectives.FuseIntegrationPerspective;
 import org.jboss.tools.fuse.reddeer.utils.LogChecker;
 import org.jboss.tools.fuse.reddeer.wizard.NewFuseIgniteExtensionProjectFirstPage;
@@ -151,6 +152,7 @@ public class NewFuseIgniteExtWizardTest {
 		assertTrue(wizard.isFinishEnabled());
 		assertTrue(wizard.isBackEnabled());
 		assertNotEquals(MessageTypeEnum.ERROR, wizard.getMessageType());
+		assertTrue("There are some errors in Error Log", LogGrapper.getPluginErrors("fuse").size() == 0);
 		LogChecker.assertNoFuseError();
 	}
 
