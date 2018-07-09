@@ -415,6 +415,7 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 	}
 	
 	private void refreshProject(IProgressMonitor monitor) {
+		if (monitor.isCanceled()) return;
 		IProject prj = this.editorInput.getCamelContextFile().getProject();
 		try {
 			prj.refreshLocal(IProject.DEPTH_INFINITE, monitor);
