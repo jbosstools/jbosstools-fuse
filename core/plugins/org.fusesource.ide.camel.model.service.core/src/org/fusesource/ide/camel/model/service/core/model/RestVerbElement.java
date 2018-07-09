@@ -52,6 +52,24 @@ public class RestVerbElement extends AbstractRestCamelModelElement {
 		return NODE_KIND_ATTRIBUTE;
 	}
 	
+	@Override
+	public void setParameter(String name, Object value) {
+		if (RestVerbElementEIP.PROP_TO_URI.equals(name)) {
+			setToUri((String) value);
+		} else {
+			setParameter(name, value, false);
+		}
+	}
+	
+	@Override
+	public Object getParameter(String name) {
+		if (RestVerbElementEIP.PROP_TO_URI.equals(name)) {
+			return getToUri();
+		} else {
+			return super.getParameter(name);
+		}
+	}
+	
 	public String getToUri() {
 		NodeList list = getXmlNode().getChildNodes();
 		if (list != null && list.getLength() > 0) {
