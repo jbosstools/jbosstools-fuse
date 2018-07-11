@@ -440,7 +440,7 @@ public class Wsdl2RestWizard extends Wizard implements INewWizard {
 				}
 			} else {
 				io.saveCamelModel(cf, f, subMon.split(1));
-				openCamelContextFile(cf.getResource(), monitor);
+				openCamelContextFile(cf.getResource(), subMon.split(1));
 			}
 		} catch (PartInitException e) {
 			Wsdl2RestUIActivator.pluginLog().logError(e);
