@@ -92,6 +92,10 @@ public class CamelProject {
 		getProject().getProjectItem("Camel Contexts").getTreeItem().getItems().get(0).select();
 	}
 
+	public void openFirstCamelContext() {
+		getProject().getProjectItem("Camel Contexts").getTreeItem().getItems().get(0).doubleClick();
+	}
+
 	public void runCamelContext() {
 
 		getProject().getProjectItem("Camel Contexts").getChildren().get(0).select();

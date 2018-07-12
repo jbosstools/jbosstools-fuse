@@ -11,7 +11,7 @@
 package org.jboss.tools.fuse.ui.bot.tests;
 
 import static org.eclipse.reddeer.requirements.server.ServerRequirementState.PRESENT;
-import static org.junit.Assert.assertTrue;
+import static org.hamcrest.CoreMatchers.equalTo;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -19,6 +19,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.reddeer.common.wait.TimePeriod;
+import org.eclipse.reddeer.eclipse.core.resources.Resource;
 import org.eclipse.reddeer.eclipse.m2e.core.ui.wizard.MavenImportWizard;
 import org.eclipse.reddeer.eclipse.ui.navigator.resources.ProjectExplorer;
 import org.eclipse.reddeer.eclipse.ui.views.log.LogView;
@@ -29,6 +30,7 @@ import org.eclipse.reddeer.junit.requirement.inject.InjectRequirement;
 import org.eclipse.reddeer.junit.runner.RedDeerSuite;
 import org.eclipse.reddeer.requirements.cleanworkspace.CleanWorkspaceRequirement.CleanWorkspace;
 import org.eclipse.reddeer.requirements.openperspective.OpenPerspectiveRequirement.OpenPerspective;
+import org.eclipse.reddeer.workbench.impl.editor.DefaultEditor;
 import org.eclipse.reddeer.workbench.impl.shell.WorkbenchShell;
 import org.eclipse.reddeer.workbench.ui.dialogs.WorkbenchPreferenceDialog;
 import org.jboss.tools.fuse.reddeer.perspectives.FuseIntegrationPerspective;
@@ -42,7 +44,9 @@ import org.jboss.tools.fuse.reddeer.utils.ProjectFactory;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ErrorCollector;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized.Parameters;
 import org.junit.runners.Parameterized.UseParametersRunnerFactory;
@@ -58,6 +62,9 @@ import org.junit.runners.Parameterized.UseParametersRunnerFactory;
 @OpenPerspective(FuseIntegrationPerspective.class)
 @UseParametersRunnerFactory(ParameterizedRequirementsRunnerFactory.class)
 public class QuickStartsTest {
+
+	@Rule
+	public ErrorCollector collector = new ErrorCollector();
 
 	@InjectRequirement
 	private static FuseRequirement serverRequirement;
@@ -164,8 +171,20 @@ public class QuickStartsTest {
 	public void testQuickStart() {
 
 		MavenImportWizard.importProject(quickstart, TimePeriod.getCustom(1000));
-		new CamelProject(new ProjectExplorer().getProjects().get(0).getName()).update();
+		String projectName = new ProjectExplorer().getProjects().get(0).getName();
+		new CamelProject(projectName).update();
 		LogChecker.assertNoFuseError();
-		assertTrue("Problems view contains some errors", new ProblemsView().getProblems(ProblemType.ERROR).isEmpty());
+		collector.checkThat("Problems view contains some errors", new ProblemsView().getProblems(ProblemType.ERROR).isEmpty(), equalTo(true));
+		checkCamelEditor(projectName);
+	}
+
+	private void checkCamelEditor(String projectName) {
+		for (Resource res : new ProjectExplorer().getProject(projectName).getChildren()) {
+			if (res.getText().equals("Camel Contexts")) {
+				new CamelProject(projectName).openFirstCamelContext();
+				collector.checkThat("Camel Editor is dirty", new DefaultEditor().isDirty(), equalTo(false));
+				break;
+			}
+		}
 	}
 }
