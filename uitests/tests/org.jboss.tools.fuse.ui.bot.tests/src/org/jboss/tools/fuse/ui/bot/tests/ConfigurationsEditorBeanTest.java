@@ -268,6 +268,43 @@ public class ConfigurationsEditorBeanTest {
 		assertXPath(false, "/bean[@id='newBeanWithFactoryBean']/@class");
 		assertXPath("singleton", "/bean[@id='newBeanWithFactoryBean']/@scope");
 	}
+	
+	/**
+	 * <p>
+	 * Tests canceling out of editing a global bean
+	 * </p>
+	 * <b>Steps:</b>
+	 * <ul>
+	 * <li>Add a global bean (go trough the whole wizard)</li>
+	 * <li>Select the created global bean and click 'Edit'</li>
+	 * <li>Click on 'Add'</li>
+	 * <li>Provide values for the fields and click 'OK'</li>
+	 * <li>Click 'Cancel'</li>
+	 * </ul>
+	 * For more details please see <a href="https://issues.jboss.org/browse/FUSETOOLS-2749">FUSETOOLS-2749</a>
+	 */
+	@Test
+	public void testCancelingEditingGlobalBean() {
+		new CamelProject(projectName).openCamelContext(projectType.getCamelContext());
+		editor = new ConfigurationsEditor();
+		AddBeanWizard beanWizard = editor.addBean();
+		beanWizard.setId("newBeanCancelingEditing");
+		FilteredSelectionDialog dialog = beanWizard.browseClass();
+		dialog.setText("HelloBean");
+		dialog.waitForItems();
+		dialog.ok();
+		beanWizard.finish();
+		
+		EditBeanWizard edit = editor.editBean("newBeanCancelingEditing");
+		BeanPropertyDialog beanProperties = edit.addProperty();
+		beanProperties.setName("testProperty");
+		beanProperties.setValue("propertyValue");
+		beanProperties.ok();
+		edit.cancel();
+		editor.close(true);
+		
+		assertXPath(false, "/bean[@id='newBeanCancelingEditing']/property[@name='testProperty']");
+	}
 
 	/**
 	 * <p>
