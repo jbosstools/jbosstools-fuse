@@ -10,6 +10,9 @@
  ******************************************************************************/
 package org.jboss.tools.fuse.reddeer.editor;
 
+import java.util.List;
+
+import org.eclipse.reddeer.jface.text.contentassist.ContentAssistant;
 import org.eclipse.reddeer.swt.impl.styledtext.DefaultStyledText;
 import org.eclipse.reddeer.workbench.impl.editor.DefaultEditor;
 
@@ -26,10 +29,9 @@ public class SourceEditor extends DefaultEditor {
 	 * Sets position of the cursor to the specified position
 	 * 
 	 * @param position
-	 *            position in the editor
+	 *                     position in the editor
 	 */
 	public void setCursorPosition(int position) {
-
 		editor.selectPosition(position);
 	}
 
@@ -37,10 +39,9 @@ public class SourceEditor extends DefaultEditor {
 	 * Inserts given text on the cursor position
 	 * 
 	 * @param text
-	 *            text to be inserted
+	 *                 text to be inserted
 	 */
 	public void insertText(String text) {
-
 		editor.insertText(text);
 	}
 
@@ -50,7 +51,6 @@ public class SourceEditor extends DefaultEditor {
 	 * @return text in the editor
 	 */
 	public String getText() {
-
 		return editor.getText();
 	}
 
@@ -60,5 +60,17 @@ public class SourceEditor extends DefaultEditor {
 
 	public void selectText(int from, int to) {
 		editor.setSelection(from, to);
+	}
+
+	/**
+	 * Opens ContentAssistant and return available code completion proposals
+	 * 
+	 * @return List<String>
+	 */
+	public List<String> getCompletionProposals() {
+		ContentAssistant assistant = openContentAssistant();
+		List<String> proposals = assistant.getProposals();
+		assistant.close();
+		return proposals;
 	}
 }

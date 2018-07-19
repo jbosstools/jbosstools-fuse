@@ -57,6 +57,11 @@ import org.jboss.tools.fuse.reddeer.component.CamelComponent;
  * @author tsedmik
  */
 public class CamelEditor extends GEFEditor {
+	
+	public static final String DESIGN_TAB = "Design";
+	public static final String SOURCE_TAB = "Source";
+	public static final String CONFIGURATIONS_TAB = "Configurations";
+	public static final String REST_TAB = "REST";
 
 	private static Logger log = Logger.getLogger(CamelEditor.class);
 
