@@ -723,7 +723,11 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 		refreshRestSection();
 		form.layout(true);
 		toolkit.decorateFormHeading(form.getForm());
-		reselect(oldSelection);
+		
+		// only try to update selection if we have one to go back to
+		if (oldSelection != null) {
+			reselect(oldSelection);
+		}
 	}
 
 	@Override
