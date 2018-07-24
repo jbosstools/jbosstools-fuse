@@ -309,8 +309,6 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 	private ToolBar createRestConfigurationToolbar(Composite parent) {
 		ToolBarManager toolBarManager = new ToolBarManager(SWT.FLAT);
 		ToolBar toolbar = toolBarManager.createControl(parent);
-		toolbar.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WHITE));
-		toolkit.adapt(toolbar);
 
 		addRestConfigAction = new AddRestConfigurationAction(this, mImageRegistry);
 		toolBarManager.add(addRestConfigAction);
@@ -325,8 +323,6 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 	private ToolBar createRestTabToolbar(Composite parent) {
 		ToolBarManager toolBarManager = new ToolBarManager(SWT.FLAT);
 		ToolBar toolbar = toolBarManager.createControl(parent);
-		toolbar.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WHITE));
-		toolkit.adapt(toolbar);
 
 		addRestElementAction = new AddRestElementAction(this, mImageRegistry);
 		toolBarManager.add(addRestElementAction);
@@ -341,8 +337,6 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 	private ToolBar createRestOperationTabToolbar(Composite parent) {
 		ToolBarManager toolBarManager = new ToolBarManager(SWT.FLAT);
 		ToolBar toolbar = toolBarManager.createControl(parent);
-		toolbar.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WHITE));
-		toolkit.adapt(toolbar);
 
 		addRestOperationAction = new AddRestOperationAction(this, mImageRegistry);
 		toolBarManager.add(addRestOperationAction);
