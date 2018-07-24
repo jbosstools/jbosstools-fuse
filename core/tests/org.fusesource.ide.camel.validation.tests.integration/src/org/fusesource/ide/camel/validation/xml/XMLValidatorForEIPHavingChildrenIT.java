@@ -36,13 +36,13 @@ public class XMLValidatorForEIPHavingChildrenIT extends AbstractXMLCamelRouteVal
                  { "routeWithEmptyMulticast", 1 },
                  { "routeWithEmptyOnCompletion", 1 },
                  { "routeWithEmptyPipeline", 1 },
-                 { "routeWithEmptyPolicy", 1 },
+                 { "routeWithEmptyPolicy", 0 },
                  { "routeWithEmptyResequence", 1 },
                  { "routeWithEmptySample", 1 },
                  { "routeWithEmptySplit", 1 },
                  { "routeWithEmptyThreads", 1 },
                  { "routeWithEmptyThrottle", 1 },
-                 { "routeWithEmptyTransacted", 1 },
+                 { "routeWithEmptyTransacted", 0 },
                  { "routeWithValidChoice", 0 },
                  { "routeWithValidContainers", 0 }
            });

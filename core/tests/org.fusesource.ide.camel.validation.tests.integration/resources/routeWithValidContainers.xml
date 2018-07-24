@@ -49,9 +49,6 @@
             <pipeline id="_pipeline1">
                 <log id="_log11" message="dummy"/>
             </pipeline>
-            <policy id="_policy1" ref="dummyForPolicy">
-                <log id="_log12" message="dummy"/>
-            </policy>
             <sample id="_sample1">
                 <log id="_log13" message="dummy"/>
             </sample>
@@ -66,9 +63,6 @@
                 <constant>dummy</constant>
                 <log id="_log16" message="dummy"/>
             </throttle>
-            <transacted id="_transacted2">
-                <log id="_log17" message="dummy"/>
-            </transacted>
             <resequence id="_resequence1">
                 <constant>dummy</constant>
                 <log id="_log18" message="dummy"/>
