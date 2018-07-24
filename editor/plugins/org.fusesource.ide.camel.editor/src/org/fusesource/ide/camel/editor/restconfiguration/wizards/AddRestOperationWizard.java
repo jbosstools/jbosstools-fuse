@@ -44,6 +44,7 @@ public class AddRestOperationWizard extends Wizard implements INewWizard {
 	public AddRestOperationWizard(RestConfigEditor editor) {
 		super();
 		this.editor = editor;
+		setWindowTitle(UIMessages.addRESTOperationWizardWindowTitle);
 	}
 	
 	/* (non-Javadoc)
