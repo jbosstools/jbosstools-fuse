@@ -41,12 +41,10 @@ public class EIPMandatoryChildValidator implements IValidator {
 			"multicast",
 			"onCompletion",
 			"pipeline",
-			"policy",
 			"sample",
 			"split",
 			"threads",
 			"throttle",
-			"transacted",
 			"resequence"));
 	
 	@Override
