@@ -407,8 +407,12 @@ public class CamelContextElement extends CamelRouteContainerElement {
 		final NodeList childNodes = getXmlNode().getChildNodes();
 		for (int i = 0; i < childNodes.getLength(); i++) {
 			Node currentNode = childNodes.item(i);
-			if (currentNode instanceof Element && !DATA_FORMATS_NODE_NAME.equals(currentNode.getLocalName())) {
-				return currentNode;
+			if (currentNode.getNodeType() == Node.ELEMENT_NODE) {
+				Element currentElement = (Element) currentNode;
+				if (!DATA_FORMATS_NODE_NAME.equals(currentElement.getTagName()) &&
+						!ENDPOINT_NODE_NAME.equals(currentElement.getTagName())) {
+					return currentNode;
+				}
 			}
 		}
 		return getFirstChild(getXmlNode());
@@ -418,8 +422,13 @@ public class CamelContextElement extends CamelRouteContainerElement {
 		final NodeList childNodes = getXmlNode().getChildNodes();
 		for (int i = 0; i < childNodes.getLength(); i++) {
 			Node currentNode = childNodes.item(i);
-			if (currentNode instanceof Element && REST_CONFIGURATION_NODE_NAME.equals(currentNode.getLocalName())) {
-				return currentNode;
+			if (currentNode.getNodeType() == Node.ELEMENT_NODE) {
+				Element currentElement = (Element) currentNode;
+				if (!DATA_FORMATS_NODE_NAME.equals(currentElement.getTagName()) &&
+						!ENDPOINT_NODE_NAME.equals(currentElement.getTagName()) &&
+						!REST_CONFIGURATION_NODE_NAME.equals(currentElement.getTagName())) {
+					return currentNode;
+				}
 			}
 		}
 		return getFirstChild(getXmlNode());
@@ -491,11 +500,11 @@ public class CamelContextElement extends CamelRouteContainerElement {
 			def.updateXMLNode();
 		}
 		if (!childExists) {
-			getXmlNode().insertBefore(def.getXmlNode(), getRestElementEntryPoint().getNextSibling());
+			getXmlNode().insertBefore(def.getXmlNode(), getRestElementEntryPoint());
 		} else {
 			// if it's already there, it's probably in the wrong place - have to move it
 			getXmlNode().removeChild(def.getXmlNode());
-			getXmlNode().insertBefore(def.getXmlNode(), getRestElementEntryPoint().getNextSibling());
+			getXmlNode().insertBefore(def.getXmlNode(), getRestElementEntryPoint());
 		}
 	}
 
