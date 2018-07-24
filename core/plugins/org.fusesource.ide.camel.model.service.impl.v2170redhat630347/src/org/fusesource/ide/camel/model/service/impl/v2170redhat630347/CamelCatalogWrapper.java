@@ -8,7 +8,7 @@
  * Contributors: 
  * Red Hat, Inc. - initial API and implementation 
  ******************************************************************************/
-package org.fusesource.ide.camel.model.service.impl.v2170redhat630343;
+package org.fusesource.ide.camel.model.service.impl.v2170redhat630347;
 
 import java.net.URISyntaxException;
 import java.util.List;
@@ -33,7 +33,7 @@ public class CamelCatalogWrapper implements ICamelCatalogWrapper {
 
 	@Override
 	public String getLoadedVersion() {
-		return "2.17.0.redhat-630343";
+		return "2.17.0.redhat-630347";
 	}
 
 	@Override

@@ -7,10 +7,10 @@
 	</classpathentry>
 	<classpathentry exported="true" kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="src" path="src/"/>
-	<classpathentry exported="true" kind="lib" path="libs/camel-blueprint-2.17.0.redhat-630343.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/camel-catalog-2.17.0.redhat-630343.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/camel-core-2.17.0.redhat-630343.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/camel-spring-2.17.0.redhat-630343.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/camel-blueprint-2.17.0.redhat-630347.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/camel-catalog-2.17.0.redhat-630347.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/camel-core-2.17.0.redhat-630347.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/camel-spring-2.17.0.redhat-630347.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/log4j-over-slf4j-1.7.22.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/slf4j-api-1.7.22.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/slf4j-simple-1.7.22.jar"/>
