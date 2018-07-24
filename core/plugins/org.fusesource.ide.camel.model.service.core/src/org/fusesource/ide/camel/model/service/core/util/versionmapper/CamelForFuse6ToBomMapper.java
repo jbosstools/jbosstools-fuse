@@ -50,6 +50,7 @@ public class CamelForFuse6ToBomMapper extends OnlineVersionMapper {
 	public static final String FUSE_63_R5_CAMEL_VERSION = "2.17.0.redhat-630310";
 	public static final String FUSE_63_R6_CAMEL_VERSION = "2.17.0.redhat-630329";
 	public static final String FUSE_63_R7_CAMEL_VERSION = "2.17.0.redhat-630343";
+	public static final String FUSE_63_R8_CAMEL_VERSION = "2.17.0.redhat-630347";
 
 	private static final String FUSE_63_R0_BOM_VERSION = "6.3.0.redhat-187";
 	private static final String FUSE_63_R1_BOM_VERSION = "6.3.0.redhat-224";
@@ -59,6 +60,7 @@ public class CamelForFuse6ToBomMapper extends OnlineVersionMapper {
 	public static final String FUSE_63_R5_BOM_VERSION = "6.3.0.redhat-310";
 	public static final String FUSE_63_R6_BOM_VERSION = "6.3.0.redhat-329";
 	public static final String FUSE_63_R7_BOM_VERSION = "6.3.0.redhat-343";
+	public static final String FUSE_63_R8_BOM_VERSION = "6.3.0.redhat-347";
 
 	public CamelForFuse6ToBomMapper() {
 		super(CAMEL_TO_BOM_MAPPING_PROPERTY, CAMEL_TO_BOM_MAPPING_DEFAULT_URL);
@@ -85,6 +87,7 @@ public class CamelForFuse6ToBomMapper extends OnlineVersionMapper {
 		mapping.put(FUSE_63_R5_CAMEL_VERSION, FUSE_63_R5_BOM_VERSION);
 		mapping.put(FUSE_63_R6_CAMEL_VERSION, FUSE_63_R6_BOM_VERSION);
 		mapping.put(FUSE_63_R7_CAMEL_VERSION, FUSE_63_R7_BOM_VERSION);
+		mapping.put(FUSE_63_R8_CAMEL_VERSION, FUSE_63_R8_BOM_VERSION);
 		return mapping;
 	}
 
