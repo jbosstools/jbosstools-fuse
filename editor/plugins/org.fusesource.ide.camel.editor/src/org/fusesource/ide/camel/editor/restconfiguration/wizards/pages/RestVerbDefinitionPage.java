@@ -23,6 +23,7 @@ import org.eclipse.swt.widgets.Text;
 import org.fusesource.ide.camel.editor.internal.UIMessages;
 import org.fusesource.ide.camel.editor.restconfiguration.RestConfigUtil;
 import org.fusesource.ide.camel.editor.restconfiguration.wizards.AddRestOperationWizard;
+import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
 import org.fusesource.ide.camel.model.service.core.model.RestVerbElement;
 import org.fusesource.ide.foundation.core.util.Strings;
 
@@ -136,6 +137,16 @@ public class RestVerbDefinitionPage extends BaseRestWizardPage {
 		} else {
 			setErrorMessage(null);
 		}
+		
+		if (getRestConfigEditor() != null) {
+			CamelContextElement ctx = getRestConfigEditor().getCtx();
+			if(!ctx.findAllNodesWithId(id).isEmpty()){
+				setErrorMessage(UIMessages.restVerbDefinitionPageInvalidOperationIDError);
+				setPageComplete(false);
+				return false;
+			}
+		}
+
 		setPageComplete(true);
 		return true;
 	}

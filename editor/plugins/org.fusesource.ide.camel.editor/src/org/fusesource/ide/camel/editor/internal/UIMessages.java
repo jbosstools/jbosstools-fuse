@@ -201,9 +201,9 @@ public class UIMessages extends NLS {
 	public static String preferredLabelsAddButtonText;
 	public static String preferredLabelsEditButtonText;
 	public static String preferredLabelsRemoveButtonText;
-
 	public static String restVerbDefinitionPageIDCannotBeNullError;
 	public static String restVerbDefinitionPageIDField;
+	public static String restVerbDefinitionPageInvalidOperationIDError;
 	public static String restVerbDefinitionPageMessage;
 	public static String restVerbDefinitionPageNoRouteToURIsAvailableMessage;
 	public static String restVerbDefinitionPageTitle;
