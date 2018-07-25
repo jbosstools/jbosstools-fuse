@@ -29,6 +29,7 @@ import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.ListViewer;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -651,34 +652,33 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 		String id = relement.getId();
 		AbstractCamelModelElement acme = ctx.getRestElements().get(id);
 		if (acme != null) {
-			restList.setSelection(new StructuredSelection(relement), true);
 			selection = acme;
-			setSelection(new StructuredSelection(selection));
 		} else {
 			if (restList.getList().getItemCount() > 0) {
-				restList.setSelection(new StructuredSelection(restList.getElementAt(0)), true);
 				selection = restList.getElementAt(0);
 			} else {
-				restList.setSelection(StructuredSelection.EMPTY);
 				selection = null;
 			}
-			if (selection != null) {
-				setSelection(new StructuredSelection(selection));
-			} else {
-				setSelection(StructuredSelection.EMPTY);
-			}
+		}
+		if (selection != null) {
+			IStructuredSelection ssel = new StructuredSelection(selection);
+			restList.setSelection(ssel, true);
+			setSelection(ssel);
+		} else {
+			restList.setSelection(StructuredSelection.EMPTY);
+			setSelection(StructuredSelection.EMPTY);
 		}
 	}
 
 	// made public for testing purposes
 	public void selectRestVerbElement(RestVerbElement rve) {
 		RestElement re = (RestElement) rve.getParent();
-		selectRestElement(re);
 		String restId = re.getId();
 		String restVerbId = rve.getId();
 		AbstractCamelModelElement acme = ctx.getRestElements().get(restId);
 		if (acme != null) {
 			RestElement relement = (RestElement) acme;
+			restList.setSelection(new StructuredSelection(relement), true);
 			RestVerbElement selRve = (RestVerbElement) relement.getRestOperations().get(restVerbId);
 			if (selRve != null) {
 				updateRestVerbDisplayForSelection(selRve);
@@ -746,7 +746,10 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 	public void setSelection(ISelection selection) {
 		Object[] list = listeners.getListeners();
 		for (int i = 0; i < list.length; i++) {
-			((ISelectionChangedListener) list[i]).selectionChanged(new SelectionChangedEvent(this, selection));
+			// limit to just the selection changed events on THIS page
+			if (parentEditor.getActivePage() == CamelEditor.REST_CONF_INDEX) {
+				((ISelectionChangedListener) list[i]).selectionChanged(new SelectionChangedEvent(this, selection));
+			}
 		}
 	}
 
