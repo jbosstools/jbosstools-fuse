@@ -18,6 +18,8 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.fusesource.ide.camel.editor.restconfiguration.RestConfigEditor;
+import org.fusesource.ide.camel.editor.restconfiguration.wizards.AddRestOperationWizard;
 
 /**
  * @author brianf
@@ -81,4 +83,14 @@ public abstract class BaseRestWizardPage extends WizardPage {
 		return comboControl;
 	}
 
+	/**
+	 * Allows access to a few things upstream.
+	 * @return rest config editor
+	 */
+	protected RestConfigEditor getRestConfigEditor() {
+		if (getWizard() instanceof AddRestOperationWizard) {
+			return ((AddRestOperationWizard) getWizard()).getRestConfigEditor();
+		}
+		return null;
+	}
 }

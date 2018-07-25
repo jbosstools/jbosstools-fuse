@@ -112,4 +112,8 @@ public class AddRestOperationWizard extends Wizard implements INewWizard {
 	public CamelFile getCameFileFromEditor( ) {
 		return editor.getCtx().getCamelFile();
 	}
+	
+	public RestConfigEditor getRestConfigEditor() {
+		return this.editor;
+	}
 }

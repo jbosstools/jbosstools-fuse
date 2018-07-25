@@ -11,6 +11,7 @@
 package org.fusesource.ide.camel.model.service.core.model;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -307,11 +308,18 @@ public class CamelContextElement extends CamelRouteContainerElement {
 		if (getEndpointDefinitions().containsKey(nodeId)) {
 			result.add(getEndpointDefinitions().get(nodeId));
 		}
-		if (getRestConfigurations().containsKey(nodeId)) {
-			result.add(getRestConfigurations().get(nodeId));
-		}
-		if (getRestElements().containsKey(nodeId)) {
-			result.add(getRestElements().get(nodeId));
+		if (!getRestElements().isEmpty()) {
+			Iterator<AbstractCamelModelElement> iter = getRestElements().values().iterator();
+			while (iter.hasNext()) {
+				RestElement restElement = (RestElement) iter.next();
+				if (restElement.getId().equals(nodeId)) {
+					result.add(restElement);
+				}
+				List<AbstractCamelModelElement> operations = restElement.findChildNodesWithId(nodeId);
+				if (!operations.isEmpty()) {
+					result.addAll(operations);
+				}
+			}
 		}
 		return result;
 	}
@@ -334,11 +342,17 @@ public class CamelContextElement extends CamelRouteContainerElement {
 		if (getEndpointDefinitions().containsKey(nodeId)) {
 			return getEndpointDefinitions().get(nodeId);
 		}
-		if (getRestConfigurations().containsKey(nodeId)) {
-			return getRestConfigurations().get(nodeId);
-		}
 		if (getRestElements().containsKey(nodeId)) {
 			return getRestElements().get(nodeId);
+		}
+		if (!getRestElements().isEmpty()) {
+			Iterator<AbstractCamelModelElement> iter = getRestElements().values().iterator();
+			while (iter.hasNext()) {
+				RestElement restElement = (RestElement) iter.next();
+				if (restElement.getRestOperations().containsKey(nodeId)) {
+					return restElement.getRestOperations().get(nodeId);
+				}
+			}
 		}
 		return null;
 	}
