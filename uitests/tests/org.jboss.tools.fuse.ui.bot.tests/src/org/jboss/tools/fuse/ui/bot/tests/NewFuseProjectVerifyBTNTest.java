@@ -62,12 +62,10 @@ public class NewFuseProjectVerifyBTNTest {
 	public static final String PROJECT_NAME = "test";
 	
 	public static final String EXISTING_CAMEL_VERSION = SupportedCamelVersions.CAMEL_2_17_0_REDHAT_630187;
-	
 	public static final String NON_EXISTING_CAMEL_VERSION = "0.0.0";
-	
 	public static final String INTERRUPT_CAMEL_VERSION = "0.0.1";
-	
 	public static final String COMMUNITY_CAMEL_VERSION = "2.20.2";
+	public static final String DISPLAYED_NAME_CAMEL_VERSION = "2.21.0.fuse-000077-redhat-1 (Fuse 7.0.0 GA)";
 	
 	private NewFuseIntegrationProjectWizard wizard;
 	
@@ -134,6 +132,21 @@ public class NewFuseProjectVerifyBTNTest {
 		
 		NewFuseIntegrationProjectWizardRuntimePage secondPage = new NewFuseIntegrationProjectWizardRuntimePage(wizard);
 		secondPage.typeCamelVersion(COMMUNITY_CAMEL_VERSION);
+		secondPage.clickVerifyCamelVersionButton();
+		
+		waiting();
+		finish();
+		LogChecker.assertNoFuseError();
+	}
+	
+	/**
+	 * Test tries to verify when typing a displayed name
+	 */
+	@Test
+	public void testTypingDisplayedNameCamelVersion() {
+		
+		NewFuseIntegrationProjectWizardRuntimePage secondPage = new NewFuseIntegrationProjectWizardRuntimePage(wizard);
+		secondPage.typeCamelVersion(DISPLAYED_NAME_CAMEL_VERSION);
 		secondPage.clickVerifyCamelVersionButton();
 		
 		waiting();

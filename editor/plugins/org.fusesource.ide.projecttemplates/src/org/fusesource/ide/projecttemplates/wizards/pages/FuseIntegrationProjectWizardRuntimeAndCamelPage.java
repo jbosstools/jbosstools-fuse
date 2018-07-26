@@ -16,6 +16,7 @@ import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -63,6 +64,7 @@ import org.eclipse.wst.server.core.ServerCore;
 import org.eclipse.wst.server.ui.ServerUIUtil;
 import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
 import org.fusesource.ide.camel.model.service.core.util.CamelVersionLabelProvider;
+import org.fusesource.ide.camel.model.service.core.util.versionmapper.CamelVersionToDisplayNameMapper;
 import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.foundation.ui.util.Widgets;
 import org.fusesource.ide.projecttemplates.internal.Messages;
@@ -96,6 +98,7 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 	private IObservableValue<FuseRuntimeKind> environmentRuntimeObservable;
 	private ISideEffect sideEffect;
 	private WritableList<String> camelVersionsProposed;
+	private CamelVersionToDisplayNameMapper camelVersionToDisplayNameMapper = new CamelVersionToDisplayNameMapper();
 	
 	public FuseIntegrationProjectWizardRuntimeAndCamelPage(EnvironmentData environment) {
 		super(Messages.newProjectWizardRuntimePageName);
@@ -178,7 +181,7 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 		
 		camelVersionCombo.addModifyListener(e -> {
 			validate();
-			environment.setCamelVersion(camelVersionCombo.getText());
+			environment.setCamelVersion(getRealCamelVersionFromDisplayedName(camelVersionCombo.getText()));
 			refreshFilteredTemplates();
 		});
 		
@@ -459,10 +462,22 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 				return selectedElement;
 			} else {
 				// the Camel version has been entered manually
-				return camelVersionComboViewer.getCombo().getText();
+				String writtenCamelVersion = camelVersionComboViewer.getCombo().getText();
+				return getRealCamelVersionFromDisplayedName(writtenCamelVersion);
 			}
 		}
 		return null;
+	}
+
+	protected String getRealCamelVersionFromDisplayedName(String writtenCamelVersion) {
+		Map<String, String> mapping = camelVersionToDisplayNameMapper.getMapping();
+		Set<Entry<String,String>> entrySet = mapping.entrySet();
+		for (Entry<String, String> entry : entrySet) {
+			if (writtenCamelVersion.equals(entry.getValue())) {
+				return entry.getKey();
+			}
+		}
+		return writtenCamelVersion;
 	}
 
 	/**
