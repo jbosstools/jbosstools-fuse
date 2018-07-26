@@ -10,7 +10,9 @@
  ******************************************************************************/ 
 package org.fusesource.ide.camel.model.service.core.model;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
@@ -102,6 +104,7 @@ public class RestElement extends AbstractRestCamelModelElement {
 	private void parseNode(Node node) {
 		RestVerbElement rve = new RestVerbElement(this, node);
 		rve.initialize();
+		rve.setParent(this);
 		this.restOperations.put(rve.getId(), rve);
 	}
 
@@ -136,6 +139,7 @@ public class RestElement extends AbstractRestCamelModelElement {
 			return;
 		}
 		restOperations.put(def.getId(), def);
+		def.setParent(this);
 		boolean childExists = false;
 		for (int i=0; i<getXmlNode().getChildNodes().getLength(); i++) {
 			if(def.getXmlNode() != null && getXmlNode().getChildNodes().item(i).isEqualNode(def.getXmlNode())) {
@@ -149,6 +153,10 @@ public class RestElement extends AbstractRestCamelModelElement {
 			def.updateXMLNode();
 		}
 		if (!childExists) {
+			getXmlNode().insertBefore(def.getXmlNode(), getFirstChild(getXmlNode()));
+		} else {
+			// if it's already there, it's probably in the wrong place - have to move it
+			getXmlNode().removeChild(def.getXmlNode());
 			getXmlNode().insertBefore(def.getXmlNode(), getFirstChild(getXmlNode()));
 		}
 	}
@@ -173,5 +181,19 @@ public class RestElement extends AbstractRestCamelModelElement {
 			}
 			notifyAboutDeletion(def);
 		}
+	}
+
+	public List<AbstractCamelModelElement> findChildNodesWithId(String nodeId) {
+		List<AbstractCamelModelElement> result = new ArrayList<>();
+
+		if (getChildElements() != null) {
+			for (AbstractCamelModelElement e : getRestOperations().values()) {
+				if (e.getId() != null && e.getId().equals(nodeId)) {
+					result.add(e);
+				}
+			}
+		}
+
+		return result;
 	}
 }

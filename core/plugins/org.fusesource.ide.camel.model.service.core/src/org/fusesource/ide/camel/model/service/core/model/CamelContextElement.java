@@ -11,6 +11,7 @@
 package org.fusesource.ide.camel.model.service.core.model;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -307,11 +308,18 @@ public class CamelContextElement extends CamelRouteContainerElement {
 		if (getEndpointDefinitions().containsKey(nodeId)) {
 			result.add(getEndpointDefinitions().get(nodeId));
 		}
-		if (getRestConfigurations().containsKey(nodeId)) {
-			result.add(getRestConfigurations().get(nodeId));
-		}
-		if (getRestElements().containsKey(nodeId)) {
-			result.add(getRestElements().get(nodeId));
+		if (!getRestElements().isEmpty()) {
+			Iterator<AbstractCamelModelElement> iter = getRestElements().values().iterator();
+			while (iter.hasNext()) {
+				RestElement restElement = (RestElement) iter.next();
+				if (restElement.getId().equals(nodeId)) {
+					result.add(restElement);
+				}
+				List<AbstractCamelModelElement> operations = restElement.findChildNodesWithId(nodeId);
+				if (!operations.isEmpty()) {
+					result.addAll(operations);
+				}
+			}
 		}
 		return result;
 	}
@@ -334,11 +342,17 @@ public class CamelContextElement extends CamelRouteContainerElement {
 		if (getEndpointDefinitions().containsKey(nodeId)) {
 			return getEndpointDefinitions().get(nodeId);
 		}
-		if (getRestConfigurations().containsKey(nodeId)) {
-			return getRestConfigurations().get(nodeId);
-		}
 		if (getRestElements().containsKey(nodeId)) {
 			return getRestElements().get(nodeId);
+		}
+		if (!getRestElements().isEmpty()) {
+			Iterator<AbstractCamelModelElement> iter = getRestElements().values().iterator();
+			while (iter.hasNext()) {
+				RestElement restElement = (RestElement) iter.next();
+				if (restElement.getRestOperations().containsKey(nodeId)) {
+					return restElement.getRestOperations().get(nodeId);
+				}
+			}
 		}
 		return null;
 	}
@@ -407,8 +421,12 @@ public class CamelContextElement extends CamelRouteContainerElement {
 		final NodeList childNodes = getXmlNode().getChildNodes();
 		for (int i = 0; i < childNodes.getLength(); i++) {
 			Node currentNode = childNodes.item(i);
-			if (currentNode instanceof Element && !DATA_FORMATS_NODE_NAME.equals(currentNode.getLocalName())) {
-				return currentNode;
+			if (currentNode.getNodeType() == Node.ELEMENT_NODE) {
+				Element currentElement = (Element) currentNode;
+				if (!DATA_FORMATS_NODE_NAME.equals(currentElement.getTagName()) &&
+						!ENDPOINT_NODE_NAME.equals(currentElement.getTagName())) {
+					return currentNode;
+				}
 			}
 		}
 		return getFirstChild(getXmlNode());
@@ -418,8 +436,13 @@ public class CamelContextElement extends CamelRouteContainerElement {
 		final NodeList childNodes = getXmlNode().getChildNodes();
 		for (int i = 0; i < childNodes.getLength(); i++) {
 			Node currentNode = childNodes.item(i);
-			if (currentNode instanceof Element && REST_CONFIGURATION_NODE_NAME.equals(currentNode.getLocalName())) {
-				return currentNode;
+			if (currentNode.getNodeType() == Node.ELEMENT_NODE) {
+				Element currentElement = (Element) currentNode;
+				if (!DATA_FORMATS_NODE_NAME.equals(currentElement.getTagName()) &&
+						!ENDPOINT_NODE_NAME.equals(currentElement.getTagName()) &&
+						!REST_CONFIGURATION_NODE_NAME.equals(currentElement.getTagName())) {
+					return currentNode;
+				}
 			}
 		}
 		return getFirstChild(getXmlNode());
@@ -491,11 +514,11 @@ public class CamelContextElement extends CamelRouteContainerElement {
 			def.updateXMLNode();
 		}
 		if (!childExists) {
-			getXmlNode().insertBefore(def.getXmlNode(), getRestElementEntryPoint().getNextSibling());
+			getXmlNode().insertBefore(def.getXmlNode(), getRestElementEntryPoint());
 		} else {
 			// if it's already there, it's probably in the wrong place - have to move it
 			getXmlNode().removeChild(def.getXmlNode());
-			getXmlNode().insertBefore(def.getXmlNode(), getRestElementEntryPoint().getNextSibling());
+			getXmlNode().insertBefore(def.getXmlNode(), getRestElementEntryPoint());
 		}
 	}
 

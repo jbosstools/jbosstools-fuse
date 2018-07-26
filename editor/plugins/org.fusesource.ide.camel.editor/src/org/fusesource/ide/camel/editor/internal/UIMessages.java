@@ -24,8 +24,11 @@ public class UIMessages extends NLS {
 	public static String addGlobalBeanWizardBeanPageTitle;
 	public static String addGlobalBeanWizardWindowTitle;
 	public static String addGlobalEndpointWizardWindowTitle;
-
 	public static String addRestElementActionTooltip;
+	public static String addRestOperationActionTooltip;
+	public static String addRESTOperationWizardErrorMessage;
+	public static String addRESTOperationWizardErrorTitle;
+	public static String addRESTOperationWizardWindowTitle;
 	public static String advancedBeanPropertiesSectionTitle;
 	public static String argumentInputDialogDialogMessage;
 	public static String argumentInputDialogDialogTitle;
@@ -52,7 +55,6 @@ public class UIMessages extends NLS {
 	public static String controlFlowDrawerTitle;
 	public static String transformationDrawerTitle;
 	public static String methodSelectionDialogNoMethodSelectedError;
-
 	public static String miscellaneousDrawerTitle;
 	public static String propertiesDetailsTitle;
 	public static String propertiesDocumentationTitle;
@@ -68,7 +70,6 @@ public class UIMessages extends NLS {
 	public static String editorPreferencePageLayoutOrientationEAST;
 	public static String editorPreferencePageGridVisibilitySetting;
 	public static String editorPreferencePageUserLabels;
-
 	public static String colorPreferencePageDescription;
 	public static String colorPreferencePageGridColorSetting;
 	public static String colorPreferencePageTextColorSetting;
@@ -90,9 +91,7 @@ public class UIMessages extends NLS {
 	public static String beanConfigUtilMethodSelectionMessage;
 	public static String beanConfigUtilNoParmMethodSelectionMessage;
 	public static String beanConfigUtilNoParmAndVoidMethodSelectionMessage;
-
 	public static String beanRefClassExistsValidatorBeanClassOrBeanRefRequired;
-
 	public static String beanRefClassExistsValidatorMustPickEitherBeanRefOrBeanClass;
 	public static String beanRequiredPropertyValidatorErrorMandatoryProperty;
 	public static String createGlobalElementDialogTitle;
@@ -113,15 +112,14 @@ public class UIMessages extends NLS {
 	public static String dataFormatSelectionPageDataFormatSelectionPageTitle;
 	public static String dataFormatSelectionPageIdLabel;
 	public static String dataFormatSelectionPageDescriptionLabel;
-
 	public static String deleteRestElementActionTooltip;
+	public static String deleteRestOperationActionTooltip;
 	public static String editGlobalBeanWizardBeanEditPageMessage;
 	public static String editGlobalBeanWizardBeanEditPageTitle;
 	public static String editGlobalBeanWizardWindowTitle;
 	public static String genericEndpointFigureFeaturePaletteDescription;
 	public static String genericEndpointFigureFeaturePaletteName;
 	public static String globalBeanBaseWizardPageFactoryBeanLabel;
-
 	public static String globalBeanEditWizardPageArgumentsGroupLabel;
 	public static String globalBeanEditWizardPageClassLabel;
 	public static String globalBeanEditWizardPageDefaultName;
@@ -169,12 +167,9 @@ public class UIMessages extends NLS {
 	public static String selectEndpointWizardPageSelectionComponentDescription;
 	public static String selectEndpointWizardPageSelectionComponentTitle;
 	public static String selectEndpointWizardWindowTitle;
-
 	public static String updatePomDependenciesProgressDialogLabel;
 	public static String loadingCamelFile;
 	public static String pending;
-
-	public static String editorPreferencePageTechPreviewRESTEditorPageSetting;
 	public static String restConfigEditorBindingModeLabel;
 	public static String restConfigEditorComponentLabel;
 	public static String restConfigEditorConfigurationTab;
@@ -206,6 +201,16 @@ public class UIMessages extends NLS {
 	public static String preferredLabelsAddButtonText;
 	public static String preferredLabelsEditButtonText;
 	public static String preferredLabelsRemoveButtonText;
+	public static String restVerbDefinitionPageIDCannotBeNullError;
+	public static String restVerbDefinitionPageIDField;
+	public static String restVerbDefinitionPageInvalidOperationIDError;
+	public static String restVerbDefinitionPageMessage;
+	public static String restVerbDefinitionPageNoRouteToURIsAvailableMessage;
+	public static String restVerbDefinitionPageTitle;
+	public static String restVerbDefinitionPageToRouteLabel;
+	public static String restVerbDefinitionPageURICannotBeNull;
+	public static String restVerbDefinitionPageURIField;
+	public static String restVerbDefinitionPageVerbField;
 	public static String restVerbParameterCannotBeNull;
 	public static String validationIDAlreadyUsed;
 	

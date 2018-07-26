@@ -17,30 +17,30 @@ import org.fusesource.ide.camel.editor.restconfiguration.RestConfigConstants;
 import org.fusesource.ide.camel.editor.restconfiguration.RestConfigEditor;
 
 /**
- * @author brianf
+ * @author bfitzpat
  */
-public class DeleteRestElementAction extends RestEditorAction {
+public class AddRestOperationAction extends RestEditorAction {
 	
 	/**
 	 * @param parent
 	 * @param imageReg
 	 */
-	public DeleteRestElementAction(RestConfigEditor parent, ImageRegistry imageReg) {
+	public AddRestOperationAction(RestConfigEditor parent, ImageRegistry imageReg) {
 		super(parent, imageReg);
 	}
 	
 	@Override
 	public void run() {
-		parent.removeRestElement();
+		parent.addRestOperation();
 	}
 	
 	@Override
 	public String getToolTipText() {
-		return UIMessages.deleteRestElementActionTooltip;
+		return UIMessages.addRestOperationActionTooltip;
 	}
 	
 	@Override
 	public ImageDescriptor getImageDescriptor() {
-		return mImageRegistry.getDescriptor(RestConfigConstants.IMG_DESC_DELETE);
+		return mImageRegistry.getDescriptor(RestConfigConstants.IMG_DESC_ADD);
 	}
 }

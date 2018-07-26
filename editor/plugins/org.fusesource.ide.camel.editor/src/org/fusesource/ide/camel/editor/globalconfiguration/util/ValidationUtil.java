@@ -28,7 +28,7 @@ public class ValidationUtil {
 	public static IStatus validateIdInParent(AbstractCamelModelElement parent, Object value) {
 		String id = (String) value;
 		AbstractCamelModelElement elementToSearchIn = parent;
-		if (elementToSearchIn.findAllNodesWithId(id).size() > 1) {
+		if (elementToSearchIn.getRouteContainer().findAllNodesWithId(id).size() > 1) {
 			return ValidationStatus.error(UIMessages.validationIDAlreadyUsed);
 		}
 		return ValidationStatus.ok();

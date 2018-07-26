@@ -14,7 +14,6 @@ import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
 import org.fusesource.ide.camel.model.service.core.internal.CamelModelServiceCoreActivator;
 import org.fusesource.ide.camel.model.service.core.model.eips.RestVerbElementEIP;
-import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -66,7 +65,8 @@ public class RestVerbElement extends AbstractRestCamelModelElement {
 				initAttribute(param.getName());
 			}
 		} else {
-			CamelModelServiceCoreActivator.pluginLog().logWarning("ParseAttributes: Missing EIP for REST Verb. Ignored.");
+			CamelModelServiceCoreActivator.pluginLog().
+				logWarning("ParseAttributes: Missing EIP for REST Verb. Ignored."); //$NON-NLS-1$
 		}
 	}
 	
@@ -99,7 +99,7 @@ public class RestVerbElement extends AbstractRestCamelModelElement {
 		if (list != null && list.getLength() > 0) {
 			for (int i = 0; i < list.getLength(); i++) {
 				Node tmp = list.item(i);
-				if (tmp instanceof Element && ((Element) tmp).getTagName().contentEquals("to")) {
+				if (tmp instanceof Element && ((Element) tmp).getTagName().contentEquals(TO_ELEMENT_TAG)) {
 					Node attr = tmp.getAttributes().getNamedItem(URI_PARAMETER_KEY);
 					if (attr != null) {
 						return attr.getNodeValue();
@@ -110,43 +110,17 @@ public class RestVerbElement extends AbstractRestCamelModelElement {
 		return null;
 	}
 
-	private boolean foundChild(Node tmp, String value) {
-		if (tmp instanceof Element && ((Element) tmp).getTagName().contentEquals(TO_ELEMENT_TAG)) {
-			Node attr = tmp.getAttributes().getNamedItem(URI_PARAMETER_KEY);
-			if (attr != null) {
-				if (value == null || value.isEmpty()) {
-					// remove from parent?
-					getXmlNode().removeChild(tmp);
-					notifyAboutDeletion(this);
-				} else {
-					if (!attr.getNodeValue().contentEquals(value)) {
-						attr.setNodeValue(value);
-					}
-				}
-				return true;
-			}
-		}
-		return false;
-	}
-	
 	public void setToUri(String value) {
-		NodeList list = getXmlNode().getChildNodes();
-		boolean foundTo = false;
-		if (list != null && list.getLength() > 0) {
-			for (int i = 0; i < list.getLength(); i++) {
-				Node tmp = list.item(i);
-				foundTo = foundChild(tmp, value);
-				if (foundTo) { 
-					break;
-				}
-			}
+		if (!getChildElements().isEmpty()) {
+			CamelBasicModelElement cme = (CamelBasicModelElement) getChildElements().get(0); // grab first element
+			cme.setParameter(URI_PARAMETER_KEY, value);
+			return;
 		}
-		if (!foundTo) {
-			Document xmlDoc = getXmlNode().getOwnerDocument();
-			Element toElement = xmlDoc.createElement(TO_ELEMENT_TAG);
-			toElement.setAttribute(URI_PARAMETER_KEY, value);
-			getXmlNode().appendChild(toElement);
-		}
+		// may have issue where inner TO does not exist - this is an invalid state that would
+		// only be created by manually hacking the XML source and is flagged as invalid by the
+		// validator. This message is just to give some indication to the user
+		CamelModelServiceCoreActivator.pluginLog().
+			logError("Setting inner To URI attribute on REST operation failed due to missing To element."); //$NON-NLS-1$
 	}
 
 	@Override
@@ -165,6 +139,25 @@ public class RestVerbElement extends AbstractRestCamelModelElement {
 		} else {
 			return super.getParameter(name);
 		}
+	}
+
+	/**
+	 * parses the children of this node
+	 */
+	@Override
+	protected void parseChildren() {
+		NodeList children = getXmlNode().getChildNodes();
+		for (int i=0; i<children.getLength(); i++) {
+			Node tmp = children.item(i);
+			if (tmp.getNodeType() != Node.ELEMENT_NODE) continue;
+			parseNode(tmp);
+		}
+	}
+
+	private void parseNode(Node node) {
+		AbstractCamelModelElement acme = new CamelBasicModelElement(this, node);		
+		acme.initialize();
+		addChildElement(acme);
 	}
 
 }
