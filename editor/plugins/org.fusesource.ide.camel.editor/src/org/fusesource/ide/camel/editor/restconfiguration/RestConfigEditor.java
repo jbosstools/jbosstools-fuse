@@ -37,9 +37,11 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
@@ -224,7 +226,6 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 		form.getBody().setLayout(new GridLayout(2, false));
 		
 		createRestConfigurationTabSection();
-		
 		createRestTabSection();
 		restOpsSection = createRestOperationTabSection();
 
@@ -354,18 +355,16 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 		section.setText(UIMessages.restConfigEditorRestSectionLabelText);
 		section.setDescription(UIMessages.restConfigEditorRestTabDescription);
 		section.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).span(1, 5).create());
-		section.setLayout(new GridLayout(2, false));
+		section.setLayout(new FillLayout(SWT.VERTICAL));
 
 		ToolBar toolbar = createRestTabToolbar(section);
 		section.setTextClient(toolbar);
 		
 		Composite client=toolkit.createComposite(section,SWT.NONE);
-		client.setLayout(new GridLayout(1, false));
-		client.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).span(1, 5).create());
+		client.setLayout(new FillLayout(SWT.VERTICAL));
 		client.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WHITE));
 		
 		restList = new ListViewer(client, SWT.V_SCROLL | SWT.SINGLE | SWT.BORDER);
-		restList.getControl().setLayoutData(GridDataFactory.fillDefaults().grab(true, true).span(1, 5).create());
 		restList.setContentProvider(ArrayContentProvider.getInstance());
 		restList.setComparator(new ViewerComparator());
 		restList.setLabelProvider(new RestLabelProvider());
@@ -409,19 +408,26 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 		Section section = toolkit.createSection(form.getBody(), Section.EXPANDED | Section.TWISTIE | Section.TITLE_BAR | Section.DESCRIPTION);
 		section.setText(UIMessages.restConfigEditorRestSectionLabel);
 		section.setDescription(UIMessages.restConfigEditorRestOperationTabDescription);
-		GridData gd = new GridData(SWT.FILL,SWT.FILL,true,true);
-		section.setLayoutData(gd);
-		section.setLayout(new GridLayout(2, false));
+		section.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).span(1, 5).create());
+		section.setLayout(new FillLayout(SWT.VERTICAL));
 
 		ToolBar toolbar = createRestOperationTabToolbar(section);
 		section.setTextClient(toolbar);
 
-		Composite client=toolkit.createComposite(section,SWT.BORDER);
+		ScrolledComposite sc = new ScrolledComposite(section, SWT.BORDER | SWT.V_SCROLL);
+		sc.setLayout(new FillLayout(SWT.VERTICAL));
+		Composite client=toolkit.createComposite(sc, SWT.NONE);
 		client.setLayout(new GridLayout(1, false));
 		client.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WHITE));
-		client.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,true));
+		sc.setContent(client);
+		sc.setExpandHorizontal(true);
+		sc.setExpandVertical(true);
+		sc.addListener(SWT.Resize, event -> {
+			int width = sc.getClientArea().width;
+			sc.setMinSize(client.computeSize(width, SWT.DEFAULT));
+		});
 		
-		section.setClient(client);
+		section.setClient(sc);
 		
 		return client;
 	}
