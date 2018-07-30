@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-     Copyright 2005-2016 Red Hat, Inc.
+     Copyright 2005-2018 Red Hat, Inc.
 
      Red Hat licenses this file to you under the Apache License, version
      2.0 (the "License"); you may not use this file except in compliance
@@ -67,48 +67,6 @@
           </releases>
         </repository>
  
-        
-        <repository>
-          <id>jboss.ea</id>
-          <name>JBoss Early Access Repository</name>
-          <url>http://repository.jboss.org/nexus/content/groups/ea</url>
-          <snapshots>
-            <enabled>false</enabled>
-          </snapshots>
-          <releases>
-            <enabled>true</enabled>
-            <updatePolicy>never</updatePolicy>
-          </releases>
-        </repository>
- 
-        
-        <repository>
-          <id>jboss.brew</id>
-          <name>JBoss Brew Repository</name>
-          <url>http://download-node-02.eng.bos.redhat.com/brewroot/repos/jb-common-build/latest/maven/</url>
-          <snapshots>
-            <enabled>false</enabled>
-          </snapshots>
-          <releases>
-            <enabled>true</enabled>
-            <updatePolicy>never</updatePolicy>
-          </releases>
-        </repository>
- 
-        
-        <repository>
-          <id>fis.brew</id>
-          <name>FIS Brew Repository</name>
-          <url>http://download-node-02.eng.bos.redhat.com/brewroot/repos/jb-fis-2.0-maven-build/latest/maven/</url>
-          <snapshots>
-            <enabled>false</enabled>
-          </snapshots>
-          <releases>
-            <enabled>true</enabled>
-            <updatePolicy>never</updatePolicy>
-          </releases>
-        </repository>
- 
       </repositories>
 
       <pluginRepositories>
@@ -145,48 +103,6 @@
           <id>redhat.ea</id>
           <name>Red Hat Early Access Repository</name>
           <url>https://maven.repository.redhat.com/earlyaccess/all</url>
-          <snapshots>
-            <enabled>false</enabled>
-          </snapshots>
-          <releases>
-            <enabled>true</enabled>
-            <updatePolicy>never</updatePolicy>
-          </releases>
-        </pluginRepository>
- 
-        
-        <pluginRepository>
-          <id>jboss.ea</id>
-          <name>JBoss Early Access Repository</name>
-          <url>http://repository.jboss.org/nexus/content/groups/ea</url>
-          <snapshots>
-            <enabled>false</enabled>
-          </snapshots>
-          <releases>
-            <enabled>true</enabled>
-            <updatePolicy>never</updatePolicy>
-          </releases>
-        </pluginRepository>
- 
-        
-        <pluginRepository>
-          <id>jboss.brew</id>
-          <name>JBoss Brew Repository</name>
-          <url>http://download-node-02.eng.bos.redhat.com/brewroot/repos/jb-common-build/latest/maven/</url>
-          <snapshots>
-            <enabled>false</enabled>
-          </snapshots>
-          <releases>
-            <enabled>true</enabled>
-            <updatePolicy>never</updatePolicy>
-          </releases>
-        </pluginRepository>
- 
-        
-        <pluginRepository>
-          <id>fis.brew</id>
-          <name>FIS Brew Repository</name>
-          <url>http://download-node-02.eng.bos.redhat.com/brewroot/repos/jb-fis-2.0-maven-build/latest/maven/</url>
           <snapshots>
             <enabled>false</enabled>
           </snapshots>
