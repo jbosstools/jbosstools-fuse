@@ -10,7 +10,7 @@
  ******************************************************************************/
 package org.fusesource.ide.camel.model.service.core.util.versionmapper;
 
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.fusesource.ide.foundation.core.util.OnlineVersionMapper;
@@ -26,7 +26,10 @@ public class CamelForFuse7ToBomMapper extends OnlineVersionMapper {
 	
 	@Override
 	protected Map<String, String> createFallbackMapping() {
-		return Collections.singletonMap(CamelForFuseOnOpenShiftToBomMapper.FUSE_700_CAMEL_VERSION, "7.0.0.fuse-000191-redhat-1");
+		Map<String, String> mapping = new HashMap<>();
+		mapping.put(CamelForFuseOnOpenShiftToBomMapper.FUSE_700_CAMEL_VERSION, "7.0.0.fuse-000191-redhat-1");
+		mapping.put(CamelForFuseOnOpenShiftToBomMapper.FUSE_701_CAMEL_VERSION, "7.0.1.fuse-000011-redhat-3");
+		return mapping;
 	}
 
 }

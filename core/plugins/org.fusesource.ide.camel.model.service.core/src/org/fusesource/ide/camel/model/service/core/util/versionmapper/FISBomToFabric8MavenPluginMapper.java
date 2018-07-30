@@ -10,7 +10,7 @@
  ******************************************************************************/
 package org.fusesource.ide.camel.model.service.core.util.versionmapper;
 
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.fusesource.ide.foundation.core.util.OnlineVersionMapper;
@@ -27,7 +27,11 @@ public class FISBomToFabric8MavenPluginMapper extends OnlineVersionMapper {
 
 	@Override
 	protected Map<String, String> createFallbackMapping() {
-		return Collections.singletonMap("2.3.7.fuse-000036-redhat-2", "3.5.32.fuse-000040-redhat-2");
+		Map<String, String> mapping = new HashMap<>();
+		mapping.put("2.3.7.fuse-000036-redhat-2", "3.5.32.fuse-000040-redhat-2");
+		mapping.put("3.0.11.fuse-000039-redhat-1", "3.5.33.fuse-000067-redhat-1");
+		mapping.put("3.0.11.fuse-000065-redhat-3", "3.5.33.fuse-000089-redhat-4");
+		return mapping;
 	}
 
 }

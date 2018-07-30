@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %Bundle-Name
-Bundle-SymbolicName: org.fusesource.ide.camel.model.service.impl.v2210fuse000077redhat1;singleton:=true
+Bundle-SymbolicName: org.fusesource.ide.camel.model.service.impl.v2210fuse000112redhat3;singleton:=true
 Bundle-Version: 11.1.0.qualifier
 Bundle-Vendor: %Bundle-Vendor
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
