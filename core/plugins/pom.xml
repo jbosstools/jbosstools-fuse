@@ -19,7 +19,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 		<module>org.fusesource.ide.camel.model.service.impl.v2170redhat630347</module>
 		<module>org.fusesource.ide.camel.model.service.impl.v2181redhat000021</module>
 		<module>org.fusesource.ide.camel.model.service.impl.v2203</module>
-		<module>org.fusesource.ide.camel.model.service.impl.v2210fuse000077redhat1</module>
+		<module>org.fusesource.ide.camel.model.service.impl.v2210fuse000112redhat3</module>
 		<module>org.fusesource.ide.camel.validation</module>
 		<module>org.fusesource.ide.cheatsheets</module>
 		<module>org.fusesource.ide.graph</module>
