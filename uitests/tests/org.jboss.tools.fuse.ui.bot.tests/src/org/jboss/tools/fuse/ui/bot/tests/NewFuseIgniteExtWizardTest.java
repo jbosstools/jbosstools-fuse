@@ -180,14 +180,7 @@ public class NewFuseIgniteExtWizardTest {
 		assertTrue(wizard.isBackEnabled());
 
 		NewFuseIgniteExtensionProjectSecondPage lastPage = new NewFuseIgniteExtensionProjectSecondPage(wizard);
-		lastPage.setTextVersion("1.0-SNAPSHOT");
-
-		assertFalse(wizard.isNextEnabled());
-		assertFalse(wizard.isFinishEnabled());
-		assertTrue(wizard.isBackEnabled());
-		assertEquals(MessageTypeEnum.ERROR, wizard.getMessageType());
-
-		lastPage.setTextVersion("1.0-1");
+		lastPage.setTextVersion("asd");
 
 		assertEquals(MessageTypeEnum.ERROR, wizard.getMessageType());
 		assertFalse(wizard.isFinishEnabled());

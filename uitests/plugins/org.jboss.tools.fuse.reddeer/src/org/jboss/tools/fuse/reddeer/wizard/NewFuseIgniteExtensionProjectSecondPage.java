@@ -12,6 +12,8 @@ package org.jboss.tools.fuse.reddeer.wizard;
 
 import java.util.List;
 
+import org.eclipse.reddeer.common.wait.AbstractWait;
+import org.eclipse.reddeer.common.wait.TimePeriod;
 import org.eclipse.reddeer.core.reference.ReferencedComposite;
 import org.eclipse.reddeer.jface.wizard.WizardPage;
 import org.eclipse.reddeer.swt.impl.button.PushButton;
@@ -96,6 +98,7 @@ public class NewFuseIgniteExtensionProjectSecondPage extends WizardPage {
 
 	public void setTextFuseIgniteVersion(String str) {
 		new DefaultCombo(this).setText(str);
+		AbstractWait.sleep(TimePeriod.SHORT);
 	}
 
 	public PushButton getVerifyBTN() {
