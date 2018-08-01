@@ -68,6 +68,7 @@ public class NewFuseIgniteProjectTest extends DefaultTest {
 		NewFuseIgniteExtensionProjectFirstPage firstPage = new NewFuseIgniteExtensionProjectFirstPage(wizard);
 		firstPage.setTextProjectName("CustomStepCamelRoute");
 		AbstractWait.sleep(TimePeriod.SHORT);
+		wizard.next();
 		wizard.finish(TimePeriod.VERY_LONG);
 		checkProject("CustomStepCamelRoute");
 	}
