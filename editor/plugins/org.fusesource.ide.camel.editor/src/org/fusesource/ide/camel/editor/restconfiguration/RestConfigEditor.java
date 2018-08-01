@@ -106,23 +106,23 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 	private Text portText;
 	private Combo bindingModeCombo;
 	private Text hostText;
-	private Composite restOpsSection;
+	private Composite restOpsComposite;
 	private ListViewer restList;
+	private ScrolledComposite restOpsScrollable;
+
 	private RestEditorColorManager colorManager = new RestEditorColorManager();
 	private Map<String, Eip> restModel;
 	private CamelContextElement ctx;
 	private RestConfigurationElement rce = null;
-	private AddRestConfigurationAction addRestConfigAction;
 	private RestConfigUtil util = new RestConfigUtil();
+
+	private AddRestConfigurationAction addRestConfigAction;
 	private DeleteRestConfigurationAction deleteRestConfigAction;
-
 	private AddRestElementAction addRestElementAction;
-
 	private DeleteRestElementAction deleteRestElementAction;
-
 	private AddRestOperationAction addRestOperationAction;
-
 	private DeleteRestOperationAction deleteRestOperationAction;
+
 	
 	/**
 	 *
@@ -227,7 +227,7 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 		
 		createRestConfigurationTabSection();
 		createRestTabSection();
-		restOpsSection = createRestOperationTabSection();
+		restOpsComposite = createRestOperationTabSection();
 
 		form.layout(true);
 		toolkit.decorateFormHeading(form.getForm());
@@ -391,12 +391,13 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 					RestVerbElement rve = (RestVerbElement) e;
 					Element elChild = (Element) rve.getXmlNode();
 					String verbUri = elChild.getAttribute(RestVerbElementEIP.PROP_URI);
-					Composite operation = createVerbComposite(restOpsSection, elChild.getTagName(), verbUri);
+					Composite operation = createVerbComposite(restOpsComposite, elChild.getTagName(), verbUri);
 					operation.setData(RestConfigConstants.REST_VERB_FLAG, rve);
 					operation.requestLayout();
 				});
-				restOpsSection.layout(true);
 			}
+			restOpsComposite.layout();
+			restOpsScrollable.notifyListeners(SWT.Resize, new Event());
 		});
 
 		section.setClient(client);
@@ -414,24 +415,26 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 		ToolBar toolbar = createRestOperationTabToolbar(section);
 		section.setTextClient(toolbar);
 
-		ScrolledComposite sc = new ScrolledComposite(section, SWT.BORDER | SWT.V_SCROLL);
-		sc.setLayout(new FillLayout(SWT.VERTICAL));
-		Composite client=toolkit.createComposite(sc, SWT.NONE);
+		restOpsScrollable = new ScrolledComposite(section, SWT.BORDER | SWT.V_SCROLL);
+		restOpsScrollable.setLayout(new FillLayout(SWT.VERTICAL));
+		Composite client=toolkit.createComposite(restOpsScrollable, SWT.NONE);
 		client.setLayout(new GridLayout(1, false));
 		client.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WHITE));
-		sc.setContent(client);
-		sc.setExpandHorizontal(true);
-		sc.setExpandVertical(true);
-		sc.addListener(SWT.Resize, event -> {
-			int width = sc.getClientArea().width;
-			sc.setMinSize(client.computeSize(width, SWT.DEFAULT));
-		});
+		restOpsScrollable.setContent(client);
+		restOpsScrollable.setExpandHorizontal(true);
+		restOpsScrollable.setExpandVertical(true);
+		restOpsScrollable.addListener(SWT.Resize, event -> computeMinSize(client) );
 		
-		section.setClient(sc);
+		section.setClient(restOpsScrollable);
 		
 		return client;
 	}
 
+	private void computeMinSize( Composite content ) {
+		int width = restOpsScrollable.getClientArea().width;
+		restOpsScrollable.setMinSize( content.computeSize( width, SWT.DEFAULT ) );
+	}
+	
 	class RestLabelProvider extends LabelProvider {
 
 		@Override
@@ -563,13 +566,13 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 	}
 
 	private void clearUI() {
-		if (restOpsSection != null && !restOpsSection.isDisposed()) {
-			Control[] children = restOpsSection.getChildren();
+		if (restOpsComposite != null && !restOpsComposite.isDisposed()) {
+			Control[] children = restOpsComposite.getChildren();
 			for (int i = 0; i < children.length; i++) {
 				Control child = children[i];
 				child.dispose();
 			}
-			restOpsSection.layout();
+			restOpsComposite.layout();
 		}
 	}
 
@@ -781,7 +784,7 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 	}
 
 	private void updateRestVerbDisplayForSelection(RestVerbElement rve) {
-		Control[] verbComposites = restOpsSection.getChildren();
+		Control[] verbComposites = restOpsComposite.getChildren();
 		for (int i=0; i < verbComposites.length; i++) {
 			Composite operation = (Composite) verbComposites[i];
 			Object data = getDataFromSelectedUIElement(operation);
