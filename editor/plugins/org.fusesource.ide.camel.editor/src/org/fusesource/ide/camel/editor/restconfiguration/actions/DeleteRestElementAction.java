@@ -10,7 +10,6 @@
  ******************************************************************************/
 package org.fusesource.ide.camel.editor.restconfiguration.actions;
 
-import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.fusesource.ide.camel.editor.internal.UIMessages;
 import org.fusesource.ide.camel.editor.restconfiguration.RestConfigConstants;
@@ -38,9 +37,9 @@ public class DeleteRestElementAction extends RestEditorAction {
 	public String getToolTipText() {
 		return UIMessages.deleteRestElementActionTooltip;
 	}
-	
+
 	@Override
-	public ImageDescriptor getImageDescriptor() {
-		return mImageRegistry.getDescriptor(RestConfigConstants.IMG_DESC_DELETE);
+	protected String getImageName() {
+		return RestConfigConstants.IMG_DESC_DELETE;
 	}
 }

@@ -17,6 +17,11 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorPart;
 import org.fusesource.ide.camel.editor.CamelDesignEditor;
 import org.fusesource.ide.camel.editor.CamelEditor;
+import org.fusesource.ide.camel.editor.restconfiguration.actions.AddRestConfigurationAction;
+import org.fusesource.ide.camel.editor.restconfiguration.actions.AddRestElementAction;
+import org.fusesource.ide.camel.editor.restconfiguration.actions.DeleteRestConfigurationAction;
+import org.fusesource.ide.camel.editor.restconfiguration.actions.DeleteRestElementAction;
+import org.fusesource.ide.camel.editor.restconfiguration.actions.DeleteRestOperationAction;
 import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.camel.model.service.core.model.RestConfigurationElement;
@@ -148,7 +153,7 @@ public class RestEditorTestIT extends AbstractCamelEditorIT {
 		CamelContextElement context = (CamelContextElement)model.getRouteContainer();
 
 		// add a REST Configuration element
-		restEditor.addRestConfigurationElement();
+		new AddRestConfigurationAction(restEditor, null).run();
 		readAndDispatch(20);
 		
 		// test for new component
@@ -180,7 +185,7 @@ public class RestEditorTestIT extends AbstractCamelEditorIT {
 		CamelContextElement context = (CamelContextElement)model.getRouteContainer();
 
 		// add a REST Configuration element
-		restEditor.addRestConfigurationElement();
+		new AddRestElementAction(restEditor, null).run();
 		readAndDispatch(20);
 		
 		// add a REST Element
@@ -215,7 +220,7 @@ public class RestEditorTestIT extends AbstractCamelEditorIT {
 		CamelContextElement context = (CamelContextElement)model.getRouteContainer();
 
 		//test to make sure it's removed
-		restEditor.removeRestConfigurationElement();
+		new DeleteRestConfigurationAction(restEditor, null).deleteWithoutUserConfirmation();
 		readAndDispatch(20);
 		assertThat(context.getRestConfigurations().isEmpty()).isNotEqualTo(false);
 		assertThat(context.getRestElements().isEmpty()).isNotEqualTo(false);
@@ -242,7 +247,7 @@ public class RestEditorTestIT extends AbstractCamelEditorIT {
 		CamelContextElement context = (CamelContextElement)model.getRouteContainer();
 
 		//test to make sure it's removed (there are two REST elements in the sample)
-		restEditor.removeRestElement();
+		new DeleteRestElementAction(restEditor, null).run();
 		readAndDispatch(20);
 
 		restEditor.removeRestElement();
@@ -272,7 +277,7 @@ public class RestEditorTestIT extends AbstractCamelEditorIT {
 		CamelContextElement context = (CamelContextElement)model.getRouteContainer();
 
 		// add a REST Element
-		restEditor.addRestElement();
+		new AddRestElementAction(restEditor, null).run();
 		readAndDispatch(20);
 
 		// add a REST Configuration element (without the wizard)
@@ -318,7 +323,7 @@ public class RestEditorTestIT extends AbstractCamelEditorIT {
 		restEditor.selectRestVerbElement(restVerbElement);
 		
 		//test to make sure it's removed (there are two REST elements in the sample)
-		restEditor.removeRestOperation();
+		new DeleteRestOperationAction(restEditor, null).run();
 		readAndDispatch(20);
 
 		assertThat(restElement.getRestOperations().get(restVerbElement.getId())).isNull();
