@@ -10,10 +10,8 @@
  ******************************************************************************/
 package org.fusesource.ide.camel.editor.restconfiguration;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.Map;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -853,47 +851,6 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 			ctx.addRestElement(newre);
 			reload();
 			selectRestElement(newre);
-		});
-	}
-
-	/**
-	 * Public for tests.
-	 */
-	public void addRestConfigurationElement() {
-		Display.getDefault().syncExec(() -> {
-			RestConfigurationElement newrce = util.createRestConfigurationNode(ctx);
-			newrce.initialize();
-			newrce.setHost("localhost"); //$NON-NLS-1$
-			newrce.setBindingMode(OFF);
-			if (ctx.getRestConfigurations().isEmpty()) {
-				ctx.addRestConfiguration(newrce);
-			}
-			reload();
-		});
-	}
-	
-	/**
-	 * Public for tests.
-	 */
-	public void removeRestConfigurationElement() {
-		Display.getDefault().syncExec(() -> {
-			// delete everything
-			if (!ctx.getRestConfigurations().isEmpty()) {
-				ctx.removeRestConfiguration(rce);
-				ctx.clearRestConfigurations();
-			}
-			if (!ctx.getRestElements().isEmpty()) {
-				ArrayList<AbstractCamelModelElement> toDelete = new ArrayList<>();
-				Iterator<AbstractCamelModelElement> iter = ctx.getRestElements().values().iterator();
-				while (iter.hasNext()) {
-					toDelete.add(iter.next());
-				}
-				for (AbstractCamelModelElement cme : toDelete) {
-					ctx.removeRestElement(cme);
-				}
-				ctx.clearRestElements();
-			}
-			reload();
 		});
 	}
 

@@ -30,6 +30,7 @@ Export-Package: org.fusesource.ide.camel.editor,
  org.fusesource.ide.camel.editor.provider;x-friends:="org.fusesource.ide.camel.editor.tests.integration",
  org.fusesource.ide.camel.editor.provider.ext,
  org.fusesource.ide.camel.editor.restconfiguration,
+ org.fusesource.ide.camel.editor.restconfiguration.actions,
  org.fusesource.ide.camel.editor.utils
 Bundle-ActivationPolicy: lazy
 Require-Bundle: org.eclipse.ui.ide;bundle-version="3.10.0",
