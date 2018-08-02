@@ -183,6 +183,11 @@
 
     <!-- Repositories -->
     <repositories>
+    	<repository>
+			<id>maven.central</id>
+			<name>Maven Central</name>
+			<url>https://repo1.maven.org/maven2</url>
+		</repository>
         <repository>
             <id>jboss-ga-repository</id>
             <url>http://maven.repository.redhat.com/techpreview/all</url>
@@ -225,6 +230,11 @@
         </repository>
     </repositories>
     <pluginRepositories>
+    	<pluginRepository>
+			<id>maven.central</id>
+			<name>Maven Central</name>
+			<url>https://repo1.maven.org/maven2</url>
+		</pluginRepository>
         <pluginRepository>
             <id>jboss-earlyaccess-plugin-repository</id>
             <url>http://maven.repository.redhat.com/earlyaccess/all/</url>
