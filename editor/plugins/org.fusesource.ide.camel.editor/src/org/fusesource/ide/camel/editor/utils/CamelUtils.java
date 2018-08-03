@@ -10,15 +10,24 @@
  ******************************************************************************/
 package org.fusesource.ide.camel.editor.utils;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.graphiti.dt.IDiagramTypeProvider;
 import org.eclipse.graphiti.features.IFeatureProvider;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IEditorReference;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 import org.fusesource.ide.camel.editor.CamelDesignEditor;
 import org.fusesource.ide.camel.editor.CamelEditor;
 import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
 import org.fusesource.ide.camel.model.service.core.util.CamelMavenUtils;
+import org.fusesource.ide.foundation.ui.io.CamelXMLEditorInput;
 
 /**
  * @author lhein
@@ -27,6 +36,10 @@ public class CamelUtils {
 
 	public static final String CAMEL_EDITOR_ID = "org.fusesource.ide.camel.editor";
 
+	private CamelUtils() {
+		// utils class
+	}
+	
 	/**
 	 * Tries to figure out the used camel version of the currently opened
 	 * diagram's project and if that fails it will return the latest supported
@@ -84,5 +97,33 @@ public class CamelUtils {
 	public static IProject project(IFeatureProvider fp) {
 		CamelDesignEditor editor = CamelUtils.getDiagramEditor(fp.getDiagramTypeProvider());
 		return editor == null ? null : editor.getWorkspaceProject();
+	}
+	
+	/**
+	 * this method has to be called from a UI thread
+	 * 
+	 * @param camelFile
+	 * @param monitor
+	 * @return
+	 * @throws PartInitException
+	 */
+	public static CamelEditor getCamelEditorForFile(IFile camelFile, IProgressMonitor monitor) throws PartInitException {
+		SubMonitor subMon = SubMonitor.convert(monitor, 1);
+		IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+		if (window != null) {
+			IWorkbenchPage activePage = window.getActivePage();
+			if (activePage != null) {
+				for (IEditorReference ref : activePage.getEditorReferences()) {
+					if (ref.getEditor(false) instanceof CamelEditor && 
+						ref.getEditorInput() instanceof CamelXMLEditorInput && 
+						((CamelXMLEditorInput)ref.getEditorInput()).getCamelContextFile().equals(camelFile)) {
+						subMon.setWorkRemaining(0);
+						return (CamelEditor)ref.getEditor(true); 
+					}
+				}
+			}
+		}
+		subMon.setWorkRemaining(0);
+		return null;
 	}
 }
