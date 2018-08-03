@@ -33,6 +33,11 @@
 
 	<repositories>
 		<repository>
+			<id>maven.central</id>
+			<name>Maven Central</name>
+			<url>https://repo1.maven.org/maven2</url>
+		</repository>
+		<repository>
 			<id>fuse-public-repository</id>
 			<name>FuseSource Community Release Repository</name>
 			<url>https://repo.fusesource.com/nexus/content/groups/public</url>
@@ -84,6 +89,11 @@
 	</repositories>
 
 	<pluginRepositories>
+		<pluginRepository>
+			<id>maven.central</id>
+			<name>Maven Central</name>
+			<url>https://repo1.maven.org/maven2</url>
+		</pluginRepository>
 		<pluginRepository>
 			<id>fuse-public-repository</id>
 			<name>FuseSource Community Release Repository</name>
