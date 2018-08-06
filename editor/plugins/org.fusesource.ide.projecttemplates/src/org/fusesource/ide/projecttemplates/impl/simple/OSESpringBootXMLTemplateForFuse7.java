@@ -21,6 +21,7 @@ public class OSESpringBootXMLTemplateForFuse7 extends AbstractOSESpringBootXMLTe
 	
 	protected static final String PLACEHOLDER_FABRIC8MAVENPLUGIN_VERSION = "%%%PLACEHOLDER_FABRIC8MAVENPLUGIN_VERSION%%%";
 	private static final String MINIMAL_COMPATIBLE_CAMEL_VERSION = "2.20.0";
+	private static final String MAXIMAL_COMPATIBLE_CAMEL_VERSION = "2.21.0.fuse-710";
 
 	@Override
 	public TemplateConfiguratorSupport getConfigurator() {
@@ -34,6 +35,8 @@ public class OSESpringBootXMLTemplateForFuse7 extends AbstractOSESpringBootXMLTe
 
 	@Override
 	public boolean isCompatible(EnvironmentData environment) {
-		return super.isCompatible(environment) && new VersionUtil().isGreaterThan(environment.getCamelVersion(), MINIMAL_COMPATIBLE_CAMEL_VERSION);
+		return super.isCompatible(environment)
+				&& new VersionUtil().isGreaterThan(environment.getCamelVersion(), MINIMAL_COMPATIBLE_CAMEL_VERSION)
+				&& new VersionUtil().isGreaterThan(MAXIMAL_COMPATIBLE_CAMEL_VERSION, environment.getCamelVersion());
 	}
 }

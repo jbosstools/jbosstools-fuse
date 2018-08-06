@@ -136,6 +136,60 @@
             			</configuration>
           			</execution>
           			
+          			<!-- BLANK-BLUEPRINT TEMPLATE Fuse 7.1 -->
+          			<execution>
+            			<id>create-template-blank-blueprint-fuse7.1</id>
+            			<goals>
+              				<goal>copy</goal>
+            			</goals>
+            			<phase>generate-resources</phase>
+            			<configuration>
+              				<fileset>
+                				<directory>template-sources/blank/blank-blueprint-fuse7.1</directory>
+                				<includes>
+                  					<include>**</include>
+                				</includes>
+                				<outputDirectory>templates/template-blank-blueprint-fuse7.1.zip</outputDirectory>
+              				</fileset>
+            			</configuration>
+          			</execution>
+          			
+          			<!-- BLANK-SPRING TEMPLATE Fuse 7.1 -->
+          			<execution>
+            			<id>create-template-blank-spring-fuse.17</id>
+            			<goals>
+              				<goal>copy</goal>
+            			</goals>
+            			<phase>generate-resources</phase>
+            			<configuration>
+              				<fileset>
+                				<directory>template-sources/blank/blank-spring-fuse7.1</directory>
+                				<includes>
+                  					<include>**</include>
+                				</includes>
+                				<outputDirectory>templates/template-blank-spring-fuse7.1.zip</outputDirectory>
+              				</fileset>
+            			</configuration>
+          			</execution>
+          			
+          			<!-- BLANK-JAVA TEMPLATE Fuse 7.1 -->
+          			<execution>
+            			<id>create-template-blank-java-fuse7.1</id>
+            			<goals>
+              				<goal>copy</goal>
+            			</goals>
+            			<phase>generate-resources</phase>
+            			<configuration>
+              				<fileset>
+                				<directory>template-sources/blank/blank-java-fuse7.1</directory>
+                				<includes>
+                  					<include>**</include>
+                				</includes>
+                				<outputDirectory>templates/template-blank-java-fuse7.1.zip</outputDirectory>
+              				</fileset>
+            			</configuration>
+          			</execution>
+          			
           			<!-- MEDIUM-CXF-CODEFIRST-JAVA TEMPLATE Fuse 6 -->
           			<execution>
             			<id>create-template-medium-cxf-codefirst-java-fuse6</id>
@@ -208,6 +262,42 @@
             			</configuration>
           			</execution>
           			
+          			<!-- MEDIUM-CXF-CODEFIRST-JAVA TEMPLATE Fuse 7.1 -->
+          			<execution>
+            			<id>create-template-medium-cxf-codefirst-java-fuse7.1</id>
+            			<goals>
+              				<goal>copy</goal>
+            			</goals>
+            			<phase>generate-resources</phase>
+            			<configuration>
+              				<fileset>
+                				<directory>template-sources/medium/cxf-code-first/medium-fuse-cxf-code-first-java-fuse7.1</directory>
+                				<includes>
+                  					<include>**</include>
+                				</includes>
+                				<outputDirectory>templates/template-medium-cxf-codefirst-java-fuse7.1.zip</outputDirectory>
+              				</fileset>
+            			</configuration>
+          			</execution>
+          			
+          			<!-- MEDIUM-CXF-CODEFIRST-SPRING TEMPLATE Fuse 7.1-->
+          			<execution>
+            			<id>create-template-medium-cxf-codefirst-spring-fuse7.1</id>
+            			<goals>
+              				<goal>copy</goal>
+            			</goals>
+            			<phase>generate-resources</phase>
+            			<configuration>
+              				<fileset>
+                				<directory>template-sources/medium/cxf-code-first/medium-fuse-cxf-code-first-spring-fuse7.1</directory>
+                				<includes>
+                  					<include>**</include>
+                				</includes>
+                				<outputDirectory>templates/template-medium-cxf-codefirst-spring-fuse7.1.zip</outputDirectory>
+              				</fileset>
+            			</configuration>
+          			</execution>
+          			
           			<!-- MEDIUM-EAP-WILDFLY-SPRING TEMPLATE Fuse 6-->
           			<execution>
             			<id>create-template-medium-eap-wildfly-spring-fuse6</id>
@@ -240,6 +330,24 @@
                   					<include>**</include>
                 				</includes>
                 				<outputDirectory>templates/template-medium-eap-wildfly-spring-fuse7.zip</outputDirectory>
+              				</fileset>
+            			</configuration>
+          			</execution>
+          			
+          			<!-- MEDIUM-EAP-WILDFLY-SPRING TEMPLATE Fuse 7.1 -->
+          			<execution>
+            			<id>create-template-medium-eap-wildfly-spring-fuse7.1</id>
+            			<goals>
+              				<goal>copy</goal>
+            			</goals>
+            			<phase>generate-resources</phase>
+            			<configuration>
+              				<fileset>
+                				<directory>template-sources/medium/eap-wildfly/camel-test-spring-fuse7.1</directory>
+                				<includes>
+                  					<include>**</include>
+                				</includes>
+                				<outputDirectory>templates/template-medium-eap-wildfly-spring-fuse7.1.zip</outputDirectory>
               				</fileset>
             			</configuration>
           			</execution>
@@ -354,7 +462,7 @@
           			
           			<!-- SIMPLE-CBR-SPRING TEMPLATE Fuse 7 -->
           			<execution>
-            			<id>create-template-simple-cbr-spring</id>
+            			<id>create-template-simple-cbr-spring7</id>
             			<goals>
               				<goal>copy</goal>
             			</goals>
@@ -372,7 +480,7 @@
           			
           			<!-- SIMPLE-CBR-JAVA TEMPLATE Fuse 7 -->
           			<execution>
-            			<id>create-template-simple-cbr-java</id>
+            			<id>create-template-simple-cbr-java7</id>
             			<goals>
               				<goal>copy</goal>
             			</goals>
@@ -384,6 +492,60 @@
                   					<include>**</include>
                 				</includes>
                 				<outputDirectory>templates/template-simple-cbr-java-fuse7.zip</outputDirectory>
+              				</fileset>
+            			</configuration>
+          			</execution>
+          			
+          			<!-- SIMPLE-CBR-BLUEPRINT TEMPLATE Fuse 7.1 -->
+          			<execution>
+            			<id>create-template-simple-cbr-blueprint-fuse7.1</id>
+            			<goals>
+              				<goal>copy</goal>
+            			</goals>
+            			<phase>generate-resources</phase>
+            			<configuration>
+              				<fileset>
+                				<directory>template-sources/simple/cbr/simple-fuse-cbr-blueprint-fuse7.1</directory>
+                				<includes>
+                  					<include>**</include>
+                				</includes>
+                				<outputDirectory>templates/template-simple-cbr-blueprint-fuse7.1.zip</outputDirectory>
+              				</fileset>
+            			</configuration>
+          			</execution>
+          			
+          			<!-- SIMPLE-CBR-SPRING TEMPLATE Fuse 7.1 -->
+          			<execution>
+            			<id>create-template-simple-cbr-spring7.1</id>
+            			<goals>
+              				<goal>copy</goal>
+            			</goals>
+            			<phase>generate-resources</phase>
+            			<configuration>
+              				<fileset>
+                				<directory>template-sources/simple/cbr/simple-fuse-cbr-spring-fuse7.1</directory>
+                				<includes>
+                  					<include>**</include>
+                				</includes>
+                				<outputDirectory>templates/template-simple-cbr-spring-fuse7.1.zip</outputDirectory>
+              				</fileset>
+            			</configuration>
+          			</execution>
+          			
+          			<!-- SIMPLE-CBR-JAVA TEMPLATE Fuse 7.1 -->
+          			<execution>
+            			<id>create-template-simple-cbr-java</id>
+            			<goals>
+              				<goal>copy</goal>
+            			</goals>
+            			<phase>generate-resources</phase>
+            			<configuration>
+              				<fileset>
+                				<directory>template-sources/simple/cbr/simple-fuse-cbr-java-fuse7.1</directory>
+                				<includes>
+                  					<include>**</include>
+                				</includes>
+                				<outputDirectory>templates/template-simple-cbr-java-fuse7.1.zip</outputDirectory>
               				</fileset>
             			</configuration>
           			</execution>
@@ -419,6 +581,24 @@
                   					<include>**</include>
                 				</includes>
                 				<outputDirectory>templates/template-simple-ose-log-springboot-fuse7.zip</outputDirectory>
+              				</fileset>
+            			</configuration>
+          			</execution>
+          			
+          			<!-- SIMPLE-OSE-SPRINGBOOT TEMPLATE for Fuse 7.1-->
+          			<execution>
+            			<id>create-template-simple-ose-springboot-fuse7.1</id>
+            			<goals>
+              				<goal>copy</goal>
+            			</goals>
+            			<phase>generate-resources</phase>
+            			<configuration>
+              				<fileset>
+                				<directory>template-sources/simple/ose/simple-ose-log-springboot-fuse7.1</directory>
+                				<includes>
+                  					<include>**</include>
+                				</includes>
+                				<outputDirectory>templates/template-simple-ose-log-springboot-fuse7.1.zip</outputDirectory>
               				</fileset>
             			</configuration>
           			</execution>
