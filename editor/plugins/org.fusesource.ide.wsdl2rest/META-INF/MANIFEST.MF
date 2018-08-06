@@ -85,3 +85,4 @@ Export-Package: org.apache.commons.validator.routines;x-friends:="org.fusesource
  org.jboss.fuse.wsdl2rest.impl.service;x-friends:="org.fusesource.ide.wsdl2rest.ui",
  org.jboss.fuse.wsdl2rest.impl.writer;x-friends:="org.fusesource.ide.wsdl2rest.ui",
  org.jboss.fuse.wsdl2rest.util;x-friends:="org.fusesource.ide.wsdl2rest.ui"
+Bundle-Vendor: Red Hat
