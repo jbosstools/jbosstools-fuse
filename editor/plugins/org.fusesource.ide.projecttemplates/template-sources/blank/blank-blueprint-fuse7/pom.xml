@@ -27,8 +27,6 @@
 
 		<!-- the version of the Red Hat Fuse BOM, defining all the dependency versions -->
 		<jboss.fuse.bom.version>%%%PLACEHOLDER_BOMVERSION%%%</jboss.fuse.bom.version>
-
-		<camel.version>2.20.1</camel.version>
 	</properties>
 
 	<repositories>
@@ -138,8 +136,8 @@
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
-				<groupId>org.jboss.fuse</groupId>
-				<artifactId>jboss-fuse-parent</artifactId>
+				<groupId>org.jboss.redhat-fuse</groupId>
+				<artifactId>fuse-karaf-bom</artifactId>
 				<version>${jboss.fuse.bom.version}</version>
 				<type>pom</type>
 				<scope>import</scope>
@@ -197,7 +195,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.7.0</version>
+				<version>3.8.0</version>
 				<configuration>
 					<source>1.8</source>
 					<target>1.8</target>
@@ -206,7 +204,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-resources-plugin</artifactId>
-				<version>3.0.2</version>
+				<version>3.1.0</version>
 				<configuration>
 					<encoding>UTF-8</encoding>
 				</configuration>
@@ -214,9 +212,9 @@
 
 			<!-- to run the example using mvn camel:run -->
 			<plugin>
-				<groupId>org.apache.camel</groupId>
+				<groupId>org.jboss.redhat-fuse</groupId>
 				<artifactId>camel-maven-plugin</artifactId>
-				<version>${camel.version}</version>
+				<version>${jboss.fuse.bom.version}</version>
 				<configuration>
 					<useBlueprint>true</useBlueprint>
 				</configuration>
