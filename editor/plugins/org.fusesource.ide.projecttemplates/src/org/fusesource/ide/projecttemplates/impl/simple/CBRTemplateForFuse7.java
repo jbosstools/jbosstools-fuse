@@ -20,6 +20,8 @@ import org.fusesource.ide.projecttemplates.wizards.pages.model.EnvironmentData;
 
 public class CBRTemplateForFuse7 extends AbstractCBRTemplate {
 
+	private static final String MAXIMAL_COMPATIBLE_CAMEL_VERSION = "2.21.0.fuse-710";
+
 	@Override
 	public TemplateCreatorSupport getCreator(CommonNewProjectMetaData projectMetaData) {
 		return new CBRUnzipTemplateCreator("7");
@@ -27,7 +29,9 @@ public class CBRTemplateForFuse7 extends AbstractCBRTemplate {
 	
 	@Override
 	public boolean isCompatible(EnvironmentData environment) {
-		return super.isCompatible(environment) && !new VersionUtil().isStrictlyLowerThan2200(environment.getCamelVersion());
+		return super.isCompatible(environment)
+				&& !new VersionUtil().isStrictlyLowerThan2200(environment.getCamelVersion())
+				&& new VersionUtil().isGreaterThan(MAXIMAL_COMPATIBLE_CAMEL_VERSION, environment.getCamelVersion());
 	}
 	
 	@Override

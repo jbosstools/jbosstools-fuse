@@ -20,6 +20,8 @@ import org.fusesource.ide.projecttemplates.wizards.pages.model.EnvironmentData;
 
 public class CXfCodeFirstProjectTemplateForFuse7 extends AbstractCxfCodeFirstProjectTemplate {
 
+	private static final String MAXIMAL_COMPATIBLE_CAMEL_VERSION = "2.21.0.fuse-710";
+
 	@Override
 	public TemplateCreatorSupport getCreator(CommonNewProjectMetaData projectMetaData) {
 		return new CXfCodeFirstUnzipTemplateCreator("7");
@@ -27,7 +29,9 @@ public class CXfCodeFirstProjectTemplateForFuse7 extends AbstractCxfCodeFirstPro
 
 	@Override
 	public boolean isCompatible(EnvironmentData environment) {
-		return super.isCompatible(environment) && !new VersionUtil().isStrictlyLowerThan2200(environment.getCamelVersion());
+		return super.isCompatible(environment)
+				&& !new VersionUtil().isStrictlyLowerThan2200(environment.getCamelVersion())
+				&& new VersionUtil().isGreaterThan(MAXIMAL_COMPATIBLE_CAMEL_VERSION, environment.getCamelVersion());
 	}
 	
 	@Override

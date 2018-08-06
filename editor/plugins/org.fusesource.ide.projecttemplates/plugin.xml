@@ -77,6 +77,15 @@
           name="%template.category.jbossfuse.expert"
           weight="2">
     </projectTemplateCategory>
+      <projectTemplate
+          category="fuse.projecttemplates.jbossfuse.simple"
+          class="org.fusesource.ide.projecttemplates.impl.simple.CBRTemplateForFuse71"
+          description="%template.simple.cbr.description"
+          id="org.fusesource.ide.projecttemplates.cbrTemplateSimplev71"
+          keywords="fuse cbr content based router"
+          name="%template.simple.cbr.name"
+          weight="0">
+    </projectTemplate>
     <projectTemplate
           category="fuse.projecttemplates.jbossfuse.simple"
           class="org.fusesource.ide.projecttemplates.impl.simple.CBRTemplateForFuse7"
@@ -121,6 +130,14 @@
           weight="0">
     </projectTemplate>
     <projectTemplate
+          class="org.fusesource.ide.projecttemplates.impl.simple.EAPSpringTemplateForFuse71"
+          description="%template.medium.eapspring.description"
+          id="org.fusesource.ide.projecttemplates.eapSpringTemplateMediumv71"
+          keywords="eap camel spring bean"
+          name="%template.medium.eapspring.name"
+          weight="0">
+    </projectTemplate>
+    <projectTemplate
           class="org.fusesource.ide.projecttemplates.impl.simple.OSESpringBootXMLTemplateForFuse6"
           description="%template.simple.osespringboot.xml.description"
           id="org.fusesource.ide.projecttemplates.oseSpringBootv6"
@@ -132,6 +149,14 @@
           class="org.fusesource.ide.projecttemplates.impl.simple.OSESpringBootXMLTemplateForFuse7"
           description="%template.simple.osespringboot.xml.description"
           id="org.fusesource.ide.projecttemplates.oseSpringBootv7"
+          keywords="ose openshift springboot"
+          name="%template.simple.osespringboot.xml.name"
+          weight="50">
+    </projectTemplate>
+    <projectTemplate
+          class="org.fusesource.ide.projecttemplates.impl.simple.OSESpringBootXMLTemplateForFuse71"
+          description="%template.simple.osespringboot.xml.description"
+          id="org.fusesource.ide.projecttemplates.oseSpringBootv71"
           keywords="ose openshift springboot"
           name="%template.simple.osespringboot.xml.name"
           weight="50">
@@ -154,6 +179,15 @@
           name="%template.medium.cxf.code.first.name"
           weight="50">
     </projectTemplate>
+    <projectTemplate
+          category="fuse.projecttemplates.jbossfuse.advanced"
+          class="org.fusesource.ide.projecttemplates.impl.medium.CXfCodeFirstProjectTemplateForFuse71"
+          description="%template.medium.cxf.code.first.description"
+          id="org.fusesource.ide.projecttemplates.cxfCodeFirstMediumv71"
+          keywords="cxf"
+          name="%template.medium.cxf.code.first.name"
+          weight="50">
+    </projectTemplate>
     <projectTemplateCategory
           id="fuse.projecttemplates.EMPTY_CATEGORY"
           name="%template.category.empty"
@@ -163,7 +197,7 @@
           category="fuse.projecttemplates.EMPTY_CATEGORY"
           class="org.fusesource.ide.projecttemplates.impl.simple.EmptyProjectTemplateForFuse6"
           description="%template.empty.description"
-          id="org.fusesource.ide.projecttemplates.empty"
+          id="org.fusesource.ide.projecttemplates.emptyv6"
           name="%template.empty.name"
           weight="50">
     </projectTemplate>
@@ -171,7 +205,15 @@
           category="fuse.projecttemplates.EMPTY_CATEGORY"
           class="org.fusesource.ide.projecttemplates.impl.simple.EmptyProjectTemplateForFuse7"
           description="%template.empty.description"
-          id="org.fusesource.ide.projecttemplates.empty"
+          id="org.fusesource.ide.projecttemplates.emptyv7"
+          name="%template.empty.name"
+          weight="50">
+    </projectTemplate>
+    <projectTemplate
+          category="fuse.projecttemplates.EMPTY_CATEGORY"
+          class="org.fusesource.ide.projecttemplates.impl.simple.EmptyProjectTemplateForFuse71"
+          description="%template.empty.description"
+          id="org.fusesource.ide.projecttemplates.emptyv71"
           name="%template.empty.name"
           weight="50">
     </projectTemplate>

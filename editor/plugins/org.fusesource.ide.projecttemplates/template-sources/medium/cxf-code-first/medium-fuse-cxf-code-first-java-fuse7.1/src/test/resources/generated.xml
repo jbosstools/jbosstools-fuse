@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE xml>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:inc="http://incident.java.first.code.cxf.camel.mycompany.com/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <inc:reportIncident>
+         <!--Optional:-->
+         <arg0>
+            <!--Optional:-->
+            <details>?</details>
+            <!--Optional:-->
+            <email>?</email>
+            <!--Optional:-->
+            <familyName>?</familyName>
+            <!--Optional:-->
+            <givenName>?</givenName>
+            <!--Optional:-->
+            <incidentDate>?</incidentDate>
+            <!--Optional:-->
+            <incidentId>30</incidentId>
+            <!--Optional:-->
+            <phone>?</phone>
+            <!--Optional:-->
+            <summary>?</summary>
+         </arg0>
+      </inc:reportIncident>
+   </soapenv:Body>
+</soapenv:Envelope>
