@@ -31,7 +31,7 @@ public class KarafLaunchConfigTabGroup extends
 
 	@Override
 	public void createTabs(ILaunchConfigurationDialog dialog, String mode) {
-		List<ILaunchConfigurationTab> tabs = new ArrayList<ILaunchConfigurationTab>(5);
+		List<ILaunchConfigurationTab> tabs = new ArrayList<>(5);
 		
 //		tabs.add(new ServerLaunchConfigurationTab(IKarafServerDelegate.SERVER_IDS_SUPPORTED));
 		tabs.add(new JavaArgumentsTab());

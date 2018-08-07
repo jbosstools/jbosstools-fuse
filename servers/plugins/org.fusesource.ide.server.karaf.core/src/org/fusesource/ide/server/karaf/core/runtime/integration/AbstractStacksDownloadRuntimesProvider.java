@@ -64,7 +64,7 @@ public abstract class AbstractStacksDownloadRuntimesProvider implements IDownloa
 	private synchronized ArrayList<DownloadRuntime> loadDownloadableRuntimes(IProgressMonitor monitor) {
 		monitor.beginTask(Messages.LoadRemoteRuntimes, 200);
 		Stacks[] stacksArr = getStacks(new SubProgressMonitor(monitor, 100));
-		ArrayList<DownloadRuntime> all = new ArrayList<DownloadRuntime>();
+		ArrayList<DownloadRuntime> all = new ArrayList<>();
 		monitor.beginTask(Messages.CreateDownloadRuntimes, stacksArr.length * 100);		
 		for( int i = 0; i < stacksArr.length && !monitor.isCanceled(); i++ ) {
 			IProgressMonitor inner = new SubProgressMonitor(monitor, 100);

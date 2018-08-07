@@ -30,7 +30,7 @@ import org.jboss.ide.eclipse.as.wtp.core.server.behavior.IControllableServerBeha
  */
 public class SshConnector  {
 
-	private static HashMap<IServer, SshConnector> connectors = new HashMap<IServer, SshConnector>();
+	private static HashMap<IServer, SshConnector> connectors = new HashMap<>();
 	
 	private int port;
 	private String host;

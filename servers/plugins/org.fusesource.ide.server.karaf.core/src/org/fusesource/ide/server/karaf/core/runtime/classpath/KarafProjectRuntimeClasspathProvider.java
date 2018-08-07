@@ -72,7 +72,7 @@ public class KarafProjectRuntimeClasspathProvider extends RuntimeClasspathProvid
 		if (installPath == null)
 			return new IClasspathEntry[0];
 
-		List<IClasspathEntry> list = new ArrayList<IClasspathEntry>();
+		List<IClasspathEntry> list = new ArrayList<>();
 
 		String runtimeId = runtime.getRuntimeType().getId();
 		if (runtimeId.indexOf(".fuseesb.runtime.") != -1 || runtimeId.indexOf(".karaf.runtime.") != -1) {
