@@ -295,7 +295,7 @@ public class TransformTestWizardPage extends NewTypeWizardPage {
                 }
 
             } else {
-                IFolder folder = javaProject.getProject().getFolder("src/test/java"); //$NON-NLS-1$
+                IFolder folder = javaProject.getProject().getFolder(TEST_SOURCE_FOLDER); //$NON-NLS-1$
                 if (!folder.exists()) {
                     IFolder srcFolder = javaProject.getProject().getFolder("src"); //$NON-NLS-1$
                     if (!srcFolder.exists()) {
