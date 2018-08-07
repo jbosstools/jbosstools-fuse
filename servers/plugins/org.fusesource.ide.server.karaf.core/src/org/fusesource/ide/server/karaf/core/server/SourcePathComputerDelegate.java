@@ -42,7 +42,7 @@ public class SourcePathComputerDelegate implements ISourcePathComputerDelegate  
 	public ISourceContainer[] computeSourceContainers(ILaunchConfiguration configuration, IProgressMonitor monitor) throws CoreException {
 		
 		IRuntimeClasspathEntry[] unresolvedEntries = JavaRuntime.computeUnresolvedSourceLookupPath(configuration);
-		List<FolderSourceContainer> sourcefolderList = new ArrayList<FolderSourceContainer>();
+		List<FolderSourceContainer> sourcefolderList = new ArrayList<>();
 		
 		IServer server =  ServerUtil.getServer(configuration);
 		
@@ -54,7 +54,7 @@ public class SourcePathComputerDelegate implements ISourcePathComputerDelegate  
 		if (modules == null)
 			return null;
 		
-		List<IJavaProject> javaProjectList = new ArrayList<IJavaProject>();
+		List<IJavaProject> javaProjectList = new ArrayList<>();
 		
 		processModules(sourcefolderList, modules, javaProjectList, server,monitor);
 
