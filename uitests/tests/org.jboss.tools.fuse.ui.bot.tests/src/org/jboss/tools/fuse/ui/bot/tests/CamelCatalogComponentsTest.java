@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.eclipse.reddeer.gef.view.PaletteView;
 import org.eclipse.reddeer.junit.internal.runner.ParameterizedRequirementsRunnerFactory;
 import org.eclipse.reddeer.junit.requirement.inject.InjectRequirement;
 import org.eclipse.reddeer.junit.runner.RedDeerSuite;
@@ -28,8 +29,6 @@ import org.eclipse.reddeer.requirements.openperspective.OpenPerspectiveRequireme
 import org.eclipse.reddeer.workbench.impl.shell.WorkbenchShell;
 import org.jboss.tools.fuse.reddeer.CamelCatalogUtils;
 import org.jboss.tools.fuse.reddeer.CamelCatalogUtils.CatalogType;
-import org.jboss.tools.fuse.reddeer.component.CamelComponent;
-import org.jboss.tools.fuse.reddeer.component.CamelComponents;
 import org.jboss.tools.fuse.reddeer.editor.CamelEditor;
 import org.jboss.tools.fuse.reddeer.perspectives.FuseIntegrationPerspective;
 import org.jboss.tools.fuse.reddeer.projectexplorer.CamelProject;
@@ -37,6 +36,7 @@ import org.jboss.tools.fuse.reddeer.requirement.CamelCatalogRequirement;
 import org.jboss.tools.fuse.reddeer.requirement.CamelCatalogRequirement.CamelCatalog;
 import org.jboss.tools.fuse.reddeer.utils.ProjectFactory;
 import org.jboss.tools.fuse.reddeer.view.FusePropertiesView;
+import org.jboss.tools.fuse.reddeer.view.PaletteViewExt;
 import org.jboss.tools.fuse.ui.bot.tests.utils.EditorManipulator;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -82,14 +82,10 @@ public class CamelCatalogComponentsTest {
 	 */
 	@Parameters
 	public static Collection<String> setupData() {
-		/**
-		 * Temporary solution -> need to get components from palette view of project with camel version according to camel catalog requirement
-		 * see https://issues.jboss.org/browse/JBQA-13800 
-		 */
-		List<String> comps = new ArrayList<>();
-		for (CamelComponent component : CamelComponents.getEndpoints()) {
-			comps.add(component.getPaletteEntry());
-		}
+		ProjectFactory.newProject(PROJECT_NAME).deploymentType(STANDALONE).runtimeType(KARAF)
+				.version(catalogRequirement.getConfiguration().getVersion()).template(CBR_SPRING).create();
+		new PaletteView().open();
+		List<String> comps = new PaletteViewExt().getGroupTools("Components");
 
 		/**
 		 * Components without Camel catalog JSON file 
@@ -136,9 +132,9 @@ public class CamelCatalogComponentsTest {
 	@After
 	public void clearSetup() {
 		new CamelProject(PROJECT_NAME).openCamelContext(CONTEXT);
-		CamelEditor.switchTab("Source");
+		CamelEditor.switchTab(CamelEditor.SOURCE_TAB);
 		EditorManipulator.copyFileContentToCamelXMLEditor("resources/camel-context-cbr.xml");
-		CamelEditor.switchTab("Design");
+		CamelEditor.switchTab(CamelEditor.DESIGN_TAB);
 	}
 
 	@AfterClass
@@ -165,7 +161,7 @@ public class CamelCatalogComponentsTest {
 		CamelEditor editor = new CamelEditor(CONTEXT);
 		editor.activate();
 		editor.addCamelComponent(component, "Route cbr-route");
-
+		
 		FusePropertiesView view = new FusePropertiesView();
 		view.open();
 		collector.checkThat("Component '" + component + "' has not 'Advanced' properties tab", view.getTabs().contains("Advanced"), equalTo(true));
