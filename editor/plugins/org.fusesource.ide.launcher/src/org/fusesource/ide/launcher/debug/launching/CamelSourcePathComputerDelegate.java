@@ -23,6 +23,7 @@ import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.sourcelookup.ISourceContainer;
 import org.eclipse.debug.core.sourcelookup.ISourcePathComputerDelegate;
@@ -44,17 +45,11 @@ import org.fusesource.ide.launcher.debug.util.CamelDebugUtils;
  * 
  * @author lhein
  */
-public class CamelSourcePathComputerDelegate implements
-		ISourcePathComputerDelegate {
+public class CamelSourcePathComputerDelegate implements ISourcePathComputerDelegate {
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.core.sourcelookup.ISourcePathComputerDelegate#computeSourceContainers(org.eclipse.debug.core.ILaunchConfiguration, org.eclipse.core.runtime.IProgressMonitor)
-	 */
 	@Override
-	public ISourceContainer[] computeSourceContainers(
-			ILaunchConfiguration configuration, IProgressMonitor monitor)
-			throws CoreException {
-		
+	public ISourceContainer[] computeSourceContainers(ILaunchConfiguration configuration, IProgressMonitor monitor) throws CoreException {
+		SubMonitor subMon = SubMonitor.convert(monitor, 2);
 		String filePathUri = CamelDebugUtils.getRawCamelContextFilePathFromLaunchConfig(configuration);
 		try {
 			filePathUri = URLEncoder.encode(filePathUri, StandardCharsets.UTF_8.name());
@@ -74,8 +69,8 @@ public class CamelSourcePathComputerDelegate implements
 		}
 		
 		// Compute the source path for any java-based debug targets.
-		ISourceContainer[] javaSourceContainers = computeJavaSourceContainers(configuration, monitor);
-		ISourceContainer[] wsSourceContainers = computeWorkspaceSourceContainers(configuration, monitor);
+		ISourceContainer[] javaSourceContainers = computeJavaSourceContainers(configuration, subMon.split(1));
+		ISourceContainer[] wsSourceContainers = computeWorkspaceSourceContainers(subMon.split(1));
 		ISourceContainer[] sourceContainers = new ISourceContainer[javaSourceContainers.length + wsSourceContainers.length + 1];
 		
 		System.arraycopy(javaSourceContainers, 0, sourceContainers, 0, javaSourceContainers.length);
@@ -85,13 +80,15 @@ public class CamelSourcePathComputerDelegate implements
 		return sourceContainers;
 	}
 	
-	private ISourceContainer[] computeWorkspaceSourceContainers(ILaunchConfiguration configuration, IProgressMonitor monitor) throws CoreException {
+	private ISourceContainer[] computeWorkspaceSourceContainers(IProgressMonitor monitor) {
 		IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
 		ISourceContainer[] containers = new ISourceContainer[projects.length];
 		
+		SubMonitor subMon = SubMonitor.convert(monitor, projects.length);
 		for (int i = 0; i < projects.length; i++) {
 			ISourceContainer container = new ProjectSourceContainer(projects[i], false);
 			containers[i] = container;
+			subMon.worked(1);
 		}
 		return containers;		
 	}
@@ -106,8 +103,9 @@ public class CamelSourcePathComputerDelegate implements
 		processProjects(projects, javaProjectList, monitor);
 
 		IRuntimeClasspathEntry[] projectEntries = new IRuntimeClasspathEntry[javaProjectList.size()];
-		for (int i = 0; i < javaProjectList.size(); i++)
-			projectEntries[i] = JavaRuntime.newProjectRuntimeClasspathEntry(javaProjectList.get(i)); 
+		for (int i = 0; i < javaProjectList.size(); i++) {
+			projectEntries[i] = JavaRuntime.newProjectRuntimeClasspathEntry(javaProjectList.get(i));
+		}
 
 		IRuntimeClasspathEntry[] entries =  new IRuntimeClasspathEntry[projectEntries.length+unresolvedEntries.length]; 
 		System.arraycopy(unresolvedEntries,0,entries,0,unresolvedEntries.length);
@@ -118,23 +116,22 @@ public class CamelSourcePathComputerDelegate implements
 	}
 
 	private void processProjects(IProject[] projects, List<IJavaProject> javaProjectList, IProgressMonitor monitor) {
-		
+		SubMonitor subMon = SubMonitor.convert(monitor, projects.length);
 		for (int i = 0; i < projects.length; i++) {
 			IProject project = projects[i];
-			
 			if (project != null && project.isAccessible()) {
-
 				try {
 					if (project.hasNature(JavaCore.NATURE_ID)) {
 						IJavaProject javaProject = (IJavaProject) project.getNature(JavaCore.NATURE_ID);
-						
-						if (!javaProjectList.contains(javaProject))
+						if (!javaProjectList.contains(javaProject)) {
 							javaProjectList.add(javaProject);
+						}
 					}
 				} catch (CoreException e) {
 					Activator.getLogger().error(e);
 				}
 			}
+			subMon.worked(1);
 		}
 	}	
 
