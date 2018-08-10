@@ -53,6 +53,12 @@ public abstract class FuseMavenLaunchDelegate extends MavenLaunchDelegate {
 			launch.addDebugTarget(target);
 		}
 	}
+	
+	@Override
+	public ILaunch getLaunch(ILaunchConfiguration configuration, String mode) throws CoreException {
+		// Workaround to FUSETOOLS-3058 with new feature "advanced source lookup" breaking Camel Source Lookup
+		return null;
+	}
 
 	private boolean hasProcess(ILaunch launch) {
 		return launch.getProcesses() != null && launch.getProcesses().length > 0;
