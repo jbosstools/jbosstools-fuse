@@ -35,6 +35,7 @@ public class IgniteVersionMapper extends OnlineVersionMapper {
 	protected Map<String, String> createFallbackMapping() {
 		Map<String, String> mapping = new HashMap<>();
 		mapping.put("1.3.10.fuse-000001-redhat-1", "1.3.10.fuse-000001-redhat-1");
+		mapping.put("1.3.12.fuse-000002-redhat-1", "1.3.12.fuse-000001-redhat-2");
 		return mapping;
 	}
 	
