@@ -154,8 +154,7 @@ public class CamelUtils {
 	
 	public static boolean startsWithOneOfNamespace(Node child, Collection<String> namespaces) {
 		return namespaces.stream()
-				.filter(namespace -> CamelUtils.startsWithNamespace(child, namespace))
-				.findAny().isPresent();
+				.anyMatch(namespace -> CamelUtils.startsWithNamespace(child, namespace));
 	}
 	
 	public static boolean isCamelNamespaceElement(Node child) {
@@ -275,7 +274,7 @@ public class CamelUtils {
 				Object designEditor = ep.getClass().getMethod("getDesignEditor", null).invoke(ep, null);
 				if (designEditor != null) {
 					Object prj = designEditor.getClass().getMethod("getWorkspaceProject", null).invoke(designEditor, null);
-					if (prj != null && prj instanceof IProject) {
+					if (prj instanceof IProject) {
 						wsProject = (IProject)prj;
 						return wsProject;
 					}
