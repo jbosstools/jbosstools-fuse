@@ -9,8 +9,6 @@
  *****************************************************************************/
 package org.jboss.tools.fuse.transformation.editor;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -120,10 +118,6 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
     public TransformationEditor() {
         super();
         ResourcesPlugin.getWorkspace().addResourceChangeListener(this);
-    }
-
-    protected void closeEditorsWithoutValidInput() {
-        Display.getDefault().asyncExec(new CloseEditorWithoutValidTransformationEditorInput(this));
     }
 
     void copySourceToProject(Class<?> sourceClass,
@@ -264,13 +258,7 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
         });
         targetViewerButton.setSelection(prefs.getBoolean(TARGET_VIEWER_PREFERENCE));
         if (!targetViewerButton.getSelection()) toggleTargetViewer(horizontalSplitter);
-        manager.addListener(new PropertyChangeListener() {
-
-            @Override
-            public void propertyChange(final PropertyChangeEvent event) {
-                managerEvent();
-            }
-        });
+        manager.addListener(event -> managerEvent());
         updateHelpText();
     }
 
@@ -300,7 +288,9 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
      * @see org.eclipse.ui.part.EditorPart#doSave(org.eclipse.core.runtime.IProgressMonitor)
      */
     @Override
-    public void doSave(final IProgressMonitor monitor) {}
+    public void doSave(final IProgressMonitor monitor) {
+    	// Save is done automatically after each modification
+    }
 
     /**
      * {@inheritDoc}
@@ -308,7 +298,9 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
      * @see org.eclipse.ui.part.EditorPart#doSaveAs()
      */
     @Override
-    public void doSaveAs() {}
+    public void doSaveAs() {
+    	// Save is done automatically after each modification
+    }
 
     /**
      * {@inheritDoc}
@@ -432,7 +424,7 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
         switch (event.getType()) {
             case IResourceChangeEvent.POST_CHANGE:
                 // file has been deleted...
-                closeEditorsWithoutValidInput();
+            	 Display.getDefault().asyncExec(new CloseEditorWithoutValidTransformationEditorInput(this));
                 break;
             case IResourceChangeEvent.PRE_CLOSE:
                 Display.getDefault().asyncExec(new Runnable() {
@@ -469,7 +461,7 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
      */
     @Override
     public void setFocus() {
-
+    	// No specific item to highlight on focus
     }
 
     void toggleSourceViewer(SashForm horizontalSplitter) {
