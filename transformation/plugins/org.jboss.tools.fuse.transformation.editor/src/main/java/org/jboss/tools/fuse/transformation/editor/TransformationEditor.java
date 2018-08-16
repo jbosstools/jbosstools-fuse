@@ -311,10 +311,12 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
     public void init(IEditorSite site,
                      IEditorInput input) throws PartInitException {
         IContentType contentType = Platform.getContentTypeManager().getContentType(DozerConfigContentTypeDescriber.ID);
-        if (!contentType.isAssociatedWith(input.getName()))
+        if (!contentType.isAssociatedWith(input.getName())) {
             throw new PartInitException(Messages.TransformationEditor_invalidTransformationFile);
-        if (CamelUtils.getDiagramEditor() == null)
+        }
+        if (CamelUtils.getDiagramEditor() == null) {
             throw new PartInitException(Messages.TransformationEditor_mustBeOpenedViaCamelEditor);
+        }
         setSite(site);
         setInput(input);
         setPartName(input.getName());
