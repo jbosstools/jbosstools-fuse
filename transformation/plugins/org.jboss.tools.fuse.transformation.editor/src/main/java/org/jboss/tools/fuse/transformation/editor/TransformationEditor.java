@@ -54,7 +54,6 @@ import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.ISaveablePart2;
 import org.eclipse.ui.IWorkbenchPage;
@@ -65,6 +64,7 @@ import org.fusesource.ide.camel.editor.utils.CamelUtils;
 import org.fusesource.ide.camel.editor.utils.MavenUtils;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.jboss.tools.fuse.transformation.core.MappingOperation;
+import org.jboss.tools.fuse.transformation.editor.internal.CloseEditorWithoutValidTransformationEditorInput;
 import org.jboss.tools.fuse.transformation.editor.internal.MappingDetailViewer;
 import org.jboss.tools.fuse.transformation.editor.internal.MappingsViewer;
 import org.jboss.tools.fuse.transformation.editor.internal.PotentialDropTarget;
@@ -123,28 +123,7 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
     }
 
     protected void closeEditorsWithoutValidInput() {
-        Display.getDefault().asyncExec(new Runnable() {
-
-            @Override
-            public void run() {
-                if (getSite() == null || getSite().getPage() == null) return;
-                // close all editors without valid input
-                IEditorReference[] refs = getSite().getPage().getEditorReferences();
-                if (refs != null) {
-                    for (IEditorReference ref : refs) {
-                        IEditorPart editor = ref.getEditor(false);
-                        if (editor != null) {
-                            IEditorInput editorInput = editor.getEditorInput();
-                            if (editorInput instanceof FileEditorInput
-                                && !((FileEditorInput)editorInput).getFile().exists()) {
-                                getSite().getPage().closeEditor(editor, false);
-                                editor.dispose();
-                            }
-                        }
-                    }
-                }
-            }
-        });
+        Display.getDefault().asyncExec(new CloseEditorWithoutValidTransformationEditorInput(this));
     }
 
     void copySourceToProject(Class<?> sourceClass,
