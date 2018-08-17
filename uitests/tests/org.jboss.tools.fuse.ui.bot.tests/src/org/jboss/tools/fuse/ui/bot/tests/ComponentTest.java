@@ -64,7 +64,7 @@ public class ComponentTest extends DefaultTest {
 	 * 
 	 * @return List of all available components in Palette
 	 */
-	@Parameters
+	@Parameters(name = "{0}")
 	public static Collection<CamelComponent> setupData() {
 		return CamelComponents.getEndpoints();
 	}
