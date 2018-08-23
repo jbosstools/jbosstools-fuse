@@ -498,12 +498,7 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 		contextPathText.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
 		contextPathText.addModifyListener(input -> {
 			if (rce != null) {
-				Text text = (Text) input.widget;
-				text.setRedraw(false);
-				int pos = text.getCaretPosition();
-				rce.setContextPath(text.getText());
-				text.setSelection(pos, pos);
-				text.setRedraw(true);
+				rce.setContextPath(contextPathText.getText());
 			}
 		});
 		
@@ -512,12 +507,7 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 		portText.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
 		portText.addModifyListener(input -> {
 			if (rce != null) {
-				Text text = (Text) input.widget;
-				text.setRedraw(false);
-				int pos = text.getCaretPosition();
 				rce.setPort(portText.getText());
-				text.setSelection(pos, pos);
-				text.setRedraw(true);
 			}
 		});
 
@@ -545,12 +535,7 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 		hostText.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
 		hostText.addModifyListener(input -> {
 			if (rce != null) {
-				Text text = (Text) input.widget;
-				text.setRedraw(false);
-				int pos = text.getCaretPosition();
 				rce.setHost(hostText.getText());
-				text.setSelection(pos, pos);
-				text.setRedraw(true);
 			}
 		});
 		
