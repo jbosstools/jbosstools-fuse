@@ -123,7 +123,8 @@ public class OpenShiftExplorer extends WorkbenchView {
 			new WaitUntil(new TreeItemHasMinChildren(treeItem, 1), TimePeriod.getCustom(20));
 			new WaitUntil(new OpenShiftExplorerLoadingIsCompleted(treeItem), TimePeriod.getCustom(20));
 			if (i != path.length) {
-				treeItem = treeItem.getItem(path[i]);
+				String name = path[i];
+				treeItem = treeItem.getItems().stream().filter(t -> t.getText().startsWith(name)).findFirst().orElse(null);
 			} else {
 				treeItem = treeItem.getItems().get(0);
 			}
@@ -132,7 +133,14 @@ public class OpenShiftExplorer extends WorkbenchView {
 		treeItem.select();
 		selectedConnection = null;
 		new WaitUntil(new ContextMenuHasItem(new ContextMenu(treeItem), "Pod Log..."), TimePeriod.getCustom(20));
-		new ContextMenuItem("Pod Log...").select();
+		new ContextMenuItem(treeItem, "Pod Log...").select();
+
+		// handle "No pod selected" shell
+		new WaitUntil(new ShellIsAvailable("No pod selected"), TimePeriod.DEFAULT, false);
+		if (new ShellIsAvailable("No pod selected").test()) {
+			new OkButton(new DefaultShell("No pod selected")).click();
+			new ContextMenuItem(treeItem, "Pod Log...").select();
+		}
 	}
 
 	/**

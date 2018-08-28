@@ -33,7 +33,7 @@ public class ContextMenuHasItem extends AbstractWaitCondition {
 	public boolean test() {
 		boolean result = false;
 		for (MenuItem tmp : menu.getItems()) {
-			if (tmp.getText().equals(item)) {
+			if (tmp.isEnabled() && tmp.getText().equals(item)) {
 				result = true;
 				break;
 			}
