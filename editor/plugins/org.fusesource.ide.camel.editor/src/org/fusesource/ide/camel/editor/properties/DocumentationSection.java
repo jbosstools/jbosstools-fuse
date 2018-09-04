@@ -48,7 +48,7 @@ public class DocumentationSection extends NodeSectionSupport {
 	private static final String HELP_CONTEXT_ID_PREFIX = "org.fusesource.ide.camel.editor.";
 	private static final String ALL_EIPS_INFO = "allEIPs";
 	private static final String ENDPOINT_GENERAL_INFO = "endpoint";
-	private static final String REST_INFO_PAGE = "restdsl";
+	private static final String REST_INFO_PAGE = "rest-tab";
 	
 	private Form form;
 	private Browser browser;
