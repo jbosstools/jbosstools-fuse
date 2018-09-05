@@ -5,7 +5,8 @@ Bundle-SymbolicName: org.fusesource.ide.imports;singleton:=true
 Bundle-Version: 11.1.0.qualifier
 Bundle-Activator: org.fusesource.ide.imports.sap.Activator
 Bundle-Vendor: %Bundle-Vendor
-Require-Bundle: org.eclipse.ui,
+Require-Bundle: javax.xml.bind;bundle-version="2.2.0",
+ org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.ui.ide,
  org.eclipse.core.resources,
