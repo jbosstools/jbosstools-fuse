@@ -31,6 +31,7 @@ import org.fusesource.ide.foundation.core.util.CamelUtils;
 import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.preferences.PreferenceManager;
 import org.fusesource.ide.preferences.PreferencesConstants;
+import org.w3c.dom.CDATASection;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -861,7 +862,17 @@ public abstract class AbstractCamelModelElement {
 			} else if (NODE_KIND_EXPRESSION.equalsIgnoreCase(kind)) {
 				updateExpression(name, value, e);
 			} else if (NODE_KIND_VALUE.equalsIgnoreCase(kind)) {
-				e.setTextContent(getMappedValue(value));
+				if (getXmlNode().hasChildNodes()) {
+					NodeList childNodes = getXmlNode().getChildNodes();
+					if(childNodes.getLength() == 1 && childNodes.item(0) instanceof CDATASection) {
+						CDATASection cData = (CDATASection) childNodes.item(0);
+						cData.setTextContent(getMappedValue(value));
+					} else {
+						e.setTextContent(getMappedValue(value));
+					}
+				} else {
+					e.setTextContent(getMappedValue(value));
+				}
 			}
 		}
 	}

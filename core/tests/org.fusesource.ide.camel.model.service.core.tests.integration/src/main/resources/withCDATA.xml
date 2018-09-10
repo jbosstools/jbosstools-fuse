@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd        http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+
+	<camelContext
+		xmlns="http://camel.apache.org/schema/spring" autoStartup="true"
+		streamCache="false" id="context1">
+
+		<route id="route1">
+			<description>edit file!</description>
+			<from uri="timer:timerName" />
+			<setBody id="setBody10">
+				<constant><![CDATA[
+		                	<v1:isAliveResponse xmlns:v1="http://model.ws.xxxx.com/global/v1">
+         						<isAlive>true</isAlive>
+      						</v1:isAliveResponse>
+		        ]]></constant>
+			</setBody>
+			<to uri="seda:anotherPlace" />
+		</route>
+	</camelContext>
+
+</beans>
