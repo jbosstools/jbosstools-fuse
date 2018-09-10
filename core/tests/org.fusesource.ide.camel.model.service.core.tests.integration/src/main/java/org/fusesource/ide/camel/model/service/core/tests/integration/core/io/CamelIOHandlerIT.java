@@ -70,7 +70,8 @@ public class CamelIOHandlerIT {
 				"globalElementsSample.xml",
 				"routes.xml",
 				"withMarshalCsvHeaders.xml",
-				"routeContext.xml");
+				"routeContext.xml",
+				"withCDATA.xml");
 		//@formatter:on
 	}
 
