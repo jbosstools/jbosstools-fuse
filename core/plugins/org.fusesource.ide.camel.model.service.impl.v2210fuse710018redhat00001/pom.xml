@@ -11,12 +11,12 @@
     <relativePath>..</relativePath>
   </parent>
 
-  <artifactId>org.fusesource.ide.camel.model.service.impl.v2210fuse000112redhat3</artifactId>
+  <artifactId>org.fusesource.ide.camel.model.service.impl.v2210fuse710018redhat00001</artifactId>
   <packaging>eclipse-plugin</packaging>
-  <name>Red Hat Fuse Tooling :: Core :: Plugins :: Camel Dynamic Service Implementation for 2.21.0.fuse-000077-redhat-1</name>
+  <name>Red Hat Fuse Tooling :: Core :: Plugins :: Camel Dynamic Service Implementation for 2.21.0.fuse-710018-redhat-00001</name>
   
   <properties>
-  		<bundle.camel.version>2.21.0.fuse-000077-redhat-1</bundle.camel.version>
+  		<bundle.camel.version>2.21.0.fuse-710018-redhat-00001</bundle.camel.version>
   		<bundle.slf4j.version>1.7.22</bundle.slf4j.version>
   </properties>
   <build>
@@ -37,7 +37,7 @@
 					<artifactItems>
 						<artifactItem>
 							<groupId>org.apache.camel</groupId>
-							<artifactId>camel-catalog</artifactId>
+            				<artifactId>camel-catalog</artifactId>
 							<version>${bundle.camel.version}</version>
 						</artifactItem>
 						<artifactItem>
@@ -57,34 +57,34 @@
 						</artifactItem>
 						<artifactItem>
 							<groupId>org.apache.camel</groupId>
-							<artifactId>camel-core</artifactId>
+            				<artifactId>camel-core</artifactId>
 							<version>${bundle.camel.version}</version>
 						</artifactItem>
 						<artifactItem>
 							<groupId>org.apache.camel</groupId>
-							<artifactId>camel-spring</artifactId>
+            				<artifactId>camel-spring</artifactId>
 							<version>${bundle.camel.version}</version>
 						</artifactItem>
 						<artifactItem>
 							<groupId>org.apache.camel</groupId>
-							<artifactId>camel-blueprint</artifactId>
+            				<artifactId>camel-blueprint</artifactId>
 							<version>${bundle.camel.version}</version>
 						</artifactItem>
-						<artifactItem>
+				        <artifactItem>
 							<groupId>org.slf4j</groupId>
 							<artifactId>slf4j-api</artifactId>
 							<version>${bundle.slf4j.version}</version>
-						</artifactItem>
-						<artifactItem>
+					    </artifactItem>
+					    <artifactItem>
 							<groupId>org.slf4j</groupId>
 							<artifactId>log4j-over-slf4j</artifactId>
 							<version>${bundle.slf4j.version}</version>
-						</artifactItem>
-						<artifactItem>
+					    </artifactItem>
+					    <artifactItem>
 							<groupId>org.slf4j</groupId>
 							<artifactId>slf4j-simple</artifactId>
 							<version>${bundle.slf4j.version}</version>
-						</artifactItem>
+					    </artifactItem>
 					</artifactItems>
 					<useBaseVersion>true</useBaseVersion>
 					<skip>false</skip>
