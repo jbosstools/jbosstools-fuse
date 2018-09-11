@@ -144,5 +144,6 @@
    <plugin id="org.fusesource.ide.camel.model.service.impl.v2181redhat000021" download-size="0" install-size="0" version="0.0.0" unpack="false"/>
    <plugin id="org.fusesource.ide.camel.model.service.impl.v2203" download-size="0" install-size="0" version="0.0.0" unpack="false"/>
    <plugin id="org.fusesource.ide.camel.model.service.impl.v2210fuse000112redhat3" download-size="0" install-size="0" version="0.0.0" unpack="false"/>
+   <plugin id="org.fusesource.ide.camel.model.service.impl.v2210fuse710018redhat00001" download-size="0" install-size="0" version="0.0.0" unpack="false"/>
 
 </feature>
