@@ -20,8 +20,7 @@ import org.fusesource.ide.foundation.core.internal.FoundationCoreActivator;
 
 public abstract class OnlineVersionMapper {
 	
-	//TODO: switch back to master after merge
-	protected static final String BASE_REPO_CONFIG_URI = "https://raw.githubusercontent.com/apupier/jbosstools-fuse/FUSETOOLS-3074-ProvideFuse71VersionForCreatingTemplates/configuration/";
+	protected static final String BASE_REPO_CONFIG_URI = "https://raw.githubusercontent.com/jbosstools/jbosstools-fuse/master/configuration/";
 	
 	private String mappingProperty;
 	private String defaultUrl;
