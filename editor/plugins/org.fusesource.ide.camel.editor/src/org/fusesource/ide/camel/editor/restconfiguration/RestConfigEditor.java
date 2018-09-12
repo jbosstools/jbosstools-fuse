@@ -12,6 +12,7 @@ package org.fusesource.ide.camel.editor.restconfiguration;
 
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.Map;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -642,9 +643,16 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 	// made public for testing purposes
 	public void selectRestElement(RestElement relement) {
 		String id = relement.getId();
-		AbstractCamelModelElement acme = ctx.getRestElements().get(id);
-		if (acme != null) {
-			selection = acme;
+		Iterator<AbstractCamelModelElement> restElementIter = ctx.getRestElements().values().iterator();
+		AbstractCamelModelElement found = null;
+		while (found == null && restElementIter.hasNext()) {
+			AbstractCamelModelElement element = restElementIter.next();
+			if (element.getId().equals(id)) {
+				found = element;
+			}
+		}
+		if (found != null) {
+			selection = found;
 		} else {
 			if (restList.getList().getItemCount() > 0) {
 				selection = restList.getElementAt(0);
@@ -667,9 +675,16 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 		RestElement re = (RestElement) rve.getParent();
 		String restId = re.getId();
 		String restVerbId = rve.getId();
-		AbstractCamelModelElement acme = ctx.getRestElements().get(restId);
-		if (acme != null) {
-			RestElement relement = (RestElement) acme;
+		Iterator<AbstractCamelModelElement> restElementIter = ctx.getRestElements().values().iterator();
+		AbstractCamelModelElement found = null;
+		while (found == null && restElementIter.hasNext()) {
+			AbstractCamelModelElement element = restElementIter.next();
+			if (element.getId().equals(restId)) {
+				found = element;
+			}
+		}
+		if (found != null) {
+			RestElement relement = (RestElement) found;
 			restList.setSelection(new StructuredSelection(relement), true);
 			RestVerbElement selRve = (RestVerbElement) relement.getRestOperations().get(restVerbId);
 			if (selRve != null) {
@@ -821,9 +836,8 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 			newrve.setParameter(RestVerbElementEIP.PROP_TO_URI, toUri);
 		}
 		re.addRestOperation(newrve);
+		selection = re;
 		reload();
-		selectRestElement(re);
-		selectRestVerbElement(newrve);
 	}
 
 	/**
@@ -848,6 +862,8 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 			if (!restList.getStructuredSelection().isEmpty()) {
 				RestElement re = (RestElement) restList.getStructuredSelection().getFirstElement();
 				ctx.removeRestElement(re);
+				selection = null;
+				setSelection(StructuredSelection.EMPTY);
 			}
 			reload();
 		});
@@ -863,8 +879,9 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 				RestVerbElement rve = (RestVerbElement)selection;
 				RestElement re = (RestElement) rve.getParent();
 				re.removeRestOperation(rve);
-				setSelection(StructuredSelection.EMPTY);
+				selection = null;
 				reload();
+				selectRestElement(re);
 			}
 		});
 	}

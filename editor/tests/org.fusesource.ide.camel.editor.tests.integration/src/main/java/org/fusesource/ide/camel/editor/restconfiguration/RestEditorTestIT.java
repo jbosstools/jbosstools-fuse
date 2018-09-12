@@ -200,6 +200,95 @@ public class RestEditorTestIT extends AbstractCamelEditorIT {
 	}
 
 	@Test
+	public void openCamelFileRestElementIdChangeAndRemoveOperationTest() throws Exception {
+		// FUSETOOLS-3088
+		IEditorPart openEditorOnFileStore = openFileInEditor(NON_REST_PROJECT);
+
+		readAndDispatch(20);
+
+		// ensure that the REST tab is available and select it
+		CamelEditor camelEditor = (CamelEditor)openEditorOnFileStore;
+		camelEditor.setActiveEditor(camelEditor.getRestEditor());
+		RestConfigEditor restEditor = camelEditor.getRestEditor();
+		camelEditor.setActiveEditor(restEditor);
+		
+		// add a REST element
+		new AddRestElementAction(restEditor, null).run();
+		readAndDispatch(20);
+
+		StructuredSelection ssel = (StructuredSelection) restEditor.getSelection();
+		RestElement re = (RestElement) ssel.getFirstElement();
+		String newId = "changed-id";
+		re.setId(newId);
+		assertThat(re.getId()).isEqualTo(newId);
+		
+		Display.getDefault().syncExec(() -> 
+			restEditor.createRestOperation(RestVerbElement.GET_VERB, "test", "myTestID", "")
+		);
+		readAndDispatch(20);
+
+		Display.getDefault().syncExec(() -> 
+			restEditor.createRestOperation(RestVerbElement.GET_VERB, "test2", "myTestID2", "")
+		);
+		readAndDispatch(20);
+		
+		RestVerbElement restVerbElement = 
+				(RestVerbElement) re.getRestOperations().values().iterator().next();
+		assertThat(restVerbElement.getId()).isEqualTo("myTestID");
+		restEditor.selectRestVerbElement(restVerbElement);
+		readAndDispatch(20);
+		
+		//test to make sure it's removed (there are two REST elements added)
+		new DeleteRestOperationAction(restEditor, null).run();
+		readAndDispatch(20);
+		
+		ssel = (StructuredSelection) restEditor.getSelection();
+		re = (RestElement) ssel.getFirstElement();
+		assertThat(re.getId()).isEqualTo(newId);
+		assertThat(re.getRestOperations()).hasSize(1);
+		RestVerbElement restVerbElement2 = 
+				(RestVerbElement) re.getRestOperations().values().iterator().next();
+		assertThat(restVerbElement2.getId()).isEqualTo("myTestID2");
+	}
+	
+	@Test
+	public void openCamelFileRestElementIdChangeAndLoseFocusTest() throws Exception {
+		// FUSETOOLS-3087
+		IEditorPart openEditorOnFileStore = openFileInEditor(NON_REST_PROJECT);
+
+		readAndDispatch(20);
+
+		CamelEditor camelEditor = (CamelEditor)openEditorOnFileStore;
+		camelEditor.setActiveEditor(camelEditor.getRestEditor());
+		RestConfigEditor restEditor = camelEditor.getRestEditor();
+		camelEditor.setActiveEditor(restEditor);
+
+		new AddRestElementAction(restEditor, null).run();
+		readAndDispatch(20);
+
+		StructuredSelection ssel = (StructuredSelection) restEditor.getSelection();
+		assertThat(ssel.getFirstElement()).isInstanceOf(RestElement.class);
+
+		RestElement re = (RestElement) ssel.getFirstElement();
+		String newId = "changed-id";
+		re.setId(newId);
+		assertThat(re.getId()).isEqualTo(newId);
+		
+		Display.getDefault().syncExec(() -> 
+			restEditor.createRestOperation(RestVerbElement.GET_VERB, "test", "myTestID", "")
+		);
+		readAndDispatch(20);
+		
+		// ensure that the new rest element (with the changed id) is still selected
+		StructuredSelection secondSsel = (StructuredSelection) restEditor.getSelection();
+		assertThat(secondSsel.getFirstElement()).isInstanceOf(RestElement.class);
+
+		RestElement selection = (RestElement) ssel.getFirstElement();
+		// make sure we got the right one
+		assertThat(selection.getId()).isEqualTo(newId);
+	}
+
+	@Test
 	public void openCamelFileRemoveRestConfigurationTest() throws Exception {
 		IEditorPart openEditorOnFileStore = openFileInEditor(REST_PROJECT);
 		assertThat(openEditorOnFileStore).isNotNull();
