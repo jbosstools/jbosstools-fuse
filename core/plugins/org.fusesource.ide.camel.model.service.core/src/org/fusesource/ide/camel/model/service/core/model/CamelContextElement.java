@@ -528,8 +528,16 @@ public class CamelContextElement extends CamelRouteContainerElement {
 	 * @param def
 	 */
 	public void removeRestElement(AbstractCamelModelElement def) {
-		if (this.restElements.containsKey(def.getId())) {
-			this.restElements.remove(def.getId());
+		Iterator<AbstractCamelModelElement> restElementIter = this.restElements.values().iterator();
+		AbstractCamelModelElement found = null;
+		while (found == null && restElementIter.hasNext()) {
+			AbstractCamelModelElement element = restElementIter.next();
+			if (element.getId().equals(def.getId())) {
+				found = element;
+			}
+		}
+		if (found != null) {
+			this.restElements.values().remove(found);
 			boolean childExists = false;
 			for (int i=0; i<getXmlNode().getChildNodes().getLength(); i++) {
 				if(getXmlNode().getChildNodes().item(i).isEqualNode(def.getXmlNode())) {
