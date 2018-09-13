@@ -37,6 +37,7 @@ Export-Package: org.jboss.tools.fuse.reddeer,
  org.jboss.tools.fuse.reddeer.view,
  org.jboss.tools.fuse.reddeer.wizard
 Bundle-Vendor: %Bundle-Vendor
-Import-Package: com.fasterxml.jackson.annotation
+Import-Package: com.fasterxml.jackson.annotation,
+ javax.xml.bind.annotation;version="2.2.0"
 Eclipse-BundleShape: dir
 Automatic-Module-Name: org.jboss.tools.fuse.reddeer

@@ -39,3 +39,5 @@ Export-Package: org.fusesource.ide.jmx.camel,
  org.fusesource.ide.jmx.camel.internal;x-friends:="org.fusesource.ide.jmx.camel.tests.integration",
  org.fusesource.ide.jmx.camel.jmx.content.navigator.providers,
  org.fusesource.ide.jmx.camel.navigator;x-friends:="org.fusesource.ide.jmx.camel.tests.integration,org.fusesource.ide.jmx.diagram.view"
+Import-Package: javax.xml.bind;version="2.2.0",
+ javax.xml.bind.annotation;version="2.2.0"

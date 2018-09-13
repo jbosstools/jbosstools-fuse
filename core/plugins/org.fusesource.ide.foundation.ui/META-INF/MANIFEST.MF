@@ -47,3 +47,5 @@ Export-Package: org.fusesource.ide.foundation.ui.actions,
  org.fusesource.ide.foundation.ui.util,
  org.fusesource.ide.foundation.ui.views,
  org.fusesource.ide.foundation.ui.wizard
+Import-Package: javax.xml.bind;version="2.2.0",
+ javax.xml.bind.annotation;version="2.2.0"

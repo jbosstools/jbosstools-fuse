@@ -32,3 +32,5 @@ Bundle-ActivationPolicy: lazy
 Bundle-Vendor: %Bundle-Vendor
 Bundle-ClassPath: .
 Export-Package: org.jboss.tools.fuse.transformation.editor.internal.util;x-friends:="org.jboss.tools.fuse.transformation.editor.tests.integration,org.jboss.tools.fuse.transformation.editor.tests"
+Import-Package: com.sun.codemodel,
+ javax.xml.bind;version="2.2.0"

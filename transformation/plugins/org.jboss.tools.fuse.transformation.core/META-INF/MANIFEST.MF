@@ -16,15 +16,11 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.11.0",
  com.fasterxml.jackson.core.jackson-databind;bundle-version="2.5.0",
  org.jboss.tools.foundation.core;bundle-version="1.2.0",
  org.jboss.tools.foundation.ui;bundle-version="1.2.0",
- org.jboss.tools.locus.jsonschema2pojo.jsonschema2pojo-core;bundle-version="0.4.13";visibility:=reexport,
- org.jboss.tools.locus.jaxb-core;bundle-version="2.2.7";visibility:=reexport,
- org.jboss.tools.locus.jaxb-impl;bundle-version="2.2.7";visibility:=reexport,
- org.jboss.tools.locus.jaxb-xjc;bundle-version="2.2.7";visibility:=reexport,
+ org.jboss.tools.locus.jsonschema2pojo.jsonschema2pojo-core;bundle-version="0.4.13",
  org.fusesource.ide.camel.model.service.core;bundle-version="10.0.0",
  org.fusesource.ide.foundation.core;bundle-version="10.0.0",
  org.fusesource.ide.foundation.ui;bundle-version="10.0.0",
- org.fusesource.ide.camel.editor;bundle-version="10.0.0",
- javax.xml.bind;bundle-version="2.2.0";visibility:=reexport
+ org.fusesource.ide.camel.editor;bundle-version="10.0.0"
 Export-Package: com.google.gson;x-friends:="org.jboss.tools.fuse.transformation.editor",
  com.google.gson.annotations;x-friends:="org.jboss.tools.fuse.transformation.editor",
  com.google.gson.internal;x-friends:="org.jboss.tools.fuse.transformation.editor",
@@ -39,4 +35,14 @@ Export-Package: com.google.gson;x-friends:="org.jboss.tools.fuse.transformation.
  org.jboss.tools.fuse.transformation.core.model.json,
  org.jboss.tools.fuse.transformation.core.model.xml,
  org.jboss.tools.fuse.transformation.core.test
+Import-Package: com.sun.codemodel,
+ com.sun.tools.xjc.api,
+ com.sun.xml.bind.api,
+ javax.xml.bind;version="2.2.0",
+ javax.xml.bind.annotation;version="2.2.0",
+ javax.xml.namespace;version="1.3.0",
+ javax.xml.parsers;version="1.3.0",
+ javax.xml.transform;version="1.3.0",
+ javax.xml.transform.dom;version="1.3.0",
+ javax.xml.transform.stream;version="1.3.0"
 

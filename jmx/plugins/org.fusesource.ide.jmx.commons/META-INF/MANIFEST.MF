@@ -27,3 +27,6 @@ Require-Bundle: org.jboss.tools.jmx.core;bundle-version="1.6.0",
  org.fusesource.ide.foundation.ui;bundle-version="10.0.0",
  org.fusesource.ide.camel.model.service.core;bundle-version="10.0.0"
 Bundle-ClassPath: .
+Import-Package: javax.xml.bind;version="2.2.0",
+ javax.xml.bind.annotation;version="2.2.0",
+ javax.xml.bind.annotation.adapters;version="2.2.0"
