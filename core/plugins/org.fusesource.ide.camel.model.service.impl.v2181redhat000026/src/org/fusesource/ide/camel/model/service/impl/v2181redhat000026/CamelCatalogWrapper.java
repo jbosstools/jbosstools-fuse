@@ -1,4 +1,4 @@
-package org.fusesource.ide.camel.model.service.impl.v2181redhat000021;
+package org.fusesource.ide.camel.model.service.impl.v2181redhat000026;
 /******************************************************************************* 
  * Copyright (c) 2018 Red Hat, Inc. 
  * Distributed under license by Red Hat, Inc. All rights reserved. 
