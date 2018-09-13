@@ -44,7 +44,7 @@ Require-Bundle: org.junit,
  org.fusesource.ide.camel.model.service.core.tests.integration;bundle-version="11.0.0",
  org.fusesource.ide.camel.model.service.impl.v2151redhat621216;bundle-version="11.0.0",
  org.fusesource.ide.camel.model.service.impl.v2170redhat630347;bundle-version="11.0.0",
- org.fusesource.ide.camel.model.service.impl.v2181redhat000021;bundle-version="11.0.0",
+ org.fusesource.ide.camel.model.service.impl.v2181redhat000026;bundle-version="11.0.0",
  org.fusesource.ide.camel.model.service.impl.v2203;bundle-version="11.0.0",
  org.fusesource.ide.camel.model.service.impl.v2210fuse000112redhat3;bundle-version="11.0.0",
  org.fusesource.ide.camel.model.service.impl.v2210fuse710018redhat00001;bundle-version="11.0.0"

@@ -23,6 +23,9 @@ public class CamelForFIS20ToBomMapper extends OnlineVersionMapper {
 	static final String FIS_20_R1_CAMEL_VERSION = "2.18.1.redhat-000012";
 	static final String FIS_20_R2_CAMEL_VERSION = "2.18.1.redhat-000015";
 	public static final String FIS_20_R3_CAMEL_VERSION = "2.18.1.redhat-000021";
+	public static final String FIS_20_R4_CAMEL_VERSION = "2.18.1.redhat-000024";
+	public static final String FIS_20_R5_CAMEL_VERSION = "2.18.1.redhat-000025";
+	public static final String FIS_20_R6_CAMEL_VERSION = "2.18.1.redhat-000026";
 	
 	public CamelForFIS20ToBomMapper() {
 		super(FIS_MAPPING_PROPERTY, FIS_MAPPING_DEFAULT_URL);
@@ -34,6 +37,9 @@ public class CamelForFIS20ToBomMapper extends OnlineVersionMapper {
 		mapping.put(FIS_20_R1_CAMEL_VERSION, "2.2.170.redhat-000010");
 		mapping.put(FIS_20_R2_CAMEL_VERSION, "2.2.170.redhat-000013");
 		mapping.put(FIS_20_R3_CAMEL_VERSION, "2.2.170.redhat-000019");
+		mapping.put(FIS_20_R4_CAMEL_VERSION, "2.2.170.redhat-000022");
+		mapping.put(FIS_20_R5_CAMEL_VERSION, "2.2.170.redhat-000023");
+		mapping.put(FIS_20_R6_CAMEL_VERSION, "2.2.170.redhat-000024");
 		return mapping;
 	}
 

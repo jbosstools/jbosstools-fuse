@@ -45,6 +45,9 @@ public class CamelVersionToDisplayNameMapper extends OnlineVersionMapper {
 		mapping.put(CamelForFIS20ToBomMapper.FIS_20_R1_CAMEL_VERSION, CamelForFIS20ToBomMapper.FIS_20_R1_CAMEL_VERSION + " (FIS 2.0 R1)");
 		mapping.put(CamelForFIS20ToBomMapper.FIS_20_R2_CAMEL_VERSION, CamelForFIS20ToBomMapper.FIS_20_R2_CAMEL_VERSION + " (FIS 2.0 R2)");
 		mapping.put(CamelForFIS20ToBomMapper.FIS_20_R3_CAMEL_VERSION, CamelForFIS20ToBomMapper.FIS_20_R3_CAMEL_VERSION + " (FIS 2.0 R3)");
+		mapping.put(CamelForFIS20ToBomMapper.FIS_20_R4_CAMEL_VERSION, CamelForFIS20ToBomMapper.FIS_20_R4_CAMEL_VERSION + " (FIS 2.0 R4)");
+		mapping.put(CamelForFIS20ToBomMapper.FIS_20_R5_CAMEL_VERSION, CamelForFIS20ToBomMapper.FIS_20_R5_CAMEL_VERSION + " (FIS 2.0 R5)");
+		mapping.put(CamelForFIS20ToBomMapper.FIS_20_R6_CAMEL_VERSION, CamelForFIS20ToBomMapper.FIS_20_R6_CAMEL_VERSION + " (FIS 2.0 R6)");
 		
 		mapping.put(CamelForFuseOnOpenShiftToBomMapper.FUSE_700_CAMEL_VERSION, CamelForFuseOnOpenShiftToBomMapper.FUSE_700_CAMEL_VERSION + " (Fuse 7.0.0 GA)");
 		mapping.put(CamelForFuseOnOpenShiftToBomMapper.FUSE_701_CAMEL_VERSION, CamelForFuseOnOpenShiftToBomMapper.FUSE_701_CAMEL_VERSION + " (Fuse 7.0.1 GA)");
