@@ -18,7 +18,7 @@
 <unit id="org.jboss.tools.runtime.core.feature.feature.group" version="3.4.4.v20180802-1505"/>
 <unit id="org.jboss.tools.stacks.core.feature.feature.group" version="1.4.101.v20180802-1505"/>
 <unit id="org.jboss.tools.usage.feature.feature.group" version="2.2.201.v20180802-1505"/>
-<unit id="org.jboss.tools.openshift.feature.feature.group" version="3.5.2.v20180912-1236"/>
+<unit id="org.jboss.tools.openshift.feature.feature.group" version="3.5.2.v20180913-0333"/>
 <unit id="org.jboss.tools.openshift.cdk.feature.feature.group" version="3.5.2.v20180816-1351"/>
 <unit id="org.jboss.tools.openshift.egit.integration.feature.feature.group" version="3.5.2.v20180807-2303"/>
 <unit id="org.jboss.tools.openshift.io.feature.feature.group" version="3.5.2.v20180823-1255"/>
