@@ -15,7 +15,6 @@ import java.net.URL;
 import org.eclipse.help.HelpSystem;
 import org.eclipse.help.IContext;
 import org.eclipse.help.IHelpResource;
-import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.browser.LocationEvent;
@@ -34,13 +33,11 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.help.IWorkbenchHelpSystem;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 import org.fusesource.ide.camel.editor.CamelEditor;
-import org.fusesource.ide.camel.editor.globalconfiguration.CamelGlobalConfigEditor;
 import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 import org.fusesource.ide.camel.editor.internal.UIMessages;
 import org.fusesource.ide.camel.editor.utils.CamelUtils;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.foundation.core.util.Strings;
-import org.fusesource.ide.foundation.ui.util.Selections;
 import org.fusesource.ide.foundation.ui.util.Widgets;
 
 /**
@@ -97,35 +94,13 @@ public class DocumentationSection extends NodeSectionSupport {
 		String contextId = null;
 		
 		if (isRestEditorTabSelected()) {
-			contextId = HELP_CONTEXT_ID_PREFIX + REST_INFO_PAGE;
+			contextId = determineDocumentationPageForRestTab();
 		} else if (isGlobalConfigTabSelected()) {
-			CamelEditor editor = CamelUtils.getDiagramEditor().getParent(); 
-			CamelGlobalConfigEditor globalConfigEditor = editor.getGlobalConfigEditor();
-			StructuredSelection ssel = 
-					(StructuredSelection) globalConfigEditor.getSite().getSelectionProvider().getSelection();
-			if (!ssel.isEmpty()) {
-				Object o = Selections.getFirstSelection(ssel);
-				AbstractCamelModelElement cme = o instanceof AbstractCamelModelElement ? (AbstractCamelModelElement) o : null;
-				if (cme != null) {
-					// lets see if we can find the docs for an endpoints URI...
-					if (node.isEndpointElement()) {
-						String scheme = getUriScheme(node);
-						contextId = HELP_CONTEXT_ID_PREFIX + scheme;
-					} else {
-						String tagName = cme.getXmlNode().getLocalName();
-						if (tagName.equals(BEAN_TAG)) {
-							contextId = HELP_CONTEXT_ID_PREFIX + GLOBAL_BEAN_PAGE;
-						} else {
-							contextId = HELP_CONTEXT_ID_PREFIX + tagName + GLOBAL_DATAFORMAT_SUFFIX;
-						}
-					}
-				}
-			}
+			contextId = determineDocumentationPageForGlobalConfigurationTab();
 		} else {
 			// lets see if we can find the docs for an endpoints URI...
 			if (node.isEndpointElement()) {
-				String scheme = getUriScheme(node);
-				contextId = HELP_CONTEXT_ID_PREFIX + scheme;
+				contextId = getEndpointDocumentationPage();
 			}
 		}
 		
@@ -144,6 +119,31 @@ public class DocumentationSection extends NodeSectionSupport {
 			}
 			resolvePage(uri, false);
 		}
+	}
+	
+	private String getEndpointDocumentationPage() {
+		String scheme = getUriScheme(node);
+		return HELP_CONTEXT_ID_PREFIX + scheme;
+	}
+	
+	private String determineDocumentationPageForGlobalConfigurationTab() {
+		String contextId = null;
+		// lets see if we can find the docs for an endpoints URI...
+		if (node.isEndpointElement()) {
+			contextId = getEndpointDocumentationPage();
+		} else {
+			String tagName = node.getXmlNode().getLocalName();
+			if (tagName.equals(BEAN_TAG)) {
+				contextId = HELP_CONTEXT_ID_PREFIX + GLOBAL_BEAN_PAGE;
+			} else {
+				contextId = HELP_CONTEXT_ID_PREFIX + tagName + GLOBAL_DATAFORMAT_SUFFIX;
+			}
+		}
+		return contextId;
+	}
+
+	private String determineDocumentationPageForRestTab() {
+		return HELP_CONTEXT_ID_PREFIX + REST_INFO_PAGE;
 	}
 	
 	private boolean isRestEditorTabSelected() {
