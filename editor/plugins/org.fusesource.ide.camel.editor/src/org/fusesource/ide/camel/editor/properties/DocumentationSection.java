@@ -39,6 +39,7 @@ import org.fusesource.ide.camel.editor.utils.CamelUtils;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.foundation.ui.util.Widgets;
+import org.w3c.dom.Element;
 
 /**
  * Shows the documentation for the currently selected node
@@ -49,7 +50,8 @@ public class DocumentationSection extends NodeSectionSupport {
 	private static final String ALL_EIPS_INFO = "allEIPs";
 	private static final String ENDPOINT_GENERAL_INFO = "endpoint";
 	private static final String REST_INFO_PAGE = "rest-tab";
-	private static final String GLOBAL_BEAN_PAGE = "global-config";
+	private static final String GLOBAL_BEAN_PAGE = "beanEIP";
+	private static final String GLOBAL_CONFIG_PAGE = "global-config";
 	private static final String GLOBAL_DATAFORMAT_SUFFIX = "-dataformat";
 	private static final String BEAN_TAG = "bean";
 	
@@ -127,15 +129,19 @@ public class DocumentationSection extends NodeSectionSupport {
 	}
 	
 	private String determineDocumentationPageForGlobalConfigurationTab() {
-		String contextId = null;
+		// default to general topic for Configuration page if we don't have a tag or endpoint
+		String contextId = HELP_CONTEXT_ID_PREFIX + GLOBAL_CONFIG_PAGE;
 		// lets see if we can find the docs for an endpoints URI...
 		if (node.isEndpointElement()) {
 			contextId = getEndpointDocumentationPage();
-		} else {
-			String tagName = node.getXmlNode().getLocalName();
-			if (tagName.equals(BEAN_TAG)) {
+		} else if (node.getXmlNode() != null) {
+			Element element = (Element) node.getXmlNode();
+			String tagName = element.getTagName();
+			// if it's a bean, go with that context ID
+			if (BEAN_TAG.equals(tagName)) {
 				contextId = HELP_CONTEXT_ID_PREFIX + GLOBAL_BEAN_PAGE;
-			} else {
+			// if it's a data format, go with that. 
+			} else if (!Strings.isEmpty(tagName)) {
 				contextId = HELP_CONTEXT_ID_PREFIX + tagName + GLOBAL_DATAFORMAT_SUFFIX;
 			}
 		}
