@@ -1445,11 +1445,217 @@
         <description>ZooKeeper Master Component Options</description>
         <topic href="zookeeper-master-component.html" label="ZooKeeper Master"/>
     </context>
+    
       <!-- REST tab in Route Editor -->
-        <context id="rest-tab">
-            <description>Rest DSL tab</description>
-            <topic href="RESTdsl.html" label="Rest DSL tab"/>
-        </context>
+    <context id="rest-tab">
+        <description>Rest DSL tab</description>
+        <topic href="RESTdsl.html" label="Rest DSL tab"/>
+    </context>
+    
+    <!-- Adding global endpoints, data formats, or beans topic -->
+    <context id="global-config">
+        <description>Global configuration elements</description>
+        <topic href="RiderAddGlobalCnfg.html" label="Global configuration elements"/>
+    </context>
+  
+  <!-- Data Format pages -->     
+  <context id="asn1-dataformat">
+      <description> Data Format</description>
+      <topic href="asn1-dataformat.html" label="ASN.1 Data Format"/>
+  </context>
+  <context id="avro-dataformat">
+      <description> Data Format</description>
+      <topic href="avro-dataformat.html" label="Avro Data Format"/>
+  </context>
+  <context id="barcode-dataformat">
+      <description>Barcode Data Format</description>
+      <topic href="barcode-dataformat.html" label="Barcode Data Format"/>
+  </context>
+  <context id="base64-dataformat">
+      <description>Base64 Data Format</description>
+      <topic href="base64-dataformat.html" label="Base64 Data Format"/>
+  </context>
+  <context id="beanio-dataformat">
+      <description>BeanIO Data Format</description>
+      <topic href="beanio-dataformat.html" label="BeanIO Data Format"/>
+  </context>
+  <context id="bindy-dataformat">
+      <description>Bindy Data Format</description>
+      <topic href="bindy-dataformat.html" label="Bindy Data Format"/>
+  </context>
+  <context id="boon-dataformat">
+      <description>Boon Data Format</description>
+      <topic href="boon-dataformat.html" label="Boon Data Format"/>
+  </context>
+  <context id="castor-dataformat">
+      <description>Castor Data Format</description>
+      <topic href="castor-dataformat.html" label="Castor Data Format"/>
+  </context>
+  <context id="crypto-dataformat">
+      <description>Crypto Data Format</description>
+      <topic href="crypto-dataformat.html" label="Crypto Data Format"/>
+  </context>
+  <context id="csv-dataformat">
+      <description>CSV Data Format</description>
+      <topic href="csv-dataformat.html" label="CSV Data Format"/>
+  </context>
+  <context id="fhirjson-dataformat">
+      <description>FHIR JSon Data Format</description>
+      <topic href="fhirJson-dataformat.html" label="FHIR JSon Data Format"/>
+  </context>
+  <context id="fhirxml-dataformat">
+      <description>FHIR XML Data Format</description>
+      <topic href="fhirXml-dataformat.html" label="FHIR XML Data Format"/>
+  </context>
+  <context id="flatpack-dataformat">
+      <description>Flatpack Data Format</description>
+      <topic href="flatpack-dataformat.html" label="Flatpack Data Format"/>
+  </context>
+  <context id="gzip-dataformat">
+      <description>GZip Data Format</description>
+      <topic href="gzip-dataformat.html" label="GZip Data Format"/>
+  </context>
+  <context id="hessian-dataformat">
+      <description>Hessian Data Format</description>
+      <topic href="hessian-dataformat.html" label="Hessian Data Format"/>
+  </context>
+  <context id="hl7-dataformat">
+      <description>HL7 Data Format</description>
+      <topic href="hl7-dataformat.html" label="HL7 Data Format"/>
+  </context>
+  <context id="ical-dataformat">
+      <description>ICal Data Format</description>
+      <topic href="ical-dataformat.html" label="ICal Data Format"/>
+  </context>
+  <context id="jacksonxml-dataformat">
+      <description>Jackson XML Data Format</description>
+      <topic href="jacksonxml-dataformat.html" label="Jackson XML Data Format"/>
+  </context>
+  <context id="jaxb-dataformat">
+      <description>JAXB Data Format</description>
+      <topic href="jaxb-dataformat.html" label="JAXB Data Format"/>
+  </context>
+  <context id="jibx-dataformat">
+      <description>JIBX Data Format</description>
+      <topic href="jibx-dataformat.html" label="JIBX Data Format"/>
+  </context>
+  <context id="json-fastjson-dataformat">
+      <description>JSON fastjson Data Format</description>
+      <topic href="json-fastjson-dataformat.html" label="JSON fastjson  Data Format"/>
+  </context>
+  <context id="json-gson-dataformat">
+      <description>JSON gson Data Format</description>
+      <topic href="json-gson-dataformat.html" label="JSON gson Data Format"/>
+  </context>
+  <context id="json-jackson-dataformat">
+      <description>JSON jackson Data Format</description>
+      <topic href="json-jackson-dataformat.html" label="JSON jackson Data Format"/>
+  </context>
+  <context id="json-johnzon-dataformat">
+      <description>JSON johnzon Data Format</description>
+      <topic href="json-johnzon-dataformat.html" label="JSON johnzon Data Format"/>
+  </context>
+  <context id="json-xstream-dataformat">
+      <description>JSON XStream Data Format</description>
+      <topic href="json-xstream-dataformat.html" label="JSON XStream Data Format"/>
+  </context>
+  <context id="lzf--dataformat">
+      <description>LZF Data Format</description>
+      <topic href="lzf--dataformat.html" label="LZF Data Format"/>
+  </context>
+  <context id="mime-multipart-dataformat">
+      <description>MIME-Multipart Data Format</description>
+      <topic href="mime-multipart-dataformat.html" label="MIME-Multipart Data Format"/>
+  </context>
+  <context id="pgp-dataformat-dataformat">
+      <description>PGP Data Format</description>
+      <topic href="pgp-dataformat-dataformat.html" label="PGP Data Format"/>
+  </context>
+  <context id="protobuf-dataformat">
+      <description>Protobuf Data Format</description>
+      <topic href="protobuf-dataformat.html" label="Protobuf Data Format"/>
+  </context>
+  <context id="rss-dataformat">
+      <description>RSS Data Format</description>
+      <topic href="rss-dataformat.html" label="RSS Data Format"/>
+  </context>
+  <context id="-dataformat">
+      <description> Data Format</description>
+      <topic href="-dataformat.html" label=" Data Format"/>
+  </context>
+  <context id="securexml-dataformat">
+      <description>XML Security Data Format</description>
+      <topic href="secureXML-dataformat.html" label="XML Security Data Format"/>
+  </context>
+  <context id="serialization-dataformat">
+      <description>Serialization Data Format</description>
+      <topic href="serialization-dataformat.html" label="Serialization Data Format"/>
+  </context>
+  <context id="soapjaxb-dataformat">
+      <description>SOAP Data Format</description>
+      <topic href="soapjaxb-dataformat.html" label="SOAP Data Format"/>
+  </context>
+  <context id="string-dataformat">
+      <description>String Data Format</description>
+      <topic href="string-dataformat.html" label="String Data Format"/>
+  </context>
+  <context id="syslog-dataformat">
+      <description>Syslog Data Format</description>
+      <topic href="syslog-dataformat.html" label="Syslog Data Format"/>
+  </context>
+  <context id="tarfile-dataformat">
+      <description>Tar Data Format</description>
+      <topic href="tarfile-dataformat.html" label="Tar Data Format"/>
+  </context>
+  <context id="thrift-dataformat">
+      <description>Thrift Data Format</description>
+      <topic href="thrift-dataformat.html" label="Thrift Data Format"/>
+  </context>
+  <context id="tidymarkup-dataformat">
+      <description>TidyMarkup Data Format</description>
+      <topic href="tidyMarkup-dataformat.html" label="TidyMarkup Data Format"/>
+  </context>
+  <context id="univocity-csv-dataformat">
+      <description>uniVocity CSV Data Format</description>
+      <topic href="univocity-csv-dataformat.html" label="uniVocity CSV Data Format"/>
+  </context>
+  <context id="univocity-fixed-dataformat">
+      <description>uniVocity Fixed Length Data Format</description>
+      <topic href="univocity-fixed-dataformat.html" label="uniVocity Fixed Length Data Format"/>
+  </context>
+  <context id="univocity-tsv-dataformat">
+      <description>uniVocity TSV Data Format</description>
+      <topic href="univocity-tsv-dataformat.html" label="uniVocity TSV Data Format"/>
+  </context>
+  <context id="xmlbeans-dataformat">
+      <description>XML Beans Data Format</description>
+      <topic href="xmlBeans-dataformat.html" label="XML Beans Data Format"/>
+  </context>
+  <context id="xmljson-dataformat">
+      <description>XML JSon Data Format</description>
+      <topic href="xmljson-dataformat.html" label="XML JSon Data Format"/>
+  </context>
+  <context id="xmlrpc-dataformat">
+      <description>XML RPC Data Format</description>
+      <topic href="xmlrpc-dataformat.html" label="XML RPC Data Format"/>
+  </context>
+  <context id="xstream-dataformat">
+      <description>XStream Data Format</description>
+      <topic href="xstream-dataformat.html" label="XStream Data Format"/>
+  </context>
+  <context id="yaml-snakeyaml-dataformat">
+      <description>YAML SnakeYAML Data Format</description>
+      <topic href="Yaml-snakeyaml-dataformat.html" label="YAML SnakeYAML Data Format"/>
+  </context>
+  <context id="zip-dataformat">
+      <description>Zip Deflate Compression Data Format</description>
+      <topic href="zip-dataformat.html" label="Zip Deflate Compression Data Format"/>
+  </context>
+  <context id="zipfile-dataformat">
+      <description>Zip File Data Format</description>
+      <topic href="zipfile-dataformat.html" label="Zip File Data Format"/>
+  </context>
+
 
     <!-- Wizard pages -->
   <!--  <context id="newCamelXML" title="New Camel Context File">
