@@ -54,6 +54,7 @@ public class DocumentationSection extends NodeSectionSupport {
 	private static final String GLOBAL_CONFIG_PAGE = "global-config";
 	private static final String GLOBAL_DATAFORMAT_SUFFIX = "-dataformat";
 	private static final String BEAN_TAG = "bean";
+	private static final String LOG_EIP = "log";
 	
 	private Form form;
 	private Browser browser;
@@ -101,7 +102,9 @@ public class DocumentationSection extends NodeSectionSupport {
 			contextId = determineDocumentationPageForGlobalConfigurationTab();
 		} else {
 			// lets see if we can find the docs for an endpoints URI...
-			if (node.isEndpointElement()) {
+			if (LOG_EIP.equalsIgnoreCase(node.getNodeTypeId())) {
+				contextId = HELP_CONTEXT_ID_PREFIX + LOG_EIP;
+			} else if (node.isEndpointElement()) {
 				contextId = getEndpointDocumentationPage();
 			}
 		}
