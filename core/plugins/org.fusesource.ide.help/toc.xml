@@ -4959,16 +4959,17 @@
          <topic label="Unmarshal" href="zipfile-dataformat.html#_unmarshal_9"/>
          <topic label="Aggregate" href="zipfile-dataformat.html#_aggregate_4"/>
          <topic label="Dependencies" href="zipfile-dataformat.html#_dependencies_74"/>
-         <topic label="Zipkin Component" href="zipfile-dataformat.html#Zipkin-ZipkinComponent"/>
-         <topic label="Options" href="zipfile-dataformat.html#camel-zipkin-Options"/>
-         <topic label="Example" href="zipfile-dataformat.html#camel-zipkin-Example">
-            <topic label="ServiceName" href="zipfile-dataformat.html#camel-zipkin-ServiceName"/>
-            <topic label="Client and Server Service Mappings" href="zipfile-dataformat.html#camel-zipkin-ClientandServerServiceMappings"/>
+      </topic>
+      <topic label="Zipkin Component" href="Zipkin-ZipkinComponent.html">
+         <topic label="Options" href="Zipkin-ZipkinComponent.html#camel-zipkin-Options"/>
+         <topic label="Example" href="Zipkin-ZipkinComponent.html#camel-zipkin-Example">
+            <topic label="ServiceName" href="Zipkin-ZipkinComponent.html#camel-zipkin-ServiceName"/>
+            <topic label="Client and Server Service Mappings" href="Zipkin-ZipkinComponent.html#camel-zipkin-ClientandServerServiceMappings"/>
          </topic>
-         <topic label="Mapping rules" href="zipfile-dataformat.html#camel-zipkin-Mappingrules">
-            <topic label="No client or server mappings" href="zipfile-dataformat.html#camel-zipkin-Noclientorservermappings"/>
+         <topic label="Mapping rules" href="Zipkin-ZipkinComponent.html#camel-zipkin-Mappingrules">
+            <topic label="No client or server mappings" href="Zipkin-ZipkinComponent.html#camel-zipkin-Noclientorservermappings"/>
          </topic>
-         <topic label="camel-zipin-starter" href="zipfile-dataformat.html#camel-zipkin-camel-zipin-starter"/>
+         <topic label="camel-zipin-starter" href="Zipkin-ZipkinComponent.html#camel-zipkin-camel-zipin-starter"/>
       </topic>
       <topic label="ZooKeeper Component" href="zookeeper-component.html">
          <topic label="URI format" href="zookeeper-component.html#_uri_format_218"/>
