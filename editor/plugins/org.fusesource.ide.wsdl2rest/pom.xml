@@ -1,6 +1,7 @@
 <project
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
-	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
@@ -22,9 +23,13 @@
 		<version.javaparser>2.5.1</version.javaparser>
 		<version.javax.ws.rs.api>2.1.0.redhat-1</version.javax.ws.rs.api>
 		<version.wsdl4j>1.6.3.redhat-2</version.wsdl4j>
-		<version.commons.lang>2.6.0.redhat-6</version.commons.lang>
 		<version.commons.validator>1.6</version.commons.validator>
-		<version.wsdl2rest>0.8.0.fuse-710018-redhat-00001</version.wsdl2rest>
+		<!-- TODO: Adjust this wsdl2rest version to the final Fuse productized 
+			version when it is available -->
+		<version.wsdl2rest>0.8.0.fuse-720034</version.wsdl2rest>
+		<version.commons.collections>3.2.1</version.commons.collections>
+		<version.commons.lang>2.4</version.commons.lang>
+		<version.oro>2.0.8</version.oro>
 	</properties>
 
 	<dependencyManagement>
@@ -105,6 +110,17 @@
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>commons-collections</groupId>
+			<artifactId>commons-collections</artifactId>
+			<version>${version.commons.collections}</version>
+		</dependency>
+		<dependency>
+			<groupId>oro</groupId>
+			<artifactId>oro</artifactId>
+			<version>${version.oro}</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>

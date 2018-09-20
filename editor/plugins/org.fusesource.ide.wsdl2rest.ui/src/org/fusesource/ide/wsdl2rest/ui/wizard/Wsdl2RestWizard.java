@@ -61,6 +61,8 @@ import org.jboss.fuse.wsdl2rest.impl.Wsdl2Rest;
  */
 public class Wsdl2RestWizard extends Wizard implements INewWizard {
 
+	private static final String APACHE_CAMEL_GROUP_ID = "org.apache.camel"; //$NON-NLS-1$
+
 	/**
 	 * Collection of settings used by the wsdl2rest utility.
 	 */
@@ -172,19 +174,32 @@ public class Wsdl2RestWizard extends Wizard implements INewWizard {
 	 * @return
 	 */
 	public boolean isProjectBlueprint(IProject project) {
+		return projectHasDependency(project, APACHE_CAMEL_GROUP_ID, "camel-blueprint"); //$NON-NLS-1$ //$NON-NLS-2$
+	}
+	
+	/**
+	 * Checks for blueprint dependency
+	 * @param project
+	 * @return
+	 */
+	public boolean isProjectSpring(IProject project) {
+		return projectHasDependency(project, APACHE_CAMEL_GROUP_ID, "camel-spring"); //$NON-NLS-1$ //$NON-NLS-2$
+	}
+
+	private boolean projectHasDependency(IProject project, String groupId, String artifactId) {
 		CamelMavenUtils cmu = new CamelMavenUtils();
 		List<Dependency> projectDependencies = cmu.getDependencyList(project);
 		Iterator<Dependency> depIter = projectDependencies.iterator();
 		while(depIter.hasNext()) {
 			Dependency dependency = depIter.next();
-			if ("org.apache.camel".equals(dependency.getGroupId()) && //$NON-NLS-1$
-					"camel-blueprint".equals(dependency.getArtifactId())) { //$NON-NLS-1$
+			if (groupId.equals(dependency.getGroupId()) &&
+					artifactId.equals(dependency.getArtifactId())) { 
 				return true;
 			}
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Checks for spring boot
 	 * @param project
@@ -196,18 +211,75 @@ public class Wsdl2RestWizard extends Wizard implements INewWizard {
 		return CamelCatalogUtils.hasSpringBootDependency(projectDependencies);
 	}
 
+	
+	private org.fusesource.ide.camel.model.service.core.catalog.Dependency makeDependency(
+			String grpId, String artId, String version) {
+		org.fusesource.ide.camel.model.service.core.catalog.Dependency dep = 
+				new org.fusesource.ide.camel.model.service.core.catalog.Dependency();
+		dep.setArtifactId(artId);
+		dep.setGroupId(grpId);
+		dep.setVersion(version);
+		return dep;
+	}
+	
 	/**
-	 * Add JAX-RS dependency
+	 * Add required dependencies
 	 */
 	private void updateDependencies(IProgressMonitor monitor) {
-		List<org.fusesource.ide.camel.model.service.core.catalog.Dependency> deps = new ArrayList<>();
-		org.fusesource.ide.camel.model.service.core.catalog.Dependency one = 
-				new org.fusesource.ide.camel.model.service.core.catalog.Dependency();
-		one.setArtifactId("jboss-jaxrs-api_2.0_spec"); //$NON-NLS-1$
-		one.setGroupId("org.jboss.spec.javax.ws.rs"); //$NON-NLS-1$
-		one.setVersion("1.0.0.Final-redhat-1"); //$NON-NLS-1$
-		deps.add(one);
 		IProject project = options.getProject();
+
+		// use project to determine if we are building a spring or blueprint project
+		boolean isBlueprint = isProjectBlueprint(project);
+		boolean isSpring = isProjectSpring(project);
+		boolean isSpringBoot = isProjectSpringBoot(project);
+		
+		// retrieve camel version for use with camel dependencies
+		CamelMavenUtils utils = new CamelMavenUtils();
+		String camelVersion = utils.getCamelVersionFromMaven(project, true);
+		
+		// now build a list of the dependencies we need
+		List<org.fusesource.ide.camel.model.service.core.catalog.Dependency> deps = new ArrayList<>();
+		org.fusesource.ide.camel.model.service.core.catalog.Dependency jaxrsSpec = 
+				makeDependency("org.jboss.spec.javax.ws.rs",  //$NON-NLS-1$
+						"jboss-jaxrs-api_2.0_spec",  //$NON-NLS-1$
+						"1.0.0.Final-redhat-1"); //$NON-NLS-1$
+		deps.add(jaxrsSpec);
+		
+		org.fusesource.ide.camel.model.service.core.catalog.Dependency camelJackson = 
+				makeDependency(APACHE_CAMEL_GROUP_ID,  //$NON-NLS-1$
+						"camel-jackson",  //$NON-NLS-1$
+						camelVersion);
+		deps.add(camelJackson);
+		
+		org.fusesource.ide.camel.model.service.core.catalog.Dependency camelCxf = 
+				makeDependency(APACHE_CAMEL_GROUP_ID,  //$NON-NLS-1$
+						"camel-cxf",  //$NON-NLS-1$
+						camelVersion);
+		deps.add(camelCxf);
+
+		if (isBlueprint) {
+			org.fusesource.ide.camel.model.service.core.catalog.Dependency camelServlet = 
+					makeDependency(APACHE_CAMEL_GROUP_ID,  //$NON-NLS-1$
+							"camel-servlet",  //$NON-NLS-1$
+							camelVersion);
+			deps.add(camelServlet);
+		}
+
+		if (isSpring) {
+			// change this once we get the spring default component updated in wsdl2rest
+			org.fusesource.ide.camel.model.service.core.catalog.Dependency camelJetty = 
+					makeDependency(APACHE_CAMEL_GROUP_ID,  //$NON-NLS-1$
+							"camel-jetty",  //$NON-NLS-1$
+							camelVersion);
+			deps.add(camelJetty);
+		}
+		
+		if (isSpringBoot) {
+			// potentially update the SpringBoot application properties to enable/configure
+			// the servlet component
+			// camel.component.servlet.mapping.contextPath=/*
+		}
+
 		new MavenUtils().updateMavenDependencies(deps, project, monitor);
 	}
 
@@ -351,6 +423,7 @@ public class Wsdl2RestWizard extends Wizard implements INewWizard {
 	 * @param tool
 	 */
 	protected Path initContextForTool(boolean isBlueprint, boolean isSpringBoot, File camelFile, Wsdl2Rest tool) {
+		tool.setNoVelocityLog(true);
 		Path contextpath = null;
 		if (camelFile != null && !camelFile.isDirectory()) {
 			contextpath = new File(camelFile.getAbsolutePath()).toPath();

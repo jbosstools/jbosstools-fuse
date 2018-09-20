@@ -33,6 +33,7 @@ public class ComponentManagerTest {
 	private Component componentWithTag22;
 	private Component componentWithTag2;
 	private Component componentWithSeveralTags;
+	private Component componentWithId;
 
 	@Before
 	public void setup() {
@@ -41,6 +42,7 @@ public class ComponentManagerTest {
 		setupComponentWithOneTag(supportedComponents);
 		setupComponentsWithSharedTags(supportedComponents);
 		setupComponentWithSeveralTags(supportedComponents);
+		setupComponentWithId(supportedComponents);
 
 		doReturn(supportedComponents).when(camelModel).getComponents();
 		componentManager = new ComponentManager(camelModel);
@@ -92,6 +94,18 @@ public class ComponentManagerTest {
 		supportedComponents.add(componentWithSeveralTags);
 	}
 
+	/**
+	 * @param supportedComponents
+	 */
+	private void setupComponentWithId(final ArrayList<Component> supportedComponents) {
+		componentWithId = new Component();
+		componentWithId.setScheme("my-component");
+		final ArrayList<String> listSingleTag = new ArrayList<>();
+		listSingleTag.add("tag-component");
+		componentWithId.setTags(listSingleTag);
+		supportedComponents.add(componentWithId);
+	}
+
 	@Test
 	public void testGetComponentForSingleTag() throws Exception {
 		assertThat(componentManager.getComponentForTag("tag1")).containsOnly(componentWithTag1);
@@ -120,13 +134,17 @@ public class ComponentManagerTest {
 
 	@Test
 	public void testGetTags() throws Exception {
-		assertThat(componentManager.getTags()).containsOnly("tag1", "tag2", "tagSeveral1", "tagSeveral2");
+		assertThat(componentManager.getTags()).containsOnly("tag1", "tag2", "tagSeveral1", "tagSeveral2", "tag-component");
 	}
 
 	@Test
 	public void testgetAllComponents(){
-		assertThat(componentManager.getAllComponents()).containsOnly(componentWithoutTag, componentWithSeveralTags, componentWithTag1, componentWithTag2, componentWithTag22);
+		assertThat(componentManager.getAllComponents()).containsOnly(componentWithoutTag, componentWithSeveralTags, componentWithTag1, componentWithTag2, componentWithTag22, componentWithId);
 	}
 
+	@Test
+	public void testGetComponentForId() throws Exception {
+		assertThat(componentManager.getComponentById("my-component")).isNotNull();
+	}
 
 }

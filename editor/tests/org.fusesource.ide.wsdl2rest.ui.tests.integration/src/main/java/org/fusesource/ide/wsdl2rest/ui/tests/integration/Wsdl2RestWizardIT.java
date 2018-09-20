@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.maven.model.Dependency;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -32,6 +33,7 @@ import org.eclipse.ui.PlatformUI;
 import org.fusesource.ide.camel.editor.utils.BuildAndRefreshJobWaiterUtil;
 import org.fusesource.ide.camel.editor.utils.JobWaiterUtil;
 import org.fusesource.ide.camel.model.service.core.tests.integration.core.io.FuseProject;
+import org.fusesource.ide.camel.model.service.core.util.CamelMavenUtils;
 import org.fusesource.ide.wsdl2rest.ui.wizard.Wsdl2RestOptions;
 import org.fusesource.ide.wsdl2rest.ui.wizard.Wsdl2RestWizard;
 import org.junit.After;
@@ -66,6 +68,7 @@ public class Wsdl2RestWizardIT {
 
 	@Rule
 	public FuseProject fuseProject5 = new FuseProject(Wsdl2RestWizardIT.class.getName() + '5', true);
+
 	private WizardDialog wizardDialog;
 
 	@Before
@@ -148,11 +151,26 @@ public class Wsdl2RestWizardIT {
 	public void testWsdl2RestWizardWithProjectInCamelPath() throws MalformedURLException, CoreException {
 		String camelPath = '/' + fuseProject2.getProject().getName() + '/' + SPRING_CAMEL_PATH;
 		runWsdl2RestWizard(camelPath, fuseProject2, Wsdl2RestWizard.DEFAULT_CONFIG_NAME);
+
+		// make sure that the jetty dependency was added as part of the wizard
+		// TODO: This will change when we update which Rest Configuration component we're using for generated Spring Rest DSL
+		Assert.assertTrue(hasDependency(fuseProject2.getProject(), "camel-jetty"));
+	}
+	
+	private static boolean hasDependency(IProject project, String artifactIdToCheck) {
+		CamelMavenUtils cmu = new CamelMavenUtils();
+		List<Dependency> projectDependencies = cmu.getDependencyList(project);
+		return projectDependencies != null
+				&& projectDependencies.stream()
+					.anyMatch(dependency -> artifactIdToCheck.equals(dependency.getArtifactId()));
 	}
 
 	@Test
 	public void testWsdl2RestWizardWithBlueprintNoProjectInCamelPath() throws MalformedURLException, CoreException {
 		runWsdl2RestWizard(BLUEPRINT_CAMEL_PATH, fuseProject3, Wsdl2RestWizard.DEFAULT_BLUEPRINT_CONFIG_NAME);
+		
+		// make sure that the servlet dependency was added as part of the wizard
+		Assert.assertTrue(hasDependency(fuseProject3.getProject(), "camel-servlet"));
 	}
 	
 	@Test
@@ -177,5 +195,5 @@ public class Wsdl2RestWizardIT {
 		}
 		return null;
 	}
-
+	
 }
