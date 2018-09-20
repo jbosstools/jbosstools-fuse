@@ -13,6 +13,7 @@ package org.fusesource.ide.camel.editor.component.wizard;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -73,6 +74,12 @@ public class ComponentManager {
 
 	public Set<Component> getAllComponents() {
 		return new HashSet<>(model.getComponents());
+	}
+	
+	public Component getComponentById(String id) {
+		return model.getComponents().stream()
+				.filter(component -> id.equalsIgnoreCase(component.getId())).findAny()
+				.orElse(null);		
 	}
 
 }

@@ -10,6 +10,7 @@
  ******************************************************************************/
 package org.fusesource.ide.camel.editor.restconfiguration;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -54,11 +55,14 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
+import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.part.EditorPart;
+import org.eclipse.ui.progress.IProgressService;
 import org.fusesource.ide.camel.editor.CamelEditor;
 import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 import org.fusesource.ide.camel.editor.internal.UIMessages;
@@ -92,7 +96,7 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 
 	private static final String OFF = "off"; //$NON-NLS-1$
 	
-	private CamelEditor parentEditor;
+	CamelEditor parentEditor;
 	private Composite parent;
 	private ScrolledForm form;
 	private FormToolkit toolkit;
@@ -490,6 +494,7 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 			public void widgetSelected(SelectionEvent e) {
 				if (rce != null) {
 					rce.setComponent(componentCombo.getText());
+					addComponentDependency(componentCombo.getText());
 				}
 			}
 		});
@@ -547,6 +552,19 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 		section.setClient(client);
 		
 		return client;
+	}
+	
+	private void addComponentDependency(String componentName) {
+		IWorkbench wb = PlatformUI.getWorkbench();
+		IProgressService ps = wb.getProgressService();
+		try {
+			ps.busyCursorWhile(new AddComponentDependencyRunnable(this, componentName));
+		} catch (InvocationTargetException e) {
+			CamelEditorUIActivator.pluginLog().logError(e);
+		} catch (InterruptedException e) {
+			CamelEditorUIActivator.pluginLog().logError(e);
+			Thread.currentThread().interrupt();
+		}
 	}
 
 	private void clearUI() {
