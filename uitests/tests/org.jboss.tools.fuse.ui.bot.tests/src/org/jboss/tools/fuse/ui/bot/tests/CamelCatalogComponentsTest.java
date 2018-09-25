@@ -14,6 +14,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.jboss.tools.fuse.reddeer.ProjectTemplate.CBR_SPRING;
 import static org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardDeploymentType.STANDALONE;
 import static org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardRuntimeType.KARAF;
+import static org.jboss.tools.fuse.reddeer.view.PaletteViewExt.GROUP_COMPONENTS;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -62,8 +63,8 @@ import org.junit.runners.Parameterized.UseParametersRunnerFactory;
 public class CamelCatalogComponentsTest {
 
 	public static final String PROJECT_NAME = "cbr";
-
 	public static final String CONTEXT = "camel-context.xml";
+	public static final String ADVANCED_TAB = "Advanced";
 
 	private static CamelCatalogUtils catalog;
 
@@ -80,12 +81,12 @@ public class CamelCatalogComponentsTest {
 	 * 
 	 * @return List of all available components
 	 */
-	@Parameters
+	@Parameters(name = "{0}")
 	public static Collection<String> setupData() {
 		ProjectFactory.newProject(PROJECT_NAME).deploymentType(STANDALONE).runtimeType(KARAF)
-				.version(catalogRequirement.getConfiguration().getVersion()).template(CBR_SPRING).create();
+			.version(catalogRequirement.getConfiguration().getVersion()).template(CBR_SPRING).create();
 		new PaletteView().open();
-		List<String> comps = new PaletteViewExt().getGroupTools("Components");
+		List<String> comps = new PaletteViewExt().getGroupTools(GROUP_COMPONENTS);
 
 		/**
 		 * Components without Camel catalog JSON file 
@@ -119,10 +120,8 @@ public class CamelCatalogComponentsTest {
 	@BeforeClass
 	public static void setupTestEnvironment() {
 		new WorkbenchShell().maximize();
-		
 		ProjectFactory.newProject(PROJECT_NAME).deploymentType(STANDALONE).runtimeType(KARAF)
-				.version(catalogRequirement.getConfiguration().getVersion()).template(CBR_SPRING).create();
-		
+				.version(catalogRequirement.getConfiguration().getVersion()).template(CBR_SPRING).create();	
 		catalog = new CamelCatalogUtils(catalogRequirement.getConfiguration().getHome());
 	}
 
@@ -147,7 +146,7 @@ public class CamelCatalogComponentsTest {
 	 * Verifies availability of component properties against Camel catalog
 	 * </p>
 	 * <ol>
-	 * <li>Get list of all components from Camel editor <p>Pallete view</p></li>
+	 * <li>Get list of all components from Camel editor <p>Palette view</p></li>
 	 * <li>Create new <p>Fuse Integration project - CBR - SPRING</p></li>
 	 * <li>Open <p>camel-context.xml</p> and activate <p>Camel editor</p></li>
 	 * <li>Add Camel component from components list (from first step) into Camel editor</li>
@@ -164,8 +163,8 @@ public class CamelCatalogComponentsTest {
 		
 		FusePropertiesView view = new FusePropertiesView();
 		view.open();
-		collector.checkThat("Component '" + component + "' has not 'Advanced' properties tab", view.getTabs().contains("Advanced"), equalTo(true));
-		view.selectTab("Advanced");
+		collector.checkThat("Component '" + component + "' has not '" + ADVANCED_TAB + "' properties tab", view.getTabs().contains(ADVANCED_TAB), equalTo(true));
+		view.selectTab(ADVANCED_TAB);
 
 		/*
 		 * Get all available properties labels from Properties 'Advanced' tab and customize labels text for comparing
