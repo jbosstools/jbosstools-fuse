@@ -1,11 +1,11 @@
 /*******************************************************************************
- * Copyright (c) 2018 Red Hat, Inc. 
- * Distributed under license by Red Hat, Inc. All rights reserved. 
- * This program is made available under the terms of the 
- * Eclipse Public License v1.0 which accompanies this distribution, 
- * and is available at http://www.eclipse.org/legal/epl-v10.html 
- * 
- * Contributors: 
+ * Copyright (c) 2018 Red Hat, Inc.
+ * Distributed under license by Red Hat, Inc. All rights reserved.
+ * This program is made available under the terms of the
+ * Eclipse Public License v1.0 which accompanies this distribution,
+ * and is available at http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
  * Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
 package org.jboss.tools.fuse.reddeer;
@@ -26,6 +26,9 @@ import org.json.JSONObject;
 /**
  * Structure for using different versions of Camel catalog
  * 
+ * For Camel components is supported only 'properties' part of available parameters, at this moment not useful to support also
+ * 'componentProperties' part (see https://issues.jboss.org/browse/FUSETOOLS-3148)
+ *
  * @author djelinek
  */
 public class CamelCatalogUtils {
@@ -33,23 +36,15 @@ public class CamelCatalogUtils {
 	private static Logger log = Logger.getLogger(CamelCatalogUtils.class);
 
 	public static final String ROOT_PATH = "/org/apache/camel/catalog/";
-
 	public static final String JSON_SUFFIX = ".json";
 
 	private static String components_path = ROOT_PATH + "components";
-
 	private static String components_list_path = ROOT_PATH + "components.properties";
-
 	private static String dataformats_path = ROOT_PATH + "dataformats";
-
 	private static String dataformats_list_path = ROOT_PATH + "dataformats.properties";
-
 	private static String languages_path = ROOT_PATH + "languages";
-
 	private static String languages_list_path = ROOT_PATH + "languages.properties";
-
 	private static String models_path = ROOT_PATH + "models";
-
 	private static String models_list_path = ROOT_PATH + "models.properties";
 
 	public enum CatalogType {
@@ -92,7 +87,6 @@ public class CamelCatalogUtils {
 		public void setListPath(String list) {
 			this.listPath = list;
 		}
-
 	}
 
 	public CamelCatalogUtils(String path) {
@@ -108,7 +102,7 @@ public class CamelCatalogUtils {
 
 	/**
 	 * Returns all available components
-	 * 
+	 *
 	 * @return String
 	 */
 	public List<String> getComponents() {
@@ -144,9 +138,9 @@ public class CamelCatalogUtils {
 
 	/**
 	 * Checks if component is in CamelCatalog
-	 * 
+	 *
 	 * @param name
-	 *            (name of Component)
+	 *                 (name of Component)
 	 * @return true/false
 	 */
 	public boolean isExistComponent(String name) {
@@ -157,7 +151,7 @@ public class CamelCatalogUtils {
 	 * Checks if dataformat is in CamelCatalog
 	 *
 	 * @param name
-	 *            (name of Component)
+	 *                 (name of Component)
 	 * @return true/false
 	 */
 	public boolean isExistDataFormat(String name) {
@@ -168,7 +162,7 @@ public class CamelCatalogUtils {
 	 * Checks if language is in CamelCatalog
 	 *
 	 * @param name
-	 *            (name of Component)
+	 *                 (name of Component)
 	 * @return true/false
 	 */
 	public boolean isExistLanguage(String name) {
@@ -179,7 +173,7 @@ public class CamelCatalogUtils {
 	 * Checks if model is in CamelCatalog
 	 *
 	 * @param name
-	 *            (name of Component)
+	 *                 (name of Component)
 	 * @return true/false
 	 */
 	public boolean isExistModel(String name) {
@@ -201,19 +195,12 @@ public class CamelCatalogUtils {
 		} catch (JSONException e) {
 			log.error("Trying to get missing property '" + label + "'");
 		}
-		if (obj == null && type == CatalogType.COMPONENT) {
-			try {
-				obj = getComponentJSONObject(type, name).getJSONObject("componentProperties").getJSONObject(label);
-			} catch (Exception e) {
-				log.error("Trying to get missing property '" + label + "'");
-			}
-		}
 		return obj;
 	}
 
 	/**
 	 * Returns property value for given component name
-	 * 
+	 *
 	 * @return String
 	 */
 	public String getPropertytValue(CatalogType type, String name, String property) {
@@ -227,11 +214,11 @@ public class CamelCatalogUtils {
 
 	/**
 	 * Returns list of available component properties names
-	 * 
+	 *
 	 * @param type
-	 *            CatalogType (COMPONENT, DATAFORMAT, LANGUAGE, MODEL)
+	 *                 CatalogType (COMPONENT, DATAFORMAT, LANGUAGE, MODEL)
 	 * @param name
-	 *            Name of component
+	 *                 Name of component
 	 * @return List<String>
 	 */
 	public List<String> getPropertiesNamesList(CatalogType type, String name) {
@@ -246,20 +233,6 @@ public class CamelCatalogUtils {
 			}
 		} catch (Exception e) {
 			log.error("Trying to get non-existing 'properties' JSON object for '" + type + "' - '" + name + "'");
-		}
-		if (type == CatalogType.COMPONENT) {
-			try {
-				obj = new JSONObject(getJsonFileContent(type, name)).getJSONObject("componentProperties");
-				arr = obj.names();
-				if (arr != null) {
-					for (int i = 0; i < arr.length(); i++) {
-						properties.add(arr.get(i).toString());
-					}
-				}
-			} catch (Exception e) {
-				log.error("Trying to get non-existing 'componentProperties' JSON object for '" + type + "' - '" + name
-						+ "'");
-			}
 		}
 		return properties;
 	}
@@ -287,11 +260,11 @@ public class CamelCatalogUtils {
 
 	/**
 	 * Returns path if file with given 'name'.json exists
-	 * 
+	 *
 	 * @param type
-	 *            CatalogType (COMPONENT, DATAFORMAT, LANGUAGE, MODEL)
+	 *                 CatalogType (COMPONENT, DATAFORMAT, LANGUAGE, MODEL)
 	 * @param name
-	 *            File name
+	 *                 File name
 	 * @return String path
 	 */
 	private String findJSONFile(CatalogType type, String name) {
@@ -308,7 +281,7 @@ public class CamelCatalogUtils {
 	 * Returns the component information from JSon as String format.
 	 *
 	 * @param name
-	 *            (the component name)
+	 *                 (the component name)
 	 * @return component details in String format
 	 */
 	private String getJsonFileContent(CatalogType type, String name) {

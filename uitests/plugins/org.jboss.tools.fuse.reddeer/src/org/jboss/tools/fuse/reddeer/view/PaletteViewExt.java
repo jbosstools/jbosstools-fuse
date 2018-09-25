@@ -29,6 +29,12 @@ import org.eclipse.reddeer.workbench.core.lookup.EditorPartLookup;
  */
 public class PaletteViewExt extends AbstractPalette {
 
+	public static final String GROUP_COMPONENTS = "Components";
+	public static final String GROUP_ROUTING = "Routing";
+	public static final String GROUP_CONTROL_FLOW = "Control Flow";
+	public static final String GROUP_TRANSFORMATION = "Transformation";
+	public static final String GROUP_MISCELLANEOUS = "Miscellaneous";
+	
 	public PaletteViewExt() {
 		super(Display.syncExec(new ResultRunnable<PaletteViewer>() {
 
