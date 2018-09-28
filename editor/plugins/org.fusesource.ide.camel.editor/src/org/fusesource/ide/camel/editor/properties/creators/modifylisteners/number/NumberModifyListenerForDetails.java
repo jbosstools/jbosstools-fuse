@@ -10,6 +10,7 @@
  ******************************************************************************/ 
 package org.fusesource.ide.camel.editor.properties.creators.modifylisteners.number;
 
+import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 
 /**
@@ -18,13 +19,13 @@ import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelEleme
  */
 public class NumberModifyListenerForDetails extends AbstractNumberModifyListener {
 
-	public NumberModifyListenerForDetails(AbstractCamelModelElement camelModelElement, String parameterName) {
-		super(camelModelElement, parameterName);
+	public NumberModifyListenerForDetails(AbstractCamelModelElement camelModelElement, Parameter parameter) {
+		super(camelModelElement, parameter);
 	}
 
 	@Override
 	protected void updateModel(String newValue) {
-		camelModelElement.setParameter(parameterName, newValue);
+		camelModelElement.setParameter(parameter.getName(), newValue);
 	}
 
 }

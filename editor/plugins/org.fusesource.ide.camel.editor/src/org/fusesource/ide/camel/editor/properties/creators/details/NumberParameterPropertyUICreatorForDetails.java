@@ -26,9 +26,9 @@ import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelEleme
  */
 public class NumberParameterPropertyUICreatorForDetails extends AbstractNumberParameterPropertyUICreator {
 
-	public NumberParameterPropertyUICreatorForDetails(DataBindingContext dbc, IObservableMap modelMap, Eip eip, AbstractCamelModelElement camelModelElement, Parameter parameter,
+	public NumberParameterPropertyUICreatorForDetails(DataBindingContext dbc, IObservableMap<?,?> modelMap, Eip eip, AbstractCamelModelElement camelModelElement, Parameter parameter,
 			Composite parent, TabbedPropertySheetWidgetFactory widgetFactory) {
-		super(dbc, modelMap, eip, camelModelElement, parameter, parent, widgetFactory, new NumberModifyListenerForDetails(camelModelElement, parameter.getName()));
+		super(dbc, modelMap, eip, camelModelElement, parameter, parent, widgetFactory, new NumberModifyListenerForDetails(camelModelElement, parameter));
 	}
 
 }

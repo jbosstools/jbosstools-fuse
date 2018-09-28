@@ -18,62 +18,45 @@ import org.junit.Test;
 public class NumberValidatorIT {
 
 	@Test
-	public void testValidateOK() throws Exception {
-		final Parameter parameter = new Parameter();
-		parameter.setJavaType(Integer.class.getName());
-		assertThat(new NumberValidator(parameter).validate("12").isOK()).isTrue();
+	public void testValidateIntegerOK() throws Exception {
+		testOk(Integer.class.getName(), "12");
 	}
 	
 	@Test
-	public void testValidateOKWithEmptyConstructor() throws Exception {
-		assertThat(new NumberValidator().validate("12").isOK()).isTrue();
+	public void testValidateIntegerDurationOK() throws Exception {
+		testOk(Integer.class.getName(), "12s");
+	}
+	
+	@Test
+	public void testValidateIntegerKO() throws Exception {
+		testKo(Integer.class.getName(), "test");
 	}
 
 	@Test
-	public void testValidateKO() throws Exception {
-		final Parameter parameter = new Parameter();
-		parameter.setJavaType(Integer.class.getName());
-		assertThat(new NumberValidator(parameter).validate("test").isOK()).isFalse();
+	public void testValidateOKLong() throws Exception {
+		testOk(Long.class.getName(), "0");
 	}
 	
 	@Test
-	public void testValidateKOWithEmptyConstructor() throws Exception {
-		final Parameter parameter = new Parameter();
-		parameter.setJavaType(Integer.class.getName());
-		assertThat(new NumberValidator().validate("test").isOK()).isFalse();
+	public void testValidateOKDurationLong() throws Exception {
+		testOk(Long.class.getName(), "0s");
+	}
+	
+	@Test
+	public void testValidateKOLong() throws Exception {
+		testKo(Long.class.getName(), "0.1");
 	}
 
-	@Test
-	public void testIgnoreNotInteger() throws Exception {
+	private void testOk(String javaType, String value) {
 		final Parameter parameter = new Parameter();
-		parameter.setJavaType(String.class.getName());
-		assertThat(new NumberValidator(parameter).validate("test").isOK()).isTrue();
-	}
-
-	@Test
-	public void testIgnoreEmptyValues() throws Exception {
-		final Parameter parameter = new Parameter();
-		parameter.setJavaType(Integer.class.getName());
-		assertThat(new NumberValidator(parameter).validate("").isOK()).isTrue();
+		parameter.setJavaType(javaType);
+		assertThat(new NumberValidator(parameter).validate(value).isOK()).isTrue();
 	}
 	
-	@Test
-	public void testIgnoreNullValues() throws Exception {
+	private void testKo(String typeName, String value) {
 		final Parameter parameter = new Parameter();
-		parameter.setJavaType(Integer.class.getName());
-		assertThat(new NumberValidator(parameter).validate(null).isOK()).isTrue();
-	}
-	
-	@Test
-	public void testIgnoreNullValuesWithEmptyConstructor() throws Exception {
-		assertThat(new NumberValidator().validate(null).isOK()).isTrue();
-	}
-	
-	@Test
-	public void testIgnorePropertyPlaceholder() throws Exception {
-		final Parameter parameter = new Parameter();
-		parameter.setJavaType(Integer.class.getName());
-		assertThat(new NumberValidator(parameter).validate("{{placeholder}}").isOK()).isTrue();
+		parameter.setJavaType(typeName);
+		assertThat(new NumberValidator(parameter).validate(value).isOK()).isFalse();
 	}
 
 }

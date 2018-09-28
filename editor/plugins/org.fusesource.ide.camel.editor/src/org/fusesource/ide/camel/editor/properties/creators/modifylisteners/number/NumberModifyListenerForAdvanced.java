@@ -22,17 +22,15 @@ import org.fusesource.ide.camel.model.service.core.util.PropertiesUtils;
  */
 public class NumberModifyListenerForAdvanced extends AbstractNumberModifyListener {
 
-	private Parameter parameter;
 	private Component component;
-	private IObservableMap modelMap;
+	private IObservableMap<?,?> modelMap;
 
-	public NumberModifyListenerForAdvanced(AbstractCamelModelElement camelModelElement, Parameter parameter, IObservableMap modelMap) {
-		super(camelModelElement, parameter.getName());
-		this.parameter = parameter;
+	public NumberModifyListenerForAdvanced(AbstractCamelModelElement camelModelElement, Parameter parameter, IObservableMap<?,?> modelMap) {
+		super(camelModelElement, parameter);
 		this.component = PropertiesUtils.getComponentFor(camelModelElement);
 		this.modelMap = modelMap;
 	}
-
+	
 	@Override
 	protected void updateModel(String newValue) {
 		PropertiesUtils.updateURIParams(camelModelElement, parameter, newValue, component, modelMap);

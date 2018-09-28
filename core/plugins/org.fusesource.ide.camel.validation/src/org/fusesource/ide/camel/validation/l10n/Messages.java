@@ -18,11 +18,12 @@ import org.eclipse.osgi.util.NLS;
  */
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.fusesource.ide.camel.validation.l10n.messages"; //$NON-NLS-1$
-	public static String NumberValidator_messageError;
+	public static String numberValidatorMessageError;
 	public static String RequiredPropertyValidator_messageMissingParameter;
 	public static String eipWithoutChild;
 	public static String validationSameComponentIdAndComponentDefinitionId;
-	public static String numberValidatorMessageErrorWithoutArgument;
+	public static String numberValidatorMessageErrorForDouble;
+	public static String numberValidatorMessageErrorForFloat;
 
 	static {
 		// initialize resource bundle

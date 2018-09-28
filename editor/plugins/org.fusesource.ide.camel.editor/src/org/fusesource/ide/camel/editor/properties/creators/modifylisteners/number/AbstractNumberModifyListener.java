@@ -15,6 +15,7 @@ import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.widgets.Text;
+import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.validation.model.NumberValidator;
 
@@ -25,18 +26,18 @@ import org.fusesource.ide.camel.validation.model.NumberValidator;
 public abstract class AbstractNumberModifyListener implements ModifyListener {
 
 	protected AbstractCamelModelElement camelModelElement;
-	protected String parameterName;
+	protected Parameter parameter;
 
-	public AbstractNumberModifyListener(AbstractCamelModelElement camelModelElement, String parameterName) {
+	public AbstractNumberModifyListener(AbstractCamelModelElement camelModelElement, Parameter parameter) {
 		this.camelModelElement = camelModelElement;
-		this.parameterName = parameterName;
+		this.parameter = parameter;
 	}
-
+	
 	@Override
 	public void modifyText(ModifyEvent e) {
 	    Text txt = (Text)e.getSource();
 	    String val = txt.getText();
-	    IStatus status = new NumberValidator().validate(val);
+	    IStatus status = new NumberValidator(parameter).validate(val);
 	    if (status.isOK()) {
 	    	txt.setBackground(ColorConstants.white);
 	    	updateModel(txt.getText());
@@ -44,6 +45,6 @@ public abstract class AbstractNumberModifyListener implements ModifyListener {
 	    	txt.setBackground(ColorConstants.red);
 	    }
 	}
-	
+
 	protected abstract void updateModel(String newValue);
 }

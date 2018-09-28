@@ -25,7 +25,7 @@ import org.fusesource.ide.foundation.core.util.Strings;
  * @author Aurelien Pupier
  *
  */
-public class NumberValidator implements IValidator {
+public class NumberValidator implements IValidator<Object> {
 
 	private Parameter parameter;
 
@@ -33,25 +33,47 @@ public class NumberValidator implements IValidator {
 		this.parameter = parameter;
 	}
 	
-	public NumberValidator() {
-	}
-
 	@Override
 	public IStatus validate(Object value) {
-		if (Strings.isNonEmptyAndNotOnlySpaces(value)
-				&& !new CamelPlaceHolderUtil().isPlaceHolder(value)
-				&& (parameter == null || CamelComponentUtils.isNumberProperty(parameter))) {
-			try {
-				PropertiesUtils.validateDuration(value.toString());
-			} catch (IllegalArgumentException ex) {
-				if (parameter != null) {
-					return ValidationStatus.error(NLS.bind(Messages.NumberValidator_messageError, parameter.getName()), ex);
-				} else {
-					return ValidationStatus.error(Messages.numberValidatorMessageErrorWithoutArgument);
-				}
+		if (Strings.isNonEmptyAndNotOnlySpaces(value) && !new CamelPlaceHolderUtil().isPlaceHolder(value)) {
+			String javaType = parameter.getJavaType();
+			if (CamelComponentUtils.isIntegerTypeProperty(javaType)) {
+				return handlePotentialDuration(value);
+			} else if(CamelComponentUtils.isDoubleTypeProperty(javaType)) {
+				return validateDouble(value);
+			} else if(CamelComponentUtils.isLongTypeProperty(javaType)) {
+				return handlePotentialDuration(value);
+			} else if(CamelComponentUtils.isFloatTypeProperty(javaType)) {
+				return validateFloat(value);
 			}
 		}
 		return ValidationStatus.ok();
 	}
 
+	private IStatus validateFloat(Object value) {
+		try {
+			Float.parseFloat(value.toString());
+		} catch(NumberFormatException nfe) {
+			return ValidationStatus.error(NLS.bind(Messages.numberValidatorMessageErrorForFloat, parameter.getName()), nfe);
+		}
+		return ValidationStatus.ok();
+	}
+
+	private IStatus validateDouble(Object value) {
+		try {
+			Double.parseDouble(value.toString());
+		} catch(NumberFormatException nfe) {
+			return ValidationStatus.error(NLS.bind(Messages.numberValidatorMessageErrorForDouble, parameter.getName()), nfe);
+		}
+		return ValidationStatus.ok();
+	}
+
+	private IStatus handlePotentialDuration(Object value) {
+		try {
+			PropertiesUtils.validateDuration(value.toString());
+		} catch (IllegalArgumentException ex) {
+			return ValidationStatus.error(NLS.bind(Messages.numberValidatorMessageError, parameter.getName()), ex);
+		}
+		return ValidationStatus.ok();
+	}
 }
