@@ -138,11 +138,27 @@ public final class CamelComponentUtils {
 
 	public static boolean isNumberProperty(Parameter p) {
 		final String javaType = p.getJavaType();
-		return p.getChoice() == null && ("int".equalsIgnoreCase(javaType) || "Integer".equalsIgnoreCase(javaType)
-				|| "java.lang.Integer".equalsIgnoreCase(javaType) || "long".equalsIgnoreCase(javaType)
-				|| "java.lang.Long".equalsIgnoreCase(javaType) || "double".equalsIgnoreCase(javaType)
-				|| "java.lang.Double".equalsIgnoreCase(javaType) || "float".equalsIgnoreCase(javaType)
-				|| "java.lang.Float".equalsIgnoreCase(javaType) || "Number".equalsIgnoreCase(javaType));
+		return p.getChoice() == null && (isIntegerTypeProperty(javaType)
+				|| isLongTypeProperty(javaType)
+				|| isDoubleTypeProperty(javaType)
+				|| isFloatTypeProperty(javaType)
+				|| "Number".equalsIgnoreCase(javaType));
+	}
+
+	public static boolean isLongTypeProperty(final String javaType) {
+		return "long".equalsIgnoreCase(javaType) || "java.lang.Long".equalsIgnoreCase(javaType);
+	}
+
+	public static boolean isDoubleTypeProperty(final String javaType) {
+		return "double".equalsIgnoreCase(javaType) || "java.lang.Double".equalsIgnoreCase(javaType);
+	}
+
+	public static boolean isFloatTypeProperty(final String javaType) {
+		return "float".equalsIgnoreCase(javaType) || "java.lang.Float".equalsIgnoreCase(javaType);
+	}
+
+	public static boolean isIntegerTypeProperty(final String javaType) {
+		return "int".equalsIgnoreCase(javaType) || "Integer".equalsIgnoreCase(javaType) || "java.lang.Integer".equalsIgnoreCase(javaType);
 	}
 
 	public static boolean isChoiceProperty(Parameter p) {
