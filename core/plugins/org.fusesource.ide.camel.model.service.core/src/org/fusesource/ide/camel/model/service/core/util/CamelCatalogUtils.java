@@ -32,6 +32,7 @@ import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelCatalogCoo
 import org.fusesource.ide.camel.model.service.core.internal.CamelModelServiceCoreActivator;
 import org.fusesource.ide.camel.model.service.core.util.versionmapper.CamelForFIS20ToBomMapper;
 import org.fusesource.ide.camel.model.service.core.util.versionmapper.CamelForFuse6ToBomMapper;
+import org.fusesource.ide.camel.model.service.core.util.versionmapper.CamelForFuse71ToBomMapper;
 import org.fusesource.ide.camel.model.service.core.util.versionmapper.CamelForFuse7ToBomMapper;
 import org.fusesource.ide.camel.model.service.core.util.versionmapper.CamelForFuseOnOpenShiftToBomMapper;
 import org.fusesource.ide.camel.model.service.core.util.versionmapper.CamelForWildflyFuse7ToBomMapper;
@@ -86,6 +87,7 @@ public class CamelCatalogUtils {
 	static final Map<String, String> CAMEL_VERSION_2_FUSE_ON_OPENSHIFT_BOM_MAPPING = new CamelForFuseOnOpenShiftToBomMapper().getMapping();
 	static final Map<String, String> CAMEL_VERSION_2_FUSE_7_BOM_MAPPING = new CamelForFuse7ToBomMapper().getMapping();
 	static final Map<String, String> CAMEL_VERSION_2_FUSE_7_WILDFLY_BOM_MAPPING = new CamelForWildflyFuse7ToBomMapper().getMapping();
+	static final Map<String, String> CAMEL_VERSION_2_FUSE_71_BOM_MAPPING = new CamelForFuse71ToBomMapper().getMapping();
 	static final Map<String, String> FISBOM_TO_FABRIC8MAVENPLUGIN_MAPPING = new FISBomToFabric8MavenPluginMapper().getMapping();
 	
 	static {
@@ -94,6 +96,7 @@ public class CamelCatalogUtils {
 		OFFICIAL_SUPPORTED_CAMEL_CATALOG_VERSIONS.addAll(CAMEL_VERSION_2_FUSE_7_WILDFLY_BOM_MAPPING.keySet());
 		OFFICIAL_SUPPORTED_CAMEL_CATALOG_VERSIONS.addAll(CAMEL_VERSION_2_FUSE_FIS_BOM_MAPPING.keySet());
 		OFFICIAL_SUPPORTED_CAMEL_CATALOG_VERSIONS.addAll(CAMEL_VERSION_2_FUSE_ON_OPENSHIFT_BOM_MAPPING.keySet());
+		OFFICIAL_SUPPORTED_CAMEL_CATALOG_VERSIONS.addAll(CAMEL_VERSION_2_FUSE_71_BOM_MAPPING.keySet());
 		
 		initCamelVersionToTest();
 		
@@ -177,12 +180,25 @@ public class CamelCatalogUtils {
 					bomVersion = getFuse7BomVersion(camelVersion, fuseBomUsed, monitor);
 				} else if(isBom(FuseBomFilter.BOM_FUSE_7_WILDFLY, fuseBomUsed)) {
 					bomVersion = getFuse7WildflyBomVersion(camelVersion, fuseBomUsed, monitor);
+				} else if(isBom(FuseBomFilter.BOM_FUSE_71_WILDFLY, fuseBomUsed)
+						|| isBom(FuseBomFilter.BOM_FUSE_71_KARAF, fuseBomUsed)
+						|| isBom(FuseBomFilter.BOM_FUSE_71_SPRINGBOOT, fuseBomUsed)) {
+					bomVersion = getFuse71BomVersion(camelVersion, fuseBomUsed, monitor);
 				}
 			}
 		} else {
 			return null;
 		}
 		return bomVersion;
+	}
+	
+	private static String getFuse71BomVersion(String camelVersion, org.apache.maven.model.Dependency fuseBomUsed,
+			IProgressMonitor monitor) {
+		if (CAMEL_VERSION_2_FUSE_71_BOM_MAPPING.containsKey(camelVersion)) {
+			return CAMEL_VERSION_2_FUSE_71_BOM_MAPPING.get(camelVersion);
+		} else {
+			return new OnlineArtifactVersionSearcher().findLatestVersion(monitor, fuseBomUsed);
+		}
 	}
 
 	protected static String getFuse7WildflyBomVersion(String camelVersion, org.apache.maven.model.Dependency fuseBomUsed, IProgressMonitor monitor) {
