@@ -15,9 +15,11 @@ import static org.junit.Assume.assumeFalse;
 import java.util.List;
 
 import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
+import org.fusesource.ide.foundation.core.util.VersionUtil;
 import org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType;
 import org.fusesource.ide.projecttemplates.impl.simple.CBRTemplateForFuse6;
 import org.fusesource.ide.projecttemplates.impl.simple.CBRTemplateForFuse7;
+import org.fusesource.ide.projecttemplates.impl.simple.CBRTemplateForFuse71;
 import org.fusesource.ide.projecttemplates.util.NewFuseIntegrationProjectMetaData;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -58,10 +60,12 @@ public class FuseIntegrationProjectCreatorRunnableForCBRIT extends FuseIntegrati
 		NewFuseIntegrationProjectMetaData newProjectMetadata = super.createDefaultNewProjectMetadata(dsl, projectName);
 		if(isOlderThan220()){
 			newProjectMetadata.setTemplate(new CBRTemplateForFuse6());
+		} else if(isNewerThan221()){
+			newProjectMetadata.setTemplate(new CBRTemplateForFuse71());
 		} else {
 			newProjectMetadata.setTemplate(new CBRTemplateForFuse7());
 		}
 		return newProjectMetadata;
 	}
-	
+
 }

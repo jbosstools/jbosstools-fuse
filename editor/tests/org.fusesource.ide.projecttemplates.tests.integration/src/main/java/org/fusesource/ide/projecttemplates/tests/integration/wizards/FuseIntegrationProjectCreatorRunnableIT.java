@@ -58,6 +58,7 @@ import org.fusesource.ide.projecttemplates.adopters.AbstractProjectTemplate;
 import org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType;
 import org.fusesource.ide.projecttemplates.impl.simple.EmptyProjectTemplateForFuse6;
 import org.fusesource.ide.projecttemplates.impl.simple.EmptyProjectTemplateForFuse7;
+import org.fusesource.ide.projecttemplates.impl.simple.EmptyProjectTemplateForFuse71;
 import org.fusesource.ide.projecttemplates.tests.integration.ProjectTemplatesIntegrationTestsActivator;
 import org.fusesource.ide.projecttemplates.util.NewFuseIntegrationProjectMetaData;
 import org.fusesource.ide.projecttemplates.wizards.FuseIntegrationProjectCreatorRunnable;
@@ -173,6 +174,8 @@ public abstract class FuseIntegrationProjectCreatorRunnableIT extends AbstractPr
 		metadata.setDslType(dsl);
 		if (isOlderThan220()) {
 			metadata.setTemplate(new EmptyProjectTemplateForFuse6());
+		} else if (isNewerThan221()){
+			metadata.setTemplate(new EmptyProjectTemplateForFuse71());
 		} else {
 			metadata.setTemplate(new EmptyProjectTemplateForFuse7());
 		}
@@ -286,5 +289,9 @@ public abstract class FuseIntegrationProjectCreatorRunnableIT extends AbstractPr
 
 	protected boolean isOlderThan220() {
 		return new VersionUtil().isStrictlyLowerThan2200(camelVersion);
+	}
+	
+	protected boolean isNewerThan221() {
+		return new VersionUtil().isStrictlyGreaterThan(camelVersion, "2.21.0.fuse-710");
 	}
 }
