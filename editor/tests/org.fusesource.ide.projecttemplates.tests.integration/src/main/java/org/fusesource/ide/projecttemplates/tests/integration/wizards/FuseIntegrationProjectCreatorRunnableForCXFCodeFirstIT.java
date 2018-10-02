@@ -19,6 +19,7 @@ import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
 import org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType;
 import org.fusesource.ide.projecttemplates.impl.medium.CXfCodeFirstProjectTemplateForFuse6;
 import org.fusesource.ide.projecttemplates.impl.medium.CXfCodeFirstProjectTemplateForFuse7;
+import org.fusesource.ide.projecttemplates.impl.medium.CXfCodeFirstProjectTemplateForFuse71;
 import org.fusesource.ide.projecttemplates.util.NewFuseIntegrationProjectMetaData;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -68,6 +69,8 @@ public class FuseIntegrationProjectCreatorRunnableForCXFCodeFirstIT extends Fuse
 		NewFuseIntegrationProjectMetaData newProjectMetadata = super.createDefaultNewProjectMetadata(dsl, projectName);
 		if(isOlderThan220()){
 			newProjectMetadata.setTemplate(new CXfCodeFirstProjectTemplateForFuse6());
+		} else if(isNewerThan221()){
+			newProjectMetadata.setTemplate(new CXfCodeFirstProjectTemplateForFuse71());
 		} else {
 			newProjectMetadata.setTemplate(new CXfCodeFirstProjectTemplateForFuse7());
 		}

@@ -38,6 +38,7 @@ import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
 import org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType;
 import org.fusesource.ide.projecttemplates.impl.simple.EAPSpringTemplateForFuse6;
 import org.fusesource.ide.projecttemplates.impl.simple.EAPSpringTemplateForFuse7;
+import org.fusesource.ide.projecttemplates.impl.simple.EAPSpringTemplateForFuse71;
 import org.fusesource.ide.projecttemplates.util.NewFuseIntegrationProjectMetaData;
 import org.fusesource.ide.projecttemplates.wizards.pages.model.EnvironmentData;
 import org.fusesource.ide.projecttemplates.wizards.pages.model.FuseDeploymentPlatform;
@@ -71,6 +72,8 @@ public class FuseIntegrationProjectCreatorRunnableForEAPSpringIT extends FuseInt
 		NewFuseIntegrationProjectMetaData newProjectMetadata = super.createDefaultNewProjectMetadata(dsl, projectName);
 		if (isOlderThan220()) {
 			newProjectMetadata.setTemplate(new EAPSpringTemplateForFuse6());
+		} else if(isNewerThan221()){
+			newProjectMetadata.setTemplate(new EAPSpringTemplateForFuse71());
 		} else {
 			newProjectMetadata.setTemplate(new EAPSpringTemplateForFuse7());
 		}
@@ -137,6 +140,7 @@ public class FuseIntegrationProjectCreatorRunnableForEAPSpringIT extends FuseInt
     	// Local launch is not configured for EAP projects
     }
     
+    @Override
 	protected EnvironmentData createEnvironmentData() {
 		return new EnvironmentData(camelVersion, FuseDeploymentPlatform.STANDALONE, FuseRuntimeKind.WILDFLY);
 	}

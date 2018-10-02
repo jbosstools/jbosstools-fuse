@@ -19,12 +19,13 @@ import org.eclipse.core.resources.IProject;
 import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
 import org.fusesource.ide.camel.model.service.core.util.versionmapper.CamelForFuseOnOpenShiftToBomMapper;
 import org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType;
+import org.fusesource.ide.projecttemplates.impl.simple.OSESpringBootXMLTemplateForFuse6;
+import org.fusesource.ide.projecttemplates.impl.simple.OSESpringBootXMLTemplateForFuse7;
+import org.fusesource.ide.projecttemplates.impl.simple.OSESpringBootXMLTemplateForFuse71;
 import org.fusesource.ide.projecttemplates.util.NewFuseIntegrationProjectMetaData;
 import org.fusesource.ide.projecttemplates.wizards.pages.model.EnvironmentData;
 import org.fusesource.ide.projecttemplates.wizards.pages.model.FuseDeploymentPlatform;
 import org.fusesource.ide.projecttemplates.wizards.pages.model.FuseRuntimeKind;
-import org.fusesource.ide.projecttemplates.impl.simple.OSESpringBootXMLTemplateForFuse6;
-import org.fusesource.ide.projecttemplates.impl.simple.OSESpringBootXMLTemplateForFuse7;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -52,6 +53,8 @@ public class FuseIntegrationProjectCreatorRunnableForOSESringBootIT extends Fuse
 	NewFuseIntegrationProjectMetaData newProjectMetadata = super.createDefaultNewProjectMetadata(dsl, projectName);
 		if (isOlderThan220()) {
 			newProjectMetadata.setTemplate(new OSESpringBootXMLTemplateForFuse6());
+		} else if (isNewerThan221()){
+			newProjectMetadata.setTemplate(new OSESpringBootXMLTemplateForFuse71());
 		} else {
 			newProjectMetadata.setTemplate(new OSESpringBootXMLTemplateForFuse7());
 		}
