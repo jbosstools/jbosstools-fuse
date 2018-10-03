@@ -3,22 +3,39 @@
 <lifecycleMappingMetadata>
 
 	<pluginExecutions>
-		<pluginExecution>
-			<pluginExecutionFilter>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<versionRange>[2.0,)</versionRange>
-				<goals>
-					<goal>compile</goal>
-					<goal>testCompile</goal>
-				</goals>
-			</pluginExecutionFilter>
-			<action>
-				<configurator>
-					<id>org.fusesource.ide.projecttemplates.camel.maven.configurator.wtp</id>
-				</configurator>
-			</action>
-		</pluginExecution>
+        <pluginExecution>
+            <pluginExecutionFilter>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <versionRange>[2.0,)</versionRange>
+                <goals>
+                    <goal>compile</goal>
+                    <goal>testCompile</goal>
+                </goals>
+            </pluginExecutionFilter>
+            <action>
+                <configurator>
+                    <id>org.fusesource.ide.projecttemplates.camel.maven.configurator.wtp</id>
+                </configurator>
+            </action>
+        </pluginExecution>
+        <pluginExecution>
+            <pluginExecutionFilter>
+                <groupId>org.jboss.redhat-fuse</groupId>
+                <artifactId>fabric8-maven-plugin</artifactId>
+                <versionRange>[7.1.0,7.2.0)</versionRange>
+                <goals>
+                    <goal>resource</goal>
+                    <goal>build</goal>
+                    <goal>push</goal>
+                    <goal>deploy</goal>
+                    <goal>watch</goal>                    
+                </goals>
+            </pluginExecutionFilter>
+            <action>
+                <ignore/>
+            </action>
+        </pluginExecution>
 	</pluginExecutions>
 
 </lifecycleMappingMetadata>
