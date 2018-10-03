@@ -138,8 +138,8 @@
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
-				<groupId>org.jboss.fuse</groupId>
-				<artifactId>jboss-fuse-parent</artifactId>
+				<groupId>org.jboss.redhat-fuse</groupId>
+				<artifactId>fuse-karaf-bom</artifactId>
 				<version>${jboss.fuse.bom.version}</version>
 				<type>pom</type>
 				<scope>import</scope>
