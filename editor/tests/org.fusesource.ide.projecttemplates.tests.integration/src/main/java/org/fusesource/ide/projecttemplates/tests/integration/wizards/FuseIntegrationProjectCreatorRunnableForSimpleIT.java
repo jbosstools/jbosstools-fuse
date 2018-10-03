@@ -84,6 +84,8 @@ public class FuseIntegrationProjectCreatorRunnableForSimpleIT extends FuseIntegr
 		String textToFind;
 		if(isOlderThan220()){
 			textToFind = "<groupId>org.jboss.fuse.bom</groupId>";
+		} else if(isNewerThan221()) {
+			textToFind = "<groupId>org.jboss.redhat-fuse</groupId>";
 		} else {
 			textToFind = "<groupId>org.jboss.fuse</groupId>";
 		}
