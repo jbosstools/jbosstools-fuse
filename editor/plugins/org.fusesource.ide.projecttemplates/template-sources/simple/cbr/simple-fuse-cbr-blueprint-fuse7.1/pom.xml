@@ -19,7 +19,7 @@
 	<properties>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<version.maven-bundle-plugin>3.2.0</version.maven-bundle-plugin>
-		<jboss.fuse.bom.version>%%%PLACEHOLDER_BOMVERSION%%%</jboss.fuse.bom.version>
+		<fuse.version>%%%PLACEHOLDER_BOMVERSION%%%</fuse.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 	<dependencyManagement>
@@ -27,7 +27,7 @@
 			<dependency>
 				<groupId>org.jboss.redhat-fuse</groupId>
 				<artifactId>fuse-karaf-bom</artifactId>
-				<version>${jboss.fuse.bom.version}</version>
+				<version>${fuse.version}</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
