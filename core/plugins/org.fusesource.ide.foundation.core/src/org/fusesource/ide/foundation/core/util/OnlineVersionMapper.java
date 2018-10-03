@@ -20,7 +20,7 @@ import org.fusesource.ide.foundation.core.internal.FoundationCoreActivator;
 
 public abstract class OnlineVersionMapper {
 	
-	protected static final String BASE_REPO_CONFIG_URI = "https://raw.githubusercontent.com/bfitzpat/jbosstools-fuse/FUSETOOLS-3061/configuration/";
+	protected static final String BASE_REPO_CONFIG_URI = "https://raw.githubusercontent.com/bfitzpat/fuseide/FUSETOOLS-3061/configuration/";
 	
 	private String mappingProperty;
 	private String defaultUrl;
