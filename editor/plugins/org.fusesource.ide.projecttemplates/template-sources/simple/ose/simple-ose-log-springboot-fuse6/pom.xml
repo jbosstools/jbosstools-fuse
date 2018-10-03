@@ -24,9 +24,9 @@
   <dependencyManagement>
     <dependencies>
       <dependency>
-        <groupId>org.jboss.redhat-fuse</groupId>
-        <artifactId>fuse-springboot-bom</artifactId>
-        <version>${fuse.version}</version>
+        <groupId>io.fabric8</groupId>
+        <artifactId>fabric8-project-bom-camel-spring-boot</artifactId>
+        <version>${fabric8.version}</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
