@@ -40,9 +40,6 @@ public class Wsdl2RestWizardSecondPage extends Wsdl2RestWizardBasePage {
 		setMessage(UIMessages.wsdl2RestWizardSecondPagePageTwoDescription);
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.jface.dialogs.IDialogPage#createControl(org.eclipse.swt.widgets.Composite)
-	 */
 	@Override
 	public void createControl(Composite parent) {
 		WizardPageSupport.create(this, dbc);
@@ -51,6 +48,58 @@ public class Wsdl2RestWizardSecondPage extends Wsdl2RestWizardBasePage {
 		composite.setLayout(GridLayoutFactory.swtDefaults().numColumns(4).create());
 		composite.setLayoutData(GridDataFactory.fillDefaults().grab(false, false).create());
 
+		Text javaPathTextControl = createDestinationJavaFolderControl(composite);
+		Text camelPathTextControl = createDestinationCamelFolderControl(composite);
+		Text targetAddressText = createLabelAndText(composite, UIMessages.wsdl2RestWizardSecondPageTargetServiceAddressLabel, 3);
+		Text targetRestAddressText = createLabelAndText(composite, UIMessages.wsdl2RestWizardSecondPageTargetRESTServiceAddressLabel, 3);
+
+		createDataBindings(javaPathTextControl, camelPathTextControl, targetAddressText, targetRestAddressText);
+
+		// set initial values
+		initIfNotEmpty(javaPathTextControl, getOptionsFromWizard().getDestinationJava());
+		initIfNotEmpty(camelPathTextControl, getOptionsFromWizard().getDestinationCamel());
+		initIfNotEmpty(targetAddressText, getOptionsFromWizard().getTargetServiceAddress());
+		initIfNotEmpty(targetRestAddressText, getOptionsFromWizard().getTargetRestServiceAddress());
+
+		setControl(composite);
+		setPageComplete(isPageComplete());
+		setErrorMessage(null); // clear any error messages at first
+	}
+
+	private void createDataBindings(Text javaPathTextControl, Text camelPathTextControl, Text targetAddressText, Text targetRestAddressText) {
+		javaPathBinding = createBinding(javaPathTextControl, "destinationJava", new PathValidator());
+		ControlDecorationSupport.create(javaPathBinding, SWT.LEFT | SWT.TOP);
+
+		camelPathBinding = createBinding(camelPathTextControl, "destinationCamel", new PathValidator());
+		ControlDecorationSupport.create(camelPathBinding, SWT.LEFT | SWT.TOP);
+
+		Binding targetAddressBinding = createBinding(targetAddressText, "targetServiceAddress", new TargetURLValidator()); //$NON-NLS-1$
+		ControlDecorationSupport.create(targetAddressBinding, SWT.LEFT | SWT.TOP);
+
+		Binding targetRestAddressBinding = createBinding(targetRestAddressText, "targetRestServiceAddress", new TargetURLValidator()); //$NON-NLS-1$
+		ControlDecorationSupport.create(targetRestAddressBinding, SWT.LEFT | SWT.TOP);
+	}
+
+	private Text createDestinationCamelFolderControl(Composite composite) {
+		Text camelPathTextControl = createLabelAndText(composite, UIMessages.wsdl2RestWizardSecondPageCamelFolderLabel, 2);
+		Button outPathBrowseButton = createButton(composite, "..."); //$NON-NLS-1$
+		outPathBrowseButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				// browse
+				IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(getOptionsFromWizard().getProjectName());
+				String path = selectFolder(project);
+				if (path != null) {
+					getOptionsFromWizard().setDestinationCamel(path);
+					camelPathTextControl.notifyListeners(SWT.Modify, new Event());
+					camelPathBinding.updateModelToTarget();
+				}
+			}
+		});
+		return camelPathTextControl;
+	}
+
+	private Text createDestinationJavaFolderControl(Composite composite) {
 		Text javaPathTextControl = createLabelAndText(composite, UIMessages.wsdl2RestWizardSecondPageJavaFolderLabel, 2);
 		Button javaPathBrowseBtn = createButton(composite, "..."); //$NON-NLS-1$
 		javaPathBrowseBtn.addSelectionListener(new SelectionAdapter() {
@@ -63,49 +112,11 @@ public class Wsdl2RestWizardSecondPage extends Wsdl2RestWizardBasePage {
 				if (path != null) {
 					getOptionsFromWizard().setDestinationJava(path);
 					javaPathTextControl.notifyListeners(SWT.Modify, new Event());
+					javaPathBinding.updateModelToTarget();
 				}
 			}
 		});
-
-		Text camelPathTextControl = createLabelAndText(composite, UIMessages.wsdl2RestWizardSecondPageCamelFolderLabel, 2);
-		Button outPathBrowseButton = createButton(composite, "..."); //$NON-NLS-1$
-		outPathBrowseButton.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				// browse
-				IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(getOptionsFromWizard().getProjectName());
-				String path = selectFolder(project);
-				if (path != null) {
-					getOptionsFromWizard().setDestinationCamel(path);
-					camelPathTextControl.notifyListeners(SWT.Modify, new Event());
-				}
-			}
-		});
-
-		Text targetAddressText = createLabelAndText(composite, UIMessages.wsdl2RestWizardSecondPageTargetServiceAddressLabel, 3);
-		Text targetRestAddressText = createLabelAndText(composite, UIMessages.wsdl2RestWizardSecondPageTargetRESTServiceAddressLabel, 3);
-
-		javaPathBinding = createBinding(javaPathTextControl, "destinationJava", new PathValidator());
-		ControlDecorationSupport.create(javaPathBinding, SWT.LEFT | SWT.TOP);
-
-		camelPathBinding = createBinding(camelPathTextControl, "destinationCamel", new PathValidator());
-		ControlDecorationSupport.create(camelPathBinding, SWT.LEFT | SWT.TOP);
-
-		Binding targetAddressBinding = createBinding(targetAddressText, "targetServiceAddress", new TargetURLValidator()); //$NON-NLS-1$
-		ControlDecorationSupport.create(targetAddressBinding, SWT.LEFT | SWT.TOP);
-
-		Binding targetRestAddressBinding = createBinding(targetRestAddressText, "targetRestServiceAddress", new TargetURLValidator()); //$NON-NLS-1$
-		ControlDecorationSupport.create(targetRestAddressBinding, SWT.LEFT | SWT.TOP);
-
-		// set initial values
-		initIfNotEmpty(javaPathTextControl, getOptionsFromWizard().getDestinationJava());
-		initIfNotEmpty(camelPathTextControl, getOptionsFromWizard().getDestinationCamel());
-		initIfNotEmpty(targetAddressText, getOptionsFromWizard().getTargetServiceAddress());
-		initIfNotEmpty(targetRestAddressText, getOptionsFromWizard().getTargetRestServiceAddress());
-
-		setControl(composite);
-		setPageComplete(isPageComplete());
-		setErrorMessage(null); // clear any error messages at first
+		return javaPathTextControl;
 	}
 	
 	protected void updateFieldsForProjectSelection() {
