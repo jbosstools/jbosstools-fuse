@@ -33,5 +33,10 @@
       <artifactId>camel-core</artifactId>
       <version>%s</version>
     </dependency>
+    <dependency>
+      <groupId>org.apache.camel</groupId>
+      <artifactId>camel-spring</artifactId>
+      <version>${camel.version}</version>
+    </dependency>
   </dependencies>
 </project>
