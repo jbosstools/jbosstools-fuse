@@ -28,7 +28,7 @@ import org.eclipse.reddeer.requirements.cleanworkspace.CleanWorkspaceRequirement
 import org.eclipse.reddeer.requirements.cleanworkspace.CleanWorkspaceRequirement.CleanWorkspace;
 import org.eclipse.reddeer.requirements.openperspective.OpenPerspectiveRequirement.OpenPerspective;
 import org.eclipse.reddeer.swt.condition.ControlIsEnabled;
-import org.eclipse.reddeer.swt.impl.button.PushButton;
+import org.eclipse.reddeer.swt.impl.button.FinishButton;
 import org.jboss.tools.fuse.reddeer.JiraIssue;
 import org.jboss.tools.fuse.reddeer.ResourceHelper;
 import org.jboss.tools.fuse.reddeer.perspectives.FuseIntegrationPerspective;
@@ -55,7 +55,9 @@ import org.junit.runner.RunWith;
  * Second wizard page:
  * <ul>
  * <li>testDestinationCamelFolder</li>
+ * <li>testDestinationCamelFolderContainerSelection</li>
  * <li>testDestinationJavaFolder</li>
+ * <li>testDestinationJavaFolderContainerSelection</li>
  * </ul>
  * 
  * @author djelinek
@@ -66,11 +68,13 @@ import org.junit.runner.RunWith;
 @RunWith(RedDeerSuite.class)
 public class CamelRestDSLFromWSDLWizardTest {
 
+	public static final String PROJECT_NAME = "wsdl2rest";
 	public static final String WSDL_FILE_EXAMPLE_PATH = "resources/wsdl2rest/WSDLFileExample.wsdl";
 	public static final String WSDL_FILE_EXAMPLE_ERROR_PATH = "resources/wsdl2rest/WSDLFileExample";
 	public static final String WSDL_FILE_EMPTY_PATH = "resources/wsdl2rest/WSDLFileEmpty.wsdl";
 	public static final String WSDL_FILE_INVALID_PATH = "resources/wsdl2rest/WSDLFileInvalid.wsdl";
-	public static final String PROJECT_NAME = "wsdl2rest";
+	public static final String[] DESTINATION_JAVA_FOLDER_PATH = { "src", "main" };
+	public static final String[] DESTINATION_CAMEL_FOLDER_PATH = { "src", "main", "resources", "META-INF", "spring" };
 
 	private String path;
 	private CamelRestDSLFromWSDLWizard wizard;
@@ -256,6 +260,42 @@ public class CamelRestDSLFromWSDLWizardTest {
 		wizard.finish(TimePeriod.DEFAULT);
 		LogChecker.assertNoFuseError();
 	}
+	
+	/**
+	 * <p>
+	 * Test verifies validation of 'Destination Camel Folder' field of the 2nd wizard page (container selection via '...' button)
+	 * </p>
+	 * <b>Steps:</b>
+	 * <ol>
+	 * <li>Verifies that 'Destination Project' field was pre-filled</li>
+	 * <li>Set path to 'example' WSDL file</li>
+	 * <li>Click 'Next' to second page</li>
+	 * <li>Set 'Destination Camel Folder' field to null</li>
+	 * <li>Verifies that 'Finish' button is disabled</li>
+	 * <li>Set 'Destination Camel Folder' field back via '...' button and 'Container Selection' dialog</li>
+	 * <li>Verifies that 'Finish' button is enabled</li>
+	 * <li>Tries to 'Finish' wizard</li>
+	 * <li>Verifies 'Error log' to 'fuse' error</li>
+	 * </ol>
+	 */
+	@Test
+	public void testDestinationCamelFolderContainerSelection() {
+		assertDestinationProjectFieldCompletion();
+
+		path = ResourceHelper.getResourceAbsolutePath(Activator.PLUGIN_ID, WSDL_FILE_EXAMPLE_PATH);
+		firstPage.setTextWSDLFile("file:" + path);
+		wizard.next();
+
+		secondPage = new CamelRestDSLFromWSDLAdvancedPage(wizard);
+		secondPage.setTextDestinationCamelFolder("");
+		assertButtonsEnabled(false);
+		secondPage.clickDestinationCamelFolderBTN(DESTINATION_CAMEL_FOLDER_PATH);
+		waitFinishBTNCondition(true);
+		assertTrue(wizard.isFinishEnabled());
+
+		wizard.finish(TimePeriod.DEFAULT);
+		LogChecker.assertNoFuseError();
+	}
 
 	/**
 	 * <p>
@@ -293,6 +333,43 @@ public class CamelRestDSLFromWSDLWizardTest {
 		wizard.finish(TimePeriod.DEFAULT);
 		LogChecker.assertNoFuseError();
 	}
+	
+	/**
+	 * <p>
+	 * Test verifies validation of 'Destination Java Folder' field of the 2nd wizard page (container selection via '...' button)
+	 * </p>
+	 * <b>Steps:</b>
+	 * <ol>
+	 * <li>Verifies that 'Destination Project' field was pre-filled</li>
+	 * <li>Set path to 'example' WSDL file</li>
+	 * <li>Click 'Next' to second page</li>
+	 * <li>Set 'Destination Java Folder' field to null</li>
+	 * <li>Verifies that 'Finish' button is disabled</li>
+	 * <li>Set 'Destination Java Folder' field back via '...' button and 'Container Selection' dialog</li>
+	 * <li>Verifies that 'Finish' button is enabled</li>
+	 * <li>Tries to 'Finish' wizard</li>
+	 * <li>Verifies 'Error log' to 'fuse' error</li>
+	 * </ol>
+	 */
+	@Test
+	public void testDestinationJavaFolderContainerSelection() {
+		assertDestinationProjectFieldCompletion();
+
+		path = ResourceHelper.getResourceAbsolutePath(Activator.PLUGIN_ID, WSDL_FILE_EXAMPLE_PATH);
+		firstPage.setTextWSDLFile("file:" + path);
+		wizard.next();
+
+		secondPage = new CamelRestDSLFromWSDLAdvancedPage(wizard);
+		secondPage.setTextDestinationJavaFolder("");
+		assertButtonsEnabled(false);
+		secondPage.clickDestinationJavaFolderBTN(DESTINATION_JAVA_FOLDER_PATH);
+		secondPage.setTextDestinationJavaFolder(secondPage.getTextDestinationJavaFolder() + "/java");
+		waitFinishBTNCondition(true);
+		assertTrue(wizard.isFinishEnabled());
+
+		wizard.finish(TimePeriod.DEFAULT);
+		LogChecker.assertNoFuseError();
+	}
 
 	private void assertDestinationProjectFieldCompletion() {
 		assertNotEquals("Field 'Destination Project' was not correctly pre-filled", "",
@@ -319,7 +396,7 @@ public class CamelRestDSLFromWSDLWizardTest {
 	}
 	
 	private void waitFinishBTNCondition(boolean enabled) {
-		ControlIsEnabled controlIsEnabled = new ControlIsEnabled(new PushButton("Finish"));
+		ControlIsEnabled controlIsEnabled = new ControlIsEnabled(new FinishButton(wizard));
 		if (enabled) {
 			new WaitUntil(controlIsEnabled, TimePeriod.DEFAULT);
 		} else {

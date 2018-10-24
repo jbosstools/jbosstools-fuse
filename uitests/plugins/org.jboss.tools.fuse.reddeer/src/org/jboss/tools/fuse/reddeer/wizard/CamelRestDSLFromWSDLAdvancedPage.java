@@ -11,7 +11,14 @@
 package org.jboss.tools.fuse.reddeer.wizard;
 
 import org.eclipse.reddeer.jface.wizard.WizardPage;
+import org.eclipse.reddeer.swt.condition.ShellIsAvailable;
+import org.eclipse.reddeer.swt.impl.button.OkButton;
+import org.eclipse.reddeer.swt.impl.button.PushButton;
 import org.eclipse.reddeer.swt.impl.text.LabeledText;
+import org.eclipse.reddeer.swt.impl.tree.DefaultTree;
+import org.eclipse.reddeer.swt.impl.tree.DefaultTreeItem;
+import org.eclipse.reddeer.common.wait.TimePeriod;
+import org.eclipse.reddeer.common.wait.WaitUntil;
 import org.eclipse.reddeer.core.reference.ReferencedComposite;
 
 /**
@@ -26,6 +33,7 @@ public class CamelRestDSLFromWSDLAdvancedPage extends WizardPage {
 	public static final String TARGET_SERVICE_ADDRESS = "Target Service Address";
 	public static final String DESTINATION_CAMEL_FOLDER = "Destination Camel Folder";
 	public static final String DESTINATION_JAVA_FOLDER = "Destination Java Folder";
+	public static final String CONTAINER_SELECTION = "Container Selection";
 
 	public CamelRestDSLFromWSDLAdvancedPage(ReferencedComposite referencedComposite) {
 		super(referencedComposite);
@@ -78,4 +86,19 @@ public class CamelRestDSLFromWSDLAdvancedPage extends WizardPage {
 	public void setTextDestinationJavaFolder(String str) {
 		new LabeledText(this, DESTINATION_JAVA_FOLDER).setText(str);
 	}
+	
+	public void clickDestinationJavaFolderBTN(String... path) {
+		new PushButton(this, 0).click();
+		new WaitUntil(new ShellIsAvailable(CONTAINER_SELECTION), TimePeriod.MEDIUM);
+		new DefaultTree().selectItems(new DefaultTreeItem(path));
+		new OkButton().click();
+	}
+	
+	public void clickDestinationCamelFolderBTN(String... path) {
+		new PushButton(this, 1).click();
+		new WaitUntil(new ShellIsAvailable(CONTAINER_SELECTION), TimePeriod.MEDIUM);
+		new DefaultTree().selectItems(new DefaultTreeItem(path));
+		new OkButton().click();
+	}
+	
 }
