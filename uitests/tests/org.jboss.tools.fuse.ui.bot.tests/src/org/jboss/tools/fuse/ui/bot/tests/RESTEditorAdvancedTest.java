@@ -1,11 +1,11 @@
 /*******************************************************************************
- * Copyright (c) 2018 Red Hat, Inc. 
- * Distributed under license by Red Hat, Inc. All rights reserved. 
- * This program is made available under the terms of the 
- * Eclipse Public License v1.0 which accompanies this distribution, 
- * and is available at http://www.eclipse.org/legal/epl-v10.html 
- * 
- * Contributors: 
+ * Copyright (c) 2018 Red Hat, Inc.
+ * Distributed under license by Red Hat, Inc. All rights reserved.
+ * This program is made available under the terms of the
+ * Eclipse Public License v1.0 which accompanies this distribution,
+ * and is available at http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
  * Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
 package org.jboss.tools.fuse.ui.bot.tests;
@@ -31,10 +31,9 @@ import org.eclipse.reddeer.requirements.cleanerrorlog.CleanErrorLogRequirement;
 import org.eclipse.reddeer.requirements.cleanworkspace.CleanWorkspaceRequirement;
 import org.eclipse.reddeer.requirements.cleanworkspace.CleanWorkspaceRequirement.CleanWorkspace;
 import org.eclipse.reddeer.requirements.openperspective.OpenPerspectiveRequirement.OpenPerspective;
-import org.eclipse.reddeer.workbench.handler.EditorHandler;
 import org.eclipse.reddeer.workbench.impl.shell.WorkbenchShell;
+import org.jboss.tools.fuse.reddeer.JiraIssue;
 import org.jboss.tools.fuse.reddeer.ProjectType;
-import org.jboss.tools.fuse.reddeer.editor.CamelEditor;
 import org.jboss.tools.fuse.reddeer.editor.RESTEditor;
 import org.jboss.tools.fuse.reddeer.perspectives.FuseIntegrationPerspective;
 import org.jboss.tools.fuse.reddeer.projectexplorer.CamelProject;
@@ -42,8 +41,6 @@ import org.jboss.tools.fuse.reddeer.utils.LogChecker;
 import org.jboss.tools.fuse.reddeer.view.FusePropertiesView;
 import org.jboss.tools.fuse.reddeer.view.FusePropertiesView.PropertyType;
 import org.jboss.tools.fuse.reddeer.wizard.AddRESTOperationWizard;
-import org.jboss.tools.fuse.ui.bot.tests.utils.EditorManipulator;
-import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -58,7 +55,7 @@ import org.xml.sax.SAXException;
 /**
  * Tests REST editor manipulation (edit/delete/add). The test imports prepared REST projects for blueprint, spring and
  * springboot.
- * 
+ *
  * @author djelinek
  *
  */
@@ -85,7 +82,7 @@ public class RESTEditorAdvancedTest {
 	public static final String ELEMENT_ADD = "/testing";
 	public static final String ELEMENT_ID_ADD = "rest-testElement";
 
-	// REST Operation testing proeprties
+	// REST Operation testing properties
 	public static final String OPERATION = "/hello/{name}";
 	public static final String OPERATION_ID = "get-hello-id";
 	public static final String OPERATION_ID_ADD = "put-newRESTOperationID";
@@ -112,28 +109,14 @@ public class RESTEditorAdvancedTest {
 	@BeforeClass
 	public static void setup() {
 		new WorkbenchShell().maximize();
-		new CleanWorkspaceRequirement().fulfill();
-
-		projectTypes().stream().forEach(projectType -> importRestProject(projectName(projectType)));
 	}
 
 	@Before
 	public void prepareWorkspace() {
 		new CleanErrorLogRequirement().fulfill();
-	}
+		new CleanWorkspaceRequirement().fulfill();
 
-	@After
-	public void resetProjectSetup() {
-		StringBuilder filePath = new StringBuilder(PROJECT_PATH + "/" + projectName + "/src/main/resources");
-		if (projectName.contains("blueprint")) {
-			filePath.append("/OSGI-INF/blueprint/" + projectType.getCamelContext());
-		} else {
-			filePath.append("/META-INF/spring/" + projectType.getCamelContext());
-		}
-		new CamelProject(projectName).openCamelContext(projectType.getCamelContext());
-		CamelEditor.switchTab(CamelEditor.SOURCE_TAB);
-		EditorManipulator.copyFileContentToCamelXMLEditor(filePath.toString());
-		EditorHandler.getInstance().closeAll(true);
+		importRestProject(projectName(projectType));
 	}
 
 	@AfterClass
@@ -163,8 +146,9 @@ public class RESTEditorAdvancedTest {
 		restEditor.setRestConfigurationPort(CONFIGURATION_PORT);
 		restEditor.setRestConfigurationBindingMode(CONFIGURATION_BINDINGMODE);
 		restEditor.setRestConfigurationHost(CONFIGURATION_HOST);
-		restEditor.save();
-		workaround_3060();
+		if (restEditor.isDirty()) {
+			restEditor.save();
+		}
 		errorCollector.checkThat(getXPathValue("restConfiguration/@component"), equalTo(CONFIGURATION_COMPONENT));
 		errorCollector.checkThat(getXPathValue("restConfiguration/@contextPath"), equalTo(CONFIGURATION_CONTEXTPATH));
 		errorCollector.checkThat(getXPathValue("restConfiguration/@port"), equalTo(CONFIGURATION_PORT));
@@ -174,57 +158,36 @@ public class RESTEditorAdvancedTest {
 
 		// delete & verify
 		restEditor.deleteRestConfiguration();
-		restEditor.save();
-		workaround_3060();
+		if (restEditor.isDirty()) {
+			restEditor.save();
+		}
 		errorCollector.checkThat(getXPathValue("restConfiguration/@*").isEmpty(), equalTo(true));
 		collectFuseErrors();
 
 		// add & verify
 		restEditor.addRestConfiguration();
-		restEditor.save();
-		workaround_3060();
+		if (restEditor.isDirty()) {
+			restEditor.save();
+		}
 		errorCollector.checkThat(getXPathValue("restConfiguration/@*").isEmpty(), equalTo(false));
 		collectFuseErrors();
 	}
 
 	/**
-	 * Tests edit/delete/add of REST Elements
+	 * Tests adding a new REST Element
 	 */
 	@Test
-	public void testRestElements() {
+	public void testAddRestElement() {
 		restEditor = openCamelContextAndSelectRestTab();
 		FusePropertiesView properties = new FusePropertiesView();
-
-		// edit & verify
-		restEditor.selectRestElement(ELEMENT_EDIT);
-		properties.activate();
-		properties.setProperty(PropertyType.TEXT, "Id *", ELEMENT_ID_EDIT);
-		properties.setProperty(PropertyType.CHECKBOX, "Enable CORS", "");
-		properties.setProperty(PropertyType.TEXT, "Path", ELEMENT_EDITED);
-		restEditor.save();
-		workaround_3060();
-		errorCollector.checkThat(getXPathValue("rest[1]/@id"), equalTo(ELEMENT_ID_EDIT));
-		errorCollector.checkThat(getXPathValue("rest[1]/@enableCORS"), equalTo("true"));
-		errorCollector.checkThat(getXPathValue("rest[1]/@path"), equalTo(ELEMENT_EDITED));
-		collectFuseErrors();
-
-		// delete & verify
-		restEditor.deleteRestElement(ELEMENT_EDITED);
-		restEditor.save();
-		workaround_3060();
-		errorCollector.checkThat(restEditor.getRestElements().size(), equalTo(1));
-		errorCollector.checkThat(restEditor.getRestElements().contains(ELEMENT_EDITED), equalTo(false));
-		errorCollector.checkThat(getXPathValue("rest[1]/@path"), not(ELEMENT_EDITED));
-		collectFuseErrors();
-
-		// add & verify
 		restEditor.addRestElement();
 		properties.activate();
 		properties.setProperty(PropertyType.TEXT, "Id *", ELEMENT_ID_ADD);
 		properties.setProperty(PropertyType.TEXT, "Path", ELEMENT_ADD);
-		restEditor.save();
-		workaround_3060();
-		errorCollector.checkThat(restEditor.getRestElements().size(), equalTo(2));
+		if (restEditor.isDirty()) {
+			restEditor.save();
+		}
+		errorCollector.checkThat(restEditor.getRestElements().size(), equalTo(3));
 		errorCollector.checkThat(restEditor.getRestElements().contains(ELEMENT_ADD), equalTo(true));
 		errorCollector.checkThat(getXPathValue("rest[1]/@id"), equalTo(ELEMENT_ID_ADD));
 		errorCollector.checkThat(getXPathValue("rest[1]/@path"), equalTo(ELEMENT_ADD));
@@ -232,45 +195,86 @@ public class RESTEditorAdvancedTest {
 	}
 
 	/**
-	 * Tests edit/delete/add of REST Operations
+	 * Tests REST Element editing
 	 */
 	@Test
-	public void testRestOperations() {
+	public void testEditRestElement() {
 		restEditor = openCamelContextAndSelectRestTab();
 		FusePropertiesView properties = new FusePropertiesView();
 
-		// edit & verify
-		restEditor.selectRestOperation(AddRESTOperationWizard.OPERATION_TYPE_GET + " " + OPERATION);
+		restEditor.selectRestElement(ELEMENT_EDIT);
 		properties.activate();
-		properties.setProperty(PropertyType.TEXT, "Id *", OPERATION_ID);
+		properties.setProperty(PropertyType.TEXT, "Id *", ELEMENT_ID_EDIT);
 		properties.setProperty(PropertyType.CHECKBOX, "Enable CORS", "");
-		restEditor.save();
-		workaround_3060();
-		errorCollector.checkThat(getXPathValue("rest/get[1]/@id"), equalTo(OPERATION_ID));
-		errorCollector.checkThat(getXPathValue("rest/get[1]/@enableCORS"), equalTo("true"));
+		properties.setProperty(PropertyType.TEXT, "Path", ELEMENT_EDITED);
+		if (restEditor.isDirty()) {
+			restEditor.save();
+		}
+		errorCollector.checkThat(getXPathValue("rest[1]/@id"), equalTo(ELEMENT_ID_EDIT));
+		errorCollector.checkThat(getXPathValue("rest[1]/@enableCORS"), equalTo("true"));
+		errorCollector.checkThat(getXPathValue("rest[1]/@path"), equalTo(ELEMENT_EDITED));
 		collectFuseErrors();
+	}
 
-		// delete & verify
-		restEditor.deleteRestOperation(AddRESTOperationWizard.OPERATION_TYPE_GET + " " + OPERATION);
-		restEditor.save();
-		workaround_3060();
-		errorCollector.checkThat(restEditor.getRestOperations().isEmpty(), equalTo(true));
-		errorCollector.checkThat(
-				restEditor.getRestOperations().contains(AddRESTOperationWizard.OPERATION_TYPE_GET + " " + OPERATION),
-				equalTo(false));
-		errorCollector.checkThat(getXPathValue("rest/get[1]/@uri"), not(OPERATION));
+	/**
+	 * Tests REST Element deleting (with user defined REST Element ID)
+	 */
+	@Test
+	public void testDeleteRestElementDefinedID() {
+		restEditor = openCamelContextAndSelectRestTab();
+		FusePropertiesView properties = new FusePropertiesView();
+
+		// edit REST Element ID
+		restEditor.selectRestElement(ELEMENT_EDIT);
+		properties.activate();
+		properties.setProperty(PropertyType.TEXT, "Id *", ELEMENT_ID_EDIT);
+		if (restEditor.isDirty()) {
+			restEditor.save();
+		}
+
+		// delete
+		restEditor.deleteRestElement(ELEMENT_EDIT);
+		if (restEditor.isDirty()) {
+			restEditor.save();
+		}
+		errorCollector.checkThat(restEditor.getRestElements().size(), equalTo(1));
+		errorCollector.checkThat(restEditor.getRestElements().contains(ELEMENT_EDIT), equalTo(false));
+		errorCollector.checkThat(getXPathValue("rest[1]/@path"), not(ELEMENT_EDIT));
 		collectFuseErrors();
+	}
 
-		// add & verify
+	/**
+	 * Tests REST Element deleting (with default generated REST Element ID)
+	 */
+	@Test
+	public void testDeleteRestElementDefaultID() {
+		restEditor = openCamelContextAndSelectRestTab();
+		restEditor.deleteRestElement(ELEMENT_EDIT);
+		if (restEditor.isDirty()) {
+			restEditor.save();
+		}
+		errorCollector.checkThat(restEditor.getRestElements().size(), equalTo(1));
+		errorCollector.checkThat(restEditor.getRestElements().contains(ELEMENT_EDIT), equalTo(false));
+		errorCollector.checkThat(getXPathValue("rest[1]/@path"), not(ELEMENT_EDIT));
+		collectFuseErrors();
+	}
+
+	/**
+	 * Tests adding a new REST Operation
+	 */
+	@Test
+	public void testAddRestOperation() {
+		restEditor = openCamelContextAndSelectRestTab();
 		AddRESTOperationWizard addOperation = restEditor.addRestOperation();
 		addOperation.setTextID(OPERATION_ID_ADD);
 		addOperation.setTextURI(OPERATION_URI_ADD);
 		addOperation.setSelectionReferencedRouteID(OPERATION_REFERENCED_ROUTEID_ADD);
 		addOperation.setSelectionOperationType(AddRESTOperationWizard.OPERATION_TYPE_PUT);
 		addOperation.finish(TimePeriod.MEDIUM);
-		restEditor.save();
-		workaround_3060();
-		errorCollector.checkThat(restEditor.getRestOperations().size(), equalTo(1));
+		if (restEditor.isDirty()) {
+			restEditor.save();
+		}
+		errorCollector.checkThat(restEditor.getRestOperations().size(), equalTo(2));
 		errorCollector.checkThat(restEditor.getRestOperations()
 				.contains(AddRESTOperationWizard.OPERATION_TYPE_PUT + " " + OPERATION_URI_ADD), equalTo(true));
 		errorCollector.checkThat(getXPathValue("rest/put[1]/@id"), equalTo(OPERATION_ID_ADD));
@@ -279,8 +283,77 @@ public class RESTEditorAdvancedTest {
 		collectFuseErrors();
 	}
 
+	/**
+	 * Tests REST Operation editing
+	 */
+	@Test
+	public void testEditRestOperation() {
+		restEditor = openCamelContextAndSelectRestTab();
+		FusePropertiesView properties = new FusePropertiesView();
+		restEditor.selectRestOperation(AddRESTOperationWizard.OPERATION_TYPE_GET + " " + OPERATION);
+		properties.activate();
+		properties.setProperty(PropertyType.TEXT, "Id *", OPERATION_ID);
+		properties.setProperty(PropertyType.CHECKBOX, "Enable CORS", "");
+		if (restEditor.isDirty()) {
+			restEditor.save();
+		}
+		errorCollector.checkThat(getXPathValue("rest/get[1]/@id"), equalTo(OPERATION_ID));
+		errorCollector.checkThat(getXPathValue("rest/get[1]/@enableCORS"), equalTo("true"));
+		collectFuseErrors();
+	}
+
+	/**
+	 * Tests REST Operation deleting (with user defined REST Operation ID)
+	 */
+	@Test
+	public void testDeleteRestOperationDefinedID() {
+		restEditor = openCamelContextAndSelectRestTab();
+		FusePropertiesView properties = new FusePropertiesView();
+
+		// edit REST Operation ID
+		restEditor.selectRestOperation(AddRESTOperationWizard.OPERATION_TYPE_GET + " " + OPERATION);
+		properties.activate();
+		properties.setProperty(PropertyType.TEXT, "Id *", OPERATION_ID);
+		if (restEditor.isDirty()) {
+			restEditor.save();
+		}
+
+		// delete
+		restEditor.deleteRestOperation(AddRESTOperationWizard.OPERATION_TYPE_GET + " " + OPERATION);
+		if (restEditor.isDirty()) {
+			restEditor.save();
+		}
+		if (!restEditor.getRestOperations().isEmpty()) {
+			throw new JiraIssue("FUSETOOLS-3155");
+		}
+		errorCollector.checkThat(restEditor.getRestOperations().isEmpty(), equalTo(true));
+		errorCollector.checkThat(
+				restEditor.getRestOperations().contains(AddRESTOperationWizard.OPERATION_TYPE_GET + " " + OPERATION),
+				equalTo(false));
+		errorCollector.checkThat(getXPathValue("rest/get[1]/@uri"), not(OPERATION));
+		collectFuseErrors();
+	}
+
+	/**
+	 * Tests REST Operation deleting (with default generated REST Operation ID)
+	 */
+	@Test
+	public void testDeleteRestOperationDefaultID() {
+		restEditor = openCamelContextAndSelectRestTab();
+		restEditor.deleteRestOperation(AddRESTOperationWizard.OPERATION_TYPE_GET + " " + OPERATION);
+		if (restEditor.isDirty()) {
+			restEditor.save();
+		}
+		errorCollector.checkThat(restEditor.getRestOperations().isEmpty(), equalTo(true));
+		errorCollector.checkThat(
+				restEditor.getRestOperations().contains(AddRESTOperationWizard.OPERATION_TYPE_GET + " " + OPERATION),
+				equalTo(false));
+		errorCollector.checkThat(getXPathValue("rest/get[1]/@uri"), not(OPERATION));
+		collectFuseErrors();
+	}
+
 	private void collectFuseErrors() {
-		errorCollector.checkThat("No Fuse errors", LogChecker.noFuseError(), equalTo(true));
+		errorCollector.checkThat("Console contains 'fuse' errors", LogChecker.noFuseError(), equalTo(true));
 	}
 
 	private RESTEditor openCamelContextAndSelectRestTab() {
@@ -302,15 +375,6 @@ public class RESTEditorAdvancedTest {
 		} catch (ParserConfigurationException | SAXException | IOException | XPathExpressionException e) {
 			throw new RuntimeException(e);
 		}
-	}
-
-	/**
-	 * see https://issues.jboss.org/browse/FUSETOOLS-3060
-	 */
-	private void workaround_3060() {
-		new CamelProject(projectName).openCamelContext(projectType.getCamelContext());
-		CamelEditor.switchTab(CamelEditor.SOURCE_TAB);
-		CamelEditor.switchTab(RESTEditor.REST_EDITOR_TAB);
 	}
 
 }

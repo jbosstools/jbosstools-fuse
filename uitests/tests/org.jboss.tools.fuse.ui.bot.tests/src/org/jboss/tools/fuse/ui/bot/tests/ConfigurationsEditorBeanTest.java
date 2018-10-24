@@ -1,11 +1,11 @@
 /*******************************************************************************
- * Copyright (c) 2017 Red Hat, Inc. 
- * Distributed under license by Red Hat, Inc. All rights reserved. 
- * This program is made available under the terms of the 
- * Eclipse Public License v1.0 which accompanies this distribution, 
- * and is available at http://www.eclipse.org/legal/epl-v10.html 
- * 
- * Contributors: 
+ * Copyright (c) 2017 Red Hat, Inc.
+ * Distributed under license by Red Hat, Inc. All rights reserved.
+ * This program is made available under the terms of the
+ * Eclipse Public License v1.0 which accompanies this distribution,
+ * and is available at http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
  * Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
 package org.jboss.tools.fuse.ui.bot.tests;
@@ -60,7 +60,7 @@ import org.xml.sax.SAXException;
 
 /**
  * Tests manipulating with beans in Configuration editor. All tests are performed on prepared projects.
- * 
+ *
  * @author apodhrad
  * @author djelinek
  *
@@ -77,7 +77,7 @@ public class ConfigurationsEditorBeanTest {
 	private String projectName;
 	private ProjectType projectType;
 	private ConfigurationsEditor editor;
-	
+
 	@Rule
 	public ErrorCollector collector = new ErrorCollector();
 
@@ -222,13 +222,16 @@ public class ConfigurationsEditorBeanTest {
 	public void testNewJavaClassWizardInitialization() {
 		new CamelProject(projectName).openCamelContext(projectType.getCamelContext());
 		editor = new ConfigurationsEditor();
-		
+
 		AddBeanWizard beanWizard = editor.addBean();
 		beanWizard.setId("beanComponent");
-		beanWizard.browseClass().waitForItems().selectItem(CLASS_NAME).ok();
+		FilteredSelectionDialog dialog = beanWizard.browseClass();
+		dialog.setText(CLASS_NAME);
+		dialog.waitForItems();
+		dialog.ok();
 		NewClassCreationWizard classWizard = beanWizard.addClass();
 		NewClassWizardPage wizardPage = new NewClassWizardPage(classWizard);
-		
+
 		collector.checkThat(wizardPage.getName(), equalTo(CLASS_NAME));
 		collector.checkThat(wizardPage.getSourceFolder(), equalTo(projectName + "/src/main/java"));
 		collector.checkThat(wizardPage.getPackage(), equalTo("org.apache.camel.component.bean"));
@@ -268,7 +271,7 @@ public class ConfigurationsEditorBeanTest {
 		assertXPath(false, "/bean[@id='newBeanWithFactoryBean']/@class");
 		assertXPath("singleton", "/bean[@id='newBeanWithFactoryBean']/@scope");
 	}
-	
+
 	/**
 	 * <p>
 	 * Tests canceling out of editing a global bean
@@ -294,7 +297,7 @@ public class ConfigurationsEditorBeanTest {
 		dialog.waitForItems();
 		dialog.ok();
 		beanWizard.finish();
-		
+
 		EditBeanWizard edit = editor.editBean("newBeanCancelingEditing");
 		BeanPropertyDialog beanProperties = edit.addProperty();
 		beanProperties.setName("testProperty");
@@ -302,7 +305,7 @@ public class ConfigurationsEditorBeanTest {
 		beanProperties.ok();
 		edit.cancel();
 		editor.close(true);
-		
+
 		assertXPath(false, "/bean[@id='newBeanCancelingEditing']/property[@name='testProperty']");
 	}
 

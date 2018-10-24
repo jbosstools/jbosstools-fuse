@@ -1,11 +1,11 @@
 /*******************************************************************************
- * Copyright (c) 2018 Red Hat, Inc. 
- * Distributed under license by Red Hat, Inc. All rights reserved. 
- * This program is made available under the terms of the 
- * Eclipse Public License v1.0 which accompanies this distribution, 
- * and is available at http://www.eclipse.org/legal/epl-v10.html 
- * 
- * Contributors: 
+ * Copyright (c) 2018 Red Hat, Inc.
+ * Distributed under license by Red Hat, Inc. All rights reserved.
+ * This program is made available under the terms of the
+ * Eclipse Public License v1.0 which accompanies this distribution,
+ * and is available at http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
  * Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
 package org.jboss.tools.fuse.ui.bot.tests;
@@ -27,7 +27,6 @@ import org.eclipse.reddeer.requirements.cleanworkspace.CleanWorkspaceRequirement
 import org.eclipse.reddeer.requirements.openperspective.OpenPerspectiveRequirement.OpenPerspective;
 import org.eclipse.reddeer.workbench.impl.shell.WorkbenchShell;
 import org.jboss.tools.fuse.reddeer.ProjectType;
-import org.jboss.tools.fuse.reddeer.editor.CamelEditorPreferences;
 import org.jboss.tools.fuse.reddeer.editor.RESTEditor;
 import org.jboss.tools.fuse.reddeer.perspectives.FuseIntegrationPerspective;
 import org.jboss.tools.fuse.reddeer.projectexplorer.CamelProject;
@@ -43,7 +42,7 @@ import org.junit.runners.Parameterized.UseParametersRunnerFactory;
 
 /**
  * Tests REST editor. The test imports prepared rest projects for blueprint and spring.
- * 
+ *
  * @author Andrej Podhradsky (apodhrad@redhat.com)
  *
  */
@@ -75,9 +74,6 @@ public class RESTEditorTest {
 
 	@BeforeClass
 	public static void importBeanProjects() {
-		// atm the rest editor is hidden and we need to set this preference
-		CamelEditorPreferences.setShowRestPagePreference(true);
-
 		new WorkbenchShell().maximize();
 		new CleanWorkspaceRequirement().fulfill();
 
