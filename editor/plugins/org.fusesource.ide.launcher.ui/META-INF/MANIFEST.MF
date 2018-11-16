@@ -39,5 +39,6 @@ Bundle-Activator: org.fusesource.ide.launcher.ui.Activator
 Bundle-ClassPath: .
 Import-Package: org.eclipse.core.externaltools.internal
 Export-Package: org.fusesource.ide.launcher.ui.launch,
+ org.fusesource.ide.launcher.ui.propertytester,
  org.fusesource.ide.launcher.ui.remote.tabs;x-friends:="org.fusesource.ide.launcher.ui.tests.integration",
  org.fusesource.ide.launcher.ui.tabs;x-friends:="org.fusesource.ide.launcher.ui.tests.integration"
