@@ -31,10 +31,11 @@ import org.fusesource.ide.launcher.ui.Activator;
 public class CamelLocalLaunchPropertyTester extends PropertyTester {
 
 	private static final String ORG_APACHE_CAMEL = "org.apache.camel";
+	private static final String ORG_JBOSS_REDHAT_FUSE = "org.jboss.redhat-fuse";
 	private static final String CAMEL_MAVEN_PLUGIN = "camel-maven-plugin";
 	private static final String ORG_SPRINGFRAMEWORK_BOOT = "org.springframework.boot";
 	private static final String SPRING_BOOT_MAVEN_PLUGIN = "spring-boot-maven-plugin";	
-	static final String IS_LOCAL_LAUNCH_AVAILABLE = "isLocalLaunchAvailable";
+	public static final String IS_LOCAL_LAUNCH_AVAILABLE = "isLocalLaunchAvailable";
 
 	public CamelLocalLaunchPropertyTester() {
 		// Keep for reflection instantiation
@@ -100,10 +101,14 @@ public class CamelLocalLaunchPropertyTester extends PropertyTester {
 	}
 	
 	private boolean isCamelMavenPlugin(Plugin plugin) {
-		return ORG_APACHE_CAMEL.equals(plugin.getGroupId()) && CAMEL_MAVEN_PLUGIN.equals(plugin.getArtifactId());
+		String groupId = plugin.getGroupId();
+		return (ORG_APACHE_CAMEL.equals(groupId) || ORG_JBOSS_REDHAT_FUSE.equals(groupId))
+				&& CAMEL_MAVEN_PLUGIN.equals(plugin.getArtifactId());
 	}
 
 	private boolean isSpringBootMavenPlugin(Plugin plugin) {
-		return ORG_SPRINGFRAMEWORK_BOOT.equals(plugin.getGroupId()) && SPRING_BOOT_MAVEN_PLUGIN.equals(plugin.getArtifactId());
+		String groupId = plugin.getGroupId();
+		return (ORG_SPRINGFRAMEWORK_BOOT.equals(groupId) || ORG_JBOSS_REDHAT_FUSE.equals(groupId)) 
+				&& SPRING_BOOT_MAVEN_PLUGIN.equals(plugin.getArtifactId());
 	}
 }

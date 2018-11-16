@@ -54,8 +54,10 @@ import org.fusesource.ide.launcher.debug.model.ThreadGarbageCollector;
 import org.fusesource.ide.launcher.debug.util.ICamelDebugConstants;
 import org.fusesource.ide.launcher.ui.launch.ExecutePomAction;
 import org.fusesource.ide.launcher.ui.launch.ExecutePomActionPostProcessor;
+import org.fusesource.ide.launcher.ui.propertytester.CamelLocalLaunchPropertyTester;
 import org.fusesource.ide.projecttemplates.adopters.AbstractProjectTemplate;
 import org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType;
+import org.fusesource.ide.projecttemplates.impl.simple.AbstractEAPSpringTemplate;
 import org.fusesource.ide.projecttemplates.impl.simple.EmptyProjectTemplateForFuse6;
 import org.fusesource.ide.projecttemplates.impl.simple.EmptyProjectTemplateForFuse7;
 import org.fusesource.ide.projecttemplates.impl.simple.EmptyProjectTemplateForFuse71;
@@ -131,11 +133,18 @@ public abstract class FuseIntegrationProjectCreatorRunnableIT extends AbstractPr
 		checkNoValidationWarning();
 		additionalChecks(project);
 		
-		if(!CamelDSLType.JAVA.equals(dsl)){
+		if(!CamelDSLType.JAVA.equals(dsl)) {
+			if(!(metadata.getTemplate() instanceof AbstractEAPSpringTemplate)) {
+				checkRunAsMenuAvailable(project);
+			}
 			launchDebug(project);
 		} else {
 			//TODO: different Run? or implement the java local camel context?
 		}
+	}
+
+	private void checkRunAsMenuAvailable(IProject project) {
+		assertThat(new CamelLocalLaunchPropertyTester().test(project, CamelLocalLaunchPropertyTester.IS_LOCAL_LAUNCH_AVAILABLE, null, null)).isTrue();
 	}
 
 	protected EnvironmentData createEnvironmentData() {
