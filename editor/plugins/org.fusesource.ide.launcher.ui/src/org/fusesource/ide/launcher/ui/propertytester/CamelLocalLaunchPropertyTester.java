@@ -92,11 +92,11 @@ public class CamelLocalLaunchPropertyTester extends PropertyTester {
 	}
 
 	private boolean containsCamelMavenPlugin(List<Plugin> plugins) {
-		return plugins.parallelStream().filter(this::isCamelMavenPlugin).findFirst().isPresent();
+		return plugins.parallelStream().anyMatch(this::isCamelMavenPlugin);
 	}
 	
 	private boolean containsSpringBootMavenPlugin(List<Plugin> plugins) {
-		return plugins.parallelStream().filter(this::isSpringBootMavenPlugin).findFirst().isPresent();
+		return plugins.parallelStream().anyMatch(this::isSpringBootMavenPlugin);
 	}
 	
 	private boolean isCamelMavenPlugin(Plugin plugin) {

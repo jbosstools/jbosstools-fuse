@@ -155,8 +155,7 @@ public abstract class FuseIntegrationProjectCreatorRunnableIT extends AbstractPr
 
 	protected boolean isValidationThreadRunning() {
 		return Thread.getAllStackTraces().keySet().stream()
-				.filter(thread -> "org.eclipse.wst.sse.ui.internal.reconcile.StructuredRegionProcessor".equals(thread.getName()))
-				.findAny().isPresent();
+				.anyMatch(thread -> "org.eclipse.wst.sse.ui.internal.reconcile.StructuredRegionProcessor".equals(thread.getName()));
 	}
 
 	/**
