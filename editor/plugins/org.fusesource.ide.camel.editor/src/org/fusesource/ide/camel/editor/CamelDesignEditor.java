@@ -61,7 +61,9 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.ISelectionService;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.FileEditorInput;
@@ -282,28 +284,34 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 	@Override
 	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
 		// If not the active editor, ignore selection changed.
-		if (getSite().getPage().getActiveEditor() == this.parent && this.parent.getActiveEditor() == this) {
-			updateActions(getSelectionActions());
+		IWorkbenchPartSite site = getSite();
+		if (site != null) {
+			IWorkbenchPage page = site.getPage();
+			if (page != null
+					&& page.getActiveEditor() == this.parent
+					&& this.parent.getActiveEditor() == this) {
+				updateActions(getSelectionActions());
 
-			if (selection instanceof StructuredSelection) {
-				StructuredSelection structuredSelection = (StructuredSelection) selection;
-				Object firstElement = structuredSelection.getFirstElement();
-				
-				/** this handles selections in the outline view -> selects the node in diagram **/
-				if (firstElement instanceof AbstractCamelModelElement) {
-					handleCamelModelElementSelection((AbstractCamelModelElement)firstElement);
-				
-				/** this handles selections in the diagram -> selects node in outline view **/
-				} else if (firstElement instanceof ContainerShapeEditPart) {
-					AbstractCamelModelElement node = NodeUtils.toCamelElement(firstElement);
-					this.outlinePage.setOutlineSelection(node);
-					
-				/** this highlights endpoints currently hitting a breakpoint **/
-				} else if (firstElement instanceof CamelStackFrame) {
-					CamelStackFrame stackFrame = (CamelStackFrame)firstElement;
-					highlightBreakpointNodeWithID(stackFrame.getEndpointId());
-				} else if (firstElement instanceof CamelThread) {
-					handleCamelThreadSelection((CamelThread)firstElement);
+				if (selection instanceof StructuredSelection) {
+					StructuredSelection structuredSelection = (StructuredSelection) selection;
+					Object firstElement = structuredSelection.getFirstElement();
+
+					/** this handles selections in the outline view -> selects the node in diagram **/
+					if (firstElement instanceof AbstractCamelModelElement) {
+						handleCamelModelElementSelection((AbstractCamelModelElement)firstElement);
+
+						/** this handles selections in the diagram -> selects node in outline view **/
+					} else if (firstElement instanceof ContainerShapeEditPart) {
+						AbstractCamelModelElement node = NodeUtils.toCamelElement(firstElement);
+						this.outlinePage.setOutlineSelection(node);
+
+						/** this highlights endpoints currently hitting a breakpoint **/
+					} else if (firstElement instanceof CamelStackFrame) {
+						CamelStackFrame stackFrame = (CamelStackFrame)firstElement;
+						highlightBreakpointNodeWithID(stackFrame.getEndpointId());
+					} else if (firstElement instanceof CamelThread) {
+						handleCamelThreadSelection((CamelThread)firstElement);
+					}
 				}
 			}
 		}
