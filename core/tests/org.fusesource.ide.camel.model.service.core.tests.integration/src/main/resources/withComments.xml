@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="              http://www.osgi.org/xmlns/blueprint/v1.0.0 https://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd              http://camel.apache.org/schema/blueprint http://camel.apache.org/schema/blueprint/camel-blueprint.xsd">
+    <!-- before camel context comment -->
+    <camelContext id="cbr-example-context" xmlns="http://camel.apache.org/schema/blueprint">
+        <!-- before route comment -->
+        <route id="cbr-route">
+            <!-- comment at first place inside route -->
+            <from id="_from1" uri="file:work/cbr/input"/>
+            <!-- test comment after first route element -->
+            <log id="_log1" message="Receiving order ${file:name}"/>
+            <!-- test comment before the last route element -->
+            <log id="_log5" message="Done processing ${file:name}"/>
+            <!-- test comment at last place inside route -->
+        </route>
+    </camelContext>
+</blueprint>

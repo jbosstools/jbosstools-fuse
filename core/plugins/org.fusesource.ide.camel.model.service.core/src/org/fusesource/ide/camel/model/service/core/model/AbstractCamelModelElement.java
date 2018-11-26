@@ -27,6 +27,7 @@ import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelCatalogCac
 import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelModel;
 import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
 import org.fusesource.ide.camel.model.service.core.internal.CamelModelServiceCoreActivator;
+import org.fusesource.ide.camel.model.service.core.util.XMLUtils;
 import org.fusesource.ide.foundation.core.util.CamelUtils;
 import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.preferences.PreferenceManager;
@@ -234,40 +235,6 @@ public abstract class AbstractCamelModelElement {
 			if (n.getNodeType() == Node.ELEMENT_NODE) {
 				return n;
 			}
-		}
-		return null;
-	}
-
-	/**
-	 * gets the previous element node if existing
-	 *
-	 * @param node
-	 * @return the previous element or null
-	 */
-	protected Node getPreviousNode(Node node) {
-		Node n = node.getPreviousSibling();
-		while (n != null) {
-			if (n.getNodeType() == Node.ELEMENT_NODE) {
-				return n;
-			}
-			n = n.getPreviousSibling();
-		}
-		return null;
-	}
-
-	/**
-	 * returns the next element node
-	 *
-	 * @param node
-	 * @return the next element node or null
-	 */
-	protected Node getNextNode(Node node) {
-		Node n = node.getNextSibling();
-		while (n != null) {
-			if (n.getNodeType() == Node.ELEMENT_NODE) {
-				return n;
-			}
-			n = n.getNextSibling();
 		}
 		return null;
 	}
@@ -539,7 +506,7 @@ public abstract class AbstractCamelModelElement {
 		// now move the node directly after inputElement in DOM tree
 		if (inputElement != null) {
 			Node inputNode = inputElement.getXmlNode();
-			Node insertPosNode = getNextNode(inputNode);
+			Node insertPosNode = new XMLUtils().getNextNode(inputNode);
 			if (insertPosNode != null && !getXmlNode().isEqualNode(insertPosNode)) {
 				inputNode.getParentNode().insertBefore(getXmlNode(), insertPosNode);
 			}

@@ -10,6 +10,7 @@
  ******************************************************************************/ 
 package org.fusesource.ide.camel.model.service.core.model;
 
+import org.fusesource.ide.camel.model.service.core.util.XMLUtils;
 import org.w3c.dom.Node;
 
 /**
@@ -76,13 +77,14 @@ public class CamelElementConnection extends AbstractCamelModelElement {
 		if (source == null) {
 			if (other.source != null)
 				return false;
-		} else if (!source.equals(other.source))
+		} else if (!source.equals(other.source)) {
 			return false;
-		if (target == null) {
+		} if (target == null) {
 			if (other.target != null)
 				return false;
-		} else if (!target.equals(other.target))
+		} else if (!target.equals(other.target)) {
 			return false;
+		}
 		return true;
 	}
 
@@ -128,7 +130,10 @@ public class CamelElementConnection extends AbstractCamelModelElement {
 			// rearrange DOM elements
 			Node sourceNode = source.getXmlNode();
 			Node targetNode = target.getXmlNode();
-			source.getParent().getXmlNode().insertBefore(sourceNode, targetNode);
+			Node currentNextNodeOfSourceNode = new XMLUtils().getNextNode(sourceNode);
+			if (currentNextNodeOfSourceNode == null || !currentNextNodeOfSourceNode.equals(targetNode)) {
+				source.getParent().getXmlNode().insertBefore(sourceNode, targetNode);
+			}
 			
 			isConnected = true;
 		}
@@ -144,7 +149,7 @@ public class CamelElementConnection extends AbstractCamelModelElement {
 	 * @param newTarget
 	 *            a new target endpoint for this connection (non null)
 	 * @throws IllegalArgumentException
-	 *             if any of the paramers are null or newSource == newTarget
+	 *             if any of the parameters are null or newSource == newTarget
 	 */
 	public void reconnect(AbstractCamelModelElement newSource, AbstractCamelModelElement newTarget) {
 		if (newSource == null || newTarget == null || newSource == newTarget) {
