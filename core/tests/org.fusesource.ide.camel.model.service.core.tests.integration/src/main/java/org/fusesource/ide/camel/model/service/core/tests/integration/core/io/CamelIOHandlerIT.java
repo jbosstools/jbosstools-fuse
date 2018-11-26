@@ -71,7 +71,8 @@ public class CamelIOHandlerIT {
 				"routes.xml",
 				"withMarshalCsvHeaders.xml",
 				"routeContext.xml",
-				"withCDATA.xml");
+				"withCDATA.xml",
+				"withComments.xml");
 		//@formatter:on
 	}
 
