@@ -1,5 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
+	<classpathentry exported="true" kind="lib" path="libs/args4j.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/camel-spring.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/commons-lang.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/commons-validator.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/cxf-codegen-plugin.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/cxf-rt-rs-extension-providers.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/cxf-rt-transports-http-jetty.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/javaparser-core.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/javax.ws.rs-api.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/slf4j-api.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/slf4j-log4j12.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/velocity.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/wsdl2rest-impl.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/wsdl2rest-util.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/wsdl4j.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/log4j.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/ant-launcher.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/ant-nodeps.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/ant.jar"/>
@@ -51,27 +73,5 @@
 	<classpathentry exported="true" kind="lib" path="libs/woodstox-core-asl.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/xml-resolver.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/xmlschema-core.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/log4j.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/args4j.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/camel-spring.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/commons-lang.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/commons-validator.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/cxf-codegen-plugin.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/cxf-rt-rs-extension-providers.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/cxf-rt-transports-http-jetty.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/javaparser-core.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/javax.ws.rs-api.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/slf4j-api.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/slf4j-log4j12.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/velocity.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/wsdl2rest-impl.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/wsdl2rest-util.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/wsdl4j.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8">
-		<attributes>
-			<attribute name="maven.pomderived" value="true"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
