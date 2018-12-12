@@ -1,6 +1,11 @@
 # Configuration Folder Description
 This folder contains configuration read by the tooling at runtime directly from Github master repository. That said you should make changes in here very carefully as your changes will affect any user directly and immediately! 
 
+## Where can I lookup the versions?
+Each release of Fuse Runtime has its own redhat-fuse pom which defines the versions it uses. The versions can be looked up at:
+
+[https://maven.repository.redhat.com/ga/org/jboss/redhat-fuse/redhat-fuse/<fuse-release-version>](https://maven.repository.redhat.com/ga/org/jboss/redhat-fuse/redhat-fuse)
+
 
 ## camel2bom.properties
 This file is used for mapping specific Camel versions to specific Fuse BOM versions. This is used when creating a project or changing the Camel version of a project. Then we try to utilize the correct BOM import aligned with the Fuse Runtime version that fits this Camel version. 
@@ -18,15 +23,87 @@ All versions not mentioned here will not have BOM support and just set the Camel
 
 
 ## camel2bom.fuse7.properties
-TODO
+This file is used for mapping specific Camel versions to specific Fuse BOM versions. This is used when creating a project or changing the Camel version of a project. Then we try to utilize the correct BOM import aligned with the Fuse Runtime version that fits this Camel version. 
+
+Fuse BOM:
+
+	<groupId>org.jboss.redhat-fuse</groupId>
+	<artifactId>fuse-karaf-bom</artifactId>
+	 
+Syntax:
+
+	<camel.version>=<fuse.bom.version>
+
+Example:
+	
+	2.21.0.fuse-720050-redhat-00001=7.2.0.fuse-720020-redhat-00001
+	
+So whenever the user creates a project for Camel version 2.21.0.fuse-720050-redhat-00001 the tooling will automatically choose the bom version 7.2.0.fuse-720020-redhat-00001 and set that in the projects pom.xml file.
+All versions not mentioned here will not have BOM support and just set the Camel version directly on the dependencies.
+
+
+## camel2bom.fuse71.properties
+see camel2bom.fuse7.properties above
 
 
 ## camel2bom.fuse7onOpenShift.properties
-TODO
+see camel2bom.fuse7.properties above with some slight changes. Here we map the Camel version to a specific Fabric8 version.
+
+Syntax:
+
+	<version.camel>=<version.fabric8>
+
+Example:
+
+	2.21.0.fuse-720050-redhat-00001=3.0.11.fuse-720027-redhat-00001
 
 
 ## camel2bom.fuse7wildfly.properties
-TODO
+see camel2bom.fuse7.properties above with some slight changes. Here we map the Camel version to a specific Wildfly Camel BOM version.
+
+Syntax:
+
+	<version.camel>=<version.bom.wildfly.camel>
+
+Example:
+
+	2.21.0.fuse-720050-redhat-00001=5.2.0.fuse-720023-redhat-00001
+
+
+## fisBomToFabric8MavenPlugin.fuse7.properties
+see camel2bom.fuse7.properties above with some slight changes. Here we map the Fabric8 version to a specific Fabric8 Maven Plugin version.
+
+Syntax:
+
+	<version.fabric8>=<version.fabric8.maven.plugin>
+
+Example:
+
+	3.0.11.fuse-720027-redhat-00001=3.5.33.fuse-720026-redhat-00001
+
+
+## camelVersionToDisplayName.properties
+Here you can specify the human readable name for a specific camel version inside the Fuse wizards.
+
+Syntax:
+
+	<camel.version>=<human readable name for the camel version including Fuse release it ships with>
+
+Example:
+
+	2.21.0.fuse-720050-redhat-00001=2.21.0.fuse-720050-redhat-00001 (Fuse 7.2.0 GA)
+
+
+## defaultVersionToSelect.properties
+Here you can specify which versions should be selected by default in the Fuse wizards.
+
+Syntax:
+
+	<component>=<component.default.version>
+
+Example:
+
+	camel=2.21.0.fuse-720050-redhat-00001
 
 
 ## fismarker.properties
@@ -42,18 +119,6 @@ Example:
 	
 So whenever the user creates a project for Camel version 2.18.1.redhat-000012 the tooling will automatically choose the bom version 2.2.170.redhat-000013 and set that in the projects pom.xml file.
 All versions not mentioned here will not have BOM support and just set the Camel version directly on the dependencies.
-
-
-## camelVersionToDisplayName.properties
-TODO
-
-
-## defaultVersionToSelect.properties
-TODO
-
-
-## fisBomToFabric8MavenPlugin.fuse7.properties
-TODO
 
 
 ## ignite.properties (DEPRECATED)
