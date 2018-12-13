@@ -36,7 +36,7 @@ public class FuseIntegrationProjectCreatorRunnableForOSESringBootIT extends Fuse
 	
 	@Parameters(name = "{0}")
 	public static List<String> parameters(){
-		return Arrays.asList(CamelCatalogUtils.CAMEL_VERSION_LATEST_FIS_20, CamelCatalogUtils.CAMEL_VERSION_LATEST_COMMUNITY, CamelForFuseOnOpenShiftToBomMapper.FUSE_710_CAMEL_VERSION);
+		return Arrays.asList(CamelCatalogUtils.CAMEL_VERSION_LATEST_FIS_20, CamelCatalogUtils.CAMEL_VERSION_LATEST_COMMUNITY, CamelForFuseOnOpenShiftToBomMapper.FUSE_720_CAMEL_VERSION);
 	}
 	
 	public FuseIntegrationProjectCreatorRunnableForOSESringBootIT(String camelVersion) {
