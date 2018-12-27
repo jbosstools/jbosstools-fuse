@@ -10,6 +10,7 @@
  ******************************************************************************/ 
 package org.fusesource.ide.projecttemplates.impl.simple;
 
+import org.fusesource.ide.camel.model.service.core.util.versionmapper.CamelForFuse6ToBomMapper;
 import org.fusesource.ide.foundation.core.util.VersionUtil;
 import org.fusesource.ide.projecttemplates.adopters.AbstractProjectTemplate;
 import org.fusesource.ide.projecttemplates.adopters.configurators.MavenTemplateConfigurator;
@@ -43,7 +44,13 @@ public class AMQTemplate extends AbstractProjectTemplate {
 		return super.isCompatible(environment)
 				&& new VersionUtil().isStrictlyLowerThan2200(environment.getCamelVersion())
 				&& FuseDeploymentPlatform.STANDALONE.equals(environment.getDeploymentPlatform())
-				&& FuseRuntimeKind.KARAF.equals(environment.getFuseRuntime());
+				&& FuseRuntimeKind.KARAF.equals(environment.getFuseRuntime())
+				&& is62OrNewerThan63R9(environment.getCamelVersion());
+	}
+	
+	private boolean is62OrNewerThan63R9(String camelVersion) {
+		return new VersionUtil().isStrictlyGreaterThan("2.17.0", camelVersion)
+			|| new VersionUtil().isGreaterThan(camelVersion, CamelForFuse6ToBomMapper.FUSE_63_R9_CAMEL_VERSION);
 	}
 
 	@Override
