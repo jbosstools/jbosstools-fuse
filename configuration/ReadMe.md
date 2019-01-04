@@ -23,6 +23,11 @@ All versions not mentioned here will not have BOM support and just set the Camel
 
 
 ## camel2bom.fuse7.properties
+see camel2bom.fuse71.properties
+The difference is that for this one it is searching for old bom ids schemes (without redhat-fuse). New versions should be provided in this file and the camel2bom.fuse71.properties for users that didn't upgraded their Fuse Tooling instance.
+
+
+## camel2bom.fuse71.properties
 This file is used for mapping specific Camel versions to specific Fuse BOM versions. This is used when creating a project or changing the Camel version of a project. Then we try to utilize the correct BOM import aligned with the Fuse Runtime version that fits this Camel version. 
 
 Fuse BOM:
@@ -40,11 +45,6 @@ Example:
 	
 So whenever the user creates a project for Camel version 2.21.0.fuse-720050-redhat-00001 the tooling will automatically choose the bom version 7.2.0.fuse-720020-redhat-00001 and set that in the projects pom.xml file.
 All versions not mentioned here will not have BOM support and just set the Camel version directly on the dependencies.
-
-
-## camel2bom.fuse71.properties
-see camel2bom.fuse7.properties above
-
 
 ## camel2bom.fuse7onOpenShift.properties
 see camel2bom.fuse7.properties above with some slight changes. Here we map the Camel version to a specific Fabric8 version.
