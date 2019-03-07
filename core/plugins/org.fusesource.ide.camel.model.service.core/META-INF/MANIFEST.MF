@@ -29,7 +29,8 @@ Require-Bundle: org.eclipse.core.resources;bundle-version="3.10.0",
  com.fasterxml.jackson.core.jackson-databind;bundle-version="2.5.0",
  org.fusesource.ide.foundation.core,
  org.fusesource.ide.foundation.ui,
- org.eclipse.m2e.core.ui;bundle-version="1.6.2"
+ org.eclipse.m2e.core.ui;bundle-version="1.6.2",
+ org.jboss.tools.common.jaxb;resolution:=optional
 Bundle-Activator: org.fusesource.ide.camel.model.service.core.internal.CamelModelServiceCoreActivator
 Bundle-ActivationPolicy: lazy
 Export-Package: org.fusesource.ide.camel.model.service.core,

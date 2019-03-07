@@ -15,4 +15,5 @@ Require-Bundle: org.junit;bundle-version="4.12.0",
  org.jboss.tools.locus.jsonschema2pojo.jsonschema2pojo-core;bundle-version="0.4.13",
  org.jboss.tools.locus.jaxb-xjc,
  org.eclipse.core.runtime;bundle-version="3.11.1",
- org.eclipse.ui.workbench
+ org.eclipse.ui.workbench,
+ org.jboss.tools.common.jaxb;resolution:=optional

@@ -24,7 +24,8 @@ Require-Bundle: org.eclipse.ui,
  org.fusesource.ide.camel.model.service.core,
  org.fusesource.ide.camel.editor,
  org.eclipse.m2e.core,
- org.fusesource.ide.wsdl2rest
+ org.fusesource.ide.wsdl2rest,
+ org.jboss.tools.common.jaxb;resolution:=optional
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .
