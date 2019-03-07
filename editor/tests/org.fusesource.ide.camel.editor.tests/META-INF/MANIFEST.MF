@@ -10,4 +10,5 @@ Require-Bundle: org.junit,
  org.jboss.tools.locus.mockito;bundle-version="1.9.5",
  org.assertj.core;bundle-version="2.1.0",
  com.ibm.icu;bundle-version="54.1.1",
- org.fusesource.ide.camel.tests.util
+ org.fusesource.ide.camel.tests.util,
+ org.jboss.tools.common.jaxb;resolution:=optional
