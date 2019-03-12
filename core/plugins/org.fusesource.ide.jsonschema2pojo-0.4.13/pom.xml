@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.fusesource.ide.core</groupId>
+		<artifactId>plugins</artifactId>
+		<version>11.2.0-SNAPSHOT</version>
+		<relativePath>..</relativePath>
+	</parent>
+
+	<artifactId>org.fusesource.ide.jsonschema2pojo-0.4.13</artifactId>
+	<packaging>eclipse-plugin</packaging>
+	<name>Red Hat Fuse Tooling :: Core :: Plugins :: JSON Schema 2 Pojo</name>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>get-jaxb-xjc</id>
+						<goals>
+							<goal>copy</goal>
+						</goals>
+						<phase>generate-resources</phase>
+					</execution>
+				</executions>
+				<configuration>
+					<artifactItems>
+						<artifactItem>
+							<groupId>org.jsonschema2pojo</groupId>
+							<artifactId>jsonschema2pojo-core</artifactId>
+							<version>0.4.13</version>
+						</artifactItem>
+					</artifactItems>
+					<skip>false</skip>
+					<outputDirectory>${basedir}/lib/</outputDirectory>
+				</configuration>
+			</plugin>
+			<plugin>
+				<!-- make sure lib dir is removed after clean to avoid "dirty" build -->
+				<artifactId>maven-clean-plugin</artifactId>
+				<configuration>
+					<filesets>
+						<fileset>
+							<directory>${basedir}/lib</directory>
+						</fileset>
+					</filesets>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>

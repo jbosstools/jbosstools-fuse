@@ -27,6 +27,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 		<module>org.fusesource.ide.graph</module>
 		<module>org.fusesource.ide.help</module>
 		<module>org.fusesource.ide.imports</module>
+		<module>org.fusesource.ide.jsonschema2pojo-0.4.13</module>
 		<module>org.fusesource.ide.maven</module>
 		<module>org.fusesource.ide.preferences</module>
 		<module>org.fusesource.ide.tooling</module>
