@@ -34,6 +34,7 @@ import org.jboss.tools.fuse.reddeer.utils.ProjectFactory;
 import org.jboss.tools.fuse.reddeer.wizard.CamelTestCaseWizard;
 import org.jboss.tools.fuse.ui.bot.tests.utils.EditorManipulator;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -47,6 +48,7 @@ import org.junit.runner.RunWith;
 @CleanWorkspace
 @OpenPerspective(FuseIntegrationPerspective.class)
 @RunWith(RedDeerSuite.class)
+@Ignore("Ignoring until FUSETOOLS-3187 fixed")
 public class ProjectLocalRunTest extends DefaultTest {
 
 	public static final String PROJECT_NAME = "cbr @1";

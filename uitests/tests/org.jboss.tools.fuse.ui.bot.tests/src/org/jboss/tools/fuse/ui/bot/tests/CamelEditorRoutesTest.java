@@ -39,6 +39,7 @@ import org.jboss.tools.fuse.reddeer.projectexplorer.CamelProject;
 import org.jboss.tools.fuse.reddeer.utils.ProjectFactory;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized.Parameters;
@@ -63,6 +64,7 @@ import org.junit.runners.Parameterized.UseParametersRunnerFactory;
 @AutoBuilding(false)
 @RunWith(RedDeerSuite.class)
 @UseParametersRunnerFactory(ParameterizedRequirementsRunnerFactory.class)
+@Ignore("Ignoring until FUSETOOLS-3187 fixed")
 public class CamelEditorRoutesTest {
 
 	public static final String PROJECT_NAME = "routes";

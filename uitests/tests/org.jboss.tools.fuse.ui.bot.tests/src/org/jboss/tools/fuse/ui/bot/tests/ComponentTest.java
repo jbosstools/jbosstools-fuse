@@ -39,6 +39,7 @@ import org.jboss.tools.fuse.reddeer.editor.CamelEditor;
 import org.jboss.tools.fuse.reddeer.utils.ProjectFactory;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized.Parameters;
@@ -54,6 +55,7 @@ import org.junit.runners.Parameterized.UseParametersRunnerFactory;
 @RunWith(RedDeerSuite.class)
 @AutoBuilding(false)
 @UseParametersRunnerFactory(ParameterizedRequirementsRunnerFactory.class)
+@Ignore("Ignoring until FUSETOOLS-3187 fixed")
 public class ComponentTest extends DefaultTest {
 
 	private CamelComponent component;

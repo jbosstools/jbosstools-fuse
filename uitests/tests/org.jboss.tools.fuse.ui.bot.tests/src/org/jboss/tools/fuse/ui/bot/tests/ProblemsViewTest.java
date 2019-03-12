@@ -27,6 +27,7 @@ import org.jboss.tools.fuse.reddeer.editor.CamelEditor;
 import org.jboss.tools.fuse.reddeer.perspectives.FuseIntegrationPerspective;
 import org.jboss.tools.fuse.reddeer.utils.ProjectFactory;
 import org.jboss.tools.fuse.ui.bot.tests.utils.EditorManipulator;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -39,6 +40,7 @@ import org.junit.runner.RunWith;
 @CleanErrorLog
 @RunWith(RedDeerSuite.class)
 @OpenPerspective(FuseIntegrationPerspective.class)
+@Ignore("Ignoring until FUSETOOLS-3187 fixed")
 public class ProblemsViewTest {
 
 	public static final String FUSE_TOOLING_PROBLEM_TYPE = "Red Hat Fuse Tooling Validation Problem";
