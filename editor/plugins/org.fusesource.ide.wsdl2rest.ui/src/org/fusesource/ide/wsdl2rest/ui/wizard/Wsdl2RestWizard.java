@@ -62,6 +62,7 @@ import org.jboss.fuse.wsdl2rest.impl.Wsdl2Rest;
 public class Wsdl2RestWizard extends Wizard implements INewWizard {
 
 	private static final String APACHE_CAMEL_GROUP_ID = "org.apache.camel"; //$NON-NLS-1$
+	private static final String JAVAX_XML_ACCESS_EXTERNAL_SCHEMA = "javax.xml.accessExternalSchema"; //$NON-NLS-1$
 
 	/**
 	 * Collection of settings used by the wsdl2rest utility.
@@ -110,7 +111,10 @@ public class Wsdl2RestWizard extends Wizard implements INewWizard {
 
 				@Override
 				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+					
+					final String initialValue_AccessExternalSchema = System.getProperty(JAVAX_XML_ACCESS_EXTERNAL_SCHEMA);
 					try {
+						System.setProperty(JAVAX_XML_ACCESS_EXTERNAL_SCHEMA, "all");
 						generate(monitor);
 					} catch (Exception e) {
 						Wsdl2RestUIActivator.pluginLog().logError(e);
@@ -120,6 +124,12 @@ public class Wsdl2RestWizard extends Wizard implements INewWizard {
 								UIMessages.wsdl2RestWizardErrorMessage,
 								new Status(IStatus.ERROR, Wsdl2RestUIActivator.PLUGIN_ID, e.getMessage(), e));
 						throw new InvocationTargetException(e);
+					} finally {
+						if (initialValue_AccessExternalSchema != null) {
+							System.setProperty(JAVAX_XML_ACCESS_EXTERNAL_SCHEMA, initialValue_AccessExternalSchema);
+						} else {
+							System.clearProperty(JAVAX_XML_ACCESS_EXTERNAL_SCHEMA);
+						}
 					}
 				}
 			});

@@ -144,13 +144,6 @@
          unpack="false"/>
 
    <plugin
-         id="org.fusesource.ide.wsdl2rest"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="org.fusesource.ide.wsdl2rest.ui"
          download-size="0"
          install-size="0"
