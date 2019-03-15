@@ -202,7 +202,6 @@
 				<dependency>
 					<groupId>com.sun.xml.messaging.saaj</groupId>
 					<artifactId>saaj-impl</artifactId>
-					<version>1.4.0-b03</version>
 				</dependency>
 				<dependency>
 					<groupId>org.apache.geronimo.specs</groupId>
@@ -211,7 +210,6 @@
 				<dependency>
 					<groupId>org.jboss.spec.javax.rmi</groupId>
 					<artifactId>jboss-rmi-api_1.0_spec</artifactId>
-					<version>1.0.6.Final</version>
 				</dependency>
 			</dependencies>
 		</profile>
