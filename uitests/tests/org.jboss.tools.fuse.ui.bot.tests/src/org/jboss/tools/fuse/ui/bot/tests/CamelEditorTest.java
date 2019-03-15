@@ -52,7 +52,6 @@ import org.jboss.tools.fuse.reddeer.utils.ProjectFactory;
 import org.jboss.tools.fuse.ui.bot.tests.utils.EditorManipulator;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -69,7 +68,6 @@ import org.junit.runner.RunWith;
 @OpenPerspective(JavaEEPerspective.class)
 @RunWith(RedDeerSuite.class)
 @AutoBuilding(false)
-@Ignore("Ignoring until FUSETOOLS-3187 fixed")
 public class CamelEditorTest extends DefaultTest {
 
 	protected Logger log = Logger.getLogger(CamelEditorTest.class);
