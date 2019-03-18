@@ -316,6 +316,24 @@
             			</configuration>
           			</execution>
           			
+          			<!-- MEDIUM-EAP-WILDFLY-SPRING TEMPLATE FIS-->
+          			<execution>
+            			<id>create-template-medium-eap-wildfly-spring-fusefis</id>
+            			<goals>
+              				<goal>copy</goal>
+            			</goals>
+            			<phase>generate-resources</phase>
+            			<configuration>
+              				<fileset>
+                				<directory>template-sources/medium/eap-wildfly/camel-test-spring-fusefis</directory>
+                				<includes>
+                  					<include>**</include>
+                				</includes>
+                				<outputDirectory>templates/template-medium-eap-wildfly-spring-fusefis.zip</outputDirectory>
+              				</fileset>
+            			</configuration>
+          			</execution>
+          			
           			<!-- MEDIUM-EAP-WILDFLY-SPRING TEMPLATE Fuse 7 -->
           			<execution>
             			<id>create-template-medium-eap-wildfly-spring-fuse7</id>

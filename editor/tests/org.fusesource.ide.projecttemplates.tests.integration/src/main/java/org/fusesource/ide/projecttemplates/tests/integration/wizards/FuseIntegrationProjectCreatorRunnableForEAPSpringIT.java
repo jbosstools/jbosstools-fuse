@@ -35,7 +35,9 @@ import org.eclipse.wst.common.componentcore.resources.IVirtualResource;
 import org.eclipse.wst.common.project.facet.core.IFacetedProject;
 import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
 import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
+import org.fusesource.ide.foundation.core.util.VersionUtil;
 import org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType;
+import org.fusesource.ide.projecttemplates.impl.simple.EAPSpringTemplateForFIS;
 import org.fusesource.ide.projecttemplates.impl.simple.EAPSpringTemplateForFuse6;
 import org.fusesource.ide.projecttemplates.impl.simple.EAPSpringTemplateForFuse7;
 import org.fusesource.ide.projecttemplates.impl.simple.EAPSpringTemplateForFuse71;
@@ -71,7 +73,11 @@ public class FuseIntegrationProjectCreatorRunnableForEAPSpringIT extends FuseInt
 	protected NewFuseIntegrationProjectMetaData createDefaultNewProjectMetadata(CamelDSLType dsl, String projectName) {
 		NewFuseIntegrationProjectMetaData newProjectMetadata = super.createDefaultNewProjectMetadata(dsl, projectName);
 		if (isOlderThan220()) {
-			newProjectMetadata.setTemplate(new EAPSpringTemplateForFuse6());
+			if(new VersionUtil().isGreaterThan(camelVersion, "2.18.0")) {
+				newProjectMetadata.setTemplate(new EAPSpringTemplateForFIS());
+			} else {
+				newProjectMetadata.setTemplate(new EAPSpringTemplateForFuse6());
+			}
 		} else if(isNewerThan221()){
 			newProjectMetadata.setTemplate(new EAPSpringTemplateForFuse71());
 		} else {

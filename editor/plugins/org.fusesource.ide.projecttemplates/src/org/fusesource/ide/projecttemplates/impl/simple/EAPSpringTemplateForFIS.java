@@ -1,5 +1,5 @@
 /******************************************************************************* 
- * Copyright (c) 2016 Red Hat, Inc. 
+ * Copyright (c) 2018 Red Hat, Inc. 
  * Distributed under license by Red Hat, Inc. All rights reserved. 
  * This program is made available under the terms of the 
  * Eclipse Public License v1.0 which accompanies this distribution, 
@@ -17,24 +17,23 @@ import org.fusesource.ide.projecttemplates.adopters.creators.TemplateCreatorSupp
 import org.fusesource.ide.projecttemplates.util.CommonNewProjectMetaData;
 import org.fusesource.ide.projecttemplates.wizards.pages.model.EnvironmentData;
 
-/**
- * @author bfitzpat
- */
-public class EAPSpringTemplateForFuse6 extends AbstractEAPSpringTemplate {
+public class EAPSpringTemplateForFIS extends AbstractEAPSpringTemplate {
 
 	@Override
 	public TemplateCreatorSupport getCreator(CommonNewProjectMetaData projectMetaData) {
-		return new EAPSpringUnzipTemplateCreator("6");
+		return new EAPSpringUnzipTemplateCreator("fis");
 	}
 	
 	@Override
 	public boolean isCompatible(EnvironmentData environment) {
-		return super.isCompatible(environment) && new VersionUtil().isStrictlyGreaterThan("2.18.1", environment.getCamelVersion());
+		return super.isCompatible(environment)
+				&& new VersionUtil().isStrictlyLowerThan2200(environment.getCamelVersion())
+				&& new VersionUtil().isGreaterThan(environment.getCamelVersion(), "2.18.0");
 	}
 	
 	@Override
 	public TemplateConfiguratorSupport getConfigurator() {
 		return new MavenTemplateConfigurator(null);
 	}
-	
+
 }
