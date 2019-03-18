@@ -13,17 +13,12 @@ package org.fusesource.ide.camel.model.service.core.io;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Result;
-import javax.xml.transform.Source;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
@@ -164,28 +159,9 @@ public class CamelIOHandler {
 	 * @param monitor
 	 */
 	public void saveCamelModel(CamelFile camelFile, File outputFile, IProgressMonitor monitor) {
-		if (this.document == null) {
-			this.document = createDocumentBuilder().newDocument();
-		}
-
+		String camelAsXml = camelFile.getDocumentAsXML();
 		try {
-			// now the real save logic
-			TransformerFactory tf = TransformerFactory.newInstance();
-			tf.setAttribute("indent-number", INDENTION_VALUE);
-
-			Transformer transformer = tf.newTransformer();
-
-			// Save vs. Save as
-			Result output = new StreamResult(outputFile);
-			Source input = new DOMSource(this.document);
-
-			transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
-			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-			transformer.setOutputProperty(OutputKeys.METHOD, "xml");
-			transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
-			transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount",
-					Integer.toString(INDENTION_VALUE));
-			transformer.transform(input, output);
+			Files.copy(new ByteArrayInputStream(camelAsXml.getBytes(StandardCharsets.UTF_8)), outputFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
 		} catch (Exception ex) {
 			CamelModelServiceCoreActivator.pluginLog()
 					.logError("Unable to save the camel file to " + outputFile.getPath(), ex);
