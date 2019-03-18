@@ -41,9 +41,9 @@ public class TemplateModelIT {
 	
 	@Test
 	public void testCorrectNumberOfTopLevelTemplates() throws Exception {
-		//currently only 6: 3 SpringBoot, 3 EAP
+		//currently only 7: 3 SpringBoot, 4 EAP
 		List<TemplateOrCategoryItem> rootTemplates = new TemplateModel().getRootTemplates();
-		assertThat(rootTemplates.stream().filter(item -> item instanceof TemplateItem).collect(Collectors.toList())).hasSize(6);
+		assertThat(rootTemplates.stream().filter(item -> item instanceof TemplateItem).collect(Collectors.toList())).hasSize(7);
 	}
 	
 	@Test

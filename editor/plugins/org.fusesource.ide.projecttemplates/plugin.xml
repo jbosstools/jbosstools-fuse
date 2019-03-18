@@ -138,6 +138,14 @@
           weight="0">
     </projectTemplate>
     <projectTemplate
+          class="org.fusesource.ide.projecttemplates.impl.simple.EAPSpringTemplateForFIS"
+          description="%template.medium.eapspring.description"
+          id="org.fusesource.ide.projecttemplates.eapSpringTemplateMediumFis"
+          keywords="eap camel spring bean"
+          name="%template.medium.eapspring.name"
+          weight="0">
+    </projectTemplate>
+    <projectTemplate
           class="org.fusesource.ide.projecttemplates.impl.simple.OSESpringBootXMLTemplateForFuse6"
           description="%template.simple.osespringboot.xml.description"
           id="org.fusesource.ide.projecttemplates.oseSpringBootv6"
