@@ -208,4 +208,9 @@ public abstract class AbstractProjectCreatorRunnableIT {
 		
         checkNoConflictingFacets(fproj);
 	}
+
+	protected boolean isJDK11WarningMessage(String message) {
+		return message.startsWith("The compiler compliance specified is 1.8 but a JRE 11 is used")
+		|| message.startsWith("Build path specifies execution environment JavaSE-1.8. There are no JREs installed in the workspace that are strictly compatible with this environment.");
+	}
 }
