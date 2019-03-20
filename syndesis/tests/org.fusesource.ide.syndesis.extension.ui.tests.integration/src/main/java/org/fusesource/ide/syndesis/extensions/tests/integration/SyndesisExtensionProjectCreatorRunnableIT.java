@@ -183,7 +183,11 @@ public abstract class SyndesisExtensionProjectCreatorRunnableIT extends Abstract
 		return marker -> {
 			try {
 				Object severity = marker.getAttribute(IMarker.SEVERITY);
-				return severity == null || severity.equals(IMarker.SEVERITY_WARNING);
+				boolean isWarning = severity ==null  || severity.equals(IMarker.SEVERITY_WARNING);
+				String message = (String)marker.getAttribute(IMarker.MESSAGE);
+				return isWarning
+						//TODO: handle templates targeting different JDK version
+						&& !isJDK11WarningMessage(message);
 			} catch (CoreException e1) {
 				return true;
 			}
