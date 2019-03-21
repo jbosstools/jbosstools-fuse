@@ -34,6 +34,11 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.model.IProcess;
+import org.eclipse.jdt.internal.launching.StandardVMType;
+import org.eclipse.jdt.launching.IVMInstall;
+import org.eclipse.jdt.launching.IVMInstallType;
+import org.eclipse.jdt.launching.JavaRuntime;
+import org.eclipse.jdt.launching.environments.IExecutionEnvironment;
 import org.eclipse.wst.common.project.facet.core.IFacetedProject;
 import org.eclipse.wst.common.project.facet.core.IProjectFacet;
 import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
@@ -43,6 +48,7 @@ import org.fusesource.ide.camel.editor.utils.JobWaiterUtil;
 import org.fusesource.ide.preferences.initializer.StagingRepositoriesPreferenceInitializer;
 import org.fusesource.ide.project.RiderProjectNature;
 import org.junit.After;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.rules.TestWatcher;
 
@@ -59,6 +65,39 @@ public abstract class AbstractProjectCreatorRunnableIT {
 	
 	protected IProject project = null;
 	protected ILaunch launch = null;
+	
+	@BeforeClass
+	public static void beforeClass() throws CoreException {
+		ensureJDK8AvailableAsDefault();
+	}
+
+	private static void ensureJDK8AvailableAsDefault() throws CoreException {
+		IVMInstallType standardVMInstallType = getStandardVMInstallType();
+		if (!hasJava8VMAvailable(standardVMInstallType)) {
+			new JDKInstaller().installJDK8(standardVMInstallType);
+		}
+	}
+
+	private static IVMInstallType getStandardVMInstallType() {
+		IVMInstallType[] vmInstallTypes = JavaRuntime.getVMInstallTypes();
+		for (IVMInstallType vmInstallType : vmInstallTypes) {
+			if (StandardVMType.ID_STANDARD_VM_TYPE.equals(vmInstallType.getId())) {
+				return vmInstallType;
+			}
+		}
+		return null;
+	}
+
+	private static boolean hasJava8VMAvailable(IVMInstallType vmInstallType) throws CoreException {
+		IExecutionEnvironment java8ExecutionEnvironment = JavaRuntime.getExecutionEnvironmentsManager().getEnvironment("JavaSE-1.8");
+		IVMInstall[] standardVmInstalls = vmInstallType.getVMInstalls();
+		for (IVMInstall standardVmInstall : standardVmInstalls) {
+			if(java8ExecutionEnvironment.isStrictlyCompatible(standardVmInstall)){
+				return true;
+			}
+		}
+		return false;
+	}
 	
 	@After
 	public void tearDown() throws CoreException {
@@ -207,10 +246,5 @@ public abstract class AbstractProjectCreatorRunnableIT {
 		assertThat(utilityFacetFound).isTrue();
 		
         checkNoConflictingFacets(fproj);
-	}
-
-	protected boolean isJDK11WarningMessage(String message) {
-		return message.startsWith("The compiler compliance specified is 1.8 but a JRE 11 is used")
-		|| message.startsWith("Build path specifies execution environment JavaSE-1.8. There are no JREs installed in the workspace that are strictly compatible with this environment.");
 	}
 }

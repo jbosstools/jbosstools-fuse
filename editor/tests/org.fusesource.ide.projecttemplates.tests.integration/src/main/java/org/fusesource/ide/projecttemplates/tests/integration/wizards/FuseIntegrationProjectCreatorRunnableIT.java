@@ -204,9 +204,7 @@ public abstract class FuseIntegrationProjectCreatorRunnableIT extends AbstractPr
 						//TODO: managed other dependencies than camel
 						&& !message.startsWith("Duplicating managed version")
 						//TODO: manage community version and pure fis version
-						&& (!message.startsWith("Overriding managed version") || (camelVersion.contains("redhat") && !CamelCatalogUtils.isPureFISVersion(camelVersion)))
-						//TODO: handle templates targeting different JDK version
-						&& !isJDK11WarningMessage(message);
+						&& (!message.startsWith("Overriding managed version") || (camelVersion.contains("redhat") && !CamelCatalogUtils.isPureFISVersion(camelVersion)));
 			} catch (CoreException e1) {
 				return true;
 			}
