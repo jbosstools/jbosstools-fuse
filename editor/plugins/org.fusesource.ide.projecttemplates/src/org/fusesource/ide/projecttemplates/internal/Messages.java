@@ -20,6 +20,8 @@ public class Messages extends NLS {
 
 	private static final String BUNDLE_NAME = "org.fusesource.ide.projecttemplates.l10n.messages";
 
+
+
 	public static String archetypeTemplateCreatorCreatingTemplateFromArchetypeMonitorMessage;
 	public static String basicProjectCreatorCreatingProjectMonitorMessage;
 	public static String defaultTemplateConfiguratorConfiguringJavaProjectMonitorMessage;
@@ -95,6 +97,9 @@ public class Messages extends NLS {
 
 	public static String dozerInformationApiBreakTitle;
 	public static String dozerInformationApiBreakMessage;
+	
+	public static String noStrictlyCompliantJREWarningTitle;
+	public static String noStrictlyCompliantJREWarningMessage;
 
 	static {
         // initialize resource bundle
