@@ -106,4 +106,8 @@ public abstract class AbstractProjectTemplate {
 	public boolean isDefault(EnvironmentData environment, CamelDSLType dslType) {
 		return false;
 	}
+
+	public String getJavaExecutionEnvironment() {
+		return "JavaSE-1.8";
+	}
 }

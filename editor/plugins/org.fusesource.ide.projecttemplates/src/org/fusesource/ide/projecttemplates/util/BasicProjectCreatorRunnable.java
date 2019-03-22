@@ -17,7 +17,12 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
+import org.eclipse.jdt.launching.IVMInstall;
+import org.eclipse.jdt.launching.IVMInstallType;
+import org.eclipse.jdt.launching.JavaRuntime;
+import org.eclipse.jdt.launching.environments.IExecutionEnvironment;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.MessageDialogWithToggle;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -70,7 +75,7 @@ public abstract class BasicProjectCreatorRunnable implements IRunnableWithProgre
 	public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 		boolean oldValueForValidation = disableGlobalValidationDuringProjectCreation();
 		try {
-			SubMonitor subMonitor = SubMonitor.convert(monitor, Messages.basicProjectCreatorRunnableCreatingTheProjectMonitorMessage, 8);
+			SubMonitor subMonitor = SubMonitor.convert(monitor, Messages.basicProjectCreatorRunnableCreatingTheProjectMonitorMessage, 9);
 			CamelModelServiceCoreActivator.getProjectClasspathChangeListener().deactivate();
 
 			// first create the project skeleton
@@ -87,6 +92,7 @@ public abstract class BasicProjectCreatorRunnable implements IRunnableWithProgre
 				} catch (CoreException ex) {
 					ProjectTemplatesActivator.pluginLog().logError("Unable to create project...", ex); //$NON-NLS-1$
 				}
+				checkJRECompatibility(template, subMonitor.split(1));
 			}
 
 			// switch perspective if needed
@@ -122,12 +128,36 @@ public abstract class BasicProjectCreatorRunnable implements IRunnableWithProgre
 
 			// a final refresh
 			new BuildAndRefreshJobWaiterUtil().waitJob(subMonitor.split(1));
+			
+			
 		} finally {
 			setbackValidationValueAfterProjectCreation(oldValueForValidation);
 			CamelModelServiceCoreActivator.getProjectClasspathChangeListener().activate();	
 		}
 	}
 	
+	private void checkJRECompatibility(AbstractProjectTemplate template, IProgressMonitor monitor) {
+		String javaExecutionEnvironment = template.getJavaExecutionEnvironment();
+		if (!hasStrictlyCompatibleVM(javaExecutionEnvironment)) {
+			MessageDialog.openWarning(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
+					Messages.noStrictlyCompliantJREWarningTitle,
+					NLS.bind(Messages.noStrictlyCompliantJREWarningMessage, javaExecutionEnvironment));
+		}
+	}
+
+	private boolean hasStrictlyCompatibleVM(String environmentId) {
+		IExecutionEnvironment executionEnvironment = JavaRuntime.getExecutionEnvironmentsManager().getEnvironment(environmentId);
+		IVMInstallType[] vmInstallTypes = JavaRuntime.getVMInstallTypes();
+		for (IVMInstallType vmInstallType : vmInstallTypes) {
+			for (IVMInstall vmInstall : vmInstallType.getVMInstalls()) {
+				if (executionEnvironment.isStrictlyCompatible(vmInstall)) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
 	protected void openRequiredFilesInEditor(IProject prj, IProgressMonitor monitor) {
 		// to be implemented by a subclass if required
 	}
