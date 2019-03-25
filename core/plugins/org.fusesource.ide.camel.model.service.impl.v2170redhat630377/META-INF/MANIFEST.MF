@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %Bundle-Name
-Bundle-SymbolicName: org.fusesource.ide.camel.model.service.impl.v2170redhat630356;singleton:=true
+Bundle-SymbolicName: org.fusesource.ide.camel.model.service.impl.v2170redhat630377;singleton:=true
 Bundle-Version: 11.3.0.qualifier
 Bundle-Vendor: %Bundle-Vendor
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
@@ -12,10 +12,10 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.11.0",
  org.fusesource.ide.camel.model.service.impl
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .,
- libs/camel-blueprint-2.17.0.redhat-630356.jar,
- libs/camel-catalog-2.17.0.redhat-630356.jar,
- libs/camel-core-2.17.0.redhat-630356.jar,
- libs/camel-spring-2.17.0.redhat-630356.jar,
+ libs/camel-blueprint-2.17.0.redhat-630377.jar,
+ libs/camel-catalog-2.17.0.redhat-630377.jar,
+ libs/camel-core-2.17.0.redhat-630377.jar,
+ libs/camel-spring-2.17.0.redhat-630377.jar,
  libs/log4j-over-slf4j-1.7.22.jar,
  libs/slf4j-api-1.7.22.jar,
  libs/slf4j-simple-1.7.22.jar
