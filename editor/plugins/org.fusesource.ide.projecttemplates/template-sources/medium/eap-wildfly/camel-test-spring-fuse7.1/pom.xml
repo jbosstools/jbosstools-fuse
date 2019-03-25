@@ -213,6 +213,16 @@
 				</dependency>
 			</dependencies>
 		</profile>
+		<profile>
+			<id>jdk12+-build</id>
+			<!-- Not supported, provided as best-effort -->
+			<activation>
+				<jdk>[12,)</jdk>
+			</activation>
+			<properties>
+				<version.maven.war.plugin>3.2.2</version.maven.war.plugin>
+			</properties>
+		</profile>
 	</profiles>
     <!-- Repositories -->
     <repositories>
