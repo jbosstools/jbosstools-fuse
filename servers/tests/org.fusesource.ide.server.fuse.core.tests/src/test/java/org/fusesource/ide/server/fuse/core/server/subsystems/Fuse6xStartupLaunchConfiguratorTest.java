@@ -13,6 +13,7 @@ package org.fusesource.ide.server.fuse.core.server.subsystems;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.eclipse.wst.server.core.IServer;
+import org.fusesource.ide.server.karaf.core.runtime.KarafRuntimeDelegate;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -26,10 +27,12 @@ public class Fuse6xStartupLaunchConfiguratorTest {
 	private IServer server;
 	@InjectMocks
 	private Fuse6xStartupLaunchConfigurator fuse6xStartupLaunchConfigurator;
+	@Mock
+	private KarafRuntimeDelegate runtime;
 
 	@Test
 	public void testGetVMArguments() throws Exception {
-		String vmArguments = fuse6xStartupLaunchConfigurator.getVMArguments("karafInstallDir", "endorsedDirs", "extDirs");
+		String vmArguments = fuse6xStartupLaunchConfigurator.getVMArguments("karafInstallDir", runtime, "endorsedDirs", "extDirs");
 		
 		assertThat(vmArguments)
 		.contains("PermSize")

@@ -14,6 +14,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.wst.server.core.IServer;
 import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.server.fuse.core.util.FuseToolingConstants;
+import org.fusesource.ide.server.karaf.core.runtime.IKarafRuntime;
 import org.fusesource.ide.server.karaf.core.server.subsystems.Karaf2xStartupLaunchConfigurator;
 
 /**
@@ -31,8 +32,8 @@ public class Fuse6xStartupLaunchConfigurator extends Karaf2xStartupLaunchConfigu
 	}
 	
 	@Override
-	public String getVMArguments(String karafInstallDir, String endorsedDirs, String extDirs) {
-		StringBuilder sb = new StringBuilder(super.getVMArguments(karafInstallDir, endorsedDirs, extDirs));
+	public String getVMArguments(String karafInstallDir, IKarafRuntime runtime, String endorsedDirs, String extDirs) {
+		StringBuilder sb = new StringBuilder(super.getVMArguments(karafInstallDir, runtime, endorsedDirs, extDirs));
 		sb.append(SPACE + "-XX:PermSize=16M -XX:MaxPermSize=128M");
 		return sb.toString();
 	}
