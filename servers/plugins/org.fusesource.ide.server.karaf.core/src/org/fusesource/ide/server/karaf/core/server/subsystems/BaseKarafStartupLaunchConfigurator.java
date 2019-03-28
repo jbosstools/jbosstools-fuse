@@ -20,6 +20,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
+import org.eclipse.jdt.launching.AbstractVMInstall;
 import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
 import org.eclipse.jdt.launching.IRuntimeClasspathEntry;
 import org.eclipse.jdt.launching.IVMInstall;
@@ -30,6 +31,7 @@ import org.fusesource.ide.server.karaf.core.Activator;
 import org.fusesource.ide.server.karaf.core.runtime.IKarafRuntime;
 import org.jboss.ide.eclipse.as.core.util.ArgsUtil;
 import org.jboss.ide.eclipse.as.wtp.core.server.launch.LaunchConfiguratorWithOverrides;
+import org.jboss.tools.common.jdt.debug.JavaUtilities;
 
 /**
  * @author lheinema
@@ -80,7 +82,7 @@ public abstract class BaseKarafStartupLaunchConfigurator extends LaunchConfigura
 //		    JAVA_EXT_DIRS="${JAVA_HOME}/jre/lib/ext:${JAVA_HOME}/lib/ext:${KARAF_HOME}/lib/ext"
 			String extDirs = createExtDirValue(karafInstallDir, vmLoc);
 			
-			String vmArguments = getVMArguments(karafInstallDir, endorsedDirs, extDirs);
+			String vmArguments = getVMArguments(karafInstallDir, runtime, endorsedDirs, extDirs);
 			String mainProgram = getMainProgram();
 			
 			// For java tabs
@@ -115,17 +117,19 @@ public abstract class BaseKarafStartupLaunchConfigurator extends LaunchConfigura
 			IKarafRuntime runtime = (IKarafRuntime)serverRuntime.loadAdapter(IKarafRuntime.class, null);
 			String karafInstallDir = serverRuntime.getLocation().toOSString();
 			configureJRE(launchConfig, runtime, karafInstallDir);
-			configureVMArguments(launchConfig, karafInstallDir);
+			configureVMArguments(launchConfig, runtime, karafInstallDir);
 		}
 	}
 
-	protected void configureVMArguments(ILaunchConfigurationWorkingCopy launchConfig, String karafInstallDir)
+	protected void configureVMArguments(ILaunchConfigurationWorkingCopy launchConfig, IKarafRuntime karafRuntime, String karafInstallDir)
 			throws CoreException {
 		String vmArguments = launchConfig.getAttribute(IJavaLaunchConfigurationConstants.ATTR_VM_ARGUMENTS, "");
-		IKarafRuntime karafRuntime = (IKarafRuntime) server.getRuntime().loadAdapter(IKarafRuntime.class, null);
-		File vmLoc = karafRuntime.getVM().getInstallLocation();
-		vmArguments = ArgsUtil.setArg(vmArguments, null, "-Djava.ext.dirs", createExtDirValue(karafInstallDir, vmLoc));
-		vmArguments = ArgsUtil.setArg(vmArguments, null, "-Djava.endorsed.dirs", createEndorsedDirValue(karafInstallDir, vmLoc));
+		IVMInstall vm = karafRuntime.getVM();
+		if (!isJigsawRunning(vm)) {
+			File vmLoc = vm.getInstallLocation();
+			vmArguments = ArgsUtil.setArg(vmArguments, null, "-Djava.ext.dirs", createExtDirValue(karafInstallDir, vmLoc));
+			vmArguments = ArgsUtil.setArg(vmArguments, null, "-Djava.endorsed.dirs", createEndorsedDirValue(karafInstallDir, vmLoc));
+		}
 		launchConfig.setAttribute(IJavaLaunchConfigurationConstants.ATTR_VM_ARGUMENTS, vmArguments);
 	}
 
@@ -214,21 +218,24 @@ public abstract class BaseKarafStartupLaunchConfigurator extends LaunchConfigura
 	/**
 	 * /!\ Public for test purpose
 	 */
-	public String getVMArguments(String karafInstallDir, String endorsedDirs, String extDirs) {
-		return getBaseVMArguments(karafInstallDir, endorsedDirs, extDirs);
+	public String getVMArguments(String karafInstallDir, IKarafRuntime runtime, String endorsedDirs, String extDirs) {
+		return getBaseVMArguments(karafInstallDir, runtime, endorsedDirs, extDirs);
 	}
 	
-	private String getBaseVMArguments(String karafInstallDir, String endorsedDirs, String extDirs) {
+	private String getBaseVMArguments(String karafInstallDir, IKarafRuntime runtime, String endorsedDirs, String extDirs) {
 		StringBuilder vmArguments = new StringBuilder();
 
 		vmArguments.append("-Xms128M");
 		vmArguments.append(SPACE + "-Xmx512M");
 		vmArguments.append(SPACE + "-XX:+UnlockDiagnosticVMOptions");
-		vmArguments.append(SPACE + "-XX:+UnsyncloadClass");
+		IVMInstall vm = runtime.getVM();
+		if (!isJigsawRunning(vm)) {
+			vmArguments.append(SPACE + "-XX:+UnsyncloadClass");
+			vmArguments.append(SPACE + "-Djava.endorsed.dirs=" + QUOTE + endorsedDirs + QUOTE);
+			vmArguments.append(SPACE + "-Djava.ext.dirs=" + QUOTE + extDirs + QUOTE);
+		}
 		vmArguments.append(SPACE + "-server");
 		vmArguments.append(SPACE + "-Dcom.sun.management.jmxremote");
-		vmArguments.append(SPACE + "-Djava.endorsed.dirs=" + QUOTE + endorsedDirs + QUOTE);
-		vmArguments.append(SPACE + "-Djava.ext.dirs=" + QUOTE + extDirs + QUOTE);
 		vmArguments.append(SPACE + "-Dkaraf.startLocalConsole=false");
 		vmArguments.append(SPACE + "-Dkaraf.startRemoteShell=true");
 		vmArguments.append(SPACE + "-Dkaraf.home=" + QUOTE + karafInstallDir + QUOTE); 
@@ -238,6 +245,10 @@ public abstract class BaseKarafStartupLaunchConfigurator extends LaunchConfigura
 		vmArguments.append(SPACE + "-Djava.util.logging.config.file=" + QUOTE + karafInstallDir + SEPARATOR + "etc" + SEPARATOR + "java.util.logging.properties" + QUOTE);
 			
 		return vmArguments.toString();
+	}
+
+	private boolean isJigsawRunning(IVMInstall vm) {
+		return vm instanceof AbstractVMInstall && JavaUtilities.isJigsawRunning(((AbstractVMInstall) vm).getJavaVersion());
 	}
 
 	/**

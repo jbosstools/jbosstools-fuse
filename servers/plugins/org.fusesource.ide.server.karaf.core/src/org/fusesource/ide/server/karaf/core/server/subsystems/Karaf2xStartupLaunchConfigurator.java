@@ -13,6 +13,7 @@ package org.fusesource.ide.server.karaf.core.server.subsystems;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.wst.server.core.IServer;
 import org.fusesource.ide.foundation.core.util.Strings;
+import org.fusesource.ide.server.karaf.core.runtime.IKarafRuntime;
 import org.fusesource.ide.server.karaf.core.util.IKarafToolingConstants;
 
 /**
@@ -30,8 +31,8 @@ public class Karaf2xStartupLaunchConfigurator extends BaseKarafStartupLaunchConf
 	}
 	
 	@Override
-	public String getVMArguments(String karafInstallDir, String endorsedDirs, String extDirs) {
-		StringBuilder vmArguments = new StringBuilder(super.getVMArguments(karafInstallDir, endorsedDirs, extDirs));
+	public String getVMArguments(String karafInstallDir, IKarafRuntime runtime, String endorsedDirs, String extDirs) {
+		StringBuilder vmArguments = new StringBuilder(super.getVMArguments(karafInstallDir, runtime, endorsedDirs, extDirs));
 		if (isNewerThanKaraf24()) {
 			vmArguments.append(SPACE + "-Dkaraf.etc=" + QUOTE + karafInstallDir + SEPARATOR + "etc" + QUOTE);
 			return vmArguments.toString();
