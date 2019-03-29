@@ -10,24 +10,28 @@
  ******************************************************************************/
 package org.fusesource.ide.project;
 
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.core.expressions.PropertyTester;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.runtime.CoreException;
-import org.fusesource.ide.foundation.ui.logging.RiderLogFacade;
 import org.eclipse.wst.common.project.facet.core.FacetedProjectFramework;
 import org.eclipse.wst.common.project.facet.core.IFacetedProject;
 import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
 import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
+import org.fusesource.ide.foundation.ui.logging.RiderLogFacade;
 import org.fusesource.ide.project.providers.CamelVirtualFolder;
 
 /**
  * @author lhein
  */
 public class CamelNatureTester extends PropertyTester {
+	
+	private Map<IProject, CamelVirtualFolder> cache = new HashMap<>();
 
 	@Override
 	public boolean test(Object receiver, String property, Object[] args, Object expectedValue) {
@@ -49,8 +53,12 @@ public class CamelNatureTester extends PropertyTester {
 
 	private boolean hasChildren(IProject project) {
 		if (project.isOpen()) {
-			CamelVirtualFolder cvf = new CamelVirtualFolder(project);
-			cvf.populateChildren();
+			CamelVirtualFolder cvf = cache.get(project);
+			if (cvf == null) {
+				cvf = new CamelVirtualFolder(project);
+				cvf.populateChildren();
+				cache.put(project, cvf);
+			}
 			return !cvf.getCamelFiles().isEmpty();
 		}
 		return false;
