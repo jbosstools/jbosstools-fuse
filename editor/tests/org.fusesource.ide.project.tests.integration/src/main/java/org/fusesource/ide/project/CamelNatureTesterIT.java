@@ -12,6 +12,10 @@ package org.fusesource.ide.project;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.io.InputStream;
+
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.camel.model.service.core.tests.integration.core.io.FuseProject;
@@ -33,6 +37,17 @@ public class CamelNatureTesterIT {
 		camelFile.getResource().delete(true, new NullProgressMonitor());
 		
 		assertThat(camelNatureTester.test(fuseProject.getProject(), "hasChildren", null, null)).isFalse();
+	}
+	
+	@Test
+	public void testDetectCamelFilesWithMultpleContext() throws Exception {
+		IProject project = fuseProject.getProject();
+		IFile file = project.getFile("fileWithSeveralContext.xml");
+		try(InputStream source = CamelNatureTesterIT.class.getResourceAsStream("/fileWithSeveralContext.xml")){
+			file.create(source, true, new NullProgressMonitor());
+		}
+		CamelNatureTester camelNatureTester = new CamelNatureTester();
+		assertThat(camelNatureTester.test(fuseProject.getProject(), "hasChildren", null, null)).isTrue();
 	}
 
 }
