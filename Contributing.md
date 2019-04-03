@@ -14,7 +14,7 @@ To configure Eclipse workspace preferences:
 
 ## Get the code
 
-The easiest way to get started with the code is to [create your own fork](http://help.github.com/forking/) at github, and then clone your fork:
+The easiest way to get started with the code is to [create your own fork](https://help.github.com/forking/) at github, and then clone your fork:
 
     git clone git@github.com:<you>/jbosstools-fuse.git
     cd jbosstools-fuse
@@ -69,7 +69,7 @@ You can then push your topic branch and its changes into your public fork reposi
 
     git push origin FUSETOOLS-1234         # pushes your topic branch into your public fork of Red Hat Fuse Tooling
 
-And then [generate a pull-request](http://help.github.com/pull-requests/) where we can review the proposed changes, comment on them, discuss with you, and if everything is good then to merge the changes right into the official repository.
+And then [generate a pull-request](https://help.github.com/pull-requests/) where we can review the proposed changes, comment on them, discuss with you, and if everything is good then to merge the changes right into the official repository.
 
 ## Setup the Target Platform for development
 

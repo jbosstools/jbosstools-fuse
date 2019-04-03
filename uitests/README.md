@@ -57,7 +57,7 @@ Current version of JBoss Tools Fuse is built on Eclipse Photon, so download Ecli
 
 ### Executing tests from IDE with a target platform
 
-1. Install RedDeer 2.x (at least UI Tools), e.g. from http://download.eclipse.org/reddeer/releases/2.3.0/
+1. Install RedDeer 2.x (at least UI Tools), e.g. from https://download.eclipse.org/reddeer/releases/2.3.0/
 2. Import the project as Existing Projects into Workspace
 3. Check 'Search for nested projects' and select all projects except 'm2-repo-cleaner'
 4. In preferences go to Plug-in Development > Target Platform
@@ -69,7 +69,7 @@ Current version of JBoss Tools Fuse is built on Eclipse Photon, so download Ecli
 
 ### Executing tests from IDE without target platform
 
-1. Install Red Hat Fuse Tools, e.g from http://download.jboss.org/jbosstools/photon/staging/updates/
-2. Install RedDeer 2.x, e.g. from http://download.eclipse.org/reddeer/releases/2.3.0/
+1. Install Red Hat Fuse Tools, e.g from https://download.jboss.org/jbosstools/photon/staging/updates/
+2. Install RedDeer 2.x, e.g. from https://download.eclipse.org/reddeer/releases/2.3.0/
 3. Import the tests as Existing Projects into Workspace
 4. Now, we can launch 'RedDeer Test' which is available in Run configuration

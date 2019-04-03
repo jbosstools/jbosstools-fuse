@@ -1,10 +1,10 @@
 # Red Hat Fuse Tooling for Eclipse
 
-Please visit our [project site](http://tools.jboss.org/features/apachecamel.html) or the [documentation provided by _Red Hat_](https://access.redhat.com/documentation/en-us/red_hat_jboss_fuse/6.3/html/tooling_tutorials/) to learn more about _Red Hat Fuse Tooling_ .
+Please visit our [project site](https://tools.jboss.org/features/fusetools.html) or the [documentation provided by _Red Hat_](https://access.redhat.com/documentation/en-us/red_hat_fuse/7.2/html/tooling_tutorials/index) to learn more about _Red Hat Fuse Tooling_ .
 
 ## Summary
 
-Red Hat Fuse Tooling contains a set of plugins / features for Eclipse which allows you to create [Apache Camel](http://camel.apache.org) routes in a graphical editor, debug and launch them locally and deploy them to runtimes like [Apache Karaf](http://karaf.apache.org), [Red Hat Fuse](https://developers.redhat.com/products/fuse/overview/), [JBoss EAP](https://developers.redhat.com/products/eap/overview/) and [OpenShift](https://www.openshift.com/).
+Red Hat Fuse Tooling contains a set of plugins / features for Eclipse which allows you to create [Apache Camel](https://camel.apache.org) routes in a graphical editor, debug and launch them locally and deploy them to runtimes like [Apache Karaf](https://karaf.apache.org), [Red Hat Fuse](https://developers.redhat.com/products/fuse/overview/), [JBoss EAP](https://developers.redhat.com/products/eap/overview/) and [OpenShift](https://www.openshift.com/).
 
 ## Community
 
