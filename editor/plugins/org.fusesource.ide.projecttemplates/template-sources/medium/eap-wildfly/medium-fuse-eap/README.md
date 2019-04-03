@@ -73,4 +73,4 @@ ${symbol_hash}${symbol_hash}${symbol_hash} Undeploying the application
 ${symbol_hash}${symbol_hash} Further reading
 
 * [WildFly-Camel documentation] (https://www.gitbook.com/book/wildflyext/wildfly-camel)
-* [Apache Camel documentation] (http://camel.apache.org/)
+* [Apache Camel documentation] (https://camel.apache.org/)

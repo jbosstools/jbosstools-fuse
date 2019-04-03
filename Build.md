@@ -4,7 +4,7 @@ This document describes how to get and build the sources. It also covers how to 
 
 ## Get the code
 
-The easiest way to get started with the code is to [create your own fork](http://help.github.com/forking/) at github, and then clone your fork:
+The easiest way to get started with the code is to [create your own fork](https://help.github.com/forking/) at github, and then clone your fork:
 
     git clone git@github.com:<you>/jbosstools-fuse.git
     cd jbosstools-fuse

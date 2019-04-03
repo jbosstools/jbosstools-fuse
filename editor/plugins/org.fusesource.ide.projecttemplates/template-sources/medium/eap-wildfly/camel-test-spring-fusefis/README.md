@@ -88,4 +88,4 @@ Further reading
 
 Apache Camel documentation
 
-http://camel.apache.org/
+https://camel.apache.org/
