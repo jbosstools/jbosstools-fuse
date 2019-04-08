@@ -21,8 +21,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.eclipse.reddeer.common.condition.WaitCondition;
 import org.eclipse.reddeer.common.wait.AbstractWait;
 import org.eclipse.reddeer.common.wait.TimePeriod;
+import org.eclipse.reddeer.common.wait.WaitUntil;
 import org.eclipse.reddeer.common.wait.WaitWhile;
 import org.eclipse.reddeer.direct.preferences.PreferencesUtil;
 import org.eclipse.reddeer.eclipse.ui.navigator.resources.ProjectExplorer;
@@ -33,11 +35,13 @@ import org.eclipse.reddeer.swt.api.Shell;
 import org.eclipse.reddeer.swt.condition.ShellIsAvailable;
 import org.eclipse.reddeer.swt.impl.button.CheckBox;
 import org.eclipse.reddeer.swt.impl.button.FinishButton;
+import org.eclipse.reddeer.swt.impl.button.OkButton;
 import org.eclipse.reddeer.swt.impl.button.PushButton;
 import org.eclipse.reddeer.swt.impl.menu.ContextMenuItem;
 import org.eclipse.reddeer.swt.impl.shell.DefaultShell;
 import org.eclipse.reddeer.workbench.core.condition.JobIsRunning;
 import org.eclipse.reddeer.workbench.impl.shell.WorkbenchShell;
+import org.fusesource.ide.camel.tests.util.InstalledJREUtils;
 import org.jboss.tools.fuse.reddeer.ProjectType;
 import org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizard;
 import org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardAdvancedPage;
@@ -52,7 +56,9 @@ import org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardRuntim
  * @author tsedmik
  */
 public class ProjectFactory {
-
+	
+	public static final String JDK_WARNING_MESSAGE = "No Strictly compliant JRE detected";
+	
 	private String name;
 	private String version;
 	private NewFuseIntegrationProjectWizardRuntimeType runtimeType;
@@ -108,7 +114,17 @@ public class ProjectFactory {
 			lastPage.selectTemplate(SPRINGBOOT);
 		}
 		new FinishButton(wiz).click();
-		new WaitWhile(new JobIsRunning(), TimePeriod.getCustom(900));
+				
+		if(!InstalledJREUtils.hasJava8VMAvailable()) {
+			DefaultShell warningMessage = new DefaultShell(JDK_WARNING_MESSAGE);
+			WaitCondition wait = new ShellIsAvailable(warningMessage);
+			new WaitUntil(wait, TimePeriod.getCustom(900), false);
+			if (wait.getResult() != null) {
+				new OkButton(warningMessage).click();
+			}
+		}
+		
+		new WaitWhile(new JobIsRunning(), TimePeriod.LONG);
 		new WaitWhile(new ShellIsAvailable("New Fuse Integration Project"), TimePeriod.getCustom(900));
 	}
 

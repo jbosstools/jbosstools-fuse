@@ -34,11 +34,7 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.model.IProcess;
-import org.eclipse.jdt.internal.launching.StandardVMType;
-import org.eclipse.jdt.launching.IVMInstall;
 import org.eclipse.jdt.launching.IVMInstallType;
-import org.eclipse.jdt.launching.JavaRuntime;
-import org.eclipse.jdt.launching.environments.IExecutionEnvironment;
 import org.eclipse.wst.common.project.facet.core.IFacetedProject;
 import org.eclipse.wst.common.project.facet.core.IProjectFacet;
 import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
@@ -72,33 +68,12 @@ public abstract class AbstractProjectCreatorRunnableIT {
 	}
 
 	private static void ensureJDK8AvailableAsDefault() throws CoreException {
-		IVMInstallType standardVMInstallType = getStandardVMInstallType();
-		if (!hasJava8VMAvailable(standardVMInstallType)) {
+		IVMInstallType standardVMInstallType = InstalledJREUtils.getStandardVMInstallType();
+		if (!InstalledJREUtils.hasJava8VMAvailable(standardVMInstallType)) {
 			new JDKInstaller().installJDK8(standardVMInstallType);
 		}
 	}
 
-	private static IVMInstallType getStandardVMInstallType() {
-		IVMInstallType[] vmInstallTypes = JavaRuntime.getVMInstallTypes();
-		for (IVMInstallType vmInstallType : vmInstallTypes) {
-			if (StandardVMType.ID_STANDARD_VM_TYPE.equals(vmInstallType.getId())) {
-				return vmInstallType;
-			}
-		}
-		return null;
-	}
-
-	private static boolean hasJava8VMAvailable(IVMInstallType vmInstallType) throws CoreException {
-		IExecutionEnvironment java8ExecutionEnvironment = JavaRuntime.getExecutionEnvironmentsManager().getEnvironment("JavaSE-1.8");
-		IVMInstall[] standardVmInstalls = vmInstallType.getVMInstalls();
-		for (IVMInstall standardVmInstall : standardVmInstalls) {
-			if(java8ExecutionEnvironment.isStrictlyCompatible(standardVmInstall)){
-				return true;
-			}
-		}
-		return false;
-	}
-	
 	@After
 	public void tearDown() throws CoreException {
 		terminateRunningProcesses();

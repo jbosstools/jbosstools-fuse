@@ -20,7 +20,9 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.reddeer.graphiti;bundle-version="2.5.0",
  org.eclipse.reddeer.eclipse;bundle-version="2.5.0",
  org.json,
- org.jboss.tools.common.jaxb;resolution:=optional
+ org.jboss.tools.common.jaxb;resolution:=optional,
+ org.eclipse.jdt.launching;bundle-version="3.13.0",
+ org.fusesource.ide.camel.tests.util;bundle-version="11.3.0"
 Export-Package: org.jboss.tools.fuse.reddeer,
  org.jboss.tools.fuse.reddeer.component,
  org.jboss.tools.fuse.reddeer.condition,
