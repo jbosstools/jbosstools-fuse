@@ -65,7 +65,7 @@ Export-Package: org.fusesource.ide.projecttemplates.actions;x-friends:="org.fuse
  org.fusesource.ide.projecttemplates.adopters.util,
  org.fusesource.ide.projecttemplates.impl.medium,
  org.fusesource.ide.projecttemplates.impl.simple,
- org.fusesource.ide.projecttemplates.internal;x-friends:="org.fusesource.ide.projecttemplates.tests.integration",
+ org.fusesource.ide.projecttemplates.internal;x-friends:="org.fusesource.ide.projecttemplates.tests.integration,org.jboss.tools.fuse.reddeer",
  org.fusesource.ide.projecttemplates.maven,
  org.fusesource.ide.projecttemplates.util,
  org.fusesource.ide.projecttemplates.util.camel,
