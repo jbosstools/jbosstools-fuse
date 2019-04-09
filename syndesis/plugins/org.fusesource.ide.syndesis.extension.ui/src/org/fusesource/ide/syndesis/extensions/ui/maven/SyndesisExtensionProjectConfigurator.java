@@ -129,13 +129,12 @@ public class SyndesisExtensionProjectConfigurator extends AbstractProjectConfigu
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.m2e.core.project.configurator.AbstractProjectConfigurator#configure(org.eclipse.m2e.core.project.configurator.ProjectConfigurationRequest, org.eclipse.core.runtime.IProgressMonitor)
-	 */
 	@Override
 	public void configure(ProjectConfigurationRequest request, IProgressMonitor monitor) throws CoreException {
-		// we add the camel nature because this enables the Camel Contexts virtual folder in the project
-		SubMonitor subMonitor = SubMonitor.convert(monitor, 10);
-		addNature(request.getProject(), RiderProjectNature.NATURE_ID, subMonitor.split(10));
+		if (isValidSyndesisProject(request.getProject())) {
+			// we add the camel nature because this enables the Camel Contexts virtual folder in the project
+			SubMonitor subMonitor = SubMonitor.convert(monitor, 10);
+			addNature(request.getProject(), RiderProjectNature.NATURE_ID, subMonitor.split(10));
+		}
 	}
 }
