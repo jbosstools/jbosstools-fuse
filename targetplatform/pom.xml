@@ -155,7 +155,7 @@
 	<repositories>
 		<repository>
 			<id>jbosstools-photon-staging</id>
-			<url>http://download.jboss.org/jbosstools/photon/staging/updates/</url>
+			<url>https://download.jboss.org/jbosstools/photon/staging/updates/</url>
 			<layout>p2</layout>
 		</repository>
 	</repositories>

@@ -82,7 +82,7 @@
 							<goal>wget</goal>
 						</goals>
 						<configuration>
-							<url>http://archive.apache.org/dist/karaf/${karaf.version}/apache-karaf-${karaf.version}.zip</url>
+							<url>https://archive.apache.org/dist/karaf/${karaf.version}/apache-karaf-${karaf.version}.zip</url>
 							<unpack>true</unpack>
 							<outputDirectory>${project.build.directory}/requirements</outputDirectory>
 						</configuration>
