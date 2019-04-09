@@ -29,6 +29,7 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.fusesource.ide.camel.model.service.core.internal.CamelModelServiceCoreActivator;
+import org.fusesource.ide.camel.model.service.core.internal.Trace;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.foundation.core.util.CamelUtils;
 import org.fusesource.ide.foundation.core.xml.namespace.CamelNamespaceXmlContentDescriber;
@@ -37,12 +38,17 @@ import org.fusesource.ide.foundation.ui.io.CamelXMLEditorInput;
 public class CamelFilesFinder {
 	
 	private static final String COM_SPRINGSOURCE_STS_CONFIG_UI_BEAN_CONFIG_FILE_CONTENT_TYPE = "com.springsource.sts.config.ui.beanConfigFile"; //$NON-NLS-1$
-
+	
 	/**
 	 * @param resource the resource in which the search occurs
 	 * @return the Set of IFile with Camel Content Type
 	 */
 	public Set<IFile> findFiles(IResource resource) {
+		boolean isPerformanceTraceOptionActivated = Trace.getInstance(CamelModelServiceCoreActivator.getDefault()).isPerformanceTraceOptionActivated();
+		long initialTime = 0;
+		if (isPerformanceTraceOptionActivated) {
+			initialTime = System.currentTimeMillis();
+		}
 		Set<IFile> res = new HashSet<>();
 		if (resource instanceof IContainer && resource.exists()) {
 			try {
@@ -67,6 +73,10 @@ public class CamelFilesFinder {
 			} catch (CoreException e1) {
 				CamelModelServiceCoreActivator.pluginLog().logError(e1);
 			}
+		}
+		if(isPerformanceTraceOptionActivated) {
+			long totalTime = System.currentTimeMillis() - initialTime;
+			Trace.trace(Trace.PERFORMANCE_TRACE_OPTION, "Time (ms) spent on resource "+ resource.getName() + " to determine if it is/contains Camel files : " + totalTime);
 		}
 		return res;
 	}
