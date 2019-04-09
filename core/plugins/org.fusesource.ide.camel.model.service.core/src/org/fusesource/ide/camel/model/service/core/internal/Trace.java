@@ -10,6 +10,7 @@
  *******************************************************************************/
 package org.fusesource.ide.camel.model.service.core.internal;
 
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.osgi.service.debug.DebugOptions;
 import org.eclipse.osgi.service.debug.DebugOptionsListener;
 import org.jboss.tools.foundation.core.plugin.AbstractTrace;
@@ -23,6 +24,8 @@ import org.jboss.tools.foundation.core.plugin.AbstractTrace;
 public class Trace extends AbstractTrace implements DebugOptionsListener {
 	
 	private static Trace instance = null;
+	public static final String PERFORMANCE_TRACE_OPTION = "/performance";
+	private CamelModelServiceCoreActivator plugin;
 	
 	/**
 	 * Trace constructor. This should never be explicitly called by clients and is used to register this class with the
@@ -30,6 +33,7 @@ public class Trace extends AbstractTrace implements DebugOptionsListener {
 	 */
 	private Trace(CamelModelServiceCoreActivator p) {
 		super(p);
+		this.plugin = p;
 	}
 	
 	public static Trace getInstance(CamelModelServiceCoreActivator p) {
@@ -52,5 +56,23 @@ public class Trace extends AbstractTrace implements DebugOptionsListener {
 	 */
 	public static void trace(final String level, String s, Throwable t) {
 		traceInternal(instance, level, s, t);
+	}
+	
+	protected void createDefaultDebugSettings() {
+		super.createDefaultDebugSettings();
+		getOptionsMap().put(PERFORMANCE_TRACE_OPTION, Boolean.valueOf(false));
+	}
+	
+	@Override
+	public void optionsChanged(DebugOptions options) {
+		super.optionsChanged(options);
+		String pid = plugin.getBundle().getSymbolicName();
+		getOptionsMap().put(PERFORMANCE_TRACE_OPTION, options.getBooleanOption(pid + PERFORMANCE_TRACE_OPTION, false));
+	}
+	
+	public boolean isPerformanceTraceOptionActivated() {
+		String pid = plugin.getBundle().getSymbolicName();
+		String debugOption = Platform.getDebugOption(pid + Trace.PERFORMANCE_TRACE_OPTION);
+		return "true".equals(debugOption);
 	}
 }
