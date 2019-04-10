@@ -75,16 +75,18 @@ public class KarafRuntimeFragment extends RuntimeWizardFragment {
 	@Override
 	protected String getHomeVersionWarning() {
 		String homeDir = homeDirComposite.getHomeDirectory();
-		File loc = new File(homeDir);
-		String serverId = new ServerBeanLoader(loc).getServerAdapterId();
-		String rtId = serverId == null ? null : 
+		if (homeDir != null) {
+			File loc = new File(homeDir);
+			String serverId = new ServerBeanLoader(loc).getServerAdapterId();
+			String rtId = serverId == null ? null : 
 				ServerCore.findServerType(serverId).getRuntimeType().getId();
-		IRuntime adapterRt = getRuntimeFromTaskModel();
-		String adapterRuntimeId = adapterRt.getRuntimeType().getId();
-		if( !adapterRuntimeId.equals(rtId)) {
-			return NLS.bind("Incorrect Version Error {0} {1}", 
-					adapterRt.getRuntimeType().getVersion(), 
-					getVersionString(loc));
+			IRuntime adapterRt = getRuntimeFromTaskModel();
+			String adapterRuntimeId = adapterRt.getRuntimeType().getId();
+			if( !adapterRuntimeId.equals(rtId)) {
+				return NLS.bind("Incorrect Version Error {0} {1}", 
+						adapterRt.getRuntimeType().getVersion(), 
+						getVersionString(loc));
+			}
 		}
 		return null;
 	}
