@@ -1,6 +1,5 @@
-package org.fusesource.ide.camel.model.service.impl.v2203;
 /******************************************************************************* 
- * Copyright (c) 2018 Red Hat, Inc. 
+ * Copyright (c) 2019 Red Hat, Inc. 
  * Distributed under license by Red Hat, Inc. All rights reserved. 
  * This program is made available under the terms of the 
  * Eclipse Public License v1.0 which accompanies this distribution, 
@@ -9,6 +8,7 @@ package org.fusesource.ide.camel.model.service.impl.v2203;
  * Contributors: 
  * Red Hat, Inc. - initial API and implementation 
  ******************************************************************************/
+package org.fusesource.ide.camel.model.service.impl.v2223;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Map;
