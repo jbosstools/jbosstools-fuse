@@ -44,12 +44,9 @@ public class InstalledJREUtils {
 	static IVMInstallType getStandardVMInstallType() {
 		IVMInstallType[] vmInstallTypes = JavaRuntime.getVMInstallTypes();
 		for (IVMInstallType vmInstallType : vmInstallTypes) {
-			if (StandardVMType.ID_STANDARD_VM_TYPE.equals(vmInstallType.getId())) {
-				if(vmInstallType.getVMInstalls().length > 0) {
-					return vmInstallType;
-				}
-			}
-			if(vmInstallType.getId().equals(ID_MAC_OSX_TYPE)) {
+			String vmInstallTypeId = vmInstallType.getId();
+			if (StandardVMType.ID_STANDARD_VM_TYPE.equals(vmInstallTypeId)
+					|| ID_MAC_OSX_TYPE.equals(vmInstallTypeId)) {
 				if(vmInstallType.getVMInstalls().length > 0) {
 					return vmInstallType;
 				}
