@@ -162,6 +162,8 @@ public class CamelModelPatcher {
 		applyFixToComponent(loadedModel, "iec60870-server", "iec60870-server:endpointUri", "iec60870-server:uriPath");
 		applyFixToComponent(loadedModel, "wordpress", "wordpress:operation", "wordpress:operationDetail");
 		applyFixToComponent(loadedModel, "micrometer", "micrometer:metricsType:meterName", "micrometer:metricsType:metricsName");
+		applyFixToComponent(loadedModel, "service", "service:serviceName:delegateUri", "service:delegateUri");
+		applyFixToComponent(loadedModel, "nsq", "nsq:lookupServer", "nsq:servers");
 	}
 
 	private static void applyFixToComponent(CamelModel loadedModel, String componentScheme, String invalidSyntaxBugFromOlderVersion, String correctSyntax) {
