@@ -41,8 +41,9 @@ import org.eclipse.reddeer.swt.impl.menu.ContextMenuItem;
 import org.eclipse.reddeer.swt.impl.shell.DefaultShell;
 import org.eclipse.reddeer.workbench.core.condition.JobIsRunning;
 import org.eclipse.reddeer.workbench.impl.shell.WorkbenchShell;
-import org.fusesource.ide.camel.tests.util.InstalledJREUtils;
+import org.eclipse.reddeer.workbench.ui.dialogs.WorkbenchPreferenceDialog;
 import org.jboss.tools.fuse.reddeer.ProjectType;
+import org.jboss.tools.fuse.reddeer.preference.InstalledJREs;
 import org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizard;
 import org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardAdvancedPage;
 import org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardDeploymentType;
@@ -91,6 +92,7 @@ public class ProjectFactory {
 
 	public void create() {
 		PreferencesUtil.setOpenAssociatedPerspective("never");
+		boolean hasJava8 = hasJava8Available();
 		NewFuseIntegrationProjectWizard wiz = new NewFuseIntegrationProjectWizard();
 		wiz.open();
 		NewFuseIntegrationProjectWizardFirstPage firstPage = new NewFuseIntegrationProjectWizardFirstPage(wiz);
@@ -115,7 +117,7 @@ public class ProjectFactory {
 		}
 		new FinishButton(wiz).click();
 				
-		if(!InstalledJREUtils.hasJava8VMAvailable()) {
+		if(!hasJava8) {
 			DefaultShell warningMessage = new DefaultShell(JDK_WARNING_MESSAGE);
 			WaitCondition wait = new ShellIsAvailable(warningMessage);
 			new WaitUntil(wait, TimePeriod.getCustom(900), false);
@@ -258,5 +260,15 @@ public class ProjectFactory {
 		}
 		wiz.cancel();
 		return templates;
+	}
+	
+	private boolean hasJava8Available() {
+		WorkbenchPreferenceDialog prefs = new WorkbenchPreferenceDialog();
+		InstalledJREs jres = new InstalledJREs(prefs); 
+		prefs.open();
+		prefs.select(jres);
+		boolean hasJava8 = jres.containsJreWithName("Java\\s*SE.*8.*") || jres.containsJreWithName(".*jdk.*8.*");
+		prefs.ok();	
+		return hasJava8;
 	}
 }
