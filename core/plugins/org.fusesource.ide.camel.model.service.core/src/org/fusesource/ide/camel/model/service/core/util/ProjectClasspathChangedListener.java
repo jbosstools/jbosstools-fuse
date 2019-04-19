@@ -29,6 +29,7 @@ import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaElementDelta;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.ui.PlatformUI;
 import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelCatalogCacheManager;
 import org.fusesource.ide.camel.model.service.core.internal.CamelModelServiceCoreActivator;
 
@@ -44,9 +45,15 @@ public class ProjectClasspathChangedListener implements IElementChangedListener,
 	 * creates a change listener watching for events in the classpath of the project
 	 */
 	public ProjectClasspathChangedListener() {
-		for (IJavaProject jp : getCamelProjects()) {
-			initializeProject(jp.getProject());
-		}
+		PlatformUI.getWorkbench().getDisplay().asyncExec(new Runnable() {
+			
+			@Override
+			public void run() {
+				for (IJavaProject jp : getCamelProjects()) {
+					initializeProject(jp.getProject());
+				}
+			}
+		});
 	}
 	
 	@Override
