@@ -131,10 +131,11 @@ public class SyndesisExtensionProjectConfigurator extends AbstractProjectConfigu
 
 	@Override
 	public void configure(ProjectConfigurationRequest request, IProgressMonitor monitor) throws CoreException {
-		if (isValidSyndesisProject(request.getProject())) {
+		IProject project = request.getProject();
+		if (!project.hasNature(RiderProjectNature.NATURE_ID) && isValidSyndesisProject(project)) {
 			// we add the camel nature because this enables the Camel Contexts virtual folder in the project
 			SubMonitor subMonitor = SubMonitor.convert(monitor, 10);
-			addNature(request.getProject(), RiderProjectNature.NATURE_ID, subMonitor.split(10));
+			addNature(project, RiderProjectNature.NATURE_ID, subMonitor.split(10));
 		}
 	}
 }
