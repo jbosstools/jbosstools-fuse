@@ -31,6 +31,7 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectReader;
 
 /**
  * @author lhein
@@ -49,6 +50,8 @@ public class Component implements ICamelCatalogElement, IParameterContainer {
 	public static final String PROPERTY_GROUPID = "groupId";
 	public static final String PROPERTY_ARTIFACTID = "artifactId";
 	public static final String PROPERTY_VERSION = "version";
+	
+	private static ObjectReader componentReader;
 
 	@JsonProperty("component")
 	private Map<String, String> model = new HashMap<>();
@@ -426,11 +429,19 @@ public class Component implements ICamelCatalogElement, IParameterContainer {
 	 */
 	public static Component getJSONFactoryInstance(InputStream stream) {
 		try {
-			ObjectMapper mapper = new ObjectMapper();
-			return mapper.readValue(stream, Component.class);
+			ObjectReader componentReader = getComponentReader();
+			return componentReader.readValue(stream);
 		} catch (IOException ex) {
 			CamelModelServiceCoreActivator.pluginLog().logError(ex);
 		}
 		return null;
+	}
+
+	private static ObjectReader getComponentReader() {
+		if(componentReader == null) {
+			ObjectMapper mapper = new ObjectMapper();
+			componentReader = mapper.readerFor(Component.class);
+		}
+		return componentReader;
 	}
 }
