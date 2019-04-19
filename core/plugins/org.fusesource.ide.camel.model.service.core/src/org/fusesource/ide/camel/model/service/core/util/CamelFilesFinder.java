@@ -21,7 +21,6 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.content.IContentDescription;
 import org.eclipse.core.runtime.content.XMLContentDescriber;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorReference;
@@ -107,26 +106,25 @@ public class CamelFilesFinder {
 	 * @throws CoreException
 	 */
 	public boolean isFuseCamelContentType(IFile ifile) throws CoreException {
-		if( ifile != null
-				&& ifile.isSynchronized(IResource.DEPTH_ZERO)
-				&& ifile.isLocal(IResource.DEPTH_ZERO)){
-			IContentDescription contentDescription = ifile.getContentDescription();
-			if(contentDescription != null){
-				String contentTypeId = contentDescription.getContentType().getId();
-				if(COM_SPRINGSOURCE_STS_CONFIG_UI_BEAN_CONFIG_FILE_CONTENT_TYPE.equals(contentTypeId)){
-					// Should we filter only for known conflicting content types? If not, it might impact performance.
-					try {
-						ByteArrayInputStream markableAndResettableStream = new ByteArrayInputStream(Files.readAllBytes(ifile.getLocation().toFile().toPath()));
-						return XMLContentDescriber.VALID == new CamelNamespaceXmlContentDescriber().describe(markableAndResettableStream, null);
-					} catch (IOException e) {
-						CamelModelServiceCoreActivator.pluginLog().logInfo("Cannot check Content type of "+ ifile.getName(), e); //$NON-NLS-1$
-					}
-				} else {
-					return CamelUtils.FUSE_CAMEL_CONTENT_TYPE.equals(contentTypeId);
-				}
+		if(isFileReadyForCheck(ifile) && ifile.getName().endsWith(".xml")){
+			try {
+				ByteArrayInputStream markableAndResettableStream = createMarkableAndResetableInputStream(ifile);
+				return XMLContentDescriber.VALID == new CamelNamespaceXmlContentDescriber().describe(markableAndResettableStream, null);
+			} catch (IOException e) {
+				CamelModelServiceCoreActivator.pluginLog().logInfo("Cannot check Content type of "+ ifile.getName(), e); //$NON-NLS-1$
 			}
 		}
 		return false;
+	}
+
+	private ByteArrayInputStream createMarkableAndResetableInputStream(IFile ifile) throws IOException {
+		return new ByteArrayInputStream(Files.readAllBytes(ifile.getLocation().toFile().toPath()));
+	}
+
+	private boolean isFileReadyForCheck(IFile ifile) {
+		return ifile != null
+				&& ifile.isSynchronized(IResource.DEPTH_ZERO)
+				&& ifile.isLocal(IResource.DEPTH_ZERO);
 	}
 	
 	/**
