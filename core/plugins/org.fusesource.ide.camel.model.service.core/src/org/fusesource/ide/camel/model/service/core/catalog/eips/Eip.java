@@ -30,12 +30,15 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectReader;
 
 /**
  * @author lhein
  */
 public class Eip implements ICamelCatalogElement, IParameterContainer {
 
+	private static ObjectReader eipReader;
+	
 	public static final String PROPERTY_NAME = "name";
 	public static final String PROPERTY_KIND = "kind";
 	public static final String PROPERTY_JAVA_TYPE = "javaType";
@@ -340,11 +343,18 @@ public class Eip implements ICamelCatalogElement, IParameterContainer {
 	 */
 	public static Eip getJSONFactoryInstance(InputStream stream) {
 		try {
-			ObjectMapper mapper = new ObjectMapper();
-			return mapper.readValue(stream, Eip.class);
+			return getEipReader().readValue(stream);
 		} catch (IOException ex) {
 			CamelModelServiceCoreActivator.pluginLog().logError(ex);
 		}
 		return null;
+	}
+	
+	private static ObjectReader getEipReader() {
+		if(eipReader == null) {
+			ObjectMapper mapper = new ObjectMapper();
+			eipReader = mapper.readerFor(Eip.class);
+		}
+		return eipReader;
 	}
 }

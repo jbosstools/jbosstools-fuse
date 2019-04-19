@@ -30,11 +30,14 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectReader;
 
 /**
  * @author lhein
  */
 public class DataFormat implements ICamelCatalogElement, IParameterContainer {
+	
+	private static ObjectReader dataformatReader;
 
 	public static final String PROPERTY_NAME = "name";
 	public static final String PROPERTY_KIND = "kind";
@@ -310,11 +313,18 @@ public class DataFormat implements ICamelCatalogElement, IParameterContainer {
 	 */
 	public static DataFormat getJSONFactoryInstance(InputStream stream) {
 		try {
-			ObjectMapper mapper = new ObjectMapper();
-			return mapper.readValue(stream, DataFormat.class);
+			return getDataformatReader().readValue(stream);
 		} catch (IOException ex) {
 			CamelModelServiceCoreActivator.pluginLog().logError(ex);
 		}
 		return null;
+	}
+	
+	private static ObjectReader getDataformatReader() {
+		if(dataformatReader == null) {
+			ObjectMapper mapper = new ObjectMapper();
+			dataformatReader = mapper.readerFor(DataFormat.class);
+		}
+		return dataformatReader;
 	}
 }
