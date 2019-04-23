@@ -118,3 +118,57 @@ There is a bash script called [_changeVersion.sh_](https://github.com/fusesource
 _Example:_
 
     ./changeVersion.sh 7.3.0-SNAPSHOT 7.3.0
+    
+## Profiling built application
+
+Profiling built application can be very useful when users are hitting performance issues and developers cannot reproduce the problem.
+The following lines will explain how to do a profiling of Fuse Tooling specific classes using [VisualVM](https://visualvm.github.io) on a [Code Ready Studio](https://developers.redhat.com/products/codeready-studio/overview/) installation.
+
+### Install Profiling Tool in VisualVM
+
+- Launch VisualVM (that you downloaded from [VisualVM website](https://visualvm.github.io)
+- Click on Tools -> Plugins -> Available Plugins, select "Startup profiler" and click install
+
+### Retrieve VM arguments from VisualVM to pass to Code Ready Studio
+
+- Click on the "Start New Process and Profile its startup" icon (it should the one at the top right of the toolbar)
+- Modify parameters for VM and architecture depending on your installation, then click continue
+- In _Profile classes_, provide _org.fusesource.ide.**_
+- Check _Include outgoing calls_, set _org.fusesource.ide.**,org.jboss.tools.**_
+- Click on _continue_
+- Click _copy to clipboard_
+- Click on "Profile"
+- If asking for a calibration click yes
+
+Please note that it is focusing on Fuse Tooling classes. In case, the performance issues are due to other part of the code, the classes to profile will need to be adapted. We are restraining the scope of classes to profile, otherwise the time to do a profile can be very very long.
+
+### Include VM arguments
+
+- Go to Code Ready Studio installation folder, and open studio/devstudio.ini file
+- right after _-vmargs_ , on a new line, paste the argument from previous step (something like _-agentpath:xxxx_) and save it
+- Double-check if there is a _-vm_ provided that it is matching the version that you selected in VisualVM configuration
+- Launch Code Ready Studio
+
+### Take a Snapshot
+
+In VisualVm, a Tree graph should appear.
+
+If profiling startup:
+
+- In toolbar of the tree graph, click on _Snapshot_
+
+If profiling another use case:
+
+- In toolbar of the tree graph, click on _Reset collected results_
+- Play the steps to reproduce the performance issue in Code Ready Studio
+- When done, go back to VisualVM and click on _Snapshot_
+
+### Share a Snapshot
+
+- Click on "Export Snapshot Data"
+- The generated *.nps file can be shared
+
+### Load a Snapshot for analysis (for Developers only)
+
+- Click on _File -> Load_
+- Choose the _*.nps_ file
