@@ -133,8 +133,8 @@ The following lines will explain how to do a profiling of Fuse Tooling specific 
 
 - Click on the "Start New Process and Profile its startup" icon (it should the one at the top right of the toolbar)
 - Modify parameters for VM and architecture depending on your installation, then click continue
-- In _Profile classes_, provide _org.fusesource.ide.**_
-- Check _Include outgoing calls_, set _org.fusesource.ide.**,org.jboss.tools.**_
+- In _Profile classes_, provide `org.fusesource.ide.**`
+- Check _Include outgoing calls_, set `org.fusesource.ide.**,org.jboss.tools.**`
 - Click on _continue_
 - Click _copy to clipboard_
 - Click on "Profile"
