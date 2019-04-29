@@ -39,9 +39,10 @@ Bundle-ClassPath: .,
  libs/commons-beanutils.jar,
  libs/commons-collections.jar,
  libs/commons-digester.jar,
- libs/commons-lang.jar,
  libs/commons-logging.jar,
  libs/commons-validator.jar,
+ libs/commons-lang.jar,
+ libs/commons-lang3.jar,
  libs/cxf-codegen-plugin.jar,
  libs/cxf-core.jar,
  libs/cxf-rt-bindings-soap.jar,
@@ -132,3 +133,4 @@ Export-Package:
  org.fusesource.ide.wsdl2rest.ui.internal,
  org.fusesource.ide.wsdl2rest.ui.wizard,
  org.fusesource.ide.wsdl2rest.ui.wizard.pages
+Automatic-Module-Name: org.fusesource.ide.wsdl2rest.ui
