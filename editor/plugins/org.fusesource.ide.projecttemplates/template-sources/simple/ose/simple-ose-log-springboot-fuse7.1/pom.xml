@@ -16,7 +16,6 @@
 
 		<!-- configure the versions you want to use here -->
 		<fuse.version>%%%PLACEHOLDER_BOMVERSION%%%</fuse.version>
-		<spring-boot.version>1.5.4.RELEASE</spring-boot.version>
 
 		<!-- maven plugin versions -->
 		<maven-compiler-plugin.version>3.6.0</maven-compiler-plugin.version>
@@ -67,9 +66,9 @@
 				</configuration>
 			</plugin>
 			<plugin>
-				<groupId>org.springframework.boot</groupId>
+				<groupId>org.jboss.redhat-fuse</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
-				<version>${spring-boot.version}</version>
+				<version>${fuse.version}</version>
 				<executions>
 					<execution>
 						<goals>
