@@ -61,13 +61,26 @@ public class CamelRunMavenLaunchDelegate extends FuseMavenLaunchDelegate {
 		}
 		
 		if (isSpringBoot(pomFile)) {
-			setGoals(CamelContextLaunchConfigConstants.DEFAULT_MAVEN_GOALS_SPRINGBOOT);
+			if (isProductizedMavenPluginUsed(pomFile)) {
+				setGoals(CamelContextLaunchConfigConstants.DEFAULT_MAVEN_GOALS_SPRINGBOOT_FUSE_PRODUCTIZED);
+			} else {
+				setGoals(CamelContextLaunchConfigConstants.DEFAULT_MAVEN_GOALS_SPRINGBOOT);
+			}
 		} else if (isWarPackaging(pomFile)) {
 			setGoals(CamelContextLaunchConfigConstants.DEFAULT_MAVEN_GOALS_WAR);
 		} else {
-			setGoals(CamelContextLaunchConfigConstants.DEFAULT_MAVEN_GOALS_JAR);
+			if (isProductizedMavenPluginUsed(pomFile)) {
+				setGoals(CamelContextLaunchConfigConstants.DEFAULT_MAVEN_GOALS_JAR_FUSE_PRODUCTIZED);
+			} else {
+				setGoals(CamelContextLaunchConfigConstants.DEFAULT_MAVEN_GOALS_JAR);
+			}
+
 		}
 		return "-U " + super.getGoals(configuration) + newGoalsAdditionForFile;
+	}
+
+	protected boolean isProductizedMavenPluginUsed(IFile pomFile) throws CoreException {
+		return MavenLaunchUtils.isProductizedMavenPluginGroupIdUsed(pomFile);
 	}
 
 	/**

@@ -20,6 +20,7 @@ import java.util.Set;
 
 import org.apache.maven.artifact.versioning.ComparableVersion;
 import org.apache.maven.model.Model;
+import org.apache.maven.model.Plugin;
 import org.apache.maven.project.MavenProject;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -74,6 +75,9 @@ public class CamelCatalogUtils {
 	
 	public static final String CATALOG_WILDFLY_GROUPID = CAMEL_WILDFLY;
 	public static final String CATALOG_WILDFLY_ARTIFACTID = "wildfly-camel-catalog";
+	
+	private static final String MAVEN_PLUGIN_GROUPID_FUSE_PRODUCTIZED = "org.jboss.redhat-fuse";
+	private static final List<String> MAVEN_PLUGINS_WITH_FUSEPRODUCTIZED_GROUPID = Arrays.asList("camel-maven-plugin", "spring-boot-maven-plugin");
 	
 	public static final String GAV_KEY_GROUPID = "groupId";
 	public static final String GAV_KEY_ARTIFACTID = "artifactId";
@@ -427,5 +431,15 @@ public class CamelCatalogUtils {
 			artifactToSearch.setArtifactId("fabric8-maven-plugin");
 			return new OnlineArtifactVersionSearcher().findLatestVersion(monitor, artifactToSearch);
 		}
+	}
+
+	public static boolean hasProductizedMavenPluginGroupId(List<Plugin> plugins) {
+		return hasPluginWithFuseProductizedGroupID(plugins, MAVEN_PLUGINS_WITH_FUSEPRODUCTIZED_GROUPID);
+	}
+	
+	private static boolean hasPluginWithFuseProductizedGroupID(List<org.apache.maven.model.Plugin> plugins, List<String> pluginsToCheck) {
+		return plugins != null
+				&& plugins.stream()
+					.anyMatch(plugin -> pluginsToCheck.contains(plugin.getArtifactId()) && MAVEN_PLUGIN_GROUPID_FUSE_PRODUCTIZED.equals(plugin.getGroupId()));
 	}
 }
