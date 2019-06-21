@@ -23,10 +23,14 @@ public interface CamelContextLaunchConfigConstants {
 	static final String DEFAULT_CONTEXT_NAME = "camelContext.xml";
 	static final String DEFAULT_MAVEN_GOALS_ALL = "clean package";
 	static final String SPECIFIC_MAVEN_GOAL_JAR = "org.apache.camel:camel-maven-plugin:run";
+	static final String SPECIFIC_MAVEN_GOAL_JAR_FUSE_PRODUCTIZED = "org.jboss.redhat-fuse:camel-maven-plugin:run";
 	static final String SPECIFIC_MAVEN_GOAL_WAR = "org.eclipse.jetty:jetty-maven-plugin:run";
 	static final String SPECIFIC_MAVEN_GOAL_SPRINGBOOT = "org.springframework.boot:spring-boot-maven-plugin:run";
+	static final String SPECIFIC_MAVEN_GOAL_SPRINGBOOT_FUSE_PRODUCTIZED = "org.jboss.redhat-fuse:spring-boot-maven-plugin:run";
 	static final String DEFAULT_MAVEN_GOALS_JAR = DEFAULT_MAVEN_GOALS_ALL + " "+SPECIFIC_MAVEN_GOAL_JAR;
-	static final String DEFAULT_MAVEN_GOALS_WAR = DEFAULT_MAVEN_GOALS_ALL + " "+SPECIFIC_MAVEN_GOAL_WAR;
-	static final String DEFAULT_MAVEN_GOALS_SPRINGBOOT = DEFAULT_MAVEN_GOALS_ALL + " "+SPECIFIC_MAVEN_GOAL_SPRINGBOOT;
+	static final String DEFAULT_MAVEN_GOALS_JAR_FUSE_PRODUCTIZED = DEFAULT_MAVEN_GOALS_ALL + " " + SPECIFIC_MAVEN_GOAL_JAR_FUSE_PRODUCTIZED;
+	static final String DEFAULT_MAVEN_GOALS_WAR = DEFAULT_MAVEN_GOALS_ALL + " " + SPECIFIC_MAVEN_GOAL_WAR;
+	static final String DEFAULT_MAVEN_GOALS_SPRINGBOOT = DEFAULT_MAVEN_GOALS_ALL + " " + SPECIFIC_MAVEN_GOAL_SPRINGBOOT;
+	static final String DEFAULT_MAVEN_GOALS_SPRINGBOOT_FUSE_PRODUCTIZED = DEFAULT_MAVEN_GOALS_ALL + " " + SPECIFIC_MAVEN_GOAL_SPRINGBOOT_FUSE_PRODUCTIZED;
 	static final String BLUEPRINT_CONTEXT = "camel.blueprint=true";
 }

@@ -19,6 +19,7 @@
 
 package org.fusesource.ide.launcher.run.util;
 
+import org.apache.maven.model.Build;
 import org.apache.maven.model.Model;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -72,14 +73,31 @@ public class MavenLaunchUtils {
 	 * @throws CoreException
 	 */
 	public static boolean isPackagingTypeWAR(IFile pomFile) throws CoreException {
-		if (pomFile == null || !pomFile.exists()) throw new CoreException(new Status(IStatus.ERROR, Activator.getBundleID(), "Can't determine packaging type because given pom file reference is null!"));
+		if (pomFile == null || !pomFile.exists()) {
+			throw new CoreException(new Status(IStatus.ERROR, Activator.getBundleID(), "Can't determine packaging type because given pom file reference is null!"));
+		}
 		Model model = MavenPlugin.getMavenModelManager().readMavenModel(pomFile);
 		return "war".equalsIgnoreCase(model.getPackaging());
 	}
 	
 	public static boolean isSpringBootProject(IFile pomFile) throws CoreException {
-		if (pomFile == null || !pomFile.exists()) throw new CoreException(new Status(IStatus.ERROR, Activator.getBundleID(), "Can't determine project type because given pom file reference is null!"));
+		if (pomFile == null || !pomFile.exists()) {
+			throw new CoreException(new Status(IStatus.ERROR, Activator.getBundleID(), "Can't determine project type because given pom file reference is null!"));
+		}
 		Model model = MavenPlugin.getMavenModelManager().readMavenModel(pomFile);
 		return CamelCatalogUtils.hasSpringBootDependency(model.getDependencies());
+	}
+
+	public static boolean isProductizedMavenPluginGroupIdUsed(IFile pomFile) throws CoreException {
+		if (pomFile == null || !pomFile.exists()) {
+			throw new CoreException(new Status(IStatus.ERROR, Activator.getBundleID(), "Can't determine if productized group id used because given pom file reference is null!"));
+		}
+		Model model = MavenPlugin.getMavenModelManager().readMavenModel(pomFile);
+		Build build = model.getBuild();
+		if (build != null) {
+			return CamelCatalogUtils.hasProductizedMavenPluginGroupId(build.getPlugins());
+		} else {
+			throw new CoreException(new Status(IStatus.ERROR, Activator.getBundleID(), "Can't determine if productized group id used because given pom file doesn't contain a build section!"));
+		}
 	}
 }

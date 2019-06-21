@@ -127,7 +127,7 @@ public class CamelContextFileTab extends AbstractLaunchConfigurationTab {
 	@Override
 	public void setDefaults(ILaunchConfigurationWorkingCopy configuration) {
 		configuration.setAttribute(CamelContextLaunchConfigConstants.ATTR_FILE, CamelContextLaunchConfigConstants.DEFAULT_CONTEXT_NAME);
-		configuration.setAttribute(MavenLaunchConstants.ATTR_GOALS, "clean package org.apache.camel:camel-maven-plugin:run");
+		configuration.setAttribute(MavenLaunchConstants.ATTR_GOALS, CamelContextLaunchConfigConstants.DEFAULT_MAVEN_GOALS_JAR_FUSE_PRODUCTIZED);
 	}
 
 	/* (non-Javadoc)
