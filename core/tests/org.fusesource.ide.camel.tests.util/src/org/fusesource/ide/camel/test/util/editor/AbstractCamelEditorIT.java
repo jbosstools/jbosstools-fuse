@@ -33,9 +33,13 @@ import org.eclipse.ui.ide.IDE;
 import org.fusesource.ide.branding.perspective.FusePerspective;
 import org.fusesource.ide.camel.editor.utils.CamelUtils;
 import org.fusesource.ide.camel.model.service.core.tests.integration.core.io.FuseProject;
+import org.fusesource.ide.camel.tests.util.Activator;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
+import org.junit.rules.TestRule;
+import org.junit.rules.TestWatcher;
+import org.junit.runner.Description;
 
 public class AbstractCamelEditorIT {
 	
@@ -48,6 +52,14 @@ public class AbstractCamelEditorIT {
 	StatusHandler statusHandlerBeforetest;
 	
 	protected String routeContainerType;
+
+	@Rule
+	public TestRule watcher = new TestWatcher() {
+		@Override
+		protected void starting(Description description) {
+			Activator.pluginLog().logInfo("Starting test: " + description.getDisplayName());
+		}
+	};
 
 	public AbstractCamelEditorIT() {
 		super();
