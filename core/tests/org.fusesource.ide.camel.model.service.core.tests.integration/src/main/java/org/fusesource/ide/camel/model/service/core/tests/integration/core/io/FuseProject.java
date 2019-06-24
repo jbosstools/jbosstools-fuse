@@ -28,7 +28,11 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.internal.IMavenConstants;
+import org.eclipse.m2e.core.project.IProjectConfigurationManager;
+import org.eclipse.m2e.core.project.ResolverConfiguration;
+import org.fusesource.ide.camel.editor.utils.BuildAndRefreshJobWaiterUtil;
 import org.fusesource.ide.camel.model.service.core.io.CamelIOHandler;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.camel.model.service.core.tests.integration.core.CamelModelServiceIntegrationTestActivator;
@@ -91,6 +95,19 @@ public class FuseProject extends ExternalResource {
 		IFolder srcMainFolder = srcFolder.getFolder("main");
 		srcMainFolder.create(IResource.FORCE, true, new NullProgressMonitor());
 		srcMainFolder.getFolder("java").create(IResource.FORCE, true, new NullProgressMonitor());
+		
+		enableMavenNature();
+	}
+
+	private void enableMavenNature() throws CoreException {
+		ResolverConfiguration configuration = new ResolverConfiguration();
+		configuration.setResolveWorkspaceProjects(true);
+		configuration.setSelectedProfiles(""); //$NON-NLS-1$
+		new BuildAndRefreshJobWaiterUtil().waitJob(new NullProgressMonitor());
+		IProjectConfigurationManager configurationManager = MavenPlugin.getProjectConfigurationManager();
+		configurationManager.enableMavenNature(project, configuration, new NullProgressMonitor());
+		configurationManager.updateProjectConfiguration(project, new NullProgressMonitor());
+		new BuildAndRefreshJobWaiterUtil().waitJob(new NullProgressMonitor());
 	}
 
 	private static String getDummyPomContent(String type) {
