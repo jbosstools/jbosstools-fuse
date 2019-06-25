@@ -25,16 +25,13 @@ import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.graphiti.palette.IPaletteCompartmentEntry;
 import org.eclipse.graphiti.palette.IToolEntry;
 import org.eclipse.graphiti.palette.impl.ObjectCreationToolEntry;
-import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.internal.IMavenConstants;
-import org.eclipse.m2e.core.project.IMavenProjectFacade;
-import org.eclipse.m2e.core.project.IProjectConfigurationManager;
-import org.eclipse.m2e.core.project.ResolverConfiguration;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 import org.fusesource.ide.camel.editor.CamelDesignEditor;
@@ -45,7 +42,7 @@ import org.fusesource.ide.camel.editor.integration.globalconfiguration.wizards.p
 import org.fusesource.ide.camel.editor.provider.ActiveMQPaletteEntry;
 import org.fusesource.ide.camel.editor.provider.ActiveMQPaletteEntryDependenciesManager;
 import org.fusesource.ide.camel.editor.provider.ToolBehaviourProvider;
-import org.fusesource.ide.camel.editor.utils.BuildAndRefreshJobWaiterUtil;
+import org.fusesource.ide.camel.editor.utils.JobWaiterUtil;
 import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelCatalogCacheManager;
 import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelModel;
 import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
@@ -71,7 +68,6 @@ public class ToolBehaviourProviderIT {
 			+ "  <groupId>com.mycompany</groupId>\n"
 			+ "  <artifactId>testproject</artifactId>\n"
 			+ "  <version>1.0.0-SNAPSHOT</version>\n"
-			+ "  <packaging>bundle</packaging>\n"
 			+ "  <name>Some Dummy Project</name>\n"
 			+ "  <dependencies>\n"
 		    + "    <dependency>\n"
@@ -102,45 +98,38 @@ public class ToolBehaviourProviderIT {
 			+ "  </build>\n"
 			+ "</project>";
 	
-	private void initProject() throws CoreException, IOException {
+	private void initToolBehaviourProvider() throws CoreException, IOException {
 		CamelEditor camelEditor = (CamelEditor)IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), (IFile) fuseProject.createEmptyCamelFile().getResource());
 		CamelDesignEditor camelDesignEditor = camelEditor.getDesignEditor();
 		toolbehaviourprovider = (ToolBehaviourProvider)camelDesignEditor.getDiagramTypeProvider().getCurrentToolBehaviorProvider();
-		
-		ResolverConfiguration configuration = new ResolverConfiguration();
-		configuration.setResolveWorkspaceProjects(true);
-		configuration.setSelectedProfiles(""); //$NON-NLS-1$
-		new BuildAndRefreshJobWaiterUtil().waitJob(new NullProgressMonitor());
-		IProjectConfigurationManager configurationManager = MavenPlugin.getProjectConfigurationManager();
-		configurationManager.enableMavenNature(fuseProject.getProject(), configuration, new NullProgressMonitor());
-		configurationManager.updateProjectConfiguration(fuseProject.getProject(), new NullProgressMonitor());
-		
-		
-		IMavenProjectFacade projectFacade = MavenPlugin.getMavenProjectRegistry().create(fuseProject.getProject().getFile(IMavenConstants.POM_FILE_NAME), true, new NullProgressMonitor());
-		assertThat(projectFacade.getMavenProject(new NullProgressMonitor())).isNotNull();
 	}
 	
 	@Test
 	public void testPaletteEntriesfromExtensionPointsContainsAMQForKaraf() throws CoreException, IOException{
-		initProject();
+		initToolBehaviourProvider();
 		testAMQPalette(ActiveMQPaletteEntryDependenciesManager.ACTIVEMQ_CAMEL, ActiveMQPaletteEntry.CAMEL_JMS);
 	}
 	
 	@Test
 	public void testPaletteEntriesfromExtensionPointsContainsAMQForSpringBoot() throws CoreException, IOException{
-		IFile pom = fuseProject.getProject().getFile(IMavenConstants.POM_FILE_NAME);
-		pom.setContents(new ByteArrayInputStream(DUMMY_POM_CONTENT_WITH_SPRING_BOOT_DEPENDENCY.getBytes(StandardCharsets.UTF_8)), IResource.FORCE, new NullProgressMonitor());
+		usePomWithSpringBootDependency();
 		
-		initProject();
+		initToolBehaviourProvider();
 		
 		List<IToolEntry> aggregatedToolEntries = toolbehaviourprovider.getAggregatedToolEntries();
 		ensureCorrectNumberOfTool(aggregatedToolEntries, CustomPaletteEntry1.INTEGRATION_TEST_KARAF_ONLY, 0);
 		ensureCorrectNumberOfTool(aggregatedToolEntries, CustomPaletteEntry2.INTEGRATION_TEST_SPRING_BOOT_ONLY, 1);
 	}
+
+	private void usePomWithSpringBootDependency() throws CoreException {
+		IFile pom = fuseProject.getProject().getFile(IMavenConstants.POM_FILE_NAME);
+		pom.setContents(new ByteArrayInputStream(DUMMY_POM_CONTENT_WITH_SPRING_BOOT_DEPENDENCY.getBytes(StandardCharsets.UTF_8)), IResource.FORCE, new NullProgressMonitor());
+		new JobWaiterUtil(Arrays.asList(ResourcesPlugin.FAMILY_AUTO_BUILD)).waitJob(new NullProgressMonitor());
+	}
 	
 	@Test
 	public void testPaletteEntriesfromExtensionPointsValidityForKaraf() throws CoreException, IOException{
-		initProject();
+		initToolBehaviourProvider();
 		List<IToolEntry> aggregatedToolEntries = toolbehaviourprovider.getAggregatedToolEntries();
 		ensureCorrectNumberOfTool(aggregatedToolEntries, CustomPaletteEntry1.INTEGRATION_TEST_KARAF_ONLY, 1);
 		ensureCorrectNumberOfTool(aggregatedToolEntries, CustomPaletteEntry2.INTEGRATION_TEST_SPRING_BOOT_ONLY, 0);
@@ -156,17 +145,16 @@ public class ToolBehaviourProviderIT {
 	
 	@Test
 	public void testPaletteEntriesfromExtensionPointsValidityFoSpringBoot() throws CoreException, IOException{
-		IFile pom = fuseProject.getProject().getFile(IMavenConstants.POM_FILE_NAME);
-		pom.setContents(new ByteArrayInputStream(DUMMY_POM_CONTENT_WITH_SPRING_BOOT_DEPENDENCY.getBytes(StandardCharsets.UTF_8)), IResource.FORCE, new NullProgressMonitor());
+		usePomWithSpringBootDependency();
 		
-		initProject();
+		initToolBehaviourProvider();
 		
 		testAMQPalette(ActiveMQPaletteEntryDependenciesManager.ACTIVEMQ_CAMEL_STARTER, ActiveMQPaletteEntry.CAMEL_JMS_STARTER);
 	}
 	
 	@Test
 	public void testAllRoutingEIPWhichCanBePartOfRouteFlowAreAvailable() throws Exception {
-		initProject();
+		initToolBehaviourProvider();
     	CamelModel model = CamelCatalogCacheManager.getInstance().getCamelModelForProject(fuseProject.getProject());
     	Collection<Eip> eips = model.getEips();
     	
