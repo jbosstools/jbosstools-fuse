@@ -110,6 +110,7 @@ public class NewDataFormatWizardIT {
 	@Test
 	public void testCreationWithDeps() throws CoreException, IOException, InterruptedException, InvocationTargetException {
 		final String id = dataFormat.getName() + "-id2";
+		Activator.pluginLog().logInfo("NewDataFormatWizardIT.testCreationWithDeps for: " + dataFormat.getName());
 
 		IProject project = fuseProject.getProject();
 		final CamelFile camelFile = fuseProject.createEmptyCamelFile();
