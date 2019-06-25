@@ -41,10 +41,14 @@ import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.camel.model.service.core.tests.integration.core.io.FuseProject;
 import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
 import org.fusesource.ide.camel.model.service.core.util.CamelMavenUtils;
+import org.fusesource.ide.camel.tests.util.Activator;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestRule;
+import org.junit.rules.TestWatcher;
+import org.junit.runner.Description;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameter;
@@ -57,6 +61,14 @@ import org.w3c.dom.Element;
  */
 @RunWith(Parameterized.class)
 public class NewDataFormatWizardIT {
+	
+	@Rule
+	public TestRule watcher = new TestWatcher() {
+		@Override
+		protected void starting(Description description) {
+			Activator.pluginLog().logInfo("Starting test: " + description.getDisplayName());
+		}
+	};
 
 	@Parameter
 	public String camelVersion;
