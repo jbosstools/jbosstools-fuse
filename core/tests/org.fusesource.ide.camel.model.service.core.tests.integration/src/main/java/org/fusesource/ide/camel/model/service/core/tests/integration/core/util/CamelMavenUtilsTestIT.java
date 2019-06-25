@@ -16,12 +16,15 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.maven.model.Repository;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.fusesource.ide.camel.editor.utils.JobWaiterUtil;
 import org.fusesource.ide.camel.model.service.core.tests.integration.core.io.FuseProject;
 import org.fusesource.ide.camel.model.service.core.util.CamelMavenUtils;
 import org.junit.Before;
@@ -37,29 +40,31 @@ public class CamelMavenUtilsTestIT {
 	private static final String POM_NAME = "pomWithVariableNameInVersion.xml";
 	
 	@Rule
-	public FuseProject fuseProject = new FuseProject("External Files");
+	public FuseProject fuseProject = new FuseProject(CamelMavenUtilsTestIT.class.getName());
 
 	private IFile pomFileInProject;
 
 	@Before
-	public void setup() throws CoreException {
+	public void setup() {
 		pomFileInProject = fuseProject.getProject().getFile("pom.xml");
-		pomFileInProject.delete(true, null);
 	}
 
 	@Test
 	public void testUretrieveCamelVersionFromMaven() throws CoreException {
 		InputStream inputStream = CamelMavenUtilsTestIT.class.getClassLoader().getResourceAsStream("/" + POM_NAME);
-		pomFileInProject.create(inputStream, true, new NullProgressMonitor());
+		pomFileInProject.setContents(inputStream, true, true, new NullProgressMonitor());
 		
-		String version = new CamelMavenUtils().getCamelVersionFromMaven(fuseProject.getProject());
+		new JobWaiterUtil(Arrays.asList(ResourcesPlugin.FAMILY_AUTO_BUILD)).waitJob(new NullProgressMonitor());
+		
+		String version = new CamelMavenUtils().getCamelVersionFromMaven(fuseProject.getProject(), false);
 		assertNotNull("The retrieved camel version should not be null.", version);
 		assertNotEquals("The retrieved camel version should not resolve to the variable name.", "${camel.version}", version);
 		assertEquals("The retrieved version doesn't match the defined value in the pom file.", "2.19.0", version);
 	}
 	
 	@Test
-	public void testEmptyRepositoriesWhenPomMissing() {
+	public void testEmptyRepositoriesWhenPomMissing() throws CoreException {
+		pomFileInProject.delete(true, null);
 		List<Repository> repositories = new CamelMavenUtils().getRepositories(fuseProject.getProject(), new NullProgressMonitor());
 		assertThat(repositories).isEmpty();
 	}
