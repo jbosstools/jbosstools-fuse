@@ -43,6 +43,7 @@ import org.eclipse.debug.core.model.IDebugTarget;
 import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.m2e.core.internal.IMavenConstants;
+import org.fusesource.ide.camel.editor.utils.BuildAndRefreshJobWaiterUtil;
 import org.fusesource.ide.camel.tests.util.Activator;
 import org.fusesource.ide.camel.tests.util.MavenProjectHelper;
 import org.fusesource.ide.launcher.debug.model.CamelDebugFacade;
@@ -78,6 +79,8 @@ public class ProjectWithDebugAvailableDeployedHelper {
 		camelContextFileFolder.mkdirs();
 		Files.copy(RemoteCamelLaunchConfigurationDelegateOverJMXIT.class.getResourceAsStream("/camel-context.xml"), new File(camelContextFileFolder, "camel-context.xml").toPath(), StandardCopyOption.REPLACE_EXISTING);
 		project = new MavenProjectHelper().importProjects(projectFolder, new String[]{POM_XML})[0];
+		//FIXME: setting the wait here but it might be a best place to put in ExecutePomAction, not doing t right now due to high risk of deadlock
+		new BuildAndRefreshJobWaiterUtil().waitJob(new NullProgressMonitor());
 		camelFile = project.getFile("src/main/resources/META-INF/spring/camel-context.xml");
 		launchCamelRoute(project);
 	}
