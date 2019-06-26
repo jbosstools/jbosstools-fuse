@@ -28,7 +28,6 @@ import org.junit.Test;
  */
 public class SwitchCamelVersionIT {
 	
-	private static final String INVALID_VERSION = "2.20.756a";
 	private static final String VALID_VERSION = "2.20.1";
 	
 	@Rule
@@ -42,17 +41,6 @@ public class SwitchCamelVersionIT {
 			new BuildAndRefreshJobWaiterUtil().waitJob(new NullProgressMonitor());
 			fuseProject.getProject().delete(true, new NullProgressMonitor());
 		}
-	}
-
-	@Test
-	public void testSetInvalidCamelVersion() throws Exception {
-		IProject project = fuseProject.getProject();
-		ChangeCamelVersionJob job = new ChangeCamelVersionJob(project, INVALID_VERSION);
-		job.schedule();
-		job.join();
-		
-		String newCamelVersion = utils.getCamelVersionFromMaven(project, false);
-		assertThat(newCamelVersion).isEqualTo(INVALID_VERSION);
 	}
 	
 	@Test
