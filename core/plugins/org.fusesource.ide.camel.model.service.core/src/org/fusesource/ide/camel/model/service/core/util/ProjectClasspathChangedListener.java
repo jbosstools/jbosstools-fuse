@@ -142,7 +142,7 @@ public class ProjectClasspathChangedListener implements IElementChangedListener,
 	private void notifyClasspathChanged(IJavaProject project) {
 		// refresh catalog if needed
 		IProject prj = project.getProject();
-		String camelVersion = new CamelMavenUtils().getCamelVersionFromMaven(prj);
+		String camelVersion = new CamelMavenUtils().getCamelVersionFromMaven(prj, false);
 		if (camelVersion != null) {
 			boolean camelVersionChanged = true;
 			String oldCamelVersion = knownProjects.get(prj);
