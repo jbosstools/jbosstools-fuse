@@ -21,6 +21,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.fusesource.ide.camel.editor.utils.BuildAndRefreshJobWaiterUtil;
 import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
 import org.junit.Test;
 
@@ -43,25 +44,26 @@ public class XMLCamelRoutesValidatorCheckIdIT extends AbstractXMLCamelRouteValid
 	
 	@Test
 	public void testValidateWithSameComponentIdAndComponentDefinitionIdAndNotSpecifyinValueForFuseOlderThan220_ReportsError() throws Exception {
-		changeProjectCamelVersionTo("2.19.4");
+		changeProjectCamelVersionTo(CamelCatalogUtils.CAMEL_VERSION_LATEST_COMMUNITY, "2.19.4");
 		
 		testValidateCreatesAValidationMarker("routeWithSameComponentIdAndComponentDefinitionId.xml");
+		
+		changeProjectCamelVersionTo("2.19.4", CamelCatalogUtils.CAMEL_VERSION_LATEST_COMMUNITY);
 	}
 
-	private void changeProjectCamelVersionTo(String camelVersion) throws IOException, CoreException {
+	private void changeProjectCamelVersionTo(String currentCamelVersion, String newCamelVersion) throws IOException, CoreException {
 		IFile pomIfile = fuseProject.getProject().getFile("pom.xml");
 		Path targetFile = pomIfile.getLocation().toFile().toPath();
 
 		try (Stream<String> lines = Files.lines(targetFile)) {
 			List<String> replaced = lines
-					.map(line-> {
-						return line.replaceAll(CamelCatalogUtils.CAMEL_VERSION_LATEST_COMMUNITY, camelVersion);
-					})
+					.map(line-> line.replaceAll(currentCamelVersion, newCamelVersion))
 					.collect(Collectors.toList());
 			Files.write(targetFile, replaced);
 		}
 		
 		pomIfile.refreshLocal(IResource.DEPTH_ZERO, new NullProgressMonitor());
+		new BuildAndRefreshJobWaiterUtil().waitJob(new NullProgressMonitor());
 	}
 	
 	@Test

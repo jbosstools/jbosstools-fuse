@@ -29,17 +29,37 @@ import org.fusesource.ide.camel.model.service.core.io.CamelIOHandler;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.camel.model.service.core.tests.integration.core.io.FuseProject;
 import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
-import org.junit.Rule;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 
 public class AbstractXMLCamelRouteValidorTestHelper {
 
-	@Rule
-	public FuseProject fuseProject = new FuseProject(getClass().getSimpleName(), CamelCatalogUtils.CAMEL_VERSION_LATEST_COMMUNITY);
+	protected static FuseProject fuseProject;
 	private CamelIOHandler marshaller = new CamelIOHandler();
 	private XMLCamelRoutesValidator xmlCamelRoutesValidator = new XMLCamelRoutesValidator();
+	private IFile camelFileUnderTest;
 
 	public AbstractXMLCamelRouteValidorTestHelper() {
 		super();
+	}
+	
+	@BeforeClass
+	public static void beforeClass() throws Throwable {
+		fuseProject = new FuseProject(AbstractXMLCamelRouteValidorTestHelper.class.getSimpleName(), CamelCatalogUtils.CAMEL_VERSION_LATEST_COMMUNITY);
+		fuseProject.before();
+	}
+	
+	@AfterClass
+	public static void afterClass() {
+		fuseProject.after();
+	}
+	
+	@After
+	public void tearDown() throws CoreException {
+		if (camelFileUnderTest != null && camelFileUnderTest.exists()) {
+			camelFileUnderTest.delete(true, new NullProgressMonitor());
+		}
 	}
 
 	protected CamelFile loadRoute(String name) throws IOException, CoreException {
@@ -49,10 +69,10 @@ public class AbstractXMLCamelRouteValidorTestHelper {
 		Files.copy(inputStream, baseFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
 	
 		inputStream = getClass().getClassLoader().getResourceAsStream("/" + name);
-		IFile fileInProject = fuseProject.getProject().getFile(name);
-		fileInProject.create(inputStream, true, new NullProgressMonitor());
+		camelFileUnderTest = fuseProject.getProject().getFile(name);
+		camelFileUnderTest.create(inputStream, true, new NullProgressMonitor());
 	
-		return marshaller.loadCamelModel(fileInProject, new NullProgressMonitor());
+		return marshaller.loadCamelModel(camelFileUnderTest, new NullProgressMonitor());
 	}
 	
 	protected void testValidateCreatesAValidationMarker(String name) throws CoreException, IOException {
