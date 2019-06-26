@@ -35,7 +35,9 @@ import org.fusesource.ide.camel.editor.utils.CamelUtils;
 import org.fusesource.ide.camel.model.service.core.tests.integration.core.io.FuseProject;
 import org.fusesource.ide.camel.tests.util.Activator;
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.rules.TestRule;
 import org.junit.rules.TestWatcher;
@@ -43,13 +45,13 @@ import org.junit.runner.Description;
 
 public class AbstractCamelEditorIT {
 	
-	@Rule
-	public FuseProject fuseProject = new FuseProject(getClass().getName());
+	protected static FuseProject fuseProject;
+	protected IFile camelFileUsedInTest;
 	
-	boolean safeRunnableIgnoreErrorStateBeforeTests;
-	protected boolean statusHandlerCalled = false;
+	static boolean safeRunnableIgnoreErrorStateBeforeTests;
+	protected static boolean statusHandlerCalled = false;
 
-	StatusHandler statusHandlerBeforetest;
+	static StatusHandler statusHandlerBeforetest;
 	
 	protected String routeContainerType;
 
@@ -61,17 +63,15 @@ public class AbstractCamelEditorIT {
 		}
 	};
 
+
 	public AbstractCamelEditorIT() {
 		super();
 	}
-
-	@Before
-	public void setup() throws Exception {
-		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-		IWorkbenchPart welcomePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActivePart();
-		welcomePage.dispose();
-		page.closeAllEditors(false);
-		PlatformUI.getWorkbench().showPerspective(FusePerspective.ID, page.getWorkbenchWindow());
+	
+	@BeforeClass
+	public static void beforeClass() throws Throwable {
+		fuseProject = new FuseProject(AbstractCamelEditorIT.class.getName());
+		fuseProject.before();
 		safeRunnableIgnoreErrorStateBeforeTests = SafeRunnable.getIgnoreErrors();
 		SafeRunnable.setIgnoreErrors(false);
 		statusHandlerBeforetest = Policy.getStatusHandler();
@@ -84,25 +84,43 @@ public class AbstractCamelEditorIT {
 			}
 		});
 	}
+	
+	@AfterClass
+	public static void afterClass() {
+		fuseProject.after();
+		SafeRunnable.setIgnoreErrors(safeRunnableIgnoreErrorStateBeforeTests);
+		Policy.setStatusHandler(statusHandlerBeforetest);
+	}
+	
+	@Before
+	public void setup() throws Exception {
+		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+		IWorkbenchPart welcomePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActivePart();
+		welcomePage.dispose();
+		page.closeAllEditors(false);
+		PlatformUI.getWorkbench().showPerspective(FusePerspective.ID, page.getWorkbenchWindow());
+	}
 
 	@After
 	public void tearDown() throws Exception {
 		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 		page.closeAllEditors(false);
-		SafeRunnable.setIgnoreErrors(safeRunnableIgnoreErrorStateBeforeTests);
-		Policy.setStatusHandler(statusHandlerBeforetest);
+		if (camelFileUsedInTest != null && camelFileUsedInTest.exists()) {
+			camelFileUsedInTest.delete(true, new NullProgressMonitor());
+			camelFileUsedInTest = null;
+		}
 	}
 
 	protected IEditorPart openFileInEditor(String filePathPattern) throws Exception {
 		String filePath = computeFilePathoUse(filePathPattern);
 		InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream(filePath);
-		final IFile fileWithoutContext = fuseProject.getProject().getFile(filePath.startsWith("/") ? filePath.substring(1) : filePath);
-		fileWithoutContext.create(inputStream, true, new NullProgressMonitor());
+		camelFileUsedInTest = fuseProject.getProject().getFile(filePath.startsWith("/") ? filePath.substring(1) : filePath);
+		camelFileUsedInTest.create(inputStream, true, new NullProgressMonitor());
 		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 		page.closeAllPerspectives(false, false);
 		PlatformUI.getWorkbench().showPerspective(FusePerspective.ID, page.getWorkbenchWindow());
 		readAndDispatch(20);
-		IEditorPart editor = IDE.openEditor(page, fileWithoutContext, CamelUtils.CAMEL_EDITOR_ID);
+		IEditorPart editor = IDE.openEditor(page, camelFileUsedInTest, CamelUtils.CAMEL_EDITOR_ID);
 		page.activate(editor);
 		editor.setFocus();
 		readAndDispatch(20);

@@ -14,7 +14,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.InputStream;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IViewPart;
@@ -73,8 +72,8 @@ public class CamelEditorCheckOpeningInSpecialCasesIT extends AbstractCamelEditor
 	private IEditorPart openFileInEditorWithOutlineViewOpened(String filePathPattern) throws Exception {
 		String filePath = computeFilePathoUse(filePathPattern);
 		InputStream inputStream = CamelEditorIT.class.getClassLoader().getResourceAsStream(filePath);
-		final IFile fileWithoutContext = fuseProject.getProject().getFile(filePath.startsWith("/") ? filePath.substring(1) : filePath);
-		fileWithoutContext.create(inputStream, true, new NullProgressMonitor());
+		camelFileUsedInTest = fuseProject.getProject().getFile(filePath.startsWith("/") ? filePath.substring(1) : filePath);
+		camelFileUsedInTest.create(inputStream, true, new NullProgressMonitor());
 		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 		page.closeAllPerspectives(false, false);
 		PlatformUI.getWorkbench().showPerspective(FusePerspective.ID, page.getWorkbenchWindow());
@@ -84,7 +83,7 @@ public class CamelEditorCheckOpeningInSpecialCasesIT extends AbstractCamelEditor
 		readAndDispatch(20);
 		//Workaround to ignore Widget is disposed for JMX Navigator, issue fixed in JBoss Tools 10.0 (by side effect of a larger modification)
 		statusHandlerCalled = false;
-		IEditorPart editor = IDE.openEditor(page, fileWithoutContext, true);
+		IEditorPart editor = IDE.openEditor(page, camelFileUsedInTest, true);
 		page.activate(editor);
 		editor.setFocus();
 		readAndDispatch(20);
