@@ -56,7 +56,9 @@ public class CamelVirtualFolderIT {
 	@Test
 	public void testCamelVirtualFolderIgnoresCamelFilesInTargetFolder() throws Exception {
 		IFolder targetFolder = fuseProject.getProject().getFolder("target");
-		targetFolder.create(true, true, new NullProgressMonitor());
+		if(!targetFolder.exists()) {
+			targetFolder.create(true, true, new NullProgressMonitor());
+		}
 		IFile camelFileInsideTargetFolder = targetFolder.getFile("emptyCamelFileInTargetFolder.xml");
 		fuseProject.createEmptyCamelFile(camelFileInsideTargetFolder);
 		
