@@ -63,7 +63,7 @@ public class NewCamelTestWizardIT {
 		newTypeWizardPage.setTypeName("UniqueTestClassNameTest", false);
 		assertThat(newCamelTestWizard.performFinish()).isTrue();
 		
-		assertThat(project.getFile(new Path("UniqueTestClassNameTest.java")).getLocation().toFile()).exists();
+		assertThat(project.getFile(new Path("src/test/java/UniqueTestClassNameTest.java")).getLocation().toFile()).exists();
 	}
 
 }

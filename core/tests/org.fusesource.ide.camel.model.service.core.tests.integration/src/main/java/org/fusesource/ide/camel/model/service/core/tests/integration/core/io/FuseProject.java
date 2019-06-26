@@ -96,6 +96,10 @@ public class FuseProject extends ExternalResource {
 		srcMainFolder.create(IResource.FORCE, true, new NullProgressMonitor());
 		srcMainFolder.getFolder("java").create(IResource.FORCE, true, new NullProgressMonitor());
 		
+		IFolder srcTestFolder = srcFolder.getFolder("test");
+		srcTestFolder.create(IResource.FORCE, true, new NullProgressMonitor());
+		srcTestFolder.getFolder("java").create(IResource.FORCE, true, new NullProgressMonitor());
+		
 		enableMavenNature();
 	}
 

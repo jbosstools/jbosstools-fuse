@@ -949,7 +949,7 @@ public class NewCamelTestWizardPageOne extends NewTypeWizardPage {
 	public void init(IStructuredSelection selection) {
 		IJavaElement elem = getInitialJavaElement(selection);
 		IJavaProject jproject = elem.getJavaProject();
-		IPackageFragmentRoot testRoot = null;
+		IPackageFragmentRoot packageFragmentRoot = null;
 
         if (selection != null && !selection.isEmpty()) {
 			Object selectedElement = selection.getFirstElement();
@@ -959,7 +959,7 @@ public class NewCamelTestWizardPageOne extends NewTypeWizardPage {
 				ifile = (IFile) selectedElement;
 			} else if (selectedElement instanceof IAdaptable) {
 				IAdaptable adaptable = (IAdaptable) selectedElement;
-				ifile = (IFile) adaptable.getAdapter(IFile.class);
+				ifile = adaptable.getAdapter(IFile.class);
 			}
 
 			if (ifile != null) {
@@ -969,17 +969,9 @@ public class NewCamelTestWizardPageOne extends NewTypeWizardPage {
             // now we determine the container for the test classes
 			if (jproject != null && jproject.exists()) {
 				try {
-					IPackageFragmentRoot[] roots= jproject.getPackageFragmentRoots();
-					for (int i= 0; i < roots.length; i++) {
-						if (roots[i].getKind() == IPackageFragmentRoot.K_SOURCE) {
-							if (roots[i].getPath().toFile().getPath().contains(String.format("src%stest%sjava", File.separator, File.separator))) {
-								testRoot = roots[i];
-								break;
-							} else if (roots[i].getPath().toFile().getPath().contains(String.format("src%stest%sscala", File.separator, File.separator))) {
-								testRoot = roots[i];
-								// we will prefer the src/test/java folder, so we don't break here and search for it
-							}
-						}
+					packageFragmentRoot = searchPackageFragmentRoot(jproject, "test");
+					if (packageFragmentRoot == null) {
+						packageFragmentRoot = searchPackageFragmentRoot(jproject, "main");
 					}
 				} catch (Exception ex) {
 					Activator.getLogger().error(ex);
@@ -993,9 +985,9 @@ public class NewCamelTestWizardPageOne extends NewTypeWizardPage {
 			initContainerPage(elem);
 
 			// if we found a suitable test class container then we set it here
-			if (testRoot != null) {
+			if (packageFragmentRoot != null) {
 				// set the container correctly
-				setPackageFragmentRoot(testRoot, true);
+				setPackageFragmentRoot(packageFragmentRoot, true);
 			}
 
 			IJavaProject project = elem.getJavaProject();
@@ -1008,7 +1000,7 @@ public class NewCamelTestWizardPageOne extends NewTypeWizardPage {
 			} else {
 				File testFolderFile = project.getProject().getParent().getRawLocation().append(getPackageFragmentRoot().getPath().makeRelative()).toFile();
 				File f = getBasePackage(testFolderFile);
-				if (f != null && testRoot != null) {
+				if (f != null && packageFragmentRoot != null) {
 					IPath p = new Path(f.getPath());
 					p = p.makeRelativeTo(project.getProject().getParent().getRawLocation().append(getPackageFragmentRoot().getPath().makeRelative()));
 					String name = "";
@@ -1021,7 +1013,7 @@ public class NewCamelTestWizardPageOne extends NewTypeWizardPage {
 						name += tok;
 					}
 					try {
-						IPackageFragment pf = testRoot.createPackageFragment(name, true, new NullProgressMonitor());
+						IPackageFragment pf = packageFragmentRoot.createPackageFragment(name, true, new NullProgressMonitor());
 						setPackageFragment(pf, true);
 					} catch (Exception ex) {
 						Activator.getLogger().error(ex);
@@ -1053,6 +1045,23 @@ public class NewCamelTestWizardPageOne extends NewTypeWizardPage {
 		}
 		setJUnit4(true, true);
 		updateStatus(getStatusList());
+	}
+
+	private IPackageFragmentRoot searchPackageFragmentRoot(IJavaProject jproject, String sourceFolderName) throws JavaModelException {
+		IPackageFragmentRoot[] roots= jproject.getPackageFragmentRoots();
+		IPackageFragmentRoot packageFragmentRoot = null;
+		for (int i= 0; i < roots.length; i++) {
+			if (roots[i].getKind() == IPackageFragmentRoot.K_SOURCE) {
+				if (roots[i].getPath().toFile().getPath().contains(String.format("src%s"+sourceFolderName+"%sjava", File.separator, File.separator))) {
+					packageFragmentRoot = roots[i];
+					break;
+				} else if (roots[i].getPath().toFile().getPath().contains(String.format("src%s"+sourceFolderName+"%sscala", File.separator, File.separator))) {
+					packageFragmentRoot = roots[i];
+					// we will prefer the src/test/java folder, so we don't break here and search for it
+				}
+			}
+		}
+		return packageFragmentRoot;
 	}
 
 	private File getBasePackage(File f) {
