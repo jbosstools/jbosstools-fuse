@@ -21,6 +21,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.m2e.core.internal.IMavenConstants;
+import org.fusesource.ide.camel.editor.utils.BuildAndRefreshJobWaiterUtil;
 import org.fusesource.ide.camel.model.service.core.tests.integration.core.io.FuseProject;
 import org.junit.Before;
 import org.junit.Rule;
@@ -237,6 +238,7 @@ public class ImportExportPackageUpdaterForPomIT {
 	
 	private void updatePom(String pom, String expectedPom, String sourceClassName, String targetClassName) throws Exception {
 		pomIFile.create(new ByteArrayInputStream(pom.getBytes(StandardCharsets.UTF_8)), true, new NullProgressMonitor());
+		new BuildAndRefreshJobWaiterUtil().waitJob(new NullProgressMonitor());
 		new ImportExportPackageUpdater(project, sourceClassName, targetClassName).updatePackageImports(new NullProgressMonitor());
 		InputStream pomContentsToCheck = pomIFile.getContents();
 		char[] buf = new char[pomContentsToCheck.available()];
