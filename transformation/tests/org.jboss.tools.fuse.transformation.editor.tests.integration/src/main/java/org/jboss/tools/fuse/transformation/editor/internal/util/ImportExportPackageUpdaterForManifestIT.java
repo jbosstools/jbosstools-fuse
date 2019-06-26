@@ -30,6 +30,7 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.launching.JavaRuntime;
 import org.eclipse.m2e.core.internal.IMavenConstants;
 import org.eclipse.pde.internal.core.bundle.WorkspaceBundleModel;
+import org.fusesource.ide.camel.editor.utils.BuildAndRefreshJobWaiterUtil;
 import org.fusesource.ide.camel.model.service.core.tests.integration.core.io.FuseProject;
 import org.junit.Before;
 import org.junit.Rule;
@@ -56,7 +57,13 @@ public class ImportExportPackageUpdaterForManifestIT {
 			"	  </dependency>\n" + 
 			"  </dependencies>" +
 			"  <build>\n" +
-			"    <plugins>\n";
+			"    <plugins>\n" +
+			"      <plugin>\n"+
+			"        <groupId>org.apache.felix</groupId>\n"+
+			"        <artifactId>maven-bundle-plugin</artifactId>\n"+
+			"        <version>4.2.0</version>\n"+
+			"        <extensions>true</extensions>\n"+
+			"      </plugin>";
 
 	private static final String POM_END = 
 			"    </plugins>\n" +
@@ -89,6 +96,7 @@ public class ImportExportPackageUpdaterForManifestIT {
 	@Test
 	public void testImportPackageELAddedForFuseBetween63And70() throws CoreException {
 		pomIFile.setContents(new ByteArrayInputStream((POM_START + POM_END).replaceAll("2.21.0", "2.17.0").getBytes(StandardCharsets.UTF_8)), IResource.FORCE, new NullProgressMonitor());
+		new BuildAndRefreshJobWaiterUtil().waitJob(new NullProgressMonitor());
 		
 		new ImportExportPackageUpdater(project, null, null).updatePackageImports(new NullProgressMonitor());
 		
