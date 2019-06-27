@@ -44,7 +44,7 @@ public class CamelEditorMoveIT extends AbstractCamelEditorIT {
 	public CamelEditorMoveIT(String routeContainerType) {
 		this.routeContainerType = routeContainerType;
 	}
-	
+
 	@Test
 	public void testMoveInsideSameContainerNotAllowed() throws Exception {
 		IEditorPart openEditorOnFileStore = openFileInEditor("/moveInRoute");
