@@ -50,7 +50,7 @@ public class SwitchCamelVersionIT {
 		job.schedule();
 		job.join();
 		
-		//FIXME: the wait of buidl job should be preferably handled in ChangeCamelversionJob or CamelMavenUtils but as it is not a regression, wait in test fo rnow
+		//FIXME: the wait of build job should be preferably handled in ChangeCamelversionJob or CamelMavenUtils but as it is not a regression, wait in test fo rnow
 		new BuildAndRefreshJobWaiterUtil().waitJob(new NullProgressMonitor());
 		
 		String newCamelVersion = utils.getCamelVersionFromMaven(project, false);
