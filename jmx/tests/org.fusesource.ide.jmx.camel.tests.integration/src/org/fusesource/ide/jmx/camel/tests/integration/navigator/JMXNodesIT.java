@@ -21,6 +21,8 @@ import java.util.Set;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.debug.internal.ui.DebugUIPlugin;
+import org.eclipse.debug.internal.ui.IInternalDebugUIConstants;
 import org.fusesource.ide.foundation.ui.tree.NodeSupport;
 import org.fusesource.ide.jmx.camel.jmx.content.navigator.providers.CamelNodeContentProvider;
 import org.fusesource.ide.jmx.camel.navigator.CamelContextNode;
@@ -46,14 +48,17 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
-@Ignore("Ignore the test class due to potential dialog poping up blocking release, only the test is affected")
 public class JMXNodesIT {
 
 	private static ProjectWithDebugAvailableDeployedHelper projectWithDebugAvailableDeployedHelper;
+	private static String initialSwitchPerspectiveValue;
 	private Set<DefaultConnectionWrapper> jmxConnections = new HashSet<>();
 	
 	@BeforeClass
 	public static void beforeClass() throws Exception {
+		initialSwitchPerspectiveValue = DebugUIPlugin.getDefault().getPreferenceStore().getString(IInternalDebugUIConstants.PREF_SWITCH_TO_PERSPECTIVE);
+		DebugUIPlugin.getDefault().getPreferenceStore().setValue(IInternalDebugUIConstants.PREF_SWITCH_TO_PERSPECTIVE, "always");
+		
 		projectWithDebugAvailableDeployedHelper = new ProjectWithDebugAvailableDeployedHelper(JMXNodesIT.class.getSimpleName());
 		projectWithDebugAvailableDeployedHelper.start();
 	}
@@ -61,6 +66,7 @@ public class JMXNodesIT {
 	@AfterClass
 	public static void afterClass() throws Exception {
 		projectWithDebugAvailableDeployedHelper.clean();
+		DebugUIPlugin.getDefault().getPreferenceStore().setValue(IInternalDebugUIConstants.PREF_SWITCH_TO_PERSPECTIVE, initialSwitchPerspectiveValue);
 	}
 	
 	@Before
