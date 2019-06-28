@@ -600,9 +600,13 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 			value = OFF; // set default 
 		}
 		if (control instanceof Text) {
-			((Text)control).setText(value);
+			if (!value.equals(((Text)control).getText())) {
+				((Text)control).setText(value);
+			}
 		} else if (control instanceof Combo) {
-			((Combo)control).setText(value);
+			if (!value.equals(((Combo)control).getText())) {
+				((Combo)control).setText(value);
+			}
 		}
 	}
 	
