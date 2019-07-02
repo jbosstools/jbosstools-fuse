@@ -194,8 +194,15 @@
          version="0.0.0"
          unpack="false"/>
          
-    <plugin
+   <plugin
          id="org.fusesource.ide.camel.model.service.impl.v2210fuse730078redhat00001"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.fusesource.ide.camel.model.service.impl.v2210fuse731003redhat00003"
          download-size="0"
          install-size="0"
          version="0.0.0"
