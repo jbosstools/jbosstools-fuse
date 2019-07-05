@@ -13,7 +13,6 @@ package org.fusesource.ide.jmx.camel.tests.integration.navigator;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -21,8 +20,6 @@ import java.util.Set;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.debug.internal.ui.DebugUIPlugin;
-import org.eclipse.debug.internal.ui.IInternalDebugUIConstants;
 import org.fusesource.ide.foundation.ui.tree.NodeSupport;
 import org.fusesource.ide.jmx.camel.jmx.content.navigator.providers.CamelNodeContentProvider;
 import org.fusesource.ide.jmx.camel.navigator.CamelContextNode;
@@ -45,20 +42,15 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class JMXNodesIT {
 
 	private static ProjectWithDebugAvailableDeployedHelper projectWithDebugAvailableDeployedHelper;
-	private static String initialSwitchPerspectiveValue;
 	private Set<DefaultConnectionWrapper> jmxConnections = new HashSet<>();
 	
 	@BeforeClass
 	public static void beforeClass() throws Exception {
-		initialSwitchPerspectiveValue = DebugUIPlugin.getDefault().getPreferenceStore().getString(IInternalDebugUIConstants.PREF_SWITCH_TO_PERSPECTIVE);
-		DebugUIPlugin.getDefault().getPreferenceStore().setValue(IInternalDebugUIConstants.PREF_SWITCH_TO_PERSPECTIVE, "always");
-		
 		projectWithDebugAvailableDeployedHelper = new ProjectWithDebugAvailableDeployedHelper(JMXNodesIT.class.getSimpleName());
 		projectWithDebugAvailableDeployedHelper.start();
 	}
@@ -66,7 +58,6 @@ public class JMXNodesIT {
 	@AfterClass
 	public static void afterClass() throws Exception {
 		projectWithDebugAvailableDeployedHelper.clean();
-		DebugUIPlugin.getDefault().getPreferenceStore().setValue(IInternalDebugUIConstants.PREF_SWITCH_TO_PERSPECTIVE, initialSwitchPerspectiveValue);
 	}
 	
 	@Before
@@ -166,7 +157,7 @@ public class JMXNodesIT {
 		assertThat(nodeAfterRefresh != node).isTrue();
 	}
 	
-	private DefaultConnectionWrapper initializeConnection(String connectioName) throws MalformedURLException, IOException, CoreException {
+	private DefaultConnectionWrapper initializeConnection(String connectioName) throws IOException, CoreException {
 		MBeanServerConnectionDescriptor descriptor = new MBeanServerConnectionDescriptor(connectioName, ICamelDebugConstants.DEFAULT_JMX_URI, null, null);
 		DefaultConnectionWrapper jmxConnection = new DefaultConnectionWrapper(descriptor);
 		IConnectionProvider provider = ExtensionManager.getProvider(DefaultConnectionProvider.PROVIDER_ID);

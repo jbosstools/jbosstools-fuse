@@ -41,6 +41,8 @@ import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.debug.core.model.IDebugTarget;
 import org.eclipse.debug.core.model.IProcess;
+import org.eclipse.debug.internal.ui.DebugUIPlugin;
+import org.eclipse.debug.internal.ui.IInternalDebugUIConstants;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.m2e.core.internal.IMavenConstants;
 import org.fusesource.ide.camel.editor.utils.BuildAndRefreshJobWaiterUtil;
@@ -57,6 +59,7 @@ public class ProjectWithDebugAvailableDeployedHelper {
 	
 	private static final String POM_XML = IMavenConstants.POM_FILE_NAME;
 	
+	private String initialSwitchPerspectiveValue;
 	private boolean deploymentFinished;
 	private boolean isDeploymentOk;
 	private ILaunch launchUsedToInitialize;
@@ -70,6 +73,9 @@ public class ProjectWithDebugAvailableDeployedHelper {
 	}
 
 	public void start() throws IOException, CoreException, MalformedObjectNameException, InterruptedException {
+		initialSwitchPerspectiveValue = DebugUIPlugin.getDefault().getPreferenceStore().getString(IInternalDebugUIConstants.PREF_SWITCH_TO_PERSPECTIVE);
+		DebugUIPlugin.getDefault().getPreferenceStore().setValue(IInternalDebugUIConstants.PREF_SWITCH_TO_PERSPECTIVE, "always");
+		
 		File projectFolder = new File(ResourcesPlugin.getWorkspace().getRoot().getLocation().toFile(), projectNameAfterImport);
 		projectFolder.mkdirs();
 		File pomFile = new File(projectFolder, POM_XML);
@@ -102,6 +108,7 @@ public class ProjectWithDebugAvailableDeployedHelper {
 			}
 		}
 		project.delete(true, new NullProgressMonitor());
+		DebugUIPlugin.getDefault().getPreferenceStore().setValue(IInternalDebugUIConstants.PREF_SWITCH_TO_PERSPECTIVE, initialSwitchPerspectiveValue);
 	}
 	
 	private void launchCamelRoute(IProject project) throws MalformedObjectNameException, InterruptedException, DebugException {

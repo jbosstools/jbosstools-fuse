@@ -19,8 +19,6 @@ import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfigurationType;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.core.ILaunchManager;
-import org.eclipse.debug.internal.ui.DebugUIPlugin;
-import org.eclipse.debug.internal.ui.IInternalDebugUIConstants;
 import org.fusesource.ide.camel.tests.util.MasterPasswordDisabler;
 import org.fusesource.ide.launcher.remote.debug.RemoteCamelLaunchConfigurationDelegate;
 import org.fusesource.ide.launcher.run.util.CamelContextLaunchConfigConstants;
@@ -35,15 +33,11 @@ public abstract class AbstractRemoteCamelLaunchConfigurationDelegate {
 	private IProject project;
 	private ILaunch remoteDebuglaunch;
 	private MasterPasswordDisabler masterPasswordDisabler;
-	private String initialSwitchPerspectiveValue;
 	
 	@Before
 	public void setup() throws Exception {
 		masterPasswordDisabler = new MasterPasswordDisabler();
 		masterPasswordDisabler.setup();
-		
-		initialSwitchPerspectiveValue = DebugUIPlugin.getDefault().getPreferenceStore().getString(IInternalDebugUIConstants.PREF_SWITCH_TO_PERSPECTIVE);
-		DebugUIPlugin.getDefault().getPreferenceStore().setValue(IInternalDebugUIConstants.PREF_SWITCH_TO_PERSPECTIVE, "always");
 		
 		projectWithDebugAvailableDeployedHelper = createProjectHelper();
 		projectWithDebugAvailableDeployedHelper.start();
@@ -63,7 +57,6 @@ public abstract class AbstractRemoteCamelLaunchConfigurationDelegate {
 		}
 		projectWithDebugAvailableDeployedHelper.clean();
 		masterPasswordDisabler.tearDown();
-		DebugUIPlugin.getDefault().getPreferenceStore().setValue(IInternalDebugUIConstants.PREF_SWITCH_TO_PERSPECTIVE, initialSwitchPerspectiveValue);
 	}
 	
 	@Test
