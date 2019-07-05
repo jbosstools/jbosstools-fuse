@@ -164,9 +164,6 @@ public class CamelModelPatcher {
 		applyFixToComponent(loadedModel, "micrometer", "micrometer:metricsType:meterName", "micrometer:metricsType:metricsName");
 		applyFixToComponent(loadedModel, "service", "service:serviceName:delegateUri", "service:delegateUri");
 		applyFixToComponent(loadedModel, "nsq", "nsq:lookupServer", "nsq:servers");
-		applyFixToComponent(loadedModel, "corda", "corda:url", "corda:configuration");
-		applyFixToComponent(loadedModel, "websocket-jsr356", "websocket-jsr356:/resourceUri", "websocket-jsr356:websocketPathOrUri");
-		applyFixToComponent(loadedModel, "pulsar", "pulsar:persistence://tenant/namespace/topic", "pulsar:topic");
 	}
 
 	private static void applyFixToComponent(CamelModel loadedModel, String componentScheme, String invalidSyntaxBugFromOlderVersion, String correctSyntax) {
