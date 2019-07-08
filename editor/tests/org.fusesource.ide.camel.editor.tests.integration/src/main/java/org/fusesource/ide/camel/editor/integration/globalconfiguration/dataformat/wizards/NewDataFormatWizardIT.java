@@ -44,7 +44,6 @@ import org.fusesource.ide.camel.model.service.core.util.CamelMavenUtils;
 import org.fusesource.ide.camel.tests.util.Activator;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestRule;
@@ -91,7 +90,11 @@ public class NewDataFormatWizardIT {
 		for (String camelVersion : supportedCamelVersions) {
 			CamelModel camelModel = CamelCatalogCacheManager.getInstance().getDefaultCamelModel(camelVersion);
 			Collection<DataFormat> supportedDataFormats = camelModel.getDataFormats();
-			Stream<Object[]> stream = supportedDataFormats.stream().map(dataFormat -> new Object[] { camelVersion, dataFormat.getName(), dataFormat });
+			Stream<Object[]> stream = supportedDataFormats.stream()
+					.filter(dataFormat -> 
+					dataFormat.getName().contains("bindy") || dataFormat.getName().contains("json") // the special ones
+					|| dataFormat.getName().contains("avro"))// a classic one
+					.map(dataFormat -> new Object[] { camelVersion, dataFormat.getName(), dataFormat });
 			res.addAll(stream.collect(Collectors.toCollection(HashSet::new)));
 		}
 		return res;
@@ -109,7 +112,6 @@ public class NewDataFormatWizardIT {
 	}
 
 	@Test
-	@Ignore("Timeout on CI surely due to the fact that tests are now taking more time as Maven configuration needs to be done. Ignoring for now to try to unblock situation for Code freeze. Tests are passing fine (but slowly) locally.")
 	public void testCreationWithDeps() throws CoreException, IOException, InterruptedException, InvocationTargetException {
 		final String id = dataFormat.getName() + "-id2";
 		Activator.pluginLog().logInfo("NewDataFormatWizardIT.testCreationWithDeps for: " + dataFormat.getName());
