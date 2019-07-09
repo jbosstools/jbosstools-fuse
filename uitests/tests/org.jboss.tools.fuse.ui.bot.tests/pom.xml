@@ -173,7 +173,7 @@
 				</os>
 			</activation>
 			<properties>
-				<test.installPath.OSX>/devstudio.app/</test.installPath.OSX>
+				<test.installPath.OSX>/codereadystudio.app/</test.installPath.OSX>
 			</properties>
 		</profile>
 		<profile>
