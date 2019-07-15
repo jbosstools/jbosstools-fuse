@@ -209,10 +209,12 @@ public class CamelDebugTarget extends CamelDebugElement implements IDebugTarget 
 			return null;
 		}
 		final List<Header> headers = msg.getMessage().getHeaders();
-		for (IBacklogTracerHeader h : headers) {
-			if ("breadcrumbid".equalsIgnoreCase(h.getKey())) {
-				// there is a breadcrumbId - use that as key
-				return h.getValue();
+		if (headers != null) {
+			for (IBacklogTracerHeader h : headers) {
+				if ("breadcrumbid".equalsIgnoreCase(h.getKey())) {
+					// there is a breadcrumbId - use that as key
+					return h.getValue();
+				}
 			}
 		}
 		// otherwise use the exchange id
