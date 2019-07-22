@@ -36,6 +36,10 @@ public class IgniteVersionMapper extends OnlineVersionMapper {
 		Map<String, String> mapping = new HashMap<>();
 		mapping.put("1.3.10.fuse-000001-redhat-1", "1.3.10.fuse-000001-redhat-1");
 		mapping.put("1.3.12.fuse-000002-redhat-1", "1.3.12.fuse-000001-redhat-2");
+		mapping.put("1.4.8.fuse-710001-redhat-00001", "1.4.8.fuse-710001-redhat-00001 (7.1.0 GA)");
+		mapping.put("1.5.8.fuse-720001-redhat-00002", "1.5.8.fuse-720001-redhat-00002 (7.2.0 GA)");
+		mapping.put("1.6.11.fuse-730003-redhat-00001", "1.6.11.fuse-730003-redhat-00001 (7.3.0 GA)");
+		mapping.put("1.6.13.fuse-731002-redhat-00001", "1.6.13.fuse-731002-redhat-00001 (7.3.1 GA)");
 		return mapping;
 	}
 	
