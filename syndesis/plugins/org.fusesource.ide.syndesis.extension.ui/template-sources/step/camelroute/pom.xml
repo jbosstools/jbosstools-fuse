@@ -74,6 +74,27 @@
 					</execution>
 				</executions>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-enforcer-plugin</artifactId>
+				<version>3.0.0-M2</version>
+				<executions>
+					<execution>
+						<id>enforce-maven</id>
+						<goals>
+							<goal>enforce</goal>
+						</goals>
+						<configuration>
+							<rules>
+								<requireMavenVersion>
+									<version>[3.5,3.6)</version>
+									<message>The Maven version must be a 3.5.x version to work correctly. If using the embedded Maven in Eclipse, which defaults to 3.6.x, you must configure a specific 3.5.x Maven instance manually. See https://issues.jboss.org/browse/FUSETOOLS-3249 for more details.</message>
+								</requireMavenVersion>
+							</rules>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
 	
