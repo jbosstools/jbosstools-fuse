@@ -13,6 +13,7 @@ package org.jboss.tools.fuse.ui.bot.tests;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import org.eclipse.reddeer.common.condition.WaitCondition;
 import org.eclipse.reddeer.common.wait.AbstractWait;
 import org.eclipse.reddeer.common.wait.TimePeriod;
 import org.eclipse.reddeer.common.wait.WaitUntil;
@@ -21,10 +22,13 @@ import org.eclipse.reddeer.eclipse.ui.navigator.resources.ProjectExplorer;
 import org.eclipse.reddeer.eclipse.ui.views.markers.ProblemsView;
 import org.eclipse.reddeer.eclipse.ui.views.markers.ProblemsView.ProblemType;
 import org.eclipse.reddeer.junit.runner.RedDeerSuite;
+import org.eclipse.reddeer.requirements.cleanerrorlog.CleanErrorLogRequirement;
+import org.eclipse.reddeer.requirements.cleanworkspace.CleanWorkspaceRequirement;
 import org.eclipse.reddeer.requirements.openperspective.OpenPerspectiveRequirement.OpenPerspective;
+import org.eclipse.reddeer.workbench.core.condition.JobIsRunning;
+import org.jboss.tools.fuse.reddeer.JiraIssue;
 import org.jboss.tools.fuse.reddeer.perspectives.FuseIntegrationPerspective;
 import org.jboss.tools.fuse.reddeer.projectexplorer.CamelProject;
-import org.jboss.tools.fuse.reddeer.utils.ProjectFactory;
 import org.jboss.tools.fuse.reddeer.wizard.NewFuseIgniteExtensionProjectFirstPage;
 import org.jboss.tools.fuse.reddeer.wizard.NewFuseIgniteExtensionProjectSecondPage;
 import org.jboss.tools.fuse.reddeer.wizard.NewFuseIgniteExtensionProjectWizard;
@@ -44,7 +48,8 @@ public class NewFuseIgniteProjectTest extends DefaultTest {
 
 	@Before
 	public void setupDeleteProjects() {
-		ProjectFactory.deleteAllProjects();
+		new CleanWorkspaceRequirement().fulfill();
+		new CleanErrorLogRequirement().fulfill();
 	}
 
 	/**
@@ -133,10 +138,15 @@ public class NewFuseIgniteProjectTest extends DefaultTest {
 		assertTrue("Project 'CustomStepCamelRoute' is not present in Project Explorer", new ProjectExplorer().containsProject(name));
 		if (hasErrors()) {
 			new CamelProject(name).update();
+			new WaitUntil(new JobIsRunning(), TimePeriod.LONG);
 		}
 		assertFalse("Project '" + name + "' was created with errors", hasErrors());
 		new ProjectExplorer().getProject(name).getResource().runAs("Maven clean verify");
-		new WaitUntil(new ConsoleHasText("BUILD SUCCESS"), TimePeriod.VERY_LONG);
+		WaitCondition wait = new ConsoleHasText("BUILD SUCCESS");
+		new WaitUntil(wait, TimePeriod.VERY_LONG, false);
+		if (wait.getResult() == null && new ConsoleHasText("Failed to execute goal io.syndesis.extension").test()) {
+			throw new JiraIssue("FUSETOOLS-3249");
+		}
 	}
 
 	private boolean hasErrors() {
