@@ -105,16 +105,17 @@ public class JMXNavigator extends WorkbenchView {
 		rightItem = getTreeItem(items, new RegexMatcher(path[1] + ".*").toString());
 		if (rightItem == null) {
 			for (TreeItem item : items) {
-				if ((path[1].equals("Local Camel Context") && item.getText().startsWith("maven [")
+				String itemName = item.getText();
+				if ((path[1].equals("Local Camel Context") && itemName.startsWith("maven [")
 						|| path[1].equals("karaf")
-								&& (item.getText().contains("karaf") || item.getText().startsWith("JBoss Fuse") || item.getText().startsWith("Red Hat Fuse")) || item.getText().contains(path[1]))
+								&& (itemName.contains("karaf") || itemName.startsWith("JBoss Fuse") || itemName.startsWith("Red Hat Fuse") || itemName.startsWith("Apache Karaf") || itemName.startsWith("org.apache.karaf.main.Main")) || itemName.contains(path[1]))
 						|| path[0].equals("User-Defined Connections")) {
 					item.select();
 					item.doubleClick();
 					expand(item);
 					if (getTreeItem(item.getItems(), "Camel") != null) {
 						rightItem = item;
-						log.info("The item with Camel Context was found: " + item.getText());
+						log.info("The item with Camel Context was found: " + itemName);
 						break;
 					}
 				}
@@ -183,7 +184,7 @@ public class JMXNavigator extends WorkbenchView {
 
 	private TreeItem getTreeItem(List<TreeItem> items, String name) {
 		for (TreeItem item : items) {
-			if (item.getText().startsWith(name)) {
+			if (item.getText().startsWith(name) || item.getText().toLowerCase().matches(".*" + name.toLowerCase() + ".*")) {
 				return item;
 			}
 		}
