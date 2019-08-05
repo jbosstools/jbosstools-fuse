@@ -179,7 +179,7 @@ Boolean bool = XPathBuilder
                    .xpath("foo/bar")
                    .evaluate(context, "&lt;foo&gt;&lt;bar&gt;true&lt;/bar&gt;&lt;/foo&gt;", Boolean.class);</pre></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="Xpath-EnableSaxon"></a>Enabling Saxon</h2></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-33473"></a>Prerequisites</h3></div></div></div><p>A prerequisite for using the Saxon parser is that you add a dependency on the
 <code class="literal">camel-saxon</code> artifact (either adding this dependency to your Maven
-POM, if you use Maven, or adding the <code class="literal">camel-saxon-7.0.0.fuse-000191-redhat-2.jar</code> file
+POM, if you use Maven, or adding the <code class="literal">camel-saxon-7.3.0.fuse-730079-redhat-00001.jar</code> file
 to your classpath, otherwise).</p></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-33474"></a>Using the Saxon parser in Java DSL</h3></div></div></div><p>In Java DSL, the simplest way to enable the Saxon parser is to call the
 <code class="literal">saxon()</code> fluent builder method. For example, you could invoke the
 Saxon parser as shown in the following example:</p><pre class="screen">// Java
