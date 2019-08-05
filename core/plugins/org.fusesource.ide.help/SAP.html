@@ -21,8 +21,8 @@ set of SAP libraries for your target operating system from the SAP Service
 Marketplace.</p><p>The names of the library files vary depending on the target operating system, as
 shown in <a class="xref" href="SAP.html#SAP-Overview-TableRSAPL" title="Table&nbsp;151.&nbsp;Required SAP Libraries">Table&nbsp;151, &#8220;Required SAP Libraries&#8221;</a>.</p><div class="table"><a name="SAP-Overview-TableRSAPL"></a><p class="title"><b>Table&nbsp;151.&nbsp;Required SAP Libraries</b></p><div class="table-contents"><table summary="Required SAP Libraries" border="1"><colgroup><col width="33%" class="col_1"><col width="33%" class="col_2"><col width="34%" class="col_3"></colgroup><thead><tr><th align="left" valign="top">SAP Component</th><th align="left" valign="top">Linux and UNIX</th><th align="left" valign="top">Windows</th></tr></thead><tbody><tr><td align="left" valign="top"><p>SAP JCo 3</p></td><td align="left" valign="top"><p><code class="literal">sapjco3.jar</code></p>
 <p><code class="literal">libsapjco3.so</code></p></td><td align="left" valign="top"><p><code class="literal">sapjco3.jar</code></p>
-<p><code class="literal">sapjco3.dll</code></p></td></tr><tr><td align="left" valign="top"><p>SAP IDoc</p></td><td align="left" valign="top"><p><code class="literal">sapidoc3.jar</code></p></td><td align="left" valign="top"><p><code class="literal">sapidoc3.jar</code></p></td></tr></tbody></table></div></div><br class="table-break"></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="_deploying_in_a_fuse_osgi_container_non_fabric"></a>Deploying in a Fuse OSGi Container (non-Fabric)</h3></div></div></div><p>You can install the SAP JCo libraries and the SAP IDoc library into the JBoss Fuse
-OSGi container (non-Fabric) as follows:</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p class="simpara">Download the SAP JCo libraries and the SAP IDoc library from the SAP
+<p><code class="literal">sapjco3.dll</code></p></td></tr><tr><td align="left" valign="top"><p>SAP IDoc</p></td><td align="left" valign="top"><p><code class="literal">sapidoc3.jar</code></p></td><td align="left" valign="top"><p><code class="literal">sapidoc3.jar</code></p></td></tr></tbody></table></div></div><br class="table-break"></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="_deploying_in_a_fuse_osgi_container"></a>Deploying in a Fuse OSGi Container</h3></div></div></div><p>You can install the SAP JCo libraries and the SAP IDoc library into the JBoss Fuse
+OSGi container as follows:</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p class="simpara">Download the SAP JCo libraries and the SAP IDoc library from the SAP
 Service Marketplace (<a class="link" href="http://service.sap.com/public/connectors" target="_top">http://service.sap.com/public/connectors</a>), making sure to choose the
 appropriate version of the libraries for your operating system.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>You require version 3.0.11 or greater of the JCo library and version
 3.0.10 or greater of the IDoc library. You must have an <span class="strong"><strong>SAP
@@ -52,64 +52,7 @@ shown:</p><pre class="screen">org.osgi.framework.system.packages.extra = \
  com.sap.conn.jco.server</pre><p class="simpara">Don&#8217;t forget to include a comma and a backslash, <code class="literal">, \</code>, at
 the end of each line preceding the new entries, so that the list is
 properly continued.</p></li><li class="listitem">You need to restart the container for these changes to take effect.</li><li class="listitem"><p class="simpara">You need to install the <code class="literal">camel-sap</code> feature in the container.
-In the Karaf console, enter the following command:</p><pre class="screen">JBossFuse:karaf@root&gt; features:install camel-sap</pre></li></ol></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="_deploying_in_a_fuse_fabric"></a>Deploying in a Fuse Fabric</h3></div></div></div><p>A prerequisite for using the SAP component is that the SAP Java Connector (SAP
-JCo) libraries and the SAP IDoc library must be installed into the <code class="literal">lib/</code>
-directory of the Java runtime: that is, <code class="literal">sapjco3.jar</code>,
-<code class="literal">libsapjco3.so</code> (or <code class="literal">sapjco3.dll</code> on Windows), and
-<code class="literal">sapidoc3.jar</code>.</p><p>In the case of a Fuse Fabric deployment, this requires some special configuration.
-There is no point in simply installing the SAP libraries in the Java
-<code class="literal">lib</code> directory on a single machine, because Fabric containers need
-to be deployable anywhere in the network. The correct approach is to define a
-special profile that is capable of downloading and installing the SAP JCo libraries
-and the SAP IDoc library on whichever host it is running on.</p><p>You can define a profile for the SAP JCo libraries and the SAP IDoc library as
-follows:</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem">Deploy the JCo libraries and the IDoc
-library&#8201;&#8212;&#8201;<code class="literal">sapjco3.jar</code>, <code class="literal">libsapjco3.so</code> (or
-<code class="literal">sapjco3.dll</code> on Windows), and
-<code class="literal">sapidoc3.jar</code>&#8201;&#8212;&#8201;to a network accessible location. For
-example, you could install the libraries in a Web server, so that the JCo
-libraries and the IDoc library can be downloaded through HTTP URLs,
-<code class="literal"><a class="link" href="http://mywebserver/sapjco3.jar" target="_top">http://mywebserver/sapjco3.jar</a></code>,
-<code class="literal"><a class="link" href="http://mywebserver/libsapjco3.so" target="_top">http://mywebserver/libsapjco3.so</a></code>, and
-<code class="literal"><a class="link" href="http://mywebserver/sapidoc3.jar" target="_top">http://mywebserver/sapidoc3.jar</a></code>.</li><li class="listitem"><p class="simpara">Create a new profile, <code class="literal">camel-sap-profile</code>, by entering the
-following console command:</p><pre class="screen">JBossFuse:karaf@root&gt; profile-create camel-sap-profile</pre></li><li class="listitem"><p class="simpara">Edit the agent properties of the <code class="literal">camel-sap-profile</code> profile,
-by entering the following console command:</p><pre class="screen">JBossFuse:karaf@root&gt; profile-edit camel-sap-profile</pre></li><li class="listitem"><p class="simpara">The built-in profile editor starts up. Use this built-in text editor to
-add the following contents to the agent properties:</p><pre class="screen"># Profile:my-camel-sap-profile
-attribute.parents = feature-camel
-
-# Deploy JCo3 Libs to Container
-lib.sapjco3.jar = http://mywebserver/sapjco3.jar
-lib.sapjco3.so = http://mywebserver/libsapjco3.so
-lib.sapidoc3.jar = http://mywebserver/sapidoc3.jar
-
-# Append JCo3 Packages and IDoc packages to OSGi system property
-# in order to expose JCo3 and IDoc classes to OSGi environment
-config.org.osgi.framework.system.packages.extra= \
-    ... pass:quotes[_Packages from etc/config.properties file_] ...\
-    com.sap.conn.jco, \
-    com.sap.conn.jco.ext, \
-    com.sap.conn.jco.monitor, \
-    com.sap.conn.jco.rt, \
-    com.sap.conn.jco.server, \
-    com.sap.conn.idoc, \
-    com.sap.conn.idoc.jco</pre><p class="simpara">Customize the property settings as follows:</p><div class="variablelist"><dl class="variablelist"><dt><span class="term"><code class="literal">lib.sapjco3.jar</code></span></dt><dd>Customize the HTTP URL to the actual location of the
-<code class="literal">sapjco3.jar</code> file on your Web server.</dd><dt><span class="term"><code class="literal">lib.sapjco3.so</code></span></dt><dd>Customize the HTTP URL to the actual location of the
-<code class="literal">libsapjco3.so</code> file (or
-<code class="literal">sapjco3.dll</code>) on your Web server.</dd><dt><span class="term"><code class="literal">lib.sapidoc3.jar</code></span></dt><dd>Customize the HTTP URL to the actual location of the
-<code class="literal">sapidoc3.jar</code> file on your Web server.</dd><dt><span class="term"><code class="literal">config.org.osgi.framework.system.packages.extra</code></span></dt><dd><p class="simpara">Open the container configuration properties file,
-<code class="literal">etc/config.properties</code>, of your JBoss Fuse
-installation and look for the
-<code class="literal">org.osgi.framework.system.packages.extra</code>
-property setting. Copy the list of packages from that setting
-and paste them into the profile&#8217;s agent properties, replacing
-the line:</p><pre class="screen">    ... <span class="emphasis"><em>Packages from etc/config.properties file</em></span> ...\</pre><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>The <code class="literal">config.*</code> prefix in
-<code class="literal">config.org.osgi.framework.system.packages.extra</code>
-indicates to Fabric that you are setting a container
-configuration property in the profile.</p></td></tr></table></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>The backslash, <code class="literal">\</code>, is the line continuation
-character (UNIX convention) and must be followed immediately
-by a newline character.</p></td></tr></table></div><p class="simpara">Type Ctrl-S to save the properties when you are finished.</p></dd></dl></div></li><li class="listitem"><p class="simpara">You can now deploy the <code class="literal">camel-sap-profile</code> profile to any
-Fabric container where you want to run the SAP component. For example, to
-deploy the <code class="literal">camel-sap-profile</code>profile to the
-<code class="literal">sap-instance</code> container:</p><pre class="screen">JBossFuse:karaf@root&gt; container-add-profile sap-instance came-sap-profile</pre></li></ol></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="_deploying_in_a_jboss_eap_container"></a>Deploying in a JBoss EAP container</h3></div></div></div><p>To deploy the SAP component in a JBoss EAP container, perform the following
+In the Karaf console, enter the following command:</p><pre class="screen">JBossFuse:karaf@root&gt; features:install camel-sap</pre></li></ol></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="_deploying_in_a_jboss_eap_container"></a>Deploying in a JBoss EAP container</h3></div></div></div><p>To deploy the SAP component in a JBoss EAP container, perform the following
 steps:</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p class="simpara">Download the SAP JCo libraries and the SAP IDoc library from the SAP
 Service Marketplace (<a class="link" href="http://service.sap.com/public/connectors" target="_top">http://service.sap.com/public/connectors</a>), making sure to
 choose the appropriate version of the libraries for your operating
@@ -125,13 +68,14 @@ cp libsapjco3.so $JBOSS_HOME/modules/system/layers/fuse/com/sap/conn/jco/main/li
 into the JBoss EAP installation, there is a standardized convention for
 naming the library subdirectory, which must be followed. In the case of
 64-bit Linux, the subdirectory is <code class="literal">linux-x86_64</code>. For other
-platforms, see <a class="link" href="https://docs.jboss.org/author/display/MODULES/Native+Libraries" target="_top">https://docs.jboss.org/author/display/MODULES/Native+Libraries</a>.</p></td></tr></table></div></li><li class="listitem"><p class="simpara">Uncomment the <code class="literal">org.switchyard.component.camel.sap</code> module in
-the SwitchYard subsystem configuration. For example, to enable the SAP
-component in JBoss EAP standalone mode, edit the
-<code class="literal">$JBOSS_HOME/standalone/configuration/standalone.xml</code> file
-and look for the following line to uncomment:</p><pre class="screen">&lt;!-- Uncomment this module to enable camel-sap binding
-&lt;module identifier="org.switchyard.component.camel.sap" implClass="org.switchyard.component.camel.sap.deploy.CamelSapComponent"/&gt;
---&gt;</pre></li></ol></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-37499"></a>URI format</h3></div></div></div><p>There are two different kinds of endpoint provided by the SAP component: the
+platforms, see <a class="link" href="https://docs.jboss.org/author/display/MODULES/Native+Libraries" target="_top">https://docs.jboss.org/author/display/MODULES/Native+Libraries</a>.</p></td></tr></table></div></li><li class="listitem"><p class="simpara">Create a new file called <code class="literal">$JBOSS_HOME/modules/system/layers/fuse/org/wildfly/camel/extras/main/module.xml</code> and <span class="strong"><strong>add</strong></span> the following content:</p><pre class="screen">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;module xmlns="urn:jboss:module:1.1" name="org.wildfly.camel.extras"&gt;
+
+	&lt;dependencies&gt;
+		&lt;module name="org.fusesource.camel.component.sap" export="true" services="export" /&gt;
+	&lt;/dependencies&gt;
+
+&lt;/module&gt;</pre></li></ol></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-37499"></a>URI format</h3></div></div></div><p>There are two different kinds of endpoint provided by the SAP component: the
 Remote Function Call (RFC) endpoints, and the Intermediate Document (IDoc)
 endpoints.</p><p>The URI formats for the RFC endpoints are as follows:</p><pre class="screen">sap-srfc-destination:<span class="emphasis"><em>destinationName</em></span>:<span class="emphasis"><em>rfcName</em></span>
 sap-trfc-destination:<span class="emphasis"><em>destinationName</em></span>:<span class="emphasis"><em>rfcName</em></span>
@@ -1271,7 +1215,7 @@ the following example:</p><pre class="screen">&lt;?xml version="1.0" encoding="A
     DESTINATION_TO="FRA"/&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-37550"></a>Date and time formats</h3></div></div></div><p>Date and Time fields are serialized into attribute values using the following
 format:</p><pre class="screen">yyyy-MM-dd'T'HH:mm:ss.SSSZ</pre><p>Date fields will be serialized with only the year, month, day and timezone
 components set:</p><pre class="screen">DEPDATE="2014-03-19T00:00:00.000-0400"</pre><p>Time fields will be serialized with only the hour, minute, second, millisecond and
-timezone components set:</p><pre class="screen">DEPTIME="1970-01-01T16:00:00.000-0500"</pre></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="SAP-XMLSerial-IDoc"></a>XML Serialization for IDoc</h2></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="_overview_52"></a>Overview</h3></div></div></div><p>An IDoc message body can be serialized into an XML string format, with the help of
+timezone components set:</p><pre class="screen">DEPTIME="1970-01-01T16:00:00.000-0500"</pre></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="SAP-XMLSerial-IDoc"></a>XML Serialization for IDoc</h2></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="_overview_51"></a>Overview</h3></div></div></div><p>An IDoc message body can be serialized into an XML string format, with the help of
 a built-in type converter.</p></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="_xml_namespace"></a>XML namespace</h3></div></div></div><p>Each serialized IDoc is associated with an XML namespace, which has the following
 general format:</p><pre class="screen"><a class="link" href="http://sap.fusesource.org/idoc/" target="_top">http://sap.fusesource.org/idoc/</a><span class="emphasis"><em>repositoryName</em></span>/<span class="emphasis"><em>idocType</em></span>/<span class="emphasis"><em>idocTypeExtension</em></span>/<span class="emphasis"><em>systemRelease</em></span>/<span class="emphasis"><em>applicationRelease</em></span></pre><p>Both the <span class="emphasis"><em>repositoryName</em></span> (name of the
 remote SAP meta-data repository) and the

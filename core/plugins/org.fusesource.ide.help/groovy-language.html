@@ -51,12 +51,11 @@ statements script, you need to make sure you set the value of result
 variable as the script return value.</p><pre class="programlisting">bar = "baz";
 # some other statements ...
 # camel take the result value as the script evaluation result
-result = body * 2 + 1</pre></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_dependencies_35"></a>Dependencies</h2></div></div></div><p>To use scripting languages in your camel routes you need to add the a
-dependency on <span class="strong"><strong>camel-script</strong></span> which integrates the JSR-223 scripting
-engine.</p><p>If you use maven you could just add the following to your pom.xml,
+result = body * 2 + 1</pre></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_dependencies_35"></a>Dependencies</h2></div></div></div><p>To use scripting languages in your camel routes you need to add a
+dependency on <span class="strong"><strong>camel-groovy</strong></span>.</p><p>If you use Maven you could just add the following to your pom.xml,
 substituting the version number for the latest &amp; greatest release (see
 the download page for the latest versions).</p><pre class="programlisting"><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;dependency&gt;</strong>
   <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;groupId&gt;</strong>org.apache.camel<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/groupId&gt;</strong>
-  <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;artifactId&gt;</strong>camel-script<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/artifactId&gt;</strong>
+  <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;artifactId&gt;</strong>camel-groovy<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/artifactId&gt;</strong>
   <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;version&gt;</strong>x.x.x<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/version&gt;</strong>
 <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/dependency&gt;</strong></pre></div></div></body></html>
