@@ -26,6 +26,7 @@ import org.fusesource.ide.projecttemplates.util.NewFuseIntegrationProjectMetaDat
 import org.fusesource.ide.projecttemplates.wizards.pages.model.EnvironmentData;
 import org.fusesource.ide.projecttemplates.wizards.pages.model.FuseDeploymentPlatform;
 import org.fusesource.ide.projecttemplates.wizards.pages.model.FuseRuntimeKind;
+import org.junit.Assume;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -45,6 +46,7 @@ public class FuseIntegrationProjectCreatorRunnableForOSESringBootIT extends Fuse
 	
 	@Test
 	public void testOSESpringBootProjectCreation() throws Exception {
+		Assume.assumeFalse("Cannot launch test until Fuse runtime is fixed, see ENTESB-11148", CamelCatalogUtils.CAMEL_VERSION_LATEST_COMMUNITY.equals(camelVersion));
         testProjectCreation("-OSESpringBootProject-"+camelVersion, CamelDSLType.SPRING, "src/main/resources/spring/camel-context.xml", null);
 	}
 	
