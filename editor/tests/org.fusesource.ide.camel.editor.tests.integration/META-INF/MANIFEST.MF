@@ -48,5 +48,6 @@ Require-Bundle: org.junit;bundle-version="4.12.0",
  org.jboss.tools.common.jaxb;resolution:=optional,
  org.fusesource.ide.camel.model.service.impl.v2210fuse720050redhat00001;bundle-version="11.4.0",
  org.fusesource.ide.camel.model.service.impl.v2210fuse730078redhat00001;bundle-version="11.4.0",
- org.fusesource.ide.camel.model.service.impl.v2210fuse731003redhat00003;bundle-version="11.4.0"
+ org.fusesource.ide.camel.model.service.impl.v2210fuse731003redhat00003;bundle-version="11.4.0",
+ org.fusesource.ide.camel.model.service.impl.v2210fuse740039redhat00001;bundle-version="11.4.0"
 Bundle-Activator: org.fusesource.ide.camel.editor.tests.integration.Activator

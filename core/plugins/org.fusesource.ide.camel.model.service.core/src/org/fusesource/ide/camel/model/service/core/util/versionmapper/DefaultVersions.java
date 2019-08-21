@@ -23,7 +23,7 @@ public class DefaultVersions extends OnlineVersionMapper {
 
 	@Override
 	protected Map<String, String> createFallbackMapping() {
-		return Collections.singletonMap("camel", CamelForFuseOnOpenShiftToBomMapper.FUSE_731_CAMEL_VERSION);
+		return Collections.singletonMap("camel", CamelForFuseOnOpenShiftToBomMapper.FUSE_740_CAMEL_VERSION);
 	}
 	
 	public String getDefaultCamelVersion() {
