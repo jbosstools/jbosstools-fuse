@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?pde version="3.8"?><target includeMode="feature" name="fuse" sequenceNumber="8">
+<?pde version="3.8"?>
+<target includeMode="feature" name="fuse" sequenceNumber="8">
 <locations>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="org.jboss.ide.eclipse.archives.feature.feature.group" version="3.6.202.v20181011-1445"/>
@@ -21,7 +22,6 @@
 <unit id="org.jboss.tools.openshift.feature.feature.group" version="3.6.0.v20190228-1836"/>
 <unit id="org.jboss.tools.openshift.cdk.feature.feature.group" version="3.6.0.v20181010-1259"/>
 <unit id="org.jboss.tools.openshift.egit.integration.feature.feature.group" version="3.6.0.v20181212-1616"/>
-<unit id="org.jboss.tools.openshift.io.feature.feature.group" version="3.6.0.v20190219-1417"/>
 <unit id="org.jboss.tools.openshift.js.feature.feature.group" version="3.6.0.v20181005-1233"/>
 <unit id="org.jboss.tools.maven.springboot.feature.feature.group" version="1.9.2.v20181211-1326"/>
 <repository location="https://download.jboss.org/jbosstools/photon/snapshots/updates/core/master/"/>
