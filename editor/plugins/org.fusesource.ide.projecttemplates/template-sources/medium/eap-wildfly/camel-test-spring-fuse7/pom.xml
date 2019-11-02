@@ -21,7 +21,7 @@
         <version.wildfly.arquillian>2.1.0.Final</version.wildfly.arquillian>
 
         <!-- Other versions -->
-        <version.apache.camel>2.21.0.fuse-000009</version.apache.camel>
+        <version.apache.camel>2.24.0</version.apache.camel>
         <version.wildfly.camel>%%%PLACEHOLDER_BOMVERSION%%%</version.wildfly.camel>
         <version.jboss.arquillian>1.1.10.Final</version.jboss.arquillian>
 
