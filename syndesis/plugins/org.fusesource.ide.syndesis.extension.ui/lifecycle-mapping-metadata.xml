@@ -19,6 +19,21 @@
 				</configurator>
 			</action>
 		</pluginExecution>
+		<!-- Workaround missing support of m2e in extension-maven-plugin -->
+        <pluginExecution>
+            <pluginExecutionFilter>
+                <groupId>io.syndesis.extension</groupId>
+                <artifactId>extension-maven-plugin</artifactId>
+                <versionRange>[1.6.0,)</versionRange>
+                <goals>
+                    <goal>generate-metadata</goal>
+                    <goal>repackage-extension</goal>                   
+                </goals>
+            </pluginExecutionFilter>
+            <action>
+                <ignore/>
+            </action>
+        </pluginExecution>
 	</pluginExecutions>
 
 </lifecycleMappingMetadata>
