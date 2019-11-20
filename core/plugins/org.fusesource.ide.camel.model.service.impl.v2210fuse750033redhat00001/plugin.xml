@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.fusesource.ide.camel.model.service.impl.camelcatalogprovider">
+      <class class="org.fusesource.ide.camel.model.service.impl.v2210fuse750033redhat00001.CamelCatalogWrapper">
+      </class>
+   </extension>
+
+</plugin>
