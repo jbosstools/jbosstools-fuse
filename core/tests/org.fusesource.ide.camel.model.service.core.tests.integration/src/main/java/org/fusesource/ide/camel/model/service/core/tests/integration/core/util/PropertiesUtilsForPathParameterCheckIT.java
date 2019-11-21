@@ -71,12 +71,12 @@ public class PropertiesUtilsForPathParameterCheckIT {
 	public void testSeveralURiPaths() throws Exception {
 		AbstractCamelModelElement selectedEP = importModel("withPathParameter.xml");
 		CamelModel camelModel = CamelCatalogCacheManager.getInstance().getCamelModelForProject(fuseProject.getProject());
-		final Component linkedinComponent = camelModel.getComponentForScheme("linkedin");
-		Parameter apiNamePathParameter = linkedinComponent.getParameters().stream().filter(p -> "apiName".equals(p.getName())).findFirst().get();
-		Parameter methodNamePathParameter = linkedinComponent.getParameters().stream().filter(p -> "methodName".equals(p.getName())).findFirst().get();
+		final Component gdriveComponent = camelModel.getComponentForScheme("google-drive");
+		Parameter apiNamePathParameter = gdriveComponent.getParameters().stream().filter(p -> "apiName".equals(p.getName())).findFirst().get();
+		Parameter methodNamePathParameter = gdriveComponent.getParameters().stream().filter(p -> "methodName".equals(p.getName())).findFirst().get();
 		
-		assertThat(PropertiesUtils.getPropertyFromUri(selectedEP, apiNamePathParameter, linkedinComponent)).isEqualTo("companies");
-		assertThat(PropertiesUtils.getPropertyFromUri(selectedEP, methodNamePathParameter, linkedinComponent)).isEqualTo("addComment");
+		assertThat(PropertiesUtils.getPropertyFromUri(selectedEP, apiNamePathParameter, gdriveComponent)).isEqualTo("drive-files");
+		assertThat(PropertiesUtils.getPropertyFromUri(selectedEP, methodNamePathParameter, gdriveComponent)).isEqualTo("get");		
 	}
 	
 	@Test
