@@ -31,7 +31,7 @@
     -->
     <camelContext id="_context1" xmlns="http://camel.apache.org/schema/blueprint">
         <route id="_route1">
-            <to id="_to1" uri="linkedin:companies/addComment?clientId=aa"/>
+            <from id="_from1" uri="google-drive:drive-files/get?fileId=validfileID12345"/>
         </route>
     </camelContext>
 </blueprint>
