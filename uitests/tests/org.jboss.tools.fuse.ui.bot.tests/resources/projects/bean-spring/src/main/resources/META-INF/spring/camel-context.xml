@@ -17,7 +17,7 @@
 -->
 <!-- Configures the Camel Context-->
 <beans xmlns="http://www.springframework.org/schema/beans"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="        http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd        http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="        http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd        http://camel.apache.org/schema/spring https://camel.apache.org/schema/spring/camel-spring.xsd">
     <bean class="hello.FooBean" id="fooBean" scope="singleton"/>
     <bean class="hello.FactoryBean" id="factoryBean" scope="singleton"/>
     <bean class="hello.HelloBean" id="helloBean" scope="singleton"/>

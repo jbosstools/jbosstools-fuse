@@ -4,7 +4,7 @@
     xsi:schemaLocation="
         http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
         http://camel.apache.org/schema/cxf http://camel.apache.org/schema/cxf/camel-cxf.xsd
-        http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+        http://camel.apache.org/schema/spring https://camel.apache.org/schema/spring/camel-spring.xsd">
 
     <camelContext id="cxfrs" xmlns="http://camel.apache.org/schema/spring">
 
