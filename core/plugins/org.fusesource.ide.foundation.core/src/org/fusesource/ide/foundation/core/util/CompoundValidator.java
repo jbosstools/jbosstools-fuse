@@ -19,7 +19,7 @@ import org.eclipse.core.runtime.IStatus;
  * more modular, easy-to-digest chunks.
  *
  * This came from
- * http://eclipsesource.com/blogs/2012/08/22/improving-reuse-of-jface-data-binding-validators/
+ * https://eclipsesource.com/blogs/2012/08/22/improving-reuse-of-jface-data-binding-validators/
  *
  */
 public class CompoundValidator implements IValidator {
