@@ -52,8 +52,8 @@ import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
  *
  * @author Patrick Talbot - Initial code
  * @author Karsten Thoms - Adoption for Spray
- * @see http://www.eclipse.org/forums/index.php/m/758573/#msg_758573
- * @see http://code.google.com/a/eclipselabs.org/p/spray/issues/detail?id=91
+ * @see https://www.eclipse.org/forums/index.php/m/758573/#msg_758573
+ * @see https://code.google.com/a/eclipselabs.org/p/spray/issues/detail?id=91
  */
 public class ZestLayoutDiagramFeature extends AbstractCustomFeature {
     static List<String> layouts = Arrays.asList("Spring Layout", 
