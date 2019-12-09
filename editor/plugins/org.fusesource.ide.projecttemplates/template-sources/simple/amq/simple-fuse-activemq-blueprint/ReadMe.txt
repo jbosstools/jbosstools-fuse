@@ -30,8 +30,8 @@ To run this project on Red Hat Fuse shell :
 
 For more general help see the Apache Camel documentation
 
-    http://camel.apache.org/
+    https://camel.apache.org/
     
 For more help on ActiveMQ Camel component see the Apache Camel documentation for ActiveMQ
 
-	http://camel.apache.org/activemq.html
+	https://camel.apache.org/activemq.html
