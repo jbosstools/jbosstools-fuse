@@ -121,7 +121,7 @@ public class CamelFileTemplateCreator {
 		sb.append("		xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n");
 		sb.append("		       xsi:schemaLocation=\"\n");
 		sb.append("       http://www.osgi.org/xmlns/blueprint/v1.0.0 https://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd\n");
-		sb.append("       http://camel.apache.org/schema/blueprint http://camel.apache.org/schema/blueprint/camel-blueprint.xsd\">\n");
+		sb.append("       http://camel.apache.org/schema/blueprint https://camel.apache.org/schema/blueprint/camel-blueprint.xsd\">\n");
 		sb.append("\n");
 		sb.append("	<camelContext id=\"context1\" xmlns=\"http://camel.apache.org/schema/blueprint\">\n");
 		sb.append("\n");

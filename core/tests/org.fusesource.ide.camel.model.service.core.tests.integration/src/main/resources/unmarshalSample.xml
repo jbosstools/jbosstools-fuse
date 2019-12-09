@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
     xmlns:camel="http://camel.apache.org/schema/blueprint"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 https://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd        http://camel.apache.org/schema/blueprint http://camel.apache.org/schema/blueprint/camel-blueprint.xsd">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 https://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd        http://camel.apache.org/schema/blueprint https://camel.apache.org/schema/blueprint/camel-blueprint.xsd">
     <camelContext id="CustInfoContext" trace="false" xmlns="http://camel.apache.org/schema/blueprint">
         <propertyPlaceholder id="properties" location="classpath:sql.properties"/>
         <route id="_route1">
