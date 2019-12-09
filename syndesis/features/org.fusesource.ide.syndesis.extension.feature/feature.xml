@@ -8,7 +8,7 @@
       license-feature="org.jboss.tools.foundation.license.feature"
       license-feature-version="0.0.0">
 
-   <description url="http://tools.jboss.org/features/apachecamel.html">
+   <description url="https://tools.jboss.org/features/fusetools.html">
       %description
    </description>
 
