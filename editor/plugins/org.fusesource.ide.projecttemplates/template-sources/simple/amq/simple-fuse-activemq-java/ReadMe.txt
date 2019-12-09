@@ -13,4 +13,4 @@ To run this project use the following Maven goal
 
 For more help see the Apache Camel documentation
 
-    http://camel.apache.org/
+    https://camel.apache.org/

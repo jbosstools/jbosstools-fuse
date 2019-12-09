@@ -16,4 +16,4 @@ You can run the following command from its shell:
 
 For more help see the Apache Camel documentation
 
-    http://camel.apache.org/
+    https://camel.apache.org/

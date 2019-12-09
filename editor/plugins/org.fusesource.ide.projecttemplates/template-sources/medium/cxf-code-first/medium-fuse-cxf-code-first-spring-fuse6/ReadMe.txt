@@ -28,4 +28,4 @@ And the WSDL file for this example at:
 
 For more help see the Apache Camel documentation
 
-    http://camel.apache.org/
+    https://camel.apache.org/
