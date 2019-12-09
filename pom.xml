@@ -72,7 +72,6 @@
 	</properties>
 
 	<modules>
-		<module>build-config</module>
 		<module>core</module>
 		<module>editor</module>
 		<module>transformation</module>
