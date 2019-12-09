@@ -7,7 +7,7 @@
     xmlns:osgix="http://www.springframework.org/schema/osgi-compendium" 
     xsi:schemaLocation="
         http://www.springframework.org/schema/beans 
-        http://www.springframework.org/schema/beans/spring-beans.xsd
+        https://www.springframework.org/schema/beans/spring-beans.xsd
         http://www.springframework.org/schema/osgi 
         http://www.springframework.org/schema/osgi/spring-osgi.xsd
         http://www.springframework.org/schema/osgi-compendium 

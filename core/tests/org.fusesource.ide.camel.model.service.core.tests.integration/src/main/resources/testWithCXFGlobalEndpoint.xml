@@ -4,7 +4,7 @@
 	xmlns:jaxrs="http://cxf.apache.org/jaxrs"
 	xsi:schemaLocation="
        http://www.springframework.org/schema/beans
-       http://www.springframework.org/schema/beans/spring-beans.xsd
+       https://www.springframework.org/schema/beans/spring-beans.xsd
        http://camel.apache.org/schema/cxf
        http://camel.apache.org/schema/cxf/camel-cxf-spring.xsd
        http://camel.apache.org/schema/spring
