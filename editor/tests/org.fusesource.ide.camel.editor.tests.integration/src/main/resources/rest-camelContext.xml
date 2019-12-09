@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd        http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd        http://camel.apache.org/schema/spring https://camel.apache.org/schema/spring/camel-spring.xsd">
     <bean class="com.mycompany.GreeterService" id="GreeterService" scope="singleton"/>
 	<camelContext xmlns="http://camel.apache.org/schema/spring" autoStartup="true" streamCache="false" id="context1">
           <restConfiguration component="netty-http" host="localhost" port="10000"/>

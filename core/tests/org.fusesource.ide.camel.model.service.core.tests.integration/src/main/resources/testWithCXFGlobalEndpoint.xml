@@ -8,7 +8,7 @@
        http://camel.apache.org/schema/cxf
        http://camel.apache.org/schema/cxf/camel-cxf-spring.xsd
        http://camel.apache.org/schema/spring
-       http://camel.apache.org/schema/spring/camel-spring.xsd
+       https://camel.apache.org/schema/spring/camel-spring.xsd
        http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd">
 
 	<bean id="myBean" class="org.acme.MyBean" />
