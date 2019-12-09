@@ -225,7 +225,7 @@
          point="org.eclipse.m2e.core.archetypeCatalogs">
       <remote
             description="%remote.description"
-            url="http://repo.fusesource.com/nexus/content/groups/public/archetype-catalog.xml">
+            url="https://repo.fusesource.com/nexus/content/groups/public/archetype-catalog.xml">
       </remote>
    </extension>
    <extension point="org.eclipse.ui.intro">
@@ -247,7 +247,7 @@
       <index
             indexId="fusesource-nexus-public"
             isShort="false"
-            repositoryUrl="http://repo.fusesource.com/nexus/content/groups/public">
+            repositoryUrl="https://repo.fusesource.com/nexus/content/groups/public">
       </index>
    </extension>
       -->
