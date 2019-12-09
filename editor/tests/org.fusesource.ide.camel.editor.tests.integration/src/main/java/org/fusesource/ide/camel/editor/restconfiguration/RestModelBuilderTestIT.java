@@ -69,7 +69,7 @@ public class RestModelBuilderTestIT {
 	private CamelFile loadCamelFile(IProgressMonitor monitor) throws IOException {
 		String text = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + 
 				"<blueprint xmlns=\"http://www.osgi.org/xmlns/blueprint/v1.0.0\"\n" + 
-				"    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.osgi.org/xmlns/blueprint/v1.0.0 https://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd                            http://camel.apache.org/schema/blueprint http://camel.apache.org/schema/blueprint/camel-blueprint.xsd\">\n" + 
+				"    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.osgi.org/xmlns/blueprint/v1.0.0 https://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd                            http://camel.apache.org/schema/blueprint https://camel.apache.org/schema/blueprint/camel-blueprint.xsd\">\n" + 
 				"    <camelContext id=\"_context1\" xmlns=\"http://camel.apache.org/schema/blueprint\">\n" + 
 				"        <restConfiguration component=\"netty-http\" host=\"localhost\" port=\"10000\"/>\n" + 
 				"        <rest path=\"/say\">\n" + 

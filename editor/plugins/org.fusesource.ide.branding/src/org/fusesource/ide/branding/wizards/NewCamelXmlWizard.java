@@ -213,7 +213,7 @@ public class NewCamelXmlWizard extends Wizard implements INewWizard {
 			builder.append("       xmlns:camel=\"" + namespace + "\"\n");
 			builder.append("       xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n");
 			builder.append("       xsi:schemaLocation=\"http://www.osgi.org/xmlns/blueprint/v1.0.0 https://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd\n");
-			builder.append("       http://camel.apache.org/schema/blueprint http://camel.apache.org/schema/blueprint/camel-blueprint.xsd\">\n");
+			builder.append("       http://camel.apache.org/schema/blueprint https://camel.apache.org/schema/blueprint/camel-blueprint.xsd\">\n");
 		}
 		builder.append("\n");
 		builder.append("  <");

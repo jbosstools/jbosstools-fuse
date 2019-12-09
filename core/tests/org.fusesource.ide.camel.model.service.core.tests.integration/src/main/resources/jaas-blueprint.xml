@@ -14,7 +14,7 @@
     xmlns:enc="http://karaf.apache.org/xmlns/jasypt/v1.0.0"
     xmlns:jaas="http://karaf.apache.org/xmlns/jaas/v1.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://camel.apache.org/schema/blueprint http://camel.apache.org/schema/blueprint/camel-blueprint.xsd">
+    xsi:schemaLocation="http://camel.apache.org/schema/blueprint https://camel.apache.org/schema/blueprint/camel-blueprint.xsd">
     <jaas:config name="karaf" rank="10">
         <jaas:module
             className="org.apache.karaf.jaas.modules.ldap.LDAPLoginModule" flags="required">
