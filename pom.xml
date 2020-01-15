@@ -40,6 +40,10 @@
 	</prerequisites>
 
 	<properties>
+	
+		<tychoVersion>1.4.0</tychoVersion>
+		<jbossTychoPluginsVersion>1.4.0</jbossTychoPluginsVersion>
+		
 		<!-- fuse tooling related -->
 		<tycho.scmUrl>scm:git:https://github.com/jbosstools/jbosstools-fuse.git</tycho.scmUrl>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
