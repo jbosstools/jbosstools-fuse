@@ -76,8 +76,7 @@ public class ProjectLocalRunTest extends DefaultTest {
 	public static void setupCreateProject() {
 
 		log.info("Create a new Fuse project from 'Content Based Router' template");
-		ProjectFactory.newProject(PROJECT_NAME).deploymentType(STANDALONE).runtimeType(KARAF).version("2.15.1.redhat-621084")
-				.template(ProjectTemplate.CBR_SPRING).create();
+		ProjectFactory.newProject(PROJECT_NAME).deploymentType(STANDALONE).runtimeType(KARAF).template(ProjectTemplate.CBR_SPRING).create();
 		new CamelProject(PROJECT_NAME).update();
 		createTestClass();
 	}

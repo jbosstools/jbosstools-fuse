@@ -92,8 +92,7 @@ public class CamelEditorRoutesTest {
 					.create();
 			break;
 		case BLUEPRINT:
-			ProjectFactory.newProject(PROJECT_NAME).deploymentType(STANDALONE).runtimeType(KARAF)
-					.template(EMPTY_BLUEPRINT).create();
+			ProjectFactory.newProject(PROJECT_NAME).deploymentType(STANDALONE).runtimeType(KARAF).template(EMPTY_BLUEPRINT).create();
 			break;
 		default:
 			ProjectFactory.newProject(PROJECT_NAME).deploymentType(STANDALONE).runtimeType(KARAF).template(EMPTY_JAVA)

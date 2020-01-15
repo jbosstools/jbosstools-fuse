@@ -11,32 +11,30 @@
 package org.jboss.tools.fuse.ui.bot.tests;
 
 import static org.jboss.tools.fuse.reddeer.ProjectTemplate.EMPTY_SPRING;
-import static org.jboss.tools.fuse.reddeer.SupportedCamelVersions.CAMEL_2_17_0_REDHAT_630187;
+import static org.jboss.tools.fuse.reddeer.view.PaletteViewExt.GROUP_COMPONENTS;
 import static org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardDeploymentType.STANDALONE;
 import static org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardRuntimeType.KARAF;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.util.Collection;
+import java.util.List;
 
 import org.eclipse.reddeer.common.logging.Logger;
-import org.eclipse.reddeer.eclipse.ui.navigator.resources.ProjectExplorer;
 import org.eclipse.reddeer.eclipse.ui.perspectives.JavaEEPerspective;
-import org.eclipse.reddeer.eclipse.ui.views.log.LogView;
 import org.eclipse.reddeer.gef.view.PaletteView;
 import org.eclipse.reddeer.junit.internal.runner.ParameterizedRequirementsRunnerFactory;
 import org.eclipse.reddeer.junit.runner.RedDeerSuite;
 import org.eclipse.reddeer.requirements.autobuilding.AutoBuildingRequirement.AutoBuilding;
+import org.eclipse.reddeer.requirements.cleanerrorlog.CleanErrorLogRequirement;
+import org.eclipse.reddeer.requirements.cleanworkspace.CleanWorkspaceRequirement;
 import org.eclipse.reddeer.requirements.cleanworkspace.CleanWorkspaceRequirement.CleanWorkspace;
 import org.eclipse.reddeer.requirements.openperspective.OpenPerspectiveRequirement.OpenPerspective;
-import org.eclipse.reddeer.workbench.exception.WorkbenchLayerException;
-import org.eclipse.reddeer.workbench.handler.EditorHandler;
-import org.eclipse.reddeer.workbench.impl.shell.WorkbenchShell;
-import org.jboss.tools.fuse.reddeer.LogGrapper;
 import org.jboss.tools.fuse.reddeer.component.CamelComponent;
-import org.jboss.tools.fuse.reddeer.component.CamelComponents;
 import org.jboss.tools.fuse.reddeer.editor.CamelEditor;
+import org.jboss.tools.fuse.reddeer.projectexplorer.CamelProject;
+import org.jboss.tools.fuse.reddeer.utils.LogChecker;
 import org.jboss.tools.fuse.reddeer.utils.ProjectFactory;
+import org.jboss.tools.fuse.reddeer.view.PaletteViewExt;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -56,8 +54,12 @@ import org.junit.runners.Parameterized.UseParametersRunnerFactory;
 @UseParametersRunnerFactory(ParameterizedRequirementsRunnerFactory.class)
 public class ComponentTest extends DefaultTest {
 
-	private CamelComponent component;
 	protected Logger log = Logger.getLogger(ComponentTest.class);
+
+	private CamelComponent component;
+	
+	public static String PROJECT_NAME = "camel-spring";
+	public static String CAMEL_CONTEXT = "camel-context.xml";
 
 	/**
 	 * Sets parameters for parameterized test
@@ -65,12 +67,17 @@ public class ComponentTest extends DefaultTest {
 	 * @return List of all available components in Palette
 	 */
 	@Parameters(name = "{0}")
-	public static Collection<CamelComponent> setupData() {
-		return CamelComponents.getEndpoints();
+	public static Collection<String> setupData() {
+		ProjectFactory.newProject(PROJECT_NAME).deploymentType(STANDALONE).runtimeType(KARAF).template(EMPTY_SPRING).create();
+		new PaletteView().open();
+		List<String> components = new PaletteViewExt().getGroupTools(GROUP_COMPONENTS);
+		components.remove("Generic"); // skip Generic component
+		return components;
 	}
 
-	public ComponentTest(CamelComponent component) {
-		this.component = component;
+	public ComponentTest(String component) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
+		Class<?> clazz = Class.forName("org.jboss.tools.fuse.reddeer.component." + component.replaceAll("\\s|-|\\(Secure\\)", ""));
+		this.component = (CamelComponent) clazz.newInstance();
 	}
 
 	/**
@@ -78,20 +85,8 @@ public class ComponentTest extends DefaultTest {
 	 */
 	@BeforeClass
 	public static void setupResetCamelContext() {
-
-		new WorkbenchShell();
-		ProjectFactory.newProject("camel-spring").deploymentType(STANDALONE).runtimeType(KARAF)
-				.version(CAMEL_2_17_0_REDHAT_630187).template(EMPTY_SPRING).create();
-		new LogView().deleteLog();
-	}
-
-	@BeforeClass
-	public static void setupClosePaletteView() {
-		new WorkbenchShell();
-		try {
-			new PaletteView().close();
-		} catch (WorkbenchLayerException ex) {
-		}
+		new CleanErrorLogRequirement().fulfill();
+		ProjectFactory.newProject(PROJECT_NAME).deploymentType(STANDALONE).runtimeType(KARAF).template(EMPTY_SPRING).create();
 	}
 
 	/**
@@ -99,10 +94,7 @@ public class ComponentTest extends DefaultTest {
 	 */
 	@AfterClass
 	public static void setupDeleteProjects() {
-
-		new WorkbenchShell();
-		EditorHandler.getInstance().closeAll(true);
-		ProjectFactory.deleteAllProjects();
+		new CleanWorkspaceRequirement().fulfill();
 	}
 
 	/**
@@ -120,9 +112,8 @@ public class ComponentTest extends DefaultTest {
 	 */
 	@Test
 	public void testComponents() {
-
-		new ProjectExplorer().open();
-		CamelEditor editor = new CamelEditor("camel-context.xml");
+		new CamelProject(PROJECT_NAME).openCamelContext(CAMEL_CONTEXT);
+		CamelEditor editor = new CamelEditor(CAMEL_CONTEXT);
 		editor.activate();
 		try {
 			editor.addCamelComponent(component, "Route _route1");
@@ -130,6 +121,6 @@ public class ComponentTest extends DefaultTest {
 		} catch (Exception e) {
 			fail("There is a problem with this component - " + component.getLabel());
 		}
-		assertTrue(LogGrapper.getPluginErrors("fuse").size() == 0);
+		LogChecker.assertNoFuseError();
 	}
 }

@@ -64,8 +64,7 @@ public class ProblemsViewTest {
 	 */
 	@Test
 	public void testProblemsOnGlobalElements() {
-		ProjectFactory.newProject(PROJECT_NAME).deploymentType(STANDALONE).runtimeType(KARAF).template(EMPTY_SPRING)
-				.create();
+		ProjectFactory.newProject(PROJECT_NAME).deploymentType(STANDALONE).runtimeType(KARAF).template(EMPTY_SPRING).create();
 		new WaitUntil(new EditorWithTitleIsActive(CAMEL_CONTEXT_XML));
 		CamelEditor editor = new CamelEditor(CAMEL_CONTEXT_XML);
 		CamelEditor.switchTab(SOURCE_TAB);
