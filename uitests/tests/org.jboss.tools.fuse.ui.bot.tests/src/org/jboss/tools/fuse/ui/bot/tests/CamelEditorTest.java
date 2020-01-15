@@ -81,8 +81,7 @@ public class CamelEditorTest extends DefaultTest {
 	@Before
 	public void setupResetCamelContext() {
 		new WorkbenchShell();
-		ProjectFactory.newProject(PROJECT_NAME).deploymentType(STANDALONE).runtimeType(KARAF)
-				.template(ProjectTemplate.CBR_SPRING).create();
+		ProjectFactory.newProject(PROJECT_NAME).deploymentType(STANDALONE).runtimeType(KARAF).template(ProjectTemplate.CBR_SPRING).create();
 		LogView view = new LogView();
 		view.open();
 		view.deleteLog();
@@ -136,7 +135,6 @@ public class CamelEditorTest extends DefaultTest {
 	 */
 	@Test
 	public void testPalette() {
-
 		new CamelProject(PROJECT_NAME).openCamelContext(CAMEL_CONTEXT);
 		CamelEditor editor = new CamelEditor(CAMEL_CONTEXT);
 		editor.activate();
@@ -169,7 +167,6 @@ public class CamelEditorTest extends DefaultTest {
 	 */
 	@Test
 	public void testXMLEditor() {
-
 		setupPrepareIDEForManipulationTests();
 		CamelEditor editor = new CamelEditor(CAMEL_CONTEXT);
 		assertFalse(editor.isComponentAvailable("Otherwise"));
@@ -233,7 +230,6 @@ public class CamelEditorTest extends DefaultTest {
 	@Jira("FUSETOOLS-2281")
 	@RunIf(conditionClass = IssueIsClosed.class)
 	public void testCodeCompletion() {
-
 		new CamelProject(PROJECT_NAME).openCamelContext(CAMEL_CONTEXT);
 		CamelEditor.switchTab("Source");
 		EditorManipulator.copyFileContentToCamelXMLEditor("resources/camel-context-all.xml");
@@ -286,7 +282,6 @@ public class CamelEditorTest extends DefaultTest {
 	 */
 	@Test
 	public void testDragAndDropComponents() {
-
 		setupPrepareIDEForManipulationTests();
 		CamelEditor editor = new CamelEditor(CAMEL_CONTEXT);
 		editor.addCamelComponent(new Otherwise(), "Choice");
@@ -324,7 +319,6 @@ public class CamelEditorTest extends DefaultTest {
 	 */
 	@Test
 	public void testCollapseExpandFeature() {
-
 		CamelEditor editor = new CamelEditor(CAMEL_CONTEXT);
 		CamelComponentEditPart editPart = new CamelComponentEditPart("Choice");
 		int startHeight = editPart.getBounds().height;

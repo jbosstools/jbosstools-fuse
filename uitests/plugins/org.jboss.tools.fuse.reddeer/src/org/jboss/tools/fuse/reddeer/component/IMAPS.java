@@ -14,7 +14,7 @@ public class IMAPS implements CamelComponent {
 
 	@Override
 	public String getPaletteEntry() {
-		return "IMAPS";
+		return "IMAPS (Secure)";
 	}
 
 	@Override

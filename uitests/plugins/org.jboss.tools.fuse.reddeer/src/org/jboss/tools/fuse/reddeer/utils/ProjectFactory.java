@@ -267,7 +267,7 @@ public class ProjectFactory {
 		InstalledJREs jres = new InstalledJREs(prefs); 
 		prefs.open();
 		prefs.select(jres);
-		boolean hasJava8 = jres.containsJreWithName("Java\\s*SE.*8.*") || jres.containsJreWithName(".*jdk.*8.*");
+		boolean hasJava8 = jres.containsJreWithName("(Java\\sSE)?(.*jdk)?.*([^a-z])?8([^a-z])?.*(jdk.*)?");
 		prefs.ok();	
 		return hasJava8;
 	}
