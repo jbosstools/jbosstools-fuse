@@ -74,6 +74,7 @@ public class FuseProject extends ExternalResource {
 
 	@Override
 	public void before() throws Throwable {
+		logForCiInvestigationPurpose("Begin FuseProject.before() " + projectName);
 		super.before();
 		IWorkspace ws = ResourcesPlugin.getWorkspace();
 		project = ws.getRoot().getProject(projectName);
@@ -89,7 +90,13 @@ public class FuseProject extends ExternalResource {
 		if (isBlueprint) {
 			pomContent = DUMMY_BLUEPRINT_POM_CONTENT;
 		}
-		pom.create(new ByteArrayInputStream(String.format(pomContent, this.camelVersion).getBytes(StandardCharsets.UTF_8)), true, new NullProgressMonitor());
+		ByteArrayInputStream newPomContent = new ByteArrayInputStream(String.format(pomContent, this.camelVersion).getBytes(StandardCharsets.UTF_8));
+		if(pom.exists()) {
+			pom.setContents(newPomContent, IResource.FORCE, new NullProgressMonitor());
+		} else {
+			pom.create(newPomContent, true, new NullProgressMonitor());
+			
+		}
 		IFolder srcFolder = project.getFolder("src");
 		srcFolder.create(IResource.FORCE, true, new NullProgressMonitor());
 		IFolder srcMainFolder = srcFolder.getFolder("main");
@@ -101,17 +108,25 @@ public class FuseProject extends ExternalResource {
 		srcTestFolder.getFolder("java").create(IResource.FORCE, true, new NullProgressMonitor());
 		
 		enableMavenNature();
+		logForCiInvestigationPurpose("End FuseProject.before() " + projectName);
+	}
+
+	private void logForCiInvestigationPurpose(String message) {
+		CamelModelServiceIntegrationTestActivator.getDefault().getLog().log(new Status(IStatus.INFO, CamelModelServiceIntegrationTestActivator.ID, message));
 	}
 
 	private void enableMavenNature() throws CoreException {
+		logForCiInvestigationPurpose("Begin FuseProject.enableMavenNature() " + projectName);
 		ResolverConfiguration configuration = new ResolverConfiguration();
 		configuration.setResolveWorkspaceProjects(true);
 		configuration.setSelectedProfiles(""); //$NON-NLS-1$
 		new BuildAndRefreshJobWaiterUtil().waitJob(new NullProgressMonitor());
 		IProjectConfigurationManager configurationManager = MavenPlugin.getProjectConfigurationManager();
 		configurationManager.enableMavenNature(project, configuration, new NullProgressMonitor());
+		new BuildAndRefreshJobWaiterUtil().waitJob(new NullProgressMonitor());
 		configurationManager.updateProjectConfiguration(project, new NullProgressMonitor());
 		new BuildAndRefreshJobWaiterUtil().waitJob(new NullProgressMonitor());
+		logForCiInvestigationPurpose("End FuseProject.enableMavenNature() " + projectName);
 	}
 
 	private static String getDummyPomContent(String type) {
@@ -126,6 +141,8 @@ public class FuseProject extends ExternalResource {
 
 	@Override
 	public void after() {
+		logForCiInvestigationPurpose("Start FuseProject.after() " + projectName);
+		new BuildAndRefreshJobWaiterUtil().waitJob(new NullProgressMonitor());
 		super.after();
 		if (project != null && project.exists()) {
 			try {
@@ -134,6 +151,7 @@ public class FuseProject extends ExternalResource {
 				CamelModelServiceIntegrationTestActivator.getDefault().getLog().log(new Status(IStatus.ERROR, CamelModelServiceIntegrationTestActivator.ID, "Cannot delete project used during test", e));
 			}
 		}
+		logForCiInvestigationPurpose("End FuseProject.after() " + projectName);
 	}
 
 	public IProject getProject() {

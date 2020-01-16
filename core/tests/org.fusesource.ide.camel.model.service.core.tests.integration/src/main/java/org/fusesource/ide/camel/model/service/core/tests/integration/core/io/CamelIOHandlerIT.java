@@ -38,7 +38,7 @@ public class CamelIOHandlerIT {
 	private CamelIOHandler marshaller = new CamelIOHandler();
 
 	@Rule
-	public FuseProject fuseProject = new FuseProject("External Files");
+	public FuseProject fuseProject = new FuseProject(CamelIOHandlerIT.class.getSimpleName());
 
 	private String fileNameToTest;
 
