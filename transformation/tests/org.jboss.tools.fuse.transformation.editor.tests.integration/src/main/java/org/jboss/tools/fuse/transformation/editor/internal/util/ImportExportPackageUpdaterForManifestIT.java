@@ -13,6 +13,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
+import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
 
 import org.eclipse.core.resources.IContainer;
@@ -40,7 +41,7 @@ import org.osgi.framework.Constants;
 public class ImportExportPackageUpdaterForManifestIT {
 	
 	private static final String POM_START = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
-			"<project xsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd\"" +
+			"<project xsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd\"" +
 			"		  xmlns=\"http://maven.apache.org/POM/4.0.0\"\n" +
 			"    	  xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n" +
 			"  <modelVersion>4.0.0</modelVersion>\n" +
@@ -180,7 +181,7 @@ public class ImportExportPackageUpdaterForManifestIT {
 	private String normalize(String text) {
 		StringBuilder builder = new StringBuilder();
 		StringCharacterIterator iter = new StringCharacterIterator(text);
-		for (char chr = iter.first(); chr != StringCharacterIterator.DONE; chr = iter.next()) {
+		for (char chr = iter.first(); chr != CharacterIterator.DONE; chr = iter.next()) {
 			if (!Character.isWhitespace(chr)){
 				builder.append(chr);
 			}
