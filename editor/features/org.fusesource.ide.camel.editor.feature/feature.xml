@@ -62,7 +62,6 @@
       <import plugin="org.eclipse.graphiti.pattern" version="0.10.2" match="greaterOrEqual"/>
       <import plugin="org.eclipse.graphiti.ui" version="0.10.2" match="greaterOrEqual"/>
       <import plugin="org.junit"/>
-      <import plugin="com.google.guava" version="15.0.0" match="compatible"/>
       <import plugin="org.jboss.tools.jmx.core" version="1.6.0" match="greaterOrEqual"/>
       <import plugin="org.jboss.tools.jmx.ui" version="1.6.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.debug.core" version="3.9.0" match="greaterOrEqual"/>
