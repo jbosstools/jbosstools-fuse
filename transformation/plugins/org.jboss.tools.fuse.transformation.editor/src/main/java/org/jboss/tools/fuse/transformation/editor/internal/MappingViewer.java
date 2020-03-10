@@ -128,13 +128,17 @@ abstract class MappingViewer {
     }
 
     public void dispose() {
-        sourceDropTarget.dispose();
-        targetDropTarget.dispose();
+    	if(sourceDropTarget != null) {
+    		sourceDropTarget.dispose();
+    	}
+    	if(targetDropTarget != null) {
+    		targetDropTarget.dispose();
+    	}
         for (Iterator<PotentialDropTarget> iter = potentialDropTargets.iterator();
              iter.hasNext();) {
                PotentialDropTarget potentialDropTarget = iter.next();
-               if (potentialDropTarget.control == sourcePropPane.getChildren()[0]
-                   || potentialDropTarget.control == targetPropPane.getChildren()[0]) {
+               if (sourcePropPane != null && potentialDropTarget.control == sourcePropPane.getChildren()[0]
+                   || targetPropPane != null && potentialDropTarget.control == targetPropPane.getChildren()[0]) {
                    iter.remove();
                }
         }
