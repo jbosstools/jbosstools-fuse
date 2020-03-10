@@ -296,7 +296,7 @@ public class DozerMapperConfiguration implements MapperConfiguration {
     public List<MappingOperation<?, ?>> getMappingsForSource(Model source) {
         List<MappingOperation<?, ?>> sourceMappings = new LinkedList<>();
         for (MappingOperation<?, ?> op : getMappings()) {
-            if (op.getSource().equals(source)) {
+            if (source.equals(op.getSource())) {
                 sourceMappings.add(op);
             }
         }
@@ -307,7 +307,7 @@ public class DozerMapperConfiguration implements MapperConfiguration {
     public List<MappingOperation<?, ?>> getMappingsForTarget(Model target) {
         List<MappingOperation<?, ?>> targetMappings = new LinkedList<>();
         for (MappingOperation<?, ?> op : getMappings()) {
-            if (op.getTarget().equals(target)) {
+            if (target.equals(op.getTarget())) {
                 targetMappings.add(op);
             }
         }
