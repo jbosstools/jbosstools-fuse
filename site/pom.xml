@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>org.fusesource.ide</groupId>
 		<artifactId>project</artifactId>
-		<version>11.5.0-SNAPSHOT</version>
+		<version>11.6.0-SNAPSHOT</version>
 	</parent>
 	<artifactId>org.fusesource.ide.updatesite</artifactId>
 	<name>Red Hat Fuse Tooling :: Update Site</name>
