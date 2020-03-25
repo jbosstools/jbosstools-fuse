@@ -23,6 +23,7 @@ import org.eclipse.ui.ide.IDE;
 import org.fusesource.ide.branding.perspective.FusePerspective;
 import org.fusesource.ide.camel.editor.CamelEditor;
 import org.fusesource.ide.camel.test.util.editor.AbstractCamelEditorIT;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class CamelEditorCheckOpeningInSpecialCasesIT extends AbstractCamelEditorIT {
@@ -53,6 +54,7 @@ public class CamelEditorCheckOpeningInSpecialCasesIT extends AbstractCamelEditor
 	}
 	
 	@Test
+	@Ignore("requires webkit 2 installed on CI")
 	public void openFileWithoutContext() throws Exception {
 		IEditorPart openEditorOnFileStore = openFileInEditor("/beans");
 		
@@ -60,6 +62,7 @@ public class CamelEditorCheckOpeningInSpecialCasesIT extends AbstractCamelEditor
 	}
 	
 	@Test
+	@Ignore("requires webkit 2 installed on CI")
 	public void openFileWithoutContextWhenOutlinePageOpened() throws Exception {
 		IEditorPart openEditorOnFileStore = openFileInEditorWithOutlineViewOpened("/beans");
 		
