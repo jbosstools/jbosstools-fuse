@@ -160,14 +160,14 @@ public class SyndesisExtensionProjectWizardExtensionDetailsPage extends WizardPa
 		extensionDetailsLabel.setLayoutData(gridData);
 		
 		Text extensionIdText = createField(container, Messages.newProjectWizardExtensionDetailsPageExtensionIdLabel, null, Messages.newProjectWizardExtensionDetailsPageExtensionIdTooltip);
-		UpdateValueStrategy updateStrategy = UpdateValueStrategy.create(null);
+		UpdateValueStrategy<String, String> updateStrategy = new UpdateValueStrategy<>();
 		updateStrategy.setBeforeSetValidator(new SyndesisExtensionIdValidator());		
 		createBinding(dbc, extensionIdText, "extensionId", updateStrategy);
 		// set a default value
 		extensionIdText.setText(DEFAULT_EXTENSION_ID);
 		
 		Text extensionNameText = createField(container, Messages.newProjectWizardExtensionDetailsPageNameLabel, null, Messages.newProjectWizardExtensionDetailsPageNameTooltip);
-		updateStrategy = UpdateValueStrategy.create(null);
+		updateStrategy = new UpdateValueStrategy<>();
 		updateStrategy.setBeforeSetValidator(new SyndesisExtensionNameValidator());
 		createBinding(dbc, extensionNameText, "name", updateStrategy);
 		// set a default value
@@ -177,7 +177,7 @@ public class SyndesisExtensionProjectWizardExtensionDetailsPage extends WizardPa
 		createBinding(dbc, extensionDescriptionText, "description");
 
 		Text extensionVersionText = createField(container, Messages.newProjectWizardExtensionDetailsPageVersionLabel, null, Messages.newProjectWizardExtensionDetailsPageVersionTooltip);
-		updateStrategy = UpdateValueStrategy.create(null);
+		updateStrategy = new UpdateValueStrategy<>();
 		updateStrategy.setBeforeSetValidator(new SyndesisExtensionVersionValidator());
 		createBinding(dbc, extensionVersionText, "version", updateStrategy);
 		// set a default value
@@ -242,8 +242,7 @@ public class SyndesisExtensionProjectWizardExtensionDetailsPage extends WizardPa
 		syndesisVersionCombo.setLabelProvider(new SyndesisVersionLabelProvider());
 		syndesisVersionCombo.setComparator(new ViewerComparator(Comparator.reverseOrder()));
 		syndesisVersionCombo.setContentProvider(ArrayContentProvider.getInstance());
-		UpdateValueStrategy updateStrategy = UpdateValueStrategy.create(null);
-		updateStrategy.setConverter(IConverter.create(String.class, String.class, o1 -> translateDisplayTextToVersion((String) o1)));
+		UpdateValueStrategy<String, String> updateStrategy = UpdateValueStrategy.create(IConverter.create(String.class, String.class, o1 -> translateDisplayTextToVersion(o1)));
 		updateStrategy.setBeforeSetValidator(new SyndesisExtensionVersionValidator());
 		createBinding(dbc, syndesisVersionCombo.getCombo(), "syndesisVersion", updateStrategy);
 		
