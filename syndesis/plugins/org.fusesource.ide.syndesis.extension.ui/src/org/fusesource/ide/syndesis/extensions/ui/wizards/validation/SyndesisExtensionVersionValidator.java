@@ -20,11 +20,10 @@ import org.fusesource.ide.syndesis.extensions.ui.internal.Messages;
 /**
  * @author lheinema
  */
-public class SyndesisExtensionVersionValidator implements IValidator {
+public class SyndesisExtensionVersionValidator implements IValidator<String> {
 
 	@Override
-	public IStatus validate(Object value) {
-		String version = (String) value;
+	public IStatus validate(String version) {
 		if (Strings.isBlank(version)) {
 			return ValidationStatus.error(Messages.newProjectWizardExtensionDetailsPageErrorMissingExtensionVersion);
 		} else if (!SyndesisExtensionsUtil.isValidSyndesisExtensionVersion(version)) {

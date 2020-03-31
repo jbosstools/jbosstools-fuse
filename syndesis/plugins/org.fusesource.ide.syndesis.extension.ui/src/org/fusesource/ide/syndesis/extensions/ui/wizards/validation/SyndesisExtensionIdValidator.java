@@ -19,11 +19,10 @@ import org.fusesource.ide.syndesis.extensions.ui.internal.Messages;
 /**
  * @author lheinema
  */
-public class SyndesisExtensionIdValidator implements IValidator {
+public class SyndesisExtensionIdValidator implements IValidator<String> {
 
 	@Override
-	public IStatus validate(Object value) {
-		String id = (String) value;
+	public IStatus validate(String id) {
 		if (Strings.isBlank(id)) {
 			return ValidationStatus.error(Messages.newProjectWizardExtensionDetailsPageErrorMissingExtensionId);
 		} else if (id.indexOf(' ') != -1) {
