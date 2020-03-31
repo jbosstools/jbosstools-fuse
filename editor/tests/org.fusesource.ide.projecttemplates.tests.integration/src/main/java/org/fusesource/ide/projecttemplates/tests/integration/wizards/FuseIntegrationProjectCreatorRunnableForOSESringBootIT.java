@@ -36,7 +36,7 @@ public class FuseIntegrationProjectCreatorRunnableForOSESringBootIT extends Fuse
 	
 	@Parameters(name = "{0}")
 	public static List<String> parameters(){
-		return Arrays.asList(CamelCatalogUtils.CAMEL_VERSION_LATEST_FIS_20, CamelCatalogUtils.CAMEL_VERSION_LATEST_COMMUNITY, CamelForFuseOnOpenShiftToBomMapper.FUSE_750_CAMEL_VERSION);
+		return Arrays.asList(CamelCatalogUtils.CAMEL_VERSION_LATEST_FIS_20, CamelCatalogUtils.CAMEL_VERSION_LATEST_COMMUNITY, CamelForFuseOnOpenShiftToBomMapper.FUSE_760_CAMEL_VERSION);
 	}
 	
 	public FuseIntegrationProjectCreatorRunnableForOSESringBootIT(String camelVersion) {
@@ -67,6 +67,7 @@ public class FuseIntegrationProjectCreatorRunnableForOSESringBootIT extends Fuse
 		assertThat(project.getFile(".settings/fusetooling/Deploy " + project.getName() + " on OpenShift.launch").getLocation().toFile()).exists();
 	}
 	
+	@Override
 	protected EnvironmentData createEnvironmentData() {
 		return new EnvironmentData(camelVersion, FuseDeploymentPlatform.STANDALONE, FuseRuntimeKind.SPRINGBOOT);
 	}

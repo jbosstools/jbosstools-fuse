@@ -57,6 +57,7 @@ public class CamelVersionToDisplayNameMapper extends OnlineVersionMapper {
 		mapping.put(CamelForFuseOnOpenShiftToBomMapper.FUSE_731_CAMEL_VERSION, CamelForFuseOnOpenShiftToBomMapper.FUSE_731_CAMEL_VERSION + " (Fuse 7.3.1 GA)");
 		mapping.put(CamelForFuseOnOpenShiftToBomMapper.FUSE_740_CAMEL_VERSION, CamelForFuseOnOpenShiftToBomMapper.FUSE_740_CAMEL_VERSION + " (Fuse 7.4.0 GA)");
 		mapping.put(CamelForFuseOnOpenShiftToBomMapper.FUSE_750_CAMEL_VERSION, CamelForFuseOnOpenShiftToBomMapper.FUSE_750_CAMEL_VERSION + " (Fuse 7.5.0 GA)");
+		mapping.put(CamelForFuseOnOpenShiftToBomMapper.FUSE_760_CAMEL_VERSION, CamelForFuseOnOpenShiftToBomMapper.FUSE_760_CAMEL_VERSION + " (Fuse 7.6.0 GA)");
 		
 		return mapping;
 	}
