@@ -127,6 +127,7 @@ This file is currently used by older versions of the tooling to map versions for
 
 ## igniteVersionToDisplayName.properties
 This file maps the Fuse Online version to a human readable name to be displayed in the New Fuse Online Extension Wizard. It replaces the old ignite.properties.
+The released versions can be found at [https://maven.repository.redhat.com/ga/io/syndesis/extension/extension-bom/](https://maven.repository.redhat.com/ga/io/syndesis/extension/extension-bom/).
 
 Syntax:
 
