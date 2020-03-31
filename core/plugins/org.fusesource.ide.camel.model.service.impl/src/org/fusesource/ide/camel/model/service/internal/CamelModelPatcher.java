@@ -167,6 +167,7 @@ public class CamelModelPatcher {
 		applyFixToComponent(loadedModel, "corda", "corda:url", "corda:configuration");
 		applyFixToComponent(loadedModel, "websocket-jsr356", "websocket-jsr356:/resourceUri", "websocket-jsr356:websocketPathOrUri");
 		applyFixToComponent(loadedModel, "pulsar", "pulsar:persistence://tenant/namespace/topic", "pulsar:topic");
+		applyFixToComponent(loadedModel, "pulsar", "pulsar:uri", "pulsar:topicUri");
 	}
 
 	private static void applyFixToComponent(CamelModel loadedModel, String componentScheme, String invalidSyntaxBugFromOlderVersion, String correctSyntax) {

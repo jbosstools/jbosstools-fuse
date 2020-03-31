@@ -36,6 +36,7 @@ public class FISBomToFabric8MavenPluginMapper extends OnlineVersionMapper {
 		mapping.put("3.0.11.fuse-730075-redhat-00001", "3.5.33.fuse-730073-redhat-00001");
 		mapping.put("3.0.11.fuse-740029-redhat-00002", "3.5.33.fuse-740029-redhat-00001");
 		mapping.put("3.0.11.fuse-750035-redhat-00001", "3.5.33.fuse-750033-redhat-00001");
+		mapping.put("3.0.11.fuse-760025-redhat-00001", "3.5.33.fuse-760025-redhat-00001");
 		return mapping;
 	}
 
