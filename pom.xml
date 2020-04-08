@@ -65,7 +65,12 @@
 		<!-- other versions -->
 		<jackson.version>2.5.1</jackson.version>
 		<slf4j.version>1.7.5</slf4j.version>
+		
+		<!-- Sonar -->
 		<sonar.test.inclusions>**/*Test.*,**/test/**/*,**/*IT.*</sonar.test.inclusions>
+		<sonar.projectKey>fusetools</sonar.projectKey>
+		<sonar.organization>default</sonar.organization>
+		<sonar.projectName>Red Hat Fuse Tooling</sonar.projectName>
 		
 		<!-- This property allows to specify Camel version used during test executions (where applicable). It is a comma-separated list. -->
 		<camelVersionsToTestWith />
