@@ -214,5 +214,16 @@
 		</plugins>
 	</build>
 
-
+	<repositories>
+		<repository>
+			<id>jboss.central</id>
+			<url>https://repository.jboss.org/nexus/content/repositories/central/</url>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
 </project>
