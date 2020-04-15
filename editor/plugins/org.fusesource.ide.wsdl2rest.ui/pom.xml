@@ -13,8 +13,8 @@
 	<name>Red Hat Fuse Tooling :: Camel Editor :: Plugins :: Wsdl2Rest UI</name>
 
 <properties>
-		<version.apache.camel>2.21.0.fuse-760027-redhat-00001</version.apache.camel>
-		<version.apache.cxf>3.2.7.fuse-760026-redhat-00001</version.apache.cxf>
+		<version.apache.camel>2.21.0.fuse-730078-redhat-00001</version.apache.camel>
+		<version.apache.cxf>3.2.7.fuse-730040-redhat-00001</version.apache.cxf>
 		<version.apache.velocity>1.7.0.redhat-5</version.apache.velocity>
 		<version.args4j>2.33</version.args4j>
 		<version.javaparser>2.5.1</version.javaparser>
@@ -24,7 +24,9 @@
 		<version.jaxb-api>2.3.0</version.jaxb-api>
 		<version.wsdl4j>1.6.3.redhat-2</version.wsdl4j>
 		<version.commons.validator>1.6</version.commons.validator>
-		<version.wsdl2rest>0.8.0.fuse-760026-redhat-00001</version.wsdl2rest>
+		<!-- TODO: Adjust this wsdl2rest version to the final Fuse productized 
+			version when it is available -->
+		<version.wsdl2rest>0.8.0.fuse-730094-redhat-00001</version.wsdl2rest>
 		<version.commons.collections>3.2.2</version.commons.collections>
 		<version.commons.lang>2.4</version.commons.lang>
         <version.commons.lang3>3.5</version.commons.lang3>
