@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Activator: org.fusesource.ide.server.tests.FuseServerTestActivator
 Bundle-Name: %Bundle-Name
 Bundle-SymbolicName: org.fusesource.ide.server.tests;singleton:=true
-Bundle-Version: 11.6.0.qualifier
+Bundle-Version: 11.7.0.qualifier
 Bundle-Vendor: %Bundle-Vendor
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8

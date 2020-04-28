@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %Bundle-Name
 Bundle-SymbolicName: org.jboss.tools.fuse.transformation.core;singleton:=true
-Bundle-Version: 11.6.0.qualifier
+Bundle-Version: 11.7.0.qualifier
 Bundle-Vendor: %Bundle-Vendor
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-Activator: org.jboss.tools.fuse.transformation.core.internal.DataTransformationCoreActivator
@@ -21,7 +21,7 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.11.0",
  org.fusesource.ide.foundation.ui;bundle-version="10.0.0",
  org.fusesource.ide.camel.editor;bundle-version="10.0.0",
  org.jboss.tools.common.jaxb;resolution:=optional,
- org.fusesource.ide.jsonschema2pojo-0.4.13;bundle-version="11.6.0"
+ org.fusesource.ide.jsonschema2pojo-0.4.13;bundle-version="11.7.0"
 Export-Package: com.google.gson;x-friends:="org.jboss.tools.fuse.transformation.editor",
  com.google.gson.annotations;x-friends:="org.jboss.tools.fuse.transformation.editor",
  com.google.gson.internal;x-friends:="org.jboss.tools.fuse.transformation.editor",
