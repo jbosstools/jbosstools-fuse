@@ -149,7 +149,7 @@ public class ToolBehaviourProviderIT {
 		
 		initToolBehaviourProvider();
 		
-		testAMQPalette(ActiveMQPaletteEntryDependenciesManager.ACTIVEMQ_CAMEL_STARTER, ActiveMQPaletteEntry.CAMEL_JMS_STARTER);
+		testAMQPalette(ActiveMQPaletteEntryDependenciesManager.ACTIVEMQ_CAMEL, ActiveMQPaletteEntry.CAMEL_JMS_STARTER);
 	}
 	
 	@Test
