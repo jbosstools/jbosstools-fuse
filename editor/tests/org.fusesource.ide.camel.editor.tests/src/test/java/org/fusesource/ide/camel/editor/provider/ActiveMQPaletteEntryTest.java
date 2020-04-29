@@ -45,23 +45,23 @@ public class ActiveMQPaletteEntryTest {
 	}
 	
 	@Test
-	public void testGetRequiredDependenciesForSpringBootProvider() throws Exception {
+	public void testGetRequiredDependenciesForSpringBootProviderIsUsingGenericOne() throws Exception {
 		List<Dependency> requiredDependencies = activeMQPaletteEntry.getRequiredDependencies(CamelCatalogUtils.RUNTIME_PROVIDER_SPRINGBOOT);
 		
 		Dependency amqDep = requiredDependencies.get(0);
-		assertThat(amqDep.getArtifactId()).isEqualTo(ActiveMQPaletteEntryDependenciesManager.ACTIVEMQ_CAMEL_STARTER);
+		assertThat(amqDep.getArtifactId()).isEqualTo(ActiveMQPaletteEntryDependenciesManager.ACTIVEMQ_CAMEL);
 		
 		Dependency jmsDep = requiredDependencies.get(1);
 		assertThat(jmsDep.getArtifactId()).isEqualTo("camel-jms-starter");
 	}
 	
 	@Test
-	public void testGetRequiredDependenciesWhenIssueRetrievingCamelVersion() throws Exception {
+	public void testGetRequiredDependenciesWhenIssueRetrievingCamelVersionIsUsingGenericOne() throws Exception {
 		doReturn(null).when(activeMQPaletteEntry).getCurrentProjectCamelVersion();
 		List<Dependency> requiredDependencies = activeMQPaletteEntry.getRequiredDependencies(CamelCatalogUtils.RUNTIME_PROVIDER_SPRINGBOOT);
 		
 		Dependency amqDep = requiredDependencies.get(0);
-		assertThat(amqDep.getArtifactId()).isEqualTo(ActiveMQPaletteEntryDependenciesManager.ACTIVEMQ_CAMEL_STARTER);
+		assertThat(amqDep.getArtifactId()).isEqualTo(ActiveMQPaletteEntryDependenciesManager.ACTIVEMQ_CAMEL);
 		assertThat(amqDep.getVersion()).isEqualTo(ActiveMQPaletteEntryDependenciesManager.LATEST_AMQ_VERSION);
 		
 		Dependency jmsDep = requiredDependencies.get(1);

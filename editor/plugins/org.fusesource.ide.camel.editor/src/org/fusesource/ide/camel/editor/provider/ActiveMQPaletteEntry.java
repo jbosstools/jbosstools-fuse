@@ -51,7 +51,7 @@ public class ActiveMQPaletteEntry implements ICustomPaletteEntry {
 	@Override
 	public List<Dependency> getRequiredDependencies(String runtimeProvider) {
 		List<Dependency> deps = new ArrayList<>();
-		deps.add(createActiveMQDependency(runtimeProvider));
+		deps.add(createActiveMQDependency());
 		deps.add(createJMSDependency(runtimeProvider));
 		return deps;
 	}
@@ -71,11 +71,11 @@ public class ActiveMQPaletteEntry implements ICustomPaletteEntry {
 		}
 	}
 
-	private Dependency createActiveMQDependency(String runtimeProvider) {
+	private Dependency createActiveMQDependency() {
 		ActiveMQPaletteEntryDependenciesManager activeMQPaletteEntryDependenciesManager = new ActiveMQPaletteEntryDependenciesManager();
 		return createDependency(
 				ActiveMQPaletteEntryDependenciesManager.ORG_APACHE_ACTIVEMQ,
-				activeMQPaletteEntryDependenciesManager.getArtifactId(runtimeProvider),
+				activeMQPaletteEntryDependenciesManager.getArtifactId(),
 				activeMQPaletteEntryDependenciesManager.getActiveMQVersion(getCurrentProjectCamelVersion()));
 	}
 

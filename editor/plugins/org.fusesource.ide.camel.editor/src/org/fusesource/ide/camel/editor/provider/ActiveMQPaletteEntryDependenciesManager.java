@@ -17,7 +17,6 @@ import java.util.Map;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Plugin;
 import org.fusesource.ide.camel.editor.provider.ext.IDependenciesManager;
-import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
 import org.fusesource.ide.foundation.core.util.Strings;
 
 public class ActiveMQPaletteEntryDependenciesManager implements IDependenciesManager {
@@ -26,7 +25,6 @@ public class ActiveMQPaletteEntryDependenciesManager implements IDependenciesMan
 	private static final String FUSE_SUFFIX = ".fuse-";
 	static final String ORG_APACHE_ACTIVEMQ = "org.apache.activemq";
 	public static final String ACTIVEMQ_CAMEL = "activemq-camel";
-	public static final String ACTIVEMQ_CAMEL_STARTER = "activemq-camel-starter";
 	
 	// TODO: change me after each release
 	public static final String LATEST_AMQ_VERSION = "5.11.0";
@@ -61,8 +59,7 @@ public class ActiveMQPaletteEntryDependenciesManager implements IDependenciesMan
 
 	private boolean isActiveMQCamelDependency(Dependency dependency) {
 		String artifactId = dependency.getArtifactId();
-		return ORG_APACHE_ACTIVEMQ.equals(dependency.getGroupId())
-				&& (ACTIVEMQ_CAMEL.equals(artifactId) || ACTIVEMQ_CAMEL_STARTER.equals(artifactId));
+		return ORG_APACHE_ACTIVEMQ.equals(dependency.getGroupId()) && ACTIVEMQ_CAMEL.equals(artifactId);
 	}
 
 	String getActiveMQVersion(String camelVersion) {
@@ -102,11 +99,7 @@ public class ActiveMQPaletteEntryDependenciesManager implements IDependenciesMan
 		throw new IllegalArgumentException("Given Camel Version " + camelVersion + " doesn't contain a valid value");
 	}
 
-	public String getArtifactId(String runtimeProvider) {
-		if(CamelCatalogUtils.RUNTIME_PROVIDER_SPRINGBOOT.equals(runtimeProvider)){
-			return ActiveMQPaletteEntryDependenciesManager.ACTIVEMQ_CAMEL_STARTER;
-		} else {
-			return ActiveMQPaletteEntryDependenciesManager.ACTIVEMQ_CAMEL;
-		}
+	public String getArtifactId() {
+		return ActiveMQPaletteEntryDependenciesManager.ACTIVEMQ_CAMEL;
 	}
 }
