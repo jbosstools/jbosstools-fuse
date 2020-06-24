@@ -144,6 +144,12 @@ public class CamelCatalogUtils {
 		return new ArrayList<>(TEST_CAMEL_VERSIONS);
 	}
 	
+	public static List<String> getCamelVersionsToTestWithForTemplates() {
+		List<String> toTest = new ArrayList<>(TEST_CAMEL_VERSIONS);
+		toTest.remove(CAMEL_VERSION_LATEST_COMMUNITY);
+		return toTest;
+	}
+	
 	public static List<String> getPureFISVersions() {
 		return new ArrayList<>(CAMEL_VERSION_2_FUSE_FIS_BOM_MAPPING.keySet());
 	}

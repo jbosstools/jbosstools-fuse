@@ -30,7 +30,7 @@ public class FuseIntegrationProjectCreatorRunnableForCBRIT extends FuseIntegrati
 
 	@Parameters(name = "{0}")
 	public static List<String> parameters(){
-		return CamelCatalogUtils.getCamelVersionsToTestWith(); 
+		return CamelCatalogUtils.getCamelVersionsToTestWithForTemplates(); 
 	}
 	
 	public FuseIntegrationProjectCreatorRunnableForCBRIT(String version) {
