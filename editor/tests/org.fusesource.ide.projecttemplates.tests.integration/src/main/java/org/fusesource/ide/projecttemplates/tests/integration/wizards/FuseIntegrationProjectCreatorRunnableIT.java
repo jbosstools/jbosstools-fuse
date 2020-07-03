@@ -61,6 +61,7 @@ import org.fusesource.ide.projecttemplates.impl.simple.AbstractEAPSpringTemplate
 import org.fusesource.ide.projecttemplates.impl.simple.EmptyProjectTemplateForFuse6;
 import org.fusesource.ide.projecttemplates.impl.simple.EmptyProjectTemplateForFuse7;
 import org.fusesource.ide.projecttemplates.impl.simple.EmptyProjectTemplateForFuse71;
+import org.fusesource.ide.projecttemplates.impl.simple.EmptyProjectTemplateForFuse76;
 import org.fusesource.ide.projecttemplates.tests.integration.ProjectTemplatesIntegrationTestsActivator;
 import org.fusesource.ide.projecttemplates.util.NewFuseIntegrationProjectMetaData;
 import org.fusesource.ide.projecttemplates.wizards.FuseIntegrationProjectCreatorRunnable;
@@ -182,6 +183,8 @@ public abstract class FuseIntegrationProjectCreatorRunnableIT extends AbstractPr
 		metadata.setDslType(dsl);
 		if (isOlderThan220()) {
 			metadata.setTemplate(new EmptyProjectTemplateForFuse6());
+		} else if(isNewerThan221For76()) {
+			metadata.setTemplate(new EmptyProjectTemplateForFuse76());
 		} else if (isNewerThan221()){
 			metadata.setTemplate(new EmptyProjectTemplateForFuse71());
 		} else {
@@ -301,5 +304,9 @@ public abstract class FuseIntegrationProjectCreatorRunnableIT extends AbstractPr
 	
 	protected boolean isNewerThan221() {
 		return new VersionUtil().isStrictlyGreaterThan(camelVersion, "2.21.0.fuse-710");
+	}
+	
+	protected boolean isNewerThan221For76() {
+		return new VersionUtil().isStrictlyGreaterThan(camelVersion, "2.21.0.fuse-760");
 	}
 }
