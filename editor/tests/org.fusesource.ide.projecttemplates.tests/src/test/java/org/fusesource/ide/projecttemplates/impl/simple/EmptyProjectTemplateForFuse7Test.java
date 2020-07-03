@@ -36,18 +36,18 @@ public class EmptyProjectTemplateForFuse7Test {
 	@Parameters(name = "{0} should be compatible? {1}")
 	public static Collection<Object[]> data() {
 		return Arrays.asList(new Object[][] {
-			{ "2.21.0.fuse-710XXX-redhat-X", true },
-			{ "2.21.1", true },
-			{ "2.21.0.fuse-000XXX-redhat-X", false },
-			{ "2.22.0", true },
-			{ "2.21.0", false },
-			{ "2.20.0", false },
+			{ "2.21.0.fuse-710XXX-redhat-X", false },
+			{ "2.21.1", false },
+			{ "2.21.0.fuse-000XXX-redhat-X", true },
+			{ "2.22.0", false },
+			{ "2.21.0", true },
+			{ "2.20.0", true },
 			{ "2.19.9", false }
 		});
 	}
 	
 	@Test
 	public void testIsCompatible() throws Exception {
-		assertThat(new EmptyProjectTemplateForFuse71().isCompatible(new EnvironmentData(version, FuseDeploymentPlatform.STANDALONE, FuseRuntimeKind.KARAF))).isEqualTo(isCompatible);
+		assertThat(new EmptyProjectTemplateForFuse7().isCompatible(new EnvironmentData(version, FuseDeploymentPlatform.STANDALONE, FuseRuntimeKind.KARAF))).isEqualTo(isCompatible);
 	}
 }

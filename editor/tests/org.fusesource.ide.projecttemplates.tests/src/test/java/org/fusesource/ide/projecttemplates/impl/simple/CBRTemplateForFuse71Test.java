@@ -37,9 +37,9 @@ public class CBRTemplateForFuse71Test {
 	public static Collection<Object[]> data() {
 		return Arrays.asList(new Object[][] {
 			{ "2.21.0.fuse-710XXX-redhat-X", true },
-			{ "2.21.1", true },
+			{ "2.21.1", false },
 			{ "2.21.0.fuse-000XXX-redhat-X", false },
-			{ "2.22.0", true },
+			{ "2.22.0", false },
 			{ "2.21.0", false },
 			{ "2.20.0", false },
 			{ "2.19.9", false }
