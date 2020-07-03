@@ -19,6 +19,7 @@ import org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType;
 import org.fusesource.ide.projecttemplates.impl.simple.CBRTemplateForFuse6;
 import org.fusesource.ide.projecttemplates.impl.simple.CBRTemplateForFuse7;
 import org.fusesource.ide.projecttemplates.impl.simple.CBRTemplateForFuse71;
+import org.fusesource.ide.projecttemplates.impl.simple.CBRTemplateForFuse76;
 import org.fusesource.ide.projecttemplates.util.NewFuseIntegrationProjectMetaData;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -59,6 +60,8 @@ public class FuseIntegrationProjectCreatorRunnableForCBRIT extends FuseIntegrati
 		NewFuseIntegrationProjectMetaData newProjectMetadata = super.createDefaultNewProjectMetadata(dsl, projectName);
 		if(isOlderThan220()){
 			newProjectMetadata.setTemplate(new CBRTemplateForFuse6());
+		} else if(isNewerThan221For76()) {
+			newProjectMetadata.setTemplate(new CBRTemplateForFuse76());
 		} else if(isNewerThan221()){
 			newProjectMetadata.setTemplate(new CBRTemplateForFuse71());
 		} else {

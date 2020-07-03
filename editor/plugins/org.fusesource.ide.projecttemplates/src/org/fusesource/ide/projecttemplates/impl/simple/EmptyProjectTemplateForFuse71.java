@@ -21,6 +21,7 @@ import org.fusesource.ide.projecttemplates.wizards.pages.model.EnvironmentData;
 public class EmptyProjectTemplateForFuse71 extends AbstractEmptyProjectTemplate {
 	
 	private static final String MINIMAL_COMPATIBLE_CAMEL_VERSION = "2.21.0.fuse-710";
+	private static final String MAXIMAL_COMPATIBLE_CAMEL_VERSION = "2.21.0.fuse-760";
 
 	@Override
 	public TemplateConfiguratorSupport getConfigurator() {
@@ -35,6 +36,7 @@ public class EmptyProjectTemplateForFuse71 extends AbstractEmptyProjectTemplate 
 	@Override
 	public boolean isCompatible(EnvironmentData environment) {
 		return super.isCompatible(environment)
+				&& new VersionUtil().isGreaterThan(MAXIMAL_COMPATIBLE_CAMEL_VERSION, environment.getCamelVersion())
 				&& new VersionUtil().isStrictlyGreaterThan(environment.getCamelVersion(), MINIMAL_COMPATIBLE_CAMEL_VERSION);
 	}
 

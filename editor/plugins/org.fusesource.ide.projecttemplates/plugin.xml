@@ -106,6 +106,15 @@
     </projectTemplate>
     <projectTemplate
           category="fuse.projecttemplates.jbossfuse.simple"
+          class="org.fusesource.ide.projecttemplates.impl.simple.CBRTemplateForFuse76"
+          description="%template.simple.cbr.description"
+          id="org.fusesource.ide.projecttemplates.cbrTemplateSimplev76"
+          keywords="fuse cbr content based router"
+          name="%template.simple.cbr.name"
+          weight="0">
+    </projectTemplate>
+    <projectTemplate
+          category="fuse.projecttemplates.jbossfuse.simple"
           class="org.fusesource.ide.projecttemplates.impl.simple.AMQTemplate"
           description="%template.simple.amq.description"
           id="org.fusesource.ide.projecttemplates.amqTemplateSimple"
@@ -196,6 +205,15 @@
           name="%template.medium.cxf.code.first.name"
           weight="50">
     </projectTemplate>
+    <projectTemplate
+          category="fuse.projecttemplates.jbossfuse.advanced"
+          class="org.fusesource.ide.projecttemplates.impl.medium.CXfCodeFirstProjectTemplateForFuse76"
+          description="%template.medium.cxf.code.first.description"
+          id="org.fusesource.ide.projecttemplates.cxfCodeFirstMediumv76"
+          keywords="cxf"
+          name="%template.medium.cxf.code.first.name"
+          weight="50">
+    </projectTemplate>
     <projectTemplateCategory
           id="fuse.projecttemplates.EMPTY_CATEGORY"
           name="%template.category.empty"
@@ -222,6 +240,14 @@
           class="org.fusesource.ide.projecttemplates.impl.simple.EmptyProjectTemplateForFuse71"
           description="%template.empty.description"
           id="org.fusesource.ide.projecttemplates.emptyv71"
+          name="%template.empty.name"
+          weight="50">
+    </projectTemplate>
+    <projectTemplate
+          category="fuse.projecttemplates.EMPTY_CATEGORY"
+          class="org.fusesource.ide.projecttemplates.impl.simple.EmptyProjectTemplateForFuse76"
+          description="%template.empty.description"
+          id="org.fusesource.ide.projecttemplates.emptyv76"
           name="%template.empty.name"
           weight="50">
     </projectTemplate>
