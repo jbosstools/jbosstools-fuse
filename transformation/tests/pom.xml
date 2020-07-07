@@ -11,10 +11,6 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/x
 	<artifactId>tests</artifactId>
 	<name>Red Hat Fuse Tooling :: Core Transformation :: Tests</name>
 	<packaging>pom</packaging>
-	<properties>
-		<!-- set a different path with -Djbosstools.test.jre.7= -->
-		<jbosstools.test.jre.7>/qa/tools/opt/jdk1.7.0_last</jbosstools.test.jre.7>
-	</properties>
 	<modules>
 		<module>org.jboss.tools.fuse.transformation.core.tests</module>
 		<module>org.jboss.tools.fuse.transformation.core.tests.integration</module>
