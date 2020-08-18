@@ -53,7 +53,8 @@ Require-Bundle: org.junit,
  org.fusesource.ide.camel.model.service.impl.v2210fuse731003redhat00003;bundle-version="11.8.0",
  org.fusesource.ide.camel.model.service.impl.v2210fuse740039redhat00001;bundle-version="11.8.0",
  org.fusesource.ide.camel.model.service.impl.v2210fuse750033redhat00001;bundle-version="11.8.0",
- org.fusesource.ide.camel.model.service.impl.v2210fuse760027redhat00001;bundle-version="11.8.0"
+ org.fusesource.ide.camel.model.service.impl.v2210fuse760027redhat00001;bundle-version="11.8.0",
+ org.fusesource.ide.camel.model.service.impl.v2210fuse770013redhat00001;bundle-version="11.8.0"
 Bundle-Vendor: %Bundle-Vendor
 Bundle-Activator: org.fusesource.ide.projecttemplates.tests.integration.ProjectTemplatesIntegrationTestsActivator
 Export-Package: org.fusesource.ide.projecttemplates.tests.integration.wizards;x-friends:="org.fusesource.ide.syndesis.extension.core.tests.integration"
