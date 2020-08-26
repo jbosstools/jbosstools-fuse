@@ -68,7 +68,7 @@ public class PropertiesUtilsTestIT {
 	@Test
 	public void testUpdateURIParamsWithPathParams() throws Exception {
 		for (Parameter p : component.getParameters()) {
-			if ("path".equalsIgnoreCase(p.getKind())) {
+			if ("path".equalsIgnoreCase(p.getKind()) && "true".equals(p.getRequired())) {
 				CamelEndpoint endpoint = createCamelEndpoint(component.getSyntax());
 				updateURIParams(endpoint, p, "abc", component, modelMap(component.getParameters()));
 				assertUri(endpoint.getUri(), component, p, "abc");
