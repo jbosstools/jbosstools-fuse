@@ -24,7 +24,7 @@ import org.junit.runners.Parameterized.Parameter;
 import org.junit.runners.Parameterized.Parameters;
 
 @RunWith(Parameterized.class)
-public class OSESpringBootXMLTemplateForFuse71Test {
+public class OSESpringBootXMLTemplateForFuse77Test {
 
 	@Parameter
 	public String version;
@@ -35,11 +35,11 @@ public class OSESpringBootXMLTemplateForFuse71Test {
 	@Parameters(name = "{0} should be compatible? {1}")
 	public static Collection<Object[]> data() {
 		return Arrays.asList(new Object[][] {
-			{ "2.23.1.fuse-770XXX-redhat-X", false },
-			{ "2.21.0.fuse-710XXX-redhat-X", true },
-			{ "2.21.1", true },
+			{ "2.23.1.fuse-770XXX-redhat-X", true },
+			{ "2.21.0.fuse-710XXX-redhat-X", false },
+			{ "2.21.1", false },
 			{ "2.21.0.fuse-000XXX-redhat-X", false },
-			{ "2.22.0", true },
+			{ "2.22.0", false },
 			{ "2.21.0", false },
 			{ "2.20.0", false },
 			{ "2.19.9", false },
@@ -48,7 +48,7 @@ public class OSESpringBootXMLTemplateForFuse71Test {
 	
 	@Test
 	public void testIsCompatible() throws Exception {
-		assertThat(new OSESpringBootXMLTemplateForFuse71().isCompatible(new EnvironmentData(version, null, FuseRuntimeKind.SPRINGBOOT))).isEqualTo(isCompatible);
+		assertThat(new OSESpringBootXMLTemplateForFuse77().isCompatible(new EnvironmentData(version, null, FuseRuntimeKind.SPRINGBOOT))).isEqualTo(isCompatible);
 	}
 
 }
