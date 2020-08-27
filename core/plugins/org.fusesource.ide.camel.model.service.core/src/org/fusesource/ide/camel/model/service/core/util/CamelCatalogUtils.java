@@ -127,6 +127,7 @@ public class CamelCatalogUtils {
 			TEST_CAMEL_VERSIONS.add(CAMEL_VERSION_LATEST_PRODUCTIZED_62);
 			TEST_CAMEL_VERSIONS.add(CAMEL_VERSION_LATEST_PRODUCTIZED_63);
 			TEST_CAMEL_VERSIONS.add(CAMEL_VERSION_LATEST_FIS_20);
+			TEST_CAMEL_VERSIONS.add(CamelForFuseOnOpenShiftToBomMapper.FUSE_770_CAMEL_VERSION_CAMEL_2_21);
 			TEST_CAMEL_VERSIONS.add(CamelForFuseOnOpenShiftToBomMapper.FUSE_770_CAMEL_VERSION);
 		}
 	}
@@ -147,9 +148,17 @@ public class CamelCatalogUtils {
 		return new ArrayList<>(TEST_CAMEL_VERSIONS);
 	}
 	
-	public static List<String> getCamelVersionsToTestWithForTemplates() {
+	public static List<String> getCamelVersionsToTestWithForNonOpenShiftTemplates() {
 		List<String> toTest = new ArrayList<>(TEST_CAMEL_VERSIONS);
 		toTest.remove(CAMEL_VERSION_LATEST_COMMUNITY);
+		toTest.remove(CamelForFuseOnOpenShiftToBomMapper.FUSE_770_CAMEL_VERSION);
+		return toTest;
+	}
+	
+	public static List<String> getCamelVersionsToTestWithForOpenShiftTemplates() {
+		List<String> toTest = new ArrayList<>();
+		toTest.add(CAMEL_VERSION_LATEST_FIS_20);
+		toTest.add(CamelForFuseOnOpenShiftToBomMapper.FUSE_770_CAMEL_VERSION);
 		return toTest;
 	}
 	

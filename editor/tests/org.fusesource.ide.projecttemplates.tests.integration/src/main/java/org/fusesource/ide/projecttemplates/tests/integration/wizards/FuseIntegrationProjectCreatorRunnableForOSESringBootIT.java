@@ -12,12 +12,10 @@ package org.fusesource.ide.projecttemplates.tests.integration.wizards;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.core.resources.IProject;
 import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
-import org.fusesource.ide.camel.model.service.core.util.versionmapper.CamelForFuseOnOpenShiftToBomMapper;
 import org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType;
 import org.fusesource.ide.projecttemplates.impl.simple.OSESpringBootXMLTemplateForFuse6;
 import org.fusesource.ide.projecttemplates.impl.simple.OSESpringBootXMLTemplateForFuse7;
@@ -37,7 +35,7 @@ public class FuseIntegrationProjectCreatorRunnableForOSESringBootIT extends Fuse
 	
 	@Parameters(name = "{0}")
 	public static List<String> parameters(){
-		return Arrays.asList(CamelCatalogUtils.CAMEL_VERSION_LATEST_FIS_20, CamelForFuseOnOpenShiftToBomMapper.FUSE_770_CAMEL_VERSION);
+		return CamelCatalogUtils.getCamelVersionsToTestWithForOpenShiftTemplates();
 	}
 	
 	public FuseIntegrationProjectCreatorRunnableForOSESringBootIT(String camelVersion) {
