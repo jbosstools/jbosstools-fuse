@@ -90,4 +90,9 @@ public class TemplateItem implements TemplateOrCategoryItem {
 	public boolean isDefault(EnvironmentData environment) {
 		return template.isDefault(environment, dslType);
 	}
+	
+	@Override
+	public String toString() {
+		return category != null ? category.getName() : "(no category)" + " " + getId() + " " + getName() + " " + dslType.name();
+	}
 }
