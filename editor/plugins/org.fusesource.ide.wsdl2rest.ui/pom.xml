@@ -23,7 +23,7 @@
 		<version.jaxws-api>2.1</version.jaxws-api>
 		<version.jaxb-api>2.3.0</version.jaxb-api>
 		<version.wsdl4j>1.6.3.redhat-2</version.wsdl4j>
-		<version.commons.validator>1.6</version.commons.validator>
+		<version.commons.validator>1.7</version.commons.validator>
 		<version.wsdl2rest>0.8.0.fuse-770013-redhat-00002</version.wsdl2rest>
 		<version.commons.collections>3.2.2</version.commons.collections>
 		<version.commons.lang>2.4</version.commons.lang>
