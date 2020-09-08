@@ -31,6 +31,7 @@ public class SupportedCamelVersions {
 	public static final String CAMEL_2_17_0_REDHAT_630262 = "2.17.0.redhat-630262";
 	public static final String CAMEL_2_18_1_REDHAT_000012 = "2.18.1.redhat-000012";
 	public static final String CAMEL_2_18_1_REDHAT_000015 = "2.18.1.redhat-000015";
+	public static final String CAMEL_2_21_0_FUSE_770 = "2.21.0.fuse-770013-redhat-00001";
 	public static final String CAMEL_LATEST = CAMEL_2_18_1_REDHAT_000015;
 
 	public static Collection<String> getCamelVersions() {

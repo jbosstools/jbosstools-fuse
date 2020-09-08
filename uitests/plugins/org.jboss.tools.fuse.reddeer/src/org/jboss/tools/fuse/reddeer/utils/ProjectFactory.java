@@ -43,6 +43,7 @@ import org.eclipse.reddeer.workbench.core.condition.JobIsRunning;
 import org.eclipse.reddeer.workbench.impl.shell.WorkbenchShell;
 import org.eclipse.reddeer.workbench.ui.dialogs.WorkbenchPreferenceDialog;
 import org.jboss.tools.fuse.reddeer.ProjectType;
+import org.jboss.tools.fuse.reddeer.SupportedCamelVersions;
 import org.jboss.tools.fuse.reddeer.preference.InstalledJREs;
 import org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizard;
 import org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardAdvancedPage;
@@ -101,7 +102,12 @@ public class ProjectFactory {
 		NewFuseIntegrationProjectWizardRuntimePage secondPage = new NewFuseIntegrationProjectWizardRuntimePage(wiz);
 		if (version != null) {
 			secondPage.typeCamelVersion(version);
+		} else {
+			if(runtimeType != NewFuseIntegrationProjectWizardRuntimeType.SPRINGBOOT) {
+				secondPage.typeCamelVersion(SupportedCamelVersions.CAMEL_2_21_0_FUSE_770);
+			}
 		}
+		
 		if (deploymentType != null) {
 			secondPage.setDeploymentType(deploymentType);
 		}
