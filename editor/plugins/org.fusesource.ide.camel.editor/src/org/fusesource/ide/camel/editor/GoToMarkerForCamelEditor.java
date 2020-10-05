@@ -12,9 +12,9 @@ package org.fusesource.ide.camel.editor;
 
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.ide.IGotoMarker;
 import org.eclipse.ui.texteditor.MarkerUtilities;
-import org.eclipse.wst.sse.ui.StructuredTextEditor;
 import org.fusesource.ide.camel.editor.globalconfiguration.CamelGlobalConfigEditor;
 import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
@@ -78,7 +78,7 @@ public class GoToMarkerForCamelEditor implements IGotoMarker {
 		// Source editor
 		int lineNumber = MarkerUtilities.getLineNumber(marker);
 		if (lineNumber != -1) {
-			final StructuredTextEditor sourceEditor = camelEditor.getSourceEditor();
+			final TextEditor sourceEditor = camelEditor.getSourceEditor();
 			camelEditor.setActiveEditor(sourceEditor);
 			final IGotoMarker sourceEditorGoToMarker = (IGotoMarker) sourceEditor.getAdapter(IGotoMarker.class);
 			if (sourceEditorGoToMarker != null) {

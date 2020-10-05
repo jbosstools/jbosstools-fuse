@@ -126,9 +126,9 @@
       <propertySections contributorId="org.fusesource.ide.camel.editor">
          <propertySection
                class="org.fusesource.ide.camel.editor.properties.DetailsSection"
+               filter="org.fusesource.ide.camel.editor.properties.DetailsSectionFilter"
                id="org.fusesource.ide.camel.editor.propertysheet.DetailsSection"
                tab="DefaultCamelPropertiesTab">
-            <input type="org.fusesource.ide.camel.model.service.core.model.IFuseDetailsPropertyContributor"/>
          </propertySection>
          <propertySection
                class="org.fusesource.ide.camel.editor.properties.AdvancedEndpointPropertiesSection"
@@ -160,9 +160,9 @@
          <propertySection
                afterSection="DefaultEndpointPropertiesSection"
                class="org.fusesource.ide.camel.editor.properties.DocumentationSection"
+               filter="org.fusesource.ide.camel.editor.properties.DocumentationSectionFilter"
                id="DocumentationSection"
                tab="DocumentationTab">
-            <input type="org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement"/>
          </propertySection>
       </propertySections>
    </extension>   

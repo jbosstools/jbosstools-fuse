@@ -11,11 +11,14 @@
 package org.fusesource.ide.camel.editor;
 
 
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.verify;
+
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.ide.IGotoMarker;
-import org.eclipse.wst.sse.ui.StructuredTextEditor;
 import org.fusesource.ide.camel.editor.globalconfiguration.CamelGlobalConfigEditor;
 import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelEndpoint;
@@ -29,9 +32,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.w3c.dom.Node;
-
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.verify;
 
 /**
  * @author Aurelien Pupier
@@ -47,7 +47,7 @@ public class GoToMarkerForCamelEditorTest {
 	@Mock
 	private CamelGlobalConfigEditor configEditor;
 	@Mock
-	private StructuredTextEditor sourceEditor;
+	private TextEditor sourceEditor;
 	@Mock
 	private IGotoMarker sourceGotoMarker;
 	@Mock

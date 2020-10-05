@@ -50,13 +50,13 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.ide.IGotoMarker;
+import org.eclipse.ui.internal.genericeditor.ExtensionBasedTextEditor;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributor;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
-import org.eclipse.wst.sse.ui.StructuredTextEditor;
 import org.fusesource.ide.camel.editor.commands.DiagramOperations;
 import org.fusesource.ide.camel.editor.commands.ImportCamelContextElementsCommand;
 import org.fusesource.ide.camel.editor.globalconfiguration.CamelGlobalConfigEditor;
@@ -70,8 +70,8 @@ import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.foundation.ui.io.CamelXMLEditorInput;
 import org.fusesource.ide.foundation.ui.util.Selections;
-import org.fusesource.ide.preferences.PreferenceManager;
 import org.fusesource.ide.preferences.PreferencesConstants;
+import org.fusesource.ide.preferences.PreferenceManager;
 
 
 /**
@@ -90,7 +90,7 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 	public static final int REST_CONF_INDEX = 3;
 	
 	/** The text editor used in source page */
-	private StructuredTextEditor sourceEditor;
+	private TextEditor sourceEditor;
 
 	/** The graphical editor used in design page */
 	private CamelDesignEditor designEditor;	
@@ -291,8 +291,8 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 	 */
 	private void createSourcePage(int index) {
 		try {
-			sourceEditor = new StructuredTextEditor();
 			IEditorInput editorInput = designEditor.asFileEditorInput(getEditorInput());
+			sourceEditor = new ExtensionBasedTextEditor();
 			addPage(index, sourceEditor, editorInput);
 			setPageText(index, UIMessages.editorSourcePageTitle);
 		} catch (PartInitException e) {
@@ -464,7 +464,7 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 	protected void pageChange(int newPageIndex) {
 		if (newPageIndex == SOURCE_PAGE_INDEX) {
 			if (sourceEditor == null) {
-				sourceEditor = new StructuredTextEditor();
+				sourceEditor = new ExtensionBasedTextEditor();
 			}
 			if (!rollBackActive) {
 				updateSourceFromModel();
@@ -683,7 +683,7 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 	 * 
 	 * @return
 	 */
-	public StructuredTextEditor getSourceEditor() {
+	public TextEditor getSourceEditor() {
 		return sourceEditor;
 	}
 
