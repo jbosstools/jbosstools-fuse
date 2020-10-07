@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %Bundle-Name
 Bundle-SymbolicName: org.jboss.tools.fuse.transformation.editor;singleton:=true
-Bundle-Version: 11.8.0.qualifier
+Bundle-Version: 11.9.0.qualifier
 Bundle-Activator: org.jboss.tools.fuse.transformation.editor.Activator
 Require-Bundle: org.eclipse.m2e.core;bundle-version="1.5.0",
  org.eclipse.m2e.maven.runtime;bundle-version="1.5.0",
