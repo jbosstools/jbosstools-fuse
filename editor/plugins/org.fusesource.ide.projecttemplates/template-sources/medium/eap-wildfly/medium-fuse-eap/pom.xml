@@ -38,7 +38,7 @@
 
         <!-- Other versions -->
         <version.apache.camel>2.15.1.redhat-621084</version.apache.camel>
-        <version.junit>4.12</version.junit>
+        <version.junit>4.13.1</version.junit>
 
         <!-- Plugin versions -->
         <version.maven.compiler.plugin>3.5.1</version.maven.compiler.plugin>
