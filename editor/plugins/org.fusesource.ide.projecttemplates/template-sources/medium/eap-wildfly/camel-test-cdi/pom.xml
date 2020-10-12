@@ -39,7 +39,7 @@
 
         <!-- Other versions -->
         <version.apache.camel>2.17.0.redhat-630157</version.apache.camel>
-        <version.junit>4.11</version.junit>
+        <version.junit>4.13.1</version.junit>
         <version.wildfly.camel>2.4.0.redhat-630157</version.wildfly.camel>
 
         <!-- Plugin versions -->
