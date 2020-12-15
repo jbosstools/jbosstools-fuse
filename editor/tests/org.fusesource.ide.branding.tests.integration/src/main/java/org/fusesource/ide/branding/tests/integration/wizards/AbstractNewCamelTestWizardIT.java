@@ -11,7 +11,14 @@
 package org.fusesource.ide.branding.tests.integration.wizards;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertTrue;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.InputStreamReader;
+import java.util.stream.Collectors;
+
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.runtime.CoreException;
@@ -28,22 +35,11 @@ import org.fusesource.ide.branding.wizards.NewCamelTestWizard;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.camel.model.service.core.tests.integration.core.io.FuseProject;
 import org.junit.Rule;
-import org.junit.Test;
 
-public class NewCamelTestWizardIT {
+public abstract class AbstractNewCamelTestWizardIT {
 	
 	@Rule
-	public FuseProject fuseProject = new FuseProject(NewCamelTestWizardIT.class.getSimpleName());
-	
-	@Test
-	public void testCreateTestForRouteUsingCamelContext() throws Exception {
-		createTestFor(fuseProject.createEmptyCamelFile());
-	}
-	
-	@Test
-	public void testCreateTestForRouteUsingRoutesForContainer() throws Exception {
-		createTestFor(fuseProject.createEmptyCamelFileWithRoutes());
-	}
+	public FuseProject fuseProject = new FuseProject(getClass().getSimpleName());
 
 	@SuppressWarnings("restriction")
 	protected void createTestFor(CamelFile camelFile) throws CoreException {
@@ -63,7 +59,14 @@ public class NewCamelTestWizardIT {
 		newTypeWizardPage.setTypeName("UniqueTestClassNameTest", false);
 		assertThat(newCamelTestWizard.performFinish()).isTrue();
 		
-		assertThat(project.getFile(new Path("src/test/java/UniqueTestClassNameTest.java")).getLocation().toFile()).exists();
+		IFile testIfile = project.getFile(new Path("src/test/java/UniqueTestClassNameTest.java"));
+		File testFile = testIfile.getLocation().toFile();
+		assertTrue(testFile.exists());
+		BufferedReader reader = new BufferedReader(new InputStreamReader(testIfile.getContents()));
+		String contentOfTestFile = reader.lines().collect(Collectors.joining("\n"));
+		assertThat(contentOfTestFile).contains("class UniqueTestClassNameTest");
+		
+		wizardDialog.close();
 	}
 
 }
