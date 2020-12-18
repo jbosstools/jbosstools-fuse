@@ -44,6 +44,7 @@ public class IgniteVersionMapper extends OnlineVersionMapper {
 		mapping.put("1.8.6.fuse-750001-redhat-00001", "1.8.6.fuse-750001-redhat-00001 (7.5.0.GA)");
 		mapping.put("1.9.0.fuse-760020-redhat-00001", "1.9.0.fuse-760020-redhat-00001 (7.6.0 GA)");
 		mapping.put("1.10.0.fuse-770020-redhat-00001", "1.10.0.fuse-770020-redhat-00001 (7.7.0 GA)");
+		mapping.put("1.11.0.fuse-780011-redhat-00001", "1.11.0.fuse-780011-redhat-00001 (7.8.0 GA)");
 		return mapping;
 	}
 	
