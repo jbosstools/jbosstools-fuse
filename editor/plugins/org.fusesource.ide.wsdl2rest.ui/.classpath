@@ -106,5 +106,27 @@
 	<classpathentry exported="true" kind="lib" path="libs/txw2.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/validation-api.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/woodstox-core.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/velocity-engine-core.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/jakarta.activation-api.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/jakarta.ws.rs-api.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/jakarta.xml.bind-api.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/activation.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/codemodel.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/commons-compress.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/commons-io.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/commons-text.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/cxf-rt-security.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/dtd-parser.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/geronimo-jta_1.1_spec.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/geronimo-ws-metadata_2.0_spec.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/istack-commons-tools.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/jboss-rmi-api_1.0_spec.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/oro.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/relaxng-datatype.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/rngom.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/snappy.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/spring-jcl.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/xsom.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/xz.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
