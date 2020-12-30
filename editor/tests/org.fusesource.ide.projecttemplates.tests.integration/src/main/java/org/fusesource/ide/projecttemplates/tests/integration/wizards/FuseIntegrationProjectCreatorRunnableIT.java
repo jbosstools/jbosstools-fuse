@@ -310,6 +310,10 @@ public abstract class FuseIntegrationProjectCreatorRunnableIT extends AbstractPr
 		return new VersionUtil().isStrictlyGreaterThan(camelVersion, "2.23");
 	}
 	
+	protected boolean isNewerThan2232() {
+		return new VersionUtil().isStrictlyGreaterThan(camelVersion, "2.23.2");
+	}
+	
 	protected boolean isNewerThan221For76() {
 		return new VersionUtil().isStrictlyGreaterThan(camelVersion, "2.21.0.fuse-760");
 	}
