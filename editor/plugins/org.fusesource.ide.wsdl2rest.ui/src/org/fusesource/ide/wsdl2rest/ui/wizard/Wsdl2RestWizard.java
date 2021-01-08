@@ -18,8 +18,10 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Properties;
 
 import org.apache.maven.model.Dependency;
+import org.apache.velocity.app.Velocity;
 import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -384,7 +386,9 @@ public class Wsdl2RestWizard extends Wizard implements INewWizard {
 			ClassLoader oldLoader = Thread.currentThread().getContextClassLoader();
 			try {
 				Thread.currentThread().setContextClassLoader(getClass().getClassLoader());
-
+				
+				initTemplateResourceLoader();
+				
 				Path outJavaPath = javaFile.toPath();
 				Wsdl2Rest tool = new Wsdl2Rest(wsdlLocation, outJavaPath);
 				initContextForTool(isBlueprint, isSpringBoot, camelFile, tool);
@@ -410,6 +414,21 @@ public class Wsdl2RestWizard extends Wizard implements INewWizard {
 			}
 		}
 		subMon.setWorkRemaining(0);
+	}
+
+	/**
+	 * Given that:
+	 *  - between cxf 3.2.7 and 3.3.6, the default values are no more the same for the Template Resource Loader
+	 *  - our bundle is embedding libs and have a dependency on org.eclipse.m2e.maven.runtime that exports a different version of Velocity (1.5. although cxf expects 1.7)
+	 *  
+	 *  We set back default values for Template Resource Loader compatible with Velocity 1.5
+	 */
+	private void initTemplateResourceLoader() {
+		Properties props = new Properties();
+		String clzName = "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader";
+		props.put("resource.loader", "class");
+		props.put("class.resource.loader.class", clzName);
+		Velocity.init(props);
 	}
 
 	/**
