@@ -16,11 +16,15 @@ import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.debug.core.model.IDebugTarget;
-import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.m2e.internal.launch.MavenLaunchDelegate;
+import org.fusesource.ide.launcher.Activator;
 import org.fusesource.ide.launcher.debug.model.CamelDebugTarget;
-import org.fusesource.ide.launcher.debug.util.ICamelDebugConstants;
-import org.fusesource.ide.launcher.util.CamelJMXLaunchConfiguration;
+import org.jboss.tools.jmx.core.IConnectionWrapper;
+import org.jboss.tools.jmx.jvmmonitor.core.IActiveJvm;
+import org.jboss.tools.jmx.jvmmonitor.core.IJvmModelChangeListener;
+import org.jboss.tools.jmx.jvmmonitor.core.JvmModel;
+import org.jboss.tools.jmx.jvmmonitor.core.JvmModelEvent;
+import org.jboss.tools.jmx.local.JVMConnectionUtility;
 
 public abstract class FuseMavenLaunchDelegate extends MavenLaunchDelegate {
 
@@ -44,14 +48,38 @@ public abstract class FuseMavenLaunchDelegate extends MavenLaunchDelegate {
 	@Override
 	public void launch(ILaunchConfiguration configuration, String mode,
 			ILaunch launch, IProgressMonitor monitor) throws CoreException {
-		super.launch(configuration, mode, launch, monitor);
-		
-		if (ILaunchManager.DEBUG_MODE.equals(mode) && hasProcess(launch)) {
-			CamelJMXLaunchConfiguration conf = new CamelJMXLaunchConfiguration(configuration, ICamelDebugConstants.DEFAULT_JMX_URI);
-			IProcess p = launch.getProcesses()[0];
-			IDebugTarget target = new CamelDebugTarget(launch, p, conf.getJMXUrl(), conf.getJMXUser(), conf.getJMXPassword());
-			launch.addDebugTarget(target);
+		if (ILaunchManager.DEBUG_MODE.equals(mode)) {
+			connectCamelDebuggerToLocalProcess(launch);
 		}
+		super.launch(configuration, mode, launch, monitor);
+	}
+
+	private void connectCamelDebuggerToLocalProcess(ILaunch launch) {
+		JvmModel model = JvmModel.getInstance();
+		model.addJvmModelChangeListener(new IJvmModelChangeListener() {
+
+			@Override
+			public void jvmModelChanged(JvmModelEvent jvmModelEvent) {
+				// the check is not perfect, if there is another jvm on the machine added in the
+				// same interval, it can pick this one...
+				// Given that it should be a matter of few milliseconds I expect that it doesn't
+				// appear too much
+				// The benefits of having debug for Fuse 7.8+ is outweighing this restriction.
+				if (JvmModelEvent.State.JvmAdded.equals(jvmModelEvent.state)
+						&& jvmModelEvent.jvm instanceof IActiveJvm
+						&& "localhost".equals(jvmModelEvent.jvm.getHost().getName())
+						&& hasProcess(launch)) {
+					model.removeJvmModelChangeListener(this);
+					try {
+						IConnectionWrapper connectionWrapper = JVMConnectionUtility.findConnectionForJvm((IActiveJvm) jvmModelEvent.jvm);
+						IDebugTarget target = new CamelDebugTarget(launch, launch.getProcesses()[0], connectionWrapper);
+						launch.addDebugTarget(target);
+					} catch (CoreException e) {
+						Activator.getLogger().error("Error while connecting the Camel debugger", e);
+					}
+				}
+			}
+		});
 	}
 	
 	@Override
