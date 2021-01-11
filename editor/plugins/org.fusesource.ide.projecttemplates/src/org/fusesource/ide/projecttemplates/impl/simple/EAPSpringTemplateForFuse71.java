@@ -21,7 +21,7 @@ import org.fusesource.ide.projecttemplates.wizards.pages.model.EnvironmentData;
 public class EAPSpringTemplateForFuse71 extends AbstractEAPSpringTemplate {
 
 	private static final String MINIMAL_COMPATIBLE_CAMEL_VERSION = "2.21.0.fuse-710";
-	private static final String FUSE_7_7_INCOMPATIBLE_CAMEL_VERSION = "2.23.2";
+	private static final String FUSE_7_7_INCOMPATIBLE_CAMEL_VERSION = "2.23.2.fuse-77";
 	
 	@Override
 	public TemplateConfiguratorSupport getConfigurator() {
