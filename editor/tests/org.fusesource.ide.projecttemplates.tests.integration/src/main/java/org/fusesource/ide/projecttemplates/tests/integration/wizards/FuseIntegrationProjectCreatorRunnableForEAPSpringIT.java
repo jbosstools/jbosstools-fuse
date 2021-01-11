@@ -41,6 +41,7 @@ import org.fusesource.ide.projecttemplates.impl.simple.EAPSpringTemplateForFIS;
 import org.fusesource.ide.projecttemplates.impl.simple.EAPSpringTemplateForFuse6;
 import org.fusesource.ide.projecttemplates.impl.simple.EAPSpringTemplateForFuse7;
 import org.fusesource.ide.projecttemplates.impl.simple.EAPSpringTemplateForFuse71;
+import org.fusesource.ide.projecttemplates.impl.simple.EAPSpringTemplateForFuse78;
 import org.fusesource.ide.projecttemplates.util.NewFuseIntegrationProjectMetaData;
 import org.fusesource.ide.projecttemplates.wizards.pages.model.EnvironmentData;
 import org.fusesource.ide.projecttemplates.wizards.pages.model.FuseDeploymentPlatform;
@@ -78,6 +79,8 @@ public class FuseIntegrationProjectCreatorRunnableForEAPSpringIT extends FuseInt
 			} else {
 				newProjectMetadata.setTemplate(new EAPSpringTemplateForFuse6());
 			}
+		} else if(isNewerThan2232()){
+			newProjectMetadata.setTemplate(new EAPSpringTemplateForFuse78());
 		} else if(isNewerThan221()){
 			newProjectMetadata.setTemplate(new EAPSpringTemplateForFuse71());
 		} else {

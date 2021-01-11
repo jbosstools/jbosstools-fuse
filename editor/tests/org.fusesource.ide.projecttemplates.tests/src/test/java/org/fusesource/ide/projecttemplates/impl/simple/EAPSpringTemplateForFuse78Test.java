@@ -25,7 +25,7 @@ import org.junit.runners.Parameterized.Parameter;
 import org.junit.runners.Parameterized.Parameters;
 
 @RunWith(Parameterized.class)
-public class EAPSpringTemplateForFuse71Test {
+public class EAPSpringTemplateForFuse78Test {
 	
 	@Parameter
 	public String version;
@@ -36,12 +36,12 @@ public class EAPSpringTemplateForFuse71Test {
 	@Parameters(name = "{0} should be compatible? {1}")
 	public static Collection<Object[]> data() {
 		return Arrays.asList(new Object[][] {
-			{ "2.23.2.fuse-780XXX-redhat-X", false },
+			{ "2.23.2.fuse-780XXX-redhat-X", true },
 			{ "2.23.2.fuse-77XXX", false },
-			{ "2.21.0.fuse-710XXX-redhat-X", true },
-			{ "2.21.1", true },
+			{ "2.21.0.fuse-710XXX-redhat-X", false },
+			{ "2.21.1", false },
 			{ "2.21.0.fuse-000XXX-redhat-X", false },
-			{ "2.22.0", true },
+			{ "2.22.0", false },
 			{ "2.21.0", false },
 			{ "2.20.0", false },
 			{ "2.19.9", false }
@@ -50,6 +50,6 @@ public class EAPSpringTemplateForFuse71Test {
 	
 	@Test
 	public void testIsCompatible() throws Exception {
-		assertThat(new EAPSpringTemplateForFuse71().isCompatible(new EnvironmentData(version, FuseDeploymentPlatform.STANDALONE, FuseRuntimeKind.WILDFLY))).isEqualTo(isCompatible);
+		assertThat(new EAPSpringTemplateForFuse78().isCompatible(new EnvironmentData(version, FuseDeploymentPlatform.STANDALONE, FuseRuntimeKind.WILDFLY))).isEqualTo(isCompatible);
 	}
 }
