@@ -26,5 +26,6 @@ Require-Bundle: org.jboss.tools.jmx.core;bundle-version="1.6.0",
  org.fusesource.ide.foundation.core;bundle-version="10.0.0",
  org.fusesource.ide.foundation.ui;bundle-version="10.0.0",
  org.fusesource.ide.camel.model.service.core;bundle-version="10.0.0",
- org.jboss.tools.common.jaxb;resolution:=optional
+ org.jboss.tools.common.jaxb;resolution:=optional,
+ javax.annotation;bundle-version="1.3.5"
 Bundle-ClassPath: .
