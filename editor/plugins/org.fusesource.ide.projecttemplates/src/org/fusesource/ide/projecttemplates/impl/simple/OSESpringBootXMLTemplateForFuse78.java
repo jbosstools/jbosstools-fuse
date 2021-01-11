@@ -34,7 +34,9 @@ public class OSESpringBootXMLTemplateForFuse78 extends AbstractOSESpringBootXMLT
 	@Override
 	public boolean isCompatible(EnvironmentData environment) {
 		return super.isCompatible(environment)
-				&& new VersionUtil().isStrictlyGreaterThan(environment.getCamelVersion(), MINIMAL_COMPATIBLE_CAMEL_VERSION);
+				&& new VersionUtil().isStrictlyGreaterThan(environment.getCamelVersion(), MINIMAL_COMPATIBLE_CAMEL_VERSION)
+				// exceptionally using a string comparator as it needs to compare 2.23.2.xxx with 2.23.2.yyy. And Maven Comparator used is not doing it
+				&& environment.getCamelVersion().compareTo(MINIMAL_COMPATIBLE_CAMEL_VERSION) > 0;
 	}
 
 }
