@@ -156,6 +156,7 @@ public class CamelCatalogUtils {
 	public static List<String> getCamelVersionsToTestWithForOpenShiftTemplates() {
 		List<String> toTest = new ArrayList<>();
 		toTest.add(CAMEL_VERSION_LATEST_FIS_20);
+		toTest.add(CamelForFuseOnOpenShiftToBomMapper.FUSE_770_CAMEL_VERSION); // last version using JMX connector debug
 		toTest.add(CamelForFuseOnOpenShiftToBomMapper.FUSE_780_CAMEL_VERSION);
 		return toTest;
 	}
