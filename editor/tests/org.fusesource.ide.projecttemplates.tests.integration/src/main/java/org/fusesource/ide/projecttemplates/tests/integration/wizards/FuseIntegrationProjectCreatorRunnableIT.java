@@ -138,7 +138,9 @@ public abstract class FuseIntegrationProjectCreatorRunnableIT extends AbstractPr
 			if(!(metadata.getTemplate() instanceof AbstractEAPSpringTemplate)) {
 				checkRunAsMenuAvailable(project);
 			}
-			launchDebug(project);
+			if(!(metadata.getCamelVersion().startsWith("2.23.2.fuse-780"))) {
+				launchDebug(project);
+			}
 		} else {
 			//TODO: different Run? or implement the java local camel context?
 		}
