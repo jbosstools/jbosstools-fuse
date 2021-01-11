@@ -18,11 +18,9 @@ import org.fusesource.ide.projecttemplates.adopters.creators.TemplateCreatorSupp
 import org.fusesource.ide.projecttemplates.util.CommonNewProjectMetaData;
 import org.fusesource.ide.projecttemplates.wizards.pages.model.EnvironmentData;
 
-public class EAPSpringTemplateForFuse71 extends AbstractEAPSpringTemplate {
+public class EAPSpringTemplateForFuse78 extends AbstractEAPSpringTemplate {
 
-	private static final String MINIMAL_COMPATIBLE_CAMEL_VERSION = "2.21.0.fuse-710";
-	private static final String FUSE_7_7_INCOMPATIBLE_CAMEL_VERSION = "2.23.2.fuse-77";
-	private static final String MAXIMAL_COMPATIBLE_CAMEL_VERSION = "2.23.2";
+	private static final String MINIMAL_COMPATIBLE_CAMEL_VERSION = "2.23.2.fuse-780";
 	
 	@Override
 	public TemplateConfiguratorSupport getConfigurator() {
@@ -31,15 +29,13 @@ public class EAPSpringTemplateForFuse71 extends AbstractEAPSpringTemplate {
 
 	@Override
 	public TemplateCreatorSupport getCreator(CommonNewProjectMetaData projectMetaData) {
-		return new EAPSpringUnzipTemplateCreator("7.1");
+		return new EAPSpringUnzipTemplateCreator("7.8");
 	}
 	
 	@Override
 	public boolean isCompatible(EnvironmentData environment) {
 		return super.isCompatible(environment)
-				&& new VersionUtil().isStrictlyGreaterThan(environment.getCamelVersion(), MINIMAL_COMPATIBLE_CAMEL_VERSION)
-				&& !environment.getCamelVersion().startsWith(FUSE_7_7_INCOMPATIBLE_CAMEL_VERSION)
-				&& new VersionUtil().isGreaterThan(MAXIMAL_COMPATIBLE_CAMEL_VERSION, environment.getCamelVersion());
+				&& new VersionUtil().isStrictlyGreaterThan(environment.getCamelVersion(), MINIMAL_COMPATIBLE_CAMEL_VERSION);
 	}
 
 }
