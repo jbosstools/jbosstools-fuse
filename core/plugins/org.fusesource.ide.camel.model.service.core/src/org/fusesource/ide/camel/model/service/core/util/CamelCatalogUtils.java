@@ -150,7 +150,6 @@ public class CamelCatalogUtils {
 	public static List<String> getCamelVersionsToTestWithForNonOpenShiftTemplates() {
 		List<String> toTest = new ArrayList<>(TEST_CAMEL_VERSIONS);
 		toTest.remove(CAMEL_VERSION_LATEST_COMMUNITY);
-		toTest.remove(CamelForFuseOnOpenShiftToBomMapper.FUSE_780_CAMEL_VERSION);
 		return toTest;
 	}
 	
