@@ -53,7 +53,7 @@ public class FuseIntegrationProjectCreatorRunnableForOSESringBootIT extends Fuse
 	NewFuseIntegrationProjectMetaData newProjectMetadata = super.createDefaultNewProjectMetadata(dsl, projectName);
 		if (isOlderThan220()) {
 			newProjectMetadata.setTemplate(new OSESpringBootXMLTemplateForFuse6());
-		} else if (isNewerThan2232()){
+		} else if (isNewerThan2232fuse780()){
 			newProjectMetadata.setTemplate(new OSESpringBootXMLTemplateForFuse78());
 		} else if (isNewerThan223()){
 			newProjectMetadata.setTemplate(new OSESpringBootXMLTemplateForFuse77());
