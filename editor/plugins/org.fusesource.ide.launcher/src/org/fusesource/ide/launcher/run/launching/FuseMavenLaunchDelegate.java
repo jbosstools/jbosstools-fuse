@@ -120,7 +120,7 @@ public abstract class FuseMavenLaunchDelegate extends MavenLaunchDelegate {
 		sb.append(" -DECLIPSE_PROCESS_NAME=\"'" + getEclipseProcessName() + "'\"");
 		// switch the test flag
 		sb.append(" -Dmaven.test.skip=" + this.skipTests);
-		// enable jmx
+		// enable JMX RMI Connector - allows remote debug for Fuse 7.8-
 		sb.append(" -Dorg.apache.camel.jmx.createRmiConnector=True");
 		
 		return sb.toString();
