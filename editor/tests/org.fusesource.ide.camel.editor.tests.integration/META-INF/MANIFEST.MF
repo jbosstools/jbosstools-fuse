@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %Bundle-Name
 Bundle-SymbolicName: org.fusesource.ide.camel.editor.tests.integration;singleton:=true
-Bundle-Version: 11.9.0.qualifier
+Bundle-Version: 11.10.0.qualifier
 Bundle-Vendor: %Bundle-Vendor
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Require-Bundle: org.junit;bundle-version="4.12.0",
@@ -46,11 +46,11 @@ Require-Bundle: org.junit;bundle-version="4.12.0",
  org.fusesource.ide.camel.model.service.impl.v2210fuse000112redhat3;bundle-version="11.0.0",
  org.fusesource.ide.camel.model.service.impl.v2210fuse710018redhat00001;bundle-version="11.0.0",
  org.jboss.tools.common.jaxb;resolution:=optional,
- org.fusesource.ide.camel.model.service.impl.v2210fuse720050redhat00001;bundle-version="11.9.0",
- org.fusesource.ide.camel.model.service.impl.v2210fuse730078redhat00001;bundle-version="11.9.0",
- org.fusesource.ide.camel.model.service.impl.v2210fuse731003redhat00003;bundle-version="11.9.0",
- org.fusesource.ide.camel.model.service.impl.v2210fuse740039redhat00001;bundle-version="11.9.0",
- org.fusesource.ide.camel.model.service.impl.v2210fuse750033redhat00001;bundle-version="11.9.0",
- org.fusesource.ide.camel.model.service.impl.v2210fuse760027redhat00001;bundle-version="11.9.0",
- org.fusesource.ide.camel.model.service.impl.v2210fuse770013redhat00001;bundle-version="11.9.0"
+ org.fusesource.ide.camel.model.service.impl.v2210fuse720050redhat00001;bundle-version="11.10.0",
+ org.fusesource.ide.camel.model.service.impl.v2210fuse730078redhat00001;bundle-version="11.10.0",
+ org.fusesource.ide.camel.model.service.impl.v2210fuse731003redhat00003;bundle-version="11.10.0",
+ org.fusesource.ide.camel.model.service.impl.v2210fuse740039redhat00001;bundle-version="11.10.0",
+ org.fusesource.ide.camel.model.service.impl.v2210fuse750033redhat00001;bundle-version="11.10.0",
+ org.fusesource.ide.camel.model.service.impl.v2210fuse760027redhat00001;bundle-version="11.10.0",
+ org.fusesource.ide.camel.model.service.impl.v2210fuse770013redhat00001;bundle-version="11.10.0"
 Bundle-Activator: org.fusesource.ide.camel.editor.tests.integration.Activator
