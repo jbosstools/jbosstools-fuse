@@ -112,18 +112,6 @@
 		<!-- End of repository definitions causing a warning (see FUSETOOLS-2547) -->
 
 		<repository>
-			<id>asf.snapshot.repo</id>
-			<name>ASF SNAPSHOT Repository</name>
-			<url>https://repository.apache.org/content/groups/snapshots</url>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-		</repository>
-
-		<repository>
 			<id>fusesource.ea.repo</id>
 			<name>Red Hat Fuse Early Access Repository</name>
 			<url>https://repo.fusesource.com/nexus/content/groups/ea</url>
