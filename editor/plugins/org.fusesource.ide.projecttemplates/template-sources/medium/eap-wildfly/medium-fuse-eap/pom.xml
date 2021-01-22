@@ -256,16 +256,6 @@
             </snapshots>
         </repository>
         <repository>
-            <id>jboss-earlyaccess-repository</id>
-            <url>http://maven.repository.redhat.com/earlyaccess/all/</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-        <repository>
             <id>fusesource-release-repository</id>
             <url>https://repo.fusesource.com/nexus/content/groups/public/</url>
             <snapshots>
@@ -275,28 +265,8 @@
                 <enabled>true</enabled>
             </releases>
         </repository>
-        <repository>
-            <id>fusesource-earlyaccess-repository</id>
-            <url>https://repo.fusesource.com/nexus/content/groups/ea</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-        </repository>
     </repositories>
     <pluginRepositories>
-        <pluginRepository>
-            <id>jboss-earlyaccess-plugin-repository</id>
-            <url>http://maven.repository.redhat.com/earlyaccess/all/</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </pluginRepository>
         <pluginRepository>
             <id>jboss-ga-plugin-repository</id>
             <url>http://maven.repository.redhat.com/techpreview/all</url>
@@ -310,16 +280,6 @@
         <pluginRepository>
             <id>fusesource-release-plugin-repository</id>
             <url>https://repo.fusesource.com/nexus/content/groups/public/</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </pluginRepository>
-        <pluginRepository>
-            <id>fusesource-earlyaccess-plugin-repository</id>
-            <url>https://repo.fusesource.com/nexus/content/groups/ea</url>
             <releases>
                 <enabled>true</enabled>
             </releases>

@@ -162,18 +162,6 @@
       <name>Red Hat GA Repository</name>
       <url>https://maven.repository.redhat.com/ga</url>
     </repository>
-    <repository>
-      <releases>
-        <enabled>true</enabled>
-        <updatePolicy>never</updatePolicy>
-      </releases>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-      <id>red-hat-ea-repository</id>
-      <name>Red Hat EA Repository</name>
-      <url>https://maven.repository.redhat.com/earlyaccess/all/</url>
-    </repository>
   </repositories>
   <pluginRepositories>
     <pluginRepository>
@@ -199,18 +187,6 @@
       <id>red-hat-ga-repository</id>
       <name>Red Hat GA Repository</name>
       <url>https://maven.repository.redhat.com/ga</url>
-    </pluginRepository>
-    <pluginRepository>
-      <releases>
-        <enabled>true</enabled>
-        <updatePolicy>never</updatePolicy>
-      </releases>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-      <id>red-hat-ea-repository</id>
-      <name>Red Hat EA Repository</name>
-      <url>https://maven.repository.redhat.com/earlyaccess/all/</url>
     </pluginRepository>
   </pluginRepositories>
   <profiles>

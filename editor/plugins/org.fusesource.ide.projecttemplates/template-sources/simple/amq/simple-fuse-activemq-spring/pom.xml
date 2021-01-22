@@ -152,17 +152,6 @@
 		<repository>
 			<releases>
 				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-			<id>ea.fusesource.org</id>
-			<name>FuseSource Community Early Access Release Repository</name>
-			<url>https://repo.fusesource.com/nexus/content/groups/ea</url>
-		</repository>
-		<repository>
-			<releases>
-				<enabled>true</enabled>
 				<updatePolicy>never</updatePolicy>
 			</releases>
 			<snapshots>
@@ -184,17 +173,6 @@
 			<id>release.fusesource.org</id>
 			<name>FuseSource Release Repository</name>
 			<url>https://repo.fusesource.com/nexus/content/repositories/releases</url>
-		</pluginRepository>
-		<pluginRepository>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-			<id>ea.fusesource.org</id>
-			<name>FuseSource Community Early Access Release Repository</name>
-			<url>https://repo.fusesource.com/nexus/content/groups/ea</url>
 		</pluginRepository>
 		<pluginRepository>
 			<releases>

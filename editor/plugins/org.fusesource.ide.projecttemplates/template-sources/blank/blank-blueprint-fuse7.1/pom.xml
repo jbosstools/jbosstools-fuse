@@ -56,31 +56,6 @@
 				<enabled>false</enabled>
 			</snapshots>
 		</repository>
-		<repository>
-			<releases>
-				<enabled>true</enabled>
-				<updatePolicy>never</updatePolicy>
-			</releases>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-			<id>red-hat-ea-repository</id>
-			<name>Red Hat EA Repository</name>
-			<url>https://maven.repository.redhat.com/earlyaccess/all</url>
-		</repository>
-		<!-- To remove when a long-term version will be available -->
-		<repository>
-			<releases>
-				<enabled>true</enabled>
-				<updatePolicy>never</updatePolicy>
-			</releases>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-			<id>jboss-ea-repository</id>
-			<name>Red Hat JBoss Early Access Repository</name>
-			<url>http://repository.jboss.org/nexus/content/groups/ea</url>
-		</repository>
 	</repositories>
 
 	<pluginRepositories>
@@ -107,31 +82,6 @@
 			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>
-		</pluginRepository>
-		<pluginRepository>
-			<releases>
-				<enabled>true</enabled>
-				<updatePolicy>never</updatePolicy>
-			</releases>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-			<id>red-hat-ea-repository</id>
-			<name>Red Hat EA Repository</name>
-			<url>https://maven.repository.redhat.com/earlyaccess/all</url>
-		</pluginRepository>
-		<!-- To remove when a long-term version will be available -->
-		<pluginRepository>
-			<releases>
-				<enabled>true</enabled>
-				<updatePolicy>never</updatePolicy>
-			</releases>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-			<id>jboss-ea-repository</id>
-			<name>Red Hat JBoss Early Access Repository</name>
-			<url>http://repository.jboss.org/nexus/content/groups/ea</url>
 		</pluginRepository>
 	</pluginRepositories>
 

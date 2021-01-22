@@ -238,10 +238,5 @@
 			<id>red-hat-ga-repository</id>
 			<url>https://maven.repository.redhat.com/ga</url>
 		</repository>
-        <repository>
-			<id>red-hat-ea-repository</id>
-			<name>Red Hat EA Repository</name>
-			<url>https://maven.repository.redhat.com/earlyaccess/all</url>
-		</repository>
     </repositories>
 </project>

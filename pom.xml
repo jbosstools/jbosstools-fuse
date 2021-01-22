@@ -112,18 +112,6 @@
 		<!-- End of repository definitions causing a warning (see FUSETOOLS-2547) -->
 
 		<repository>
-			<id>fusesource.ea.repo</id>
-			<name>Red Hat Fuse Early Access Repository</name>
-			<url>https://repo.fusesource.com/nexus/content/groups/ea</url>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-		</repository>
-
-		<repository>
 			<id>fusesource.release.repo</id>
 			<name>Red Hat Fuse Release Repository</name>
 			<url>https://repo.fusesource.com/nexus/content/repositories/releases</url>
@@ -150,17 +138,6 @@
 	</repositories>
 
 	<pluginRepositories>
-		<pluginRepository>
-			<id>fusesource.ea.repo</id>
-			<name>Red Hat Fuse Early Access Repository</name>
-			<url>https://repo.fusesource.com/nexus/content/groups/ea</url>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-		</pluginRepository>
 
 		<pluginRepository>
 			<id>fusesource.release.repo</id>
