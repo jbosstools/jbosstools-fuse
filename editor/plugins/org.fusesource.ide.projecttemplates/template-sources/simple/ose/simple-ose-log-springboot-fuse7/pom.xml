@@ -100,27 +100,11 @@
 			<id>red-hat-ga-repository</id>
 			<url>https://maven.repository.redhat.com/ga</url>
 		</repository>
-		<repository>
-			<id>red-hat-early-access-repository</id>
-			<url>https://maven.repository.redhat.com/earlyaccess/all</url>
-		</repository>
-		<repository>
-			<id>jboss-early-access-repository</id>
-			<url>https://repository.jboss.org/nexus/content/groups/ea</url>
-		</repository>
 	</repositories>
 	<pluginRepositories>
 		<pluginRepository>
 			<id>red-hat-ga-repository</id>
 			<url>https://maven.repository.redhat.com/ga</url>
-		</pluginRepository>
-		<pluginRepository>
-			<id>red-hat-early-access-repository</id>
-			<url>https://maven.repository.redhat.com/earlyaccess/all</url>
-		</pluginRepository>
-		<pluginRepository>
-			<id>jboss-early-access-repository</id>
-			<url>https://repository.jboss.org/nexus/content/groups/ea</url>
 		</pluginRepository>
 	</pluginRepositories>
 	<profiles>
