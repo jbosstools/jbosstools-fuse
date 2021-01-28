@@ -49,7 +49,10 @@ class EventDispatchJob extends Job {
 
 	private void checkSuspendedBreakpoints() {
 		ICamelDebuggerMBeanFacade debugger = camelDebugTarget.getDebugger();
-		if (debugger != null && !camelDebugTarget.isSuspended()) {
+		if (debugger != null
+				&& !camelDebugTarget.isSuspended()
+				&& !camelDebugTarget.isDisconnected()
+				&& !camelDebugTarget.isTerminated()) {
 			try {
 				Set<String> suspendedBreakpoints = debugger.getSuspendedBreakpointNodeIds();
 				if (suspendedBreakpoints != null && !suspendedBreakpoints.isEmpty()) {

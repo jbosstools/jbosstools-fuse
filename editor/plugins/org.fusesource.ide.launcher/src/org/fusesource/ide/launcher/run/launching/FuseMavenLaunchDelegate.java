@@ -16,9 +16,11 @@ import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.debug.core.model.IDebugTarget;
+import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.m2e.internal.launch.MavenLaunchDelegate;
 import org.fusesource.ide.launcher.Activator;
 import org.fusesource.ide.launcher.debug.model.CamelDebugTarget;
+import org.fusesource.ide.launcher.run.util.CamelContextLaunchConfigConstants;
 import org.jboss.tools.jmx.core.IConnectionWrapper;
 import org.jboss.tools.jmx.jvmmonitor.core.IActiveJvm;
 import org.jboss.tools.jmx.jvmmonitor.core.IJvmModelChangeListener;
@@ -59,16 +61,12 @@ public abstract class FuseMavenLaunchDelegate extends MavenLaunchDelegate {
 		model.addJvmModelChangeListener(new IJvmModelChangeListener() {
 
 			@Override
-			public void jvmModelChanged(JvmModelEvent jvmModelEvent) {
-				// the check is not perfect, if there is another jvm on the machine added in the
-				// same interval, it can pick this one...
-				// Given that it should be a matter of few milliseconds I expect that it doesn't
-				// appear too much
-				// The benefits of having debug for Fuse 7.8+ is outweighing this restriction.
+			public void jvmModelChanged(JvmModelEvent jvmModelEvent) {				
 				if (JvmModelEvent.State.JvmAdded.equals(jvmModelEvent.state)
 						&& jvmModelEvent.jvm instanceof IActiveJvm
 						&& "localhost".equals(jvmModelEvent.jvm.getHost().getName())
-						&& hasProcess(launch)) {
+						&& isJVMLaunchCommandOfCamel(jvmModelEvent.jvm.getLaunchCommand())
+						&& isLocalCamelProcess(launch)) {
 					model.removeJvmModelChangeListener(this);
 					try {
 						IConnectionWrapper connectionWrapper = JVMConnectionUtility.findConnectionForJvm((IActiveJvm) jvmModelEvent.jvm);
@@ -82,6 +80,18 @@ public abstract class FuseMavenLaunchDelegate extends MavenLaunchDelegate {
 		});
 	}
 	
+	private boolean isJVMLaunchCommandOfCamel(String launchCommand) {
+		return launchCommand.contains(CamelContextLaunchConfigConstants.ATTR_CONTEXT_FILE);
+	}
+	
+	protected boolean isLocalCamelProcess(ILaunch launch) {
+		if(launch.getProcesses().length > 0) {
+			String cmdLine = launch.getProcesses()[0].getAttribute(IProcess.ATTR_CMDLINE);
+			return cmdLine !=null && cmdLine.contains(getEclipseProcessName()) && cmdLine.contains("-DECLIPSE_PROCESS_NAME");
+		}
+		return false;
+	}
+
 	@Override
 	public ILaunch getLaunch(ILaunchConfiguration configuration, String mode) throws CoreException {
 		// Workaround to FUSETOOLS-3058 with new feature "advanced source lookup" breaking Camel Source Lookup
