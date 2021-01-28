@@ -23,9 +23,9 @@ public class JDKInstaller {
 
 	public IVMInstall installJDK8(IVMInstallType vmInstallType) {
 		IVMInstall vmInstall = vmInstallType.createVMInstall(JDK8_VMINSTALL_NAME);
-		vmInstall.setName(JDK8_VMINSTALL_NAME);
 		File jdk8home = findJDK8VM();
 		vmInstall.setInstallLocation(jdk8home);
+		vmInstall.setName(JDK8_VMINSTALL_NAME);
 		return vmInstall;
 	}
 

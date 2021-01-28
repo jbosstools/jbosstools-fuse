@@ -14,16 +14,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Optional;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.management.MBeanServerConnection;
 import javax.management.MalformedObjectNameException;
 import javax.management.ObjectName;
-import javax.management.remote.JMXConnector;
-import javax.management.remote.JMXConnectorFactory;
-import javax.management.remote.JMXServiceURL;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
@@ -34,6 +31,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.core.ILaunchManager;
+import org.eclipse.debug.core.model.IDebugTarget;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
@@ -51,7 +49,6 @@ import org.fusesource.ide.foundation.ui.util.ScreenshotUtil;
 import org.fusesource.ide.launcher.debug.model.CamelDebugFacade;
 import org.fusesource.ide.launcher.debug.model.CamelDebugTarget;
 import org.fusesource.ide.launcher.debug.model.ThreadGarbageCollector;
-import org.fusesource.ide.launcher.debug.util.ICamelDebugConstants;
 import org.fusesource.ide.launcher.ui.launch.ExecutePomAction;
 import org.fusesource.ide.launcher.ui.launch.ExecutePomActionPostProcessor;
 import org.fusesource.ide.launcher.ui.propertytester.CamelLocalLaunchPropertyTester;
@@ -250,10 +247,8 @@ public abstract class FuseIntegrationProjectCreatorRunnableIT extends AbstractPr
 			@Override
 			protected void appendAttributes(IContainer basedir, ILaunchConfigurationWorkingCopy workingCopy, String goal) {
 				super.appendAttributes(basedir, workingCopy, goal);
-				System.out.println("Maven output file path: "+mavenOutputFilePath);
 				workingCopy.setAttribute("org.eclipse.debug.ui.ATTR_CAPTURE_IN_FILE", mavenOutputFilePath);
 			}
-			
 		};
 
 		executePomAction.setPostProcessor(new ExecutePomActionPostProcessor() {
@@ -271,27 +266,28 @@ public abstract class FuseIntegrationProjectCreatorRunnableIT extends AbstractPr
 			}
 		});
 		executePomAction.launch(getSelectionForLaunch(project), ILaunchManager.DEBUG_MODE);
+		launch = executePomAction.getLaunch();
+		
+		
 		int currentAwaitedTime = 0;
 		while (currentAwaitedTime < ThreadGarbageCollector.THREAD_LIFE_DURATION && !deploymentFinished) {
 			readAndDispatch(0);
-			try (JMXConnector jmxc = JMXConnectorFactory.connect(new JMXServiceURL(ICamelDebugConstants.DEFAULT_JMX_URI))) {
-				MBeanServerConnection mbsc = jmxc.getMBeanServerConnection();
-				deploymentFinished = !mbsc.queryMBeans(new ObjectName(CamelDebugFacade.CAMEL_DEBUGGER_MBEAN_DEFAULT), null).isEmpty();
-				isDeploymentOk = deploymentFinished;
-				System.out.println("JMX connection succeeded");
-				System.out.println("isDeployment Finished? " + isDeploymentOk);
-			} catch(IOException ioe){
-				System.out.println("JMX connection attempt failed");
+			System.out.println("isDeployment Finished? " + deploymentFinished);
+			Optional<IDebugTarget> camelDebugTarget = Stream.of(launch.getDebugTargets())
+				.filter(debugTarget -> debugTarget instanceof CamelDebugTarget)
+				.findAny();
+			if(camelDebugTarget.isPresent()) {
+				MBeanServerConnection mBeanConnection = ((CamelDebugTarget) camelDebugTarget.get()).getMBeanConnection();
+				isDeploymentOk = mBeanConnection != null
+						&& !mBeanConnection.queryMBeans(new ObjectName(CamelDebugFacade.CAMEL_DEBUGGER_MBEAN_DEFAULT), null).isEmpty();
+				if(isDeploymentOk) {
+					deploymentFinished = true;
+				}
 			}
 			Thread.sleep(500);
 			currentAwaitedTime += 500;
 		}
 		assertThat(isDeploymentOk).as("build/deployment failed, you can have a look to the file "+ mavenOutputFilePath + " for more information.").isTrue();
-		launch = executePomAction.getLaunch();
-		assertThat(Stream.of(launch.getDebugTargets())
-				.filter(debugTarget -> debugTarget instanceof CamelDebugTarget)
-				.collect(Collectors.toList()))
-		.isNotEmpty();
 	}
 
 	protected StructuredSelection getSelectionForLaunch(IProject project) {
