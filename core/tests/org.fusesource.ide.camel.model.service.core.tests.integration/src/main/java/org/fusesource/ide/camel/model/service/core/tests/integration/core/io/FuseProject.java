@@ -38,6 +38,8 @@ import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.camel.model.service.core.tests.integration.core.CamelModelServiceIntegrationTestActivator;
 import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
 import org.junit.rules.ExternalResource;
+import org.junit.runner.Description;
+import org.junit.runners.model.Statement;
 
 /**
  * @author Aurelien Pupier
@@ -53,6 +55,10 @@ public class FuseProject extends ExternalResource {
 	private String camelVersion;
 	private boolean isBlueprint = false;
 
+	public FuseProject() {
+		this(null, CamelCatalogUtils.getLatestCamelVersion());
+	}
+	
 	public FuseProject(String projectName) {
 		this(projectName, CamelCatalogUtils.getLatestCamelVersion());
 	}
@@ -70,6 +76,14 @@ public class FuseProject extends ExternalResource {
 	public FuseProject(String projectName, String camelVersion, boolean isBlueprint) {
 		this(projectName, camelVersion);
 		this.isBlueprint = isBlueprint;
+	}
+	
+	@Override
+	public Statement apply(Statement base, Description description) {
+		if(projectName == null) {
+			projectName = description.getClassName() + "." + description.getMethodName();
+		}
+		return super.apply(base, description);
 	}
 
 	@Override
