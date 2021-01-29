@@ -166,7 +166,7 @@ public class ImportExportPackageUpdaterForPomIT {
 			POM_END;
 
 	@Rule
-	public FuseProject fuseProject = new FuseProject(ImportExportPackageUpdaterForPomIT.class.getName());
+	public FuseProject fuseProject = new FuseProject();
 
 	private IProject project;
 	private IFile pomIFile;

@@ -59,7 +59,7 @@ public class ToolBehaviourProviderIT {
 	private ToolBehaviourProvider toolbehaviourprovider;
 	
 	@Rule
-	public FuseProject fuseProject = new FuseProject(ToolBehaviourProviderIT.class.getName());
+	public FuseProject fuseProject = new FuseProject();
 	
 	private static final String DUMMY_POM_CONTENT_WITH_SPRING_BOOT_DEPENDENCY = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
 			+ "<project xsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd\" xmlns=\"http://maven.apache.org/POM/4.0.0\"\n"
