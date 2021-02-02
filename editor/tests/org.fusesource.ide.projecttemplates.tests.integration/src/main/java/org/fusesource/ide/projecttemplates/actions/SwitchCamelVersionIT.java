@@ -31,7 +31,7 @@ public class SwitchCamelVersionIT {
 	private static final String VALID_VERSION = "2.20.1";
 	
 	@Rule
-	public FuseProject fuseProject = new FuseProject(SwitchCamelVersionIT.class.getSimpleName());
+	public FuseProject fuseProject = new FuseProject();
 
 	private CamelMavenUtils utils = new CamelMavenUtils();
 	

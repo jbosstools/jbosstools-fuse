@@ -32,7 +32,7 @@ import org.junit.runner.Description;
 public class CamelCtxNavContentProviderIT {
 
 	@Rule
-	public FuseProject fuseProject = new FuseProject(getClass().getSimpleName());
+	public FuseProject fuseProject = new FuseProject();
 	
 	@Rule
 	public final TestRule watchman = new TestWatcher() {
