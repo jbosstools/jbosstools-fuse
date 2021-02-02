@@ -37,7 +37,7 @@ public class CamelElementConnectionIT {
 	public TemporaryFolder testFolder = new TemporaryFolder();
 
 	@Rule
-	public FuseProject fuseProject = new FuseProject(CamelElementConnectionIT.class.getSimpleName());
+	public FuseProject fuseProject = new FuseProject();
 	
 	@Test
 	public void testReconnectionOfAlreadyConnectedElementDoesntModifyXML() throws IOException, CoreException {

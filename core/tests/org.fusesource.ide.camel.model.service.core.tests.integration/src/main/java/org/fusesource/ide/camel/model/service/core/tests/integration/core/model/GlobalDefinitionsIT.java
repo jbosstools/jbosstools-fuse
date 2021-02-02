@@ -44,7 +44,7 @@ public class GlobalDefinitionsIT {
 	private static final Object[] NO_CHILDREN = {};
 	
 	@Rule
-	public FuseProject fuseProject = new FuseProject(GlobalDefinitionsIT.class.getSimpleName());
+	public FuseProject fuseProject = new FuseProject();
 
 	@Test
 	public void testGlobalDefinitionRead() throws IOException, CoreException {
