@@ -39,7 +39,7 @@ public class CamelDebugFacade implements ICamelDebuggerMBeanFacade {
 	private static final String CAMEL_CONTEXT_MBEAN = "org.apache.camel:type=context,name=\"%s\",*";
 	
 	
-	private static final long TIMEOUT_MBEAN_REGISTRATION = JMXCamelConnectJob.CONNECTION_TIMEOUT_IN_MILLIS + 30 * 1000L;
+	private static final long TIMEOUT_MBEAN_REGISTRATION = JMXCamelConnectJob.CONNECTION_TIMEOUT_IN_MILLIS + 5 * 60 * 1000L;
 	
 	private ObjectName objectNameDebugger = null;
 	private ObjectName objectNameContext = null;
