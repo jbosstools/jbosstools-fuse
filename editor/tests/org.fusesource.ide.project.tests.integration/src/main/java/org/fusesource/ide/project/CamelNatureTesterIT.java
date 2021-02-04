@@ -19,14 +19,13 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.camel.model.service.core.tests.integration.core.io.FuseProject;
-import org.fusesource.ide.project.providers.CamelVirtualFolderIT;
 import org.junit.Rule;
 import org.junit.Test;
 
 public class CamelNatureTesterIT {
 	
 	@Rule
-	public FuseProject fuseProject = new FuseProject(CamelVirtualFolderIT.class.getName());
+	public FuseProject fuseProject = new FuseProject();
 	
 	@Test
 	public void testDetectRemovalOfFileForHasChildren() throws Exception {
@@ -40,7 +39,7 @@ public class CamelNatureTesterIT {
 	}
 	
 	@Test
-	public void testDetectCamelFilesWithMultpleContext() throws Exception {
+	public void testDetectCamelFilesWithMultipleContext() throws Exception {
 		IProject project = fuseProject.getProject();
 		IFile file = project.getFile("fileWithSeveralContext.xml");
 		try(InputStream source = CamelNatureTesterIT.class.getResourceAsStream("/fileWithSeveralContext.xml")){
