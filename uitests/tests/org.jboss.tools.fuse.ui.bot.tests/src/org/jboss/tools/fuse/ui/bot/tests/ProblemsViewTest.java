@@ -13,11 +13,8 @@ package org.jboss.tools.fuse.ui.bot.tests;
 import static org.jboss.tools.fuse.reddeer.ProjectTemplate.EMPTY_SPRING;
 import static org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardDeploymentType.STANDALONE;
 import static org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardRuntimeType.KARAF;
-import static org.junit.Assert.assertEquals;
 
 import org.eclipse.reddeer.common.wait.WaitUntil;
-import org.eclipse.reddeer.eclipse.ui.views.markers.ProblemsView;
-import org.eclipse.reddeer.eclipse.ui.views.markers.ProblemsView.ProblemType;
 import org.eclipse.reddeer.junit.runner.RedDeerSuite;
 import org.eclipse.reddeer.requirements.cleanerrorlog.CleanErrorLogRequirement.CleanErrorLog;
 import org.eclipse.reddeer.requirements.cleanworkspace.CleanWorkspaceRequirement.CleanWorkspace;
@@ -27,6 +24,7 @@ import org.jboss.tools.fuse.reddeer.editor.CamelEditor;
 import org.jboss.tools.fuse.reddeer.perspectives.FuseIntegrationPerspective;
 import org.jboss.tools.fuse.reddeer.utils.ProjectFactory;
 import org.jboss.tools.fuse.ui.bot.tests.utils.EditorManipulator;
+import org.jboss.tools.fuse.ui.bot.tests.utils.FuseToolingProblems;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -70,18 +68,11 @@ public class ProblemsViewTest {
 		CamelEditor.switchTab(SOURCE_TAB);
 		EditorManipulator.copyFileContentToCamelXMLEditor(ROUTE_WITH_ERRORS);
 		CamelEditor.switchTab(DESIGN_TAB);
-		assertEquals("Fuse Tooling Validation should discover 2 problems!", 2, getFuseToolingProblems());
+		new WaitUntil(new FuseToolingProblems(2));
 		editor.activate();
 		CamelEditor.switchTab(SOURCE_TAB);
 		EditorManipulator.copyFileContentToCamelXMLEditor(ROUTE_WITHOUT_ERRORS);
 		CamelEditor.switchTab(DESIGN_TAB);
-		assertEquals("Fuse Tooling Validation should not discover any problems!", 0, getFuseToolingProblems());
-	}
-
-	private long getFuseToolingProblems() {
-		ProblemsView view = new ProblemsView();
-		view.open();
-		return view.getProblems(ProblemType.ALL).stream()
-				.filter(problem -> FUSE_TOOLING_PROBLEM_TYPE.equals(problem.getType())).count();
+		new WaitUntil(new FuseToolingProblems(0));
 	}
 }
