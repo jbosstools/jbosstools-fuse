@@ -14,10 +14,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
+import org.assertj.core.api.Assertions;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.fusesource.ide.foundation.ui.tree.NodeSupport;
@@ -91,9 +94,10 @@ public class JMXNodesIT {
 		List<NodeSupport> traversedNodes = new ArrayList<>();
 		CamelContextsNode camelContextsNode = (CamelContextsNode)camelNodeContentProvider.getChildren(jmxConnection)[0];
 		traversedNodes.add(camelContextsNode);
-		CamelContextNode camelContextNode = (CamelContextNode)camelNodeContentProvider.getChildren(camelContextsNode)[0];
+		Object[] contextsChildren = camelNodeContentProvider.getChildren(camelContextsNode);
+		assertThat(Arrays.asList(contextsChildren).stream().map(Object::toString).collect(Collectors.toList())).containsExactly("contextToTestJMX");
+		CamelContextNode camelContextNode = (CamelContextNode)contextsChildren[0];
 		traversedNodes.add(camelContextNode);
-		assertThat(camelContextNode.toString()).isEqualTo("contextToTestJMX");
 		EndpointsNode endpointsNode = (EndpointsNode)camelNodeContentProvider.getChildren(camelContextNode)[0];
 		traversedNodes.add(endpointsNode);
 		EndpointSchemeNode fileEndpointSchemeNode = (EndpointSchemeNode)camelNodeContentProvider.getChildren(endpointsNode)[0];
