@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.IFile;
@@ -30,6 +31,8 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.internal.IMavenConstants;
+import org.eclipse.m2e.core.internal.MavenPluginActivator;
+import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.eclipse.m2e.core.project.IProjectConfigurationManager;
 import org.eclipse.m2e.core.project.ResolverConfiguration;
 import org.fusesource.ide.camel.editor.utils.BuildAndRefreshJobWaiterUtil;
@@ -47,6 +50,7 @@ import org.junit.runners.model.Statement;
  */
 public class FuseProject extends ExternalResource {
 
+	private static final int TIMEOUT_M2E_REGISTRY_REMOVAL = 50000;
 	private static final String DUMMY_SPRING_POM_CONTENT = getDummyPomContent("Spring");
 	private static final String DUMMY_BLUEPRINT_POM_CONTENT = getDummyPomContent("Blueprint");
 
@@ -144,9 +148,32 @@ public class FuseProject extends ExternalResource {
 		if (project != null && project.exists()) {
 			try {
 				project.delete(true, new NullProgressMonitor());
-			} catch (CoreException e) {
+				awaitProjectIsRemovedFromM2ERegistry();
+			} catch (CoreException | InterruptedException e) {
 				CamelModelServiceIntegrationTestActivator.getDefault().getLog().log(new Status(IStatus.ERROR, CamelModelServiceIntegrationTestActivator.ID, "Cannot delete project used during test", e));
 			}
+		}
+	}
+
+	/**
+	 * The m2e registry is updated asynchronously.
+	 * When deleting a project, and recreating one with same name just after, it can cause StaleMutableRegistryException.
+	 * Awaiting that the m2e registry is updated with project removal avoids this issue.
+	 * 
+	 * @throws InterruptedException
+	 */
+	private void awaitProjectIsRemovedFromM2ERegistry() throws InterruptedException {
+		int time = 0;
+		boolean mavenProjectInRegistry = true;
+		while(mavenProjectInRegistry && time < TIMEOUT_M2E_REGISTRY_REMOVAL ) {
+			IMavenProjectFacade[] projectsInRegistry = MavenPluginActivator.getDefault().getMavenProjectManagerImpl().getProjects();
+			mavenProjectInRegistry = Arrays.asList(projectsInRegistry).stream()
+					.map(IMavenProjectFacade::getProject)
+					.map(IProject::getName)
+					.filter(projectInRegistryName -> projectInRegistryName.equals(projectName))
+					.count() > 0;
+					time += 500;
+					Thread.sleep(500);
 		}
 	}
 
