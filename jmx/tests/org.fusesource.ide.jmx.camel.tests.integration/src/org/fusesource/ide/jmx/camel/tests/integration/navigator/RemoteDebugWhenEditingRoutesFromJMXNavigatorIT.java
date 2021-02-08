@@ -13,6 +13,8 @@ package org.fusesource.ide.jmx.camel.tests.integration.navigator;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -62,8 +64,9 @@ public class RemoteDebugWhenEditingRoutesFromJMXNavigatorIT {
 		initializeConnection();
 		CamelNodeContentProvider camelNodeContentProvider = new CamelNodeContentProvider();
 		CamelContextsNode camelContextsNode = (CamelContextsNode)camelNodeContentProvider.getChildren(jmxConnection)[0];
+		Object[] contextsChildren = camelNodeContentProvider.getChildren(camelContextsNode);
+		assertThat(Arrays.asList(contextsChildren).stream().map(Object::toString).collect(Collectors.toList())).containsExactly("contextToTestJMX");
 		CamelContextNode camelContextNode = (CamelContextNode)camelNodeContentProvider.getChildren(camelContextsNode)[0];
-		assertThat(camelContextNode.toString()).isEqualTo("contextToTestJMX");
 		
 		ILaunch remoteDebuglaunch = camelContextNode.editRoutes();
 		String camelFilePath = CamelDebugUtils.getRawCamelContextFilePathFromLaunchConfig(remoteDebuglaunch.getLaunchConfiguration());
