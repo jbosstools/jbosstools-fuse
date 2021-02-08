@@ -40,7 +40,7 @@ public class CamelMavenUtilsTestIT {
 	private static final String POM_NAME = "pomWithVariableNameInVersion.xml";
 	
 	@Rule
-	public FuseProject fuseProject = new FuseProject(CamelMavenUtilsTestIT.class.getName());
+	public FuseProject fuseProject = new FuseProject();
 
 	private IFile pomFileInProject;
 
@@ -50,7 +50,7 @@ public class CamelMavenUtilsTestIT {
 	}
 
 	@Test
-	public void testUretrieveCamelVersionFromMaven() throws CoreException {
+	public void testRetrieveCamelVersionFromMaven() throws CoreException {
 		InputStream inputStream = CamelMavenUtilsTestIT.class.getClassLoader().getResourceAsStream("/" + POM_NAME);
 		pomFileInProject.setContents(inputStream, true, true, new NullProgressMonitor());
 		
