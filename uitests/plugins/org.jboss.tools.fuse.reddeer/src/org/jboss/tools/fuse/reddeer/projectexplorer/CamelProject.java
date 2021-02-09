@@ -15,6 +15,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +26,7 @@ import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.reddeer.common.exception.WaitTimeoutExpiredException;
 import org.eclipse.reddeer.common.matcher.RegexMatcher;
 import org.eclipse.reddeer.common.util.XPathEvaluator;
 import org.eclipse.reddeer.common.wait.AbstractWait;
@@ -104,7 +106,33 @@ public class CamelProject {
 			new ContextMenuItem("Run As", "1 Local Camel Context").select();
 		}
 		AbstractWait.sleep(TimePeriod.DEFAULT);
-		new WaitUntil(new ConsoleHasText("started and consuming from"), TimePeriod.getCustom(600));
+		try {
+			new WaitUntil(new ConsoleHasText("started and consuming from"), TimePeriod.getCustom(600));
+		} catch(WaitTimeoutExpiredException ex) {
+			backupHsErrPidLogs();
+			throw ex;
+		}
+	}
+
+	private void backupHsErrPidLogs() {
+		File projectFolder = getFile();
+		try {
+			Files.walk(projectFolder.toPath()).filter(file -> {
+				String filename = file.getFileName().toFile().getName();
+				return filename.startsWith("hs_err_pid") && filename.endsWith(".log");
+			}).forEach(hsErrPidLog -> {
+				try {
+					Path grandParent = hsErrPidLog.getParent().getParent();
+					Path targetPath = grandParent.resolve(hsErrPidLog.getFileName().toFile().getName());
+					Files.move(hsErrPidLog, targetPath);
+					System.out.println("Moving "+ hsErrPidLog.toFile().getAbsolutePath() + " to " + targetPath.toFile().getAbsolutePath());
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			});
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void runCamelContextWithoutTests(String name) {
