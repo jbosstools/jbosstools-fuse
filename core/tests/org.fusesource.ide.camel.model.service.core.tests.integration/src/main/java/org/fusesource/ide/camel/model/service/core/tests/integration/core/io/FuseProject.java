@@ -70,6 +70,10 @@ public class FuseProject extends ExternalResource {
 	public FuseProject(String projectName, boolean isBlueprint) {
 		this(projectName, CamelCatalogUtils.getLatestCamelVersion(), isBlueprint);
 	}
+	
+	public FuseProject(boolean isBlueprint) {
+		this(null, CamelCatalogUtils.getLatestCamelVersion(), isBlueprint);
+	}
 
 	public FuseProject(String projectName, String camelVersion) {
 		this.projectName = projectName;
