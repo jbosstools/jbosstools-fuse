@@ -39,7 +39,7 @@ import org.junit.Rule;
 public abstract class AbstractNewCamelTestWizardIT {
 	
 	@Rule
-	public FuseProject fuseProject = new FuseProject(getClass().getSimpleName());
+	public FuseProject fuseProject = new FuseProject();
 
 	@SuppressWarnings("restriction")
 	protected void createTestFor(CamelFile camelFile) throws CoreException {
