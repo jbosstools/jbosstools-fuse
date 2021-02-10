@@ -102,7 +102,7 @@ public class NewDataFormatWizardIT {
 	
 	@Before
 	public void before() throws Throwable {
-		fuseProject = new FuseProject(NewDataFormatWizardIT.class.getName(), camelVersion);
+		fuseProject = new FuseProject(NewDataFormatWizardIT.class.getName() + camelVersion + dataFormatName, camelVersion);
 		fuseProject.before();
 	}
 	
