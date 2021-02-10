@@ -15,18 +15,35 @@ import static org.assertj.core.api.Assertions.assertThat;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.PlatformUI;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.camel.model.service.core.tests.integration.core.io.FuseProject;
+import org.fusesource.ide.camel.tests.util.CommonTestUtils;
+import org.fusesource.ide.foundation.ui.util.ScreenshotUtil;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestRule;
+import org.junit.rules.TestWatcher;
+import org.junit.runner.Description;
 
 public class CamelCtxNavContentProviderIT {
 
 	@Rule
 	public FuseProject fuseProject = new FuseProject(getClass().getSimpleName());
+	
+	@Rule
+	public final TestRule watchman = new TestWatcher() {
+
+		@Override
+		protected void failed(Throwable e, Description description) {
+			String screenshotFolder = "./target/screenshots";
+			CommonTestUtils.createScreenshotFolder(screenshotFolder);
+			ScreenshotUtil.saveScreenshotToFile(screenshotFolder+"/"+ description.getMethodName()+".png", SWT.IMAGE_PNG);
+		}
+	};
 	
 	@Test
 	public void testRouteLoadedWithOneRoute() throws Exception {
