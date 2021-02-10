@@ -107,7 +107,7 @@ public class CamelProject {
 		}
 		AbstractWait.sleep(TimePeriod.DEFAULT);
 		try {
-			new WaitUntil(new ConsoleHasText("started and consuming from"), TimePeriod.getCustom(600));
+			new WaitUntil(new ConsoleHasText("started and consuming from"), TimePeriod.getCustom(1200));
 		} catch(WaitTimeoutExpiredException ex) {
 			backupHsErrPidLogs();
 			throw ex;
@@ -140,7 +140,7 @@ public class CamelProject {
 		String id = getCamelContextId("src/main/resources", "META-INF", "spring", name);
 		getProject().getProjectItem("src/main/resources", "META-INF", "spring", name).select();
 		new ContextMenuItem("Run As", "3 Local Camel Context (without tests)").select();
-		new WaitUntil(new ConsoleHasText("(CamelContext: " + id + ") started"), TimePeriod.VERY_LONG);
+		new WaitUntil(new ConsoleHasText("(CamelContext: " + id + ") started"), TimePeriod.getCustom(600));
 	}
 
 	public void debugCamelContextWithoutTests(String name) {
