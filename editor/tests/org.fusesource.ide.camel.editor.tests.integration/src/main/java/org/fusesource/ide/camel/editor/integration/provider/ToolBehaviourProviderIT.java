@@ -48,6 +48,7 @@ import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelModel;
 import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
 import org.fusesource.ide.camel.model.service.core.tests.integration.core.io.FuseProject;
 import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
+import org.junit.After;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -60,6 +61,8 @@ public class ToolBehaviourProviderIT {
 	
 	@Rule
 	public FuseProject fuseProject = new FuseProject();
+
+	private CamelEditor camelEditor;
 	
 	private static final String DUMMY_POM_CONTENT_WITH_SPRING_BOOT_DEPENDENCY = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
 			+ "<project xsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd\" xmlns=\"http://maven.apache.org/POM/4.0.0\"\n"
@@ -97,9 +100,16 @@ public class ToolBehaviourProviderIT {
 			+ "    </plugins>\n"
 			+ "  </build>\n"
 			+ "</project>";
+		
+	@After
+	public void tearDown() {
+		if(camelEditor != null) {
+			PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().closeEditor(camelEditor, false);
+		}
+	}
 	
 	private void initToolBehaviourProvider() throws CoreException, IOException {
-		CamelEditor camelEditor = (CamelEditor)IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), (IFile) fuseProject.createEmptyCamelFile().getResource());
+		camelEditor = (CamelEditor)IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), (IFile) fuseProject.createEmptyCamelFile().getResource());
 		CamelDesignEditor camelDesignEditor = camelEditor.getDesignEditor();
 		toolbehaviourprovider = (ToolBehaviourProvider)camelDesignEditor.getDiagramTypeProvider().getCurrentToolBehaviorProvider();
 	}
