@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry exported="true" kind="lib" path="libs/xmlbeans-2.6.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/xmlbeans-4.0.0.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/gson-2.2.4.jar"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="src" path="src"/>

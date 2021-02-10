@@ -59,7 +59,7 @@
 		<wildfly.version>2.3.0.redhat-630187</wildfly.version>
 
 		<!-- data transformation versions -->
-		<version.xmlbeans>2.6.0</version.xmlbeans>
+		<version.xmlbeans>4.0.0</version.xmlbeans>
 		<version.gson>2.2.4</version.gson>
 
 		<!-- other versions -->
