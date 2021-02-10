@@ -42,9 +42,7 @@ public class PreferencesInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferencesConstants.EDITOR_FIGURE_FG_COLOR, "128,128,128");
 		store.setDefault(PreferencesConstants.EDITOR_TEXT_COLOR, "0,0,0");
 
-		Display.getDefault().syncExec( () -> {
-			Color c = Display.getDefault().getSystemColor(SWT.COLOR_WIDGET_LIGHT_SHADOW);
-			store.setDefault(PreferencesConstants.EDITOR_TABLE_CHART_BG_COLOR, String.format("%d,%d,%d", c.getRed(), c.getGreen(), c.getBlue()));				
-		});
+		Color c = Display.getDefault().getSystemColor(SWT.COLOR_WIDGET_LIGHT_SHADOW);
+		store.setDefault(PreferencesConstants.EDITOR_TABLE_CHART_BG_COLOR, String.format("%d,%d,%d", c.getRed(), c.getGreen(), c.getBlue()));				
 	}
 }
