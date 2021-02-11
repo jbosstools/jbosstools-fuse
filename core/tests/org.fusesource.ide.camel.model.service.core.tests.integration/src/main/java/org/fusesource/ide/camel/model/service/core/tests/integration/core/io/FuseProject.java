@@ -32,6 +32,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.internal.IMavenConstants;
 import org.eclipse.m2e.core.internal.MavenPluginActivator;
+import org.eclipse.m2e.core.internal.project.registry.StaleMutableProjectRegistryException;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.eclipse.m2e.core.project.IProjectConfigurationManager;
 import org.eclipse.m2e.core.project.ResolverConfiguration;
@@ -100,9 +101,11 @@ public class FuseProject extends ExternalResource {
 		IWorkspace ws = ResourcesPlugin.getWorkspace();
 		project = ws.getRoot().getProject(projectName);
 		if (!project.exists()) {
+			logInfo("Creating project "+projectName);
 			project.create(null);
 		}
 		if (!project.isOpen()) {
+			logInfo("Opening project "+projectName);
 			project.open(null);
 		}
 		// Create a fake pom.xml
@@ -122,7 +125,35 @@ public class FuseProject extends ExternalResource {
 		srcTestFolder.create(IResource.FORCE, true, new NullProgressMonitor());
 		srcTestFolder.getFolder("java").create(IResource.FORCE, true, new NullProgressMonitor());
 		
-		enableMavenNature();
+		try {
+			enableMavenNature();
+		} catch (StaleMutableProjectRegistryException ex) {
+			logError(ex, "Exception why enabling Maven Nature of " + projectName);
+			// second attempt to enable Maven nature
+			enableMavenNature();
+		}
+		logInfo("End of FuseProject.before() for project " + projectName);
+	}
+
+	private void logError(StaleMutableProjectRegistryException ex, String message) {
+		CamelModelServiceIntegrationTestActivator bundle = CamelModelServiceIntegrationTestActivator.getDefault();
+		if(bundle != null) {
+			bundle.getLog().error(message, ex);
+		} else {
+			// When launching in Eclipse as JUnit Plugin, the bundle is not initialized. So here is a workaround
+			ex.printStackTrace();
+			System.err.println(message);
+		}
+	}
+
+	private void logInfo(String message) {
+		CamelModelServiceIntegrationTestActivator bundle = CamelModelServiceIntegrationTestActivator.getDefault();
+		if(bundle != null) {
+			bundle.getLog().info(message);
+		} else {
+			// When launching in Eclipse as JUnit Plugin, the bundle is not initialized. So here is a workaround
+			System.out.println(message);
+		}
 	}
 
 	private void enableMavenNature() throws CoreException {
@@ -131,7 +162,9 @@ public class FuseProject extends ExternalResource {
 		configuration.setSelectedProfiles(""); //$NON-NLS-1$
 		new BuildAndRefreshJobWaiterUtil().waitJob(new NullProgressMonitor());
 		IProjectConfigurationManager configurationManager = MavenPlugin.getProjectConfigurationManager();
+		logInfo("Enabling Maven nature to " + projectName);
 		configurationManager.enableMavenNature(project, configuration, new NullProgressMonitor());
+		logInfo("Updating Maven project configuration of " + projectName);
 		configurationManager.updateProjectConfiguration(project, new NullProgressMonitor());
 		new BuildAndRefreshJobWaiterUtil().waitJob(new NullProgressMonitor());
 	}
