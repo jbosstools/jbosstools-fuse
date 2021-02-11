@@ -73,7 +73,7 @@ public class ImportExportPackageUpdaterForManifestIT {
 	
 
 	@Rule
-	public FuseProject fuseProject = new FuseProject(ImportExportPackageUpdaterForManifestIT.class.getName());
+	public FuseProject fuseProject = new FuseProject();
 	
 	private IProject project;
 	private IFile pomIFile;
