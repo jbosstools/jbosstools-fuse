@@ -270,9 +270,9 @@
 
 	<profiles>
 		<profile>
-			<id>default-integration-test</id>
+			<id>all-integration-test</id>
 			<activation>
-				<activeByDefault>true</activeByDefault>
+				<activeByDefault>false</activeByDefault>
 			</activation>
 			<build>
 				<plugins>
@@ -292,7 +292,7 @@
 		<profile>
 			<id>without-templates-integration-test</id>
 			<activation>
-				<activeByDefault>false</activeByDefault>
+				<activeByDefault>true</activeByDefault>
 			</activation>
 			<build>
 				<plugins>
