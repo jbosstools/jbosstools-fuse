@@ -198,14 +198,13 @@
 
 			<!-- needed for building the source features -->
 			<plugin>
-				<groupId>org.eclipse.tycho.extras</groupId>
-				<artifactId>tycho-source-feature-plugin</artifactId>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-source-plugin</artifactId>
 		       <executions>
 		          <execution>
-		            <phase>package</phase>
-		            <id>source-feature</id>
+		            <id>feature-source</id>
 		            <goals>
-		              <goal>source-feature</goal>
+		              <goal>feature-source</goal>
 		            </goals>
 		            <configuration>
 		              <excludes>
@@ -219,8 +218,16 @@
 			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>tycho-p2-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>attach-p2-metadata</id>
+						<phase>package</phase>
+						<goals>
+							<goal>p2-metadata</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
-
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
