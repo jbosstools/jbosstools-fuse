@@ -1,9 +1,9 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: %Bundle-Name
+Bundle-Name: Red Hat Fuse Tooling server integration tests
 Bundle-SymbolicName: org.fusesource.ide.server.fuse.core.tests.integration;singleton:=true
 Bundle-Version: 11.10.0.qualifier
-Bundle-Vendor: %Bundle-Vendor
+Bundle-Vendor: Red Hat
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Require-Bundle: org.junit;bundle-version="4.12.0",
  org.jboss.tools.locus.mockito;bundle-version="1.9.5",
