@@ -202,7 +202,11 @@ public abstract class AbstractProjectCreatorRunnableIT {
 		return marker -> {
 			try {
 				Object severity = marker.getAttribute(IMarker.SEVERITY);
-				return severity == null || severity.equals(IMarker.SEVERITY_ERROR);
+				boolean isError = severity == null || severity.equals(IMarker.SEVERITY_ERROR);
+				String message = (String)marker.getAttribute(IMarker.MESSAGE);
+				return isError
+						// workaround for https://github.com/EclipseFdn/osgi.org/issues/11 and https://issues.redhat.com/browse/FUSETOOLS-3446
+						&& !message.startsWith("Error while downloading 'https://www.osgi.org/xmlns");
 			} catch (CoreException e1) {
 				return true;
 			}
