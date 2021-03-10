@@ -280,6 +280,10 @@
 			<id>all-integration-test</id>
 			<activation>
 				<activeByDefault>false</activeByDefault>
+				<property>
+					<name>fuse.tooling.all-integration-test</name>
+					<value>true</value>
+				</property>
 			</activation>
 			<build>
 				<plugins>
@@ -324,6 +328,10 @@
 			<id>templates-integration-test</id>
 			<activation>
 				<activeByDefault>false</activeByDefault>
+				<property>
+					<name>fuse.tooling.templates-integration-test</name>
+					<value>true</value>
+				</property>
 			</activation>
 			<build>
 				<plugins>
