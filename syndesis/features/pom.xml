@@ -13,6 +13,13 @@
 	<modules>
 		<module>org.fusesource.ide.syndesis.extension.feature</module>
 	</modules>
-
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-source-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
 </project>
 	

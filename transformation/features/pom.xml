@@ -15,5 +15,12 @@
   <modules>
     <module>org.jboss.tools.fuse.transformation.feature</module>
   </modules>
-
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-source-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
 </project>
