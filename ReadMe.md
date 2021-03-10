@@ -1,5 +1,7 @@
 # Red Hat Fuse Tooling for Eclipse
 
+dummy modif
+
 Please visit our [project site](https://tools.jboss.org/features/fusetools.html) or the [documentation provided by _Red Hat_](https://access.redhat.com/documentation/en-us/red_hat_fuse/7.2/html/tooling_tutorials/index) to learn more about _Red Hat Fuse Tooling_ .
 
 ## Summary
