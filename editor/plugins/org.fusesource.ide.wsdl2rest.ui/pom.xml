@@ -181,7 +181,7 @@
 						</goals>
 						<configuration>
 							<excludeScope>system</excludeScope>
-							<stripVersion>true</stripVersion>
+							<stripVersion>false</stripVersion>
 							<outputDirectory>${basedir}/libs/</outputDirectory>
 							<skip>false</skip>
 						</configuration>
