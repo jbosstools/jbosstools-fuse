@@ -164,14 +164,19 @@ public abstract class BasicProjectCreatorRunnable implements IRunnableWithProgre
 	
 	protected void doAdditionalProjectConfiguration(IProject prj, IProgressMonitor monitor) {
 		// delete invalid MANIFEST files
-		IResource rs = prj.findMember("src/META-INF/"); //$NON-NLS-1$
+		safeDelete(prj, monitor, "src/META-INF/");
+		safeDelete(prj, monitor, "src/main/java/META-INF/");
+	}
+
+	private void safeDelete(IProject prj, IProgressMonitor monitor, String path) {
+		IResource rs = prj.findMember(path); //$NON-NLS-1$
 		if (rs != null && rs.exists()) {
 			try {
 				rs.delete(true, monitor);
 			} catch (CoreException ex) {
 				ProjectTemplatesActivator.pluginLog().logError(ex);
 			}
-		}		
+		}
 	}
 
 	protected boolean requiresFuseIntegrationPerspective() {
