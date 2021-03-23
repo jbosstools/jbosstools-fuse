@@ -180,7 +180,7 @@
 							<goal>copy-dependencies</goal>
 						</goals>
 						<configuration>
-							<excludeScope>system</excludeScope>
+							<includeScope>runtime</includeScope>
 							<stripVersion>true</stripVersion>
 							<outputDirectory>${basedir}/libs/</outputDirectory>
 							<skip>false</skip>

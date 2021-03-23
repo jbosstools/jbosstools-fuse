@@ -7,21 +7,25 @@
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="src" path="src/"/>
-	<classpathentry exported="true" kind="lib" path="libs/ant-launcher.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/ant-nodeps.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/activation.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/ant.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/ant-launcher.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/args4j.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/asm.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/camel-core.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/camel-spring.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/classworlds.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/codemodel.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/commonj.sdo.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/commons-beanutils.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/commons-collections.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/commons-compress.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/commons-digester.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/commons-logging.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/commons-validator.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/commons-io.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/commons-lang.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/commons-lang3.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/commons-logging.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/commons-text.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/commons-validator.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/cxf-codegen-plugin.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/cxf-core.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/cxf-rt-bindings-soap.jar"/>
@@ -29,8 +33,9 @@
 	<classpathentry exported="true" kind="lib" path="libs/cxf-rt-frontend-jaxrs.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/cxf-rt-javascript.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/cxf-rt-rs-extension-providers.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/cxf-rt-transports-http-jetty.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/cxf-rt-security.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/cxf-rt-transports-http.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/cxf-rt-transports-http-jetty.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/cxf-rt-wsdl.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/cxf-tools-common.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/cxf-tools-validator.jar"/>
@@ -38,59 +43,46 @@
 	<classpathentry exported="true" kind="lib" path="libs/cxf-tools-wsdlto-databinding-jaxb.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/cxf-tools-wsdlto-frontend-javascript.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/cxf-tools-wsdlto-frontend-jaxws.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/hamcrest-core.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/dtd-parser.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/FastInfoset.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/geronimo-jta_1.1_spec.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/geronimo-ws-metadata_2.0_spec.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/gmbal-api-only.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/ha-api.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/istack-commons-runtime.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/istack-commons-tools.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/jacorb-omgapi.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/jakarta.activation-api.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/jakarta.ws.rs-api.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/jakarta.xml.bind-api.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/javaparser-core.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/javax.activation.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/javax.activation-api.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/javax.annotation-api.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/javax.json.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/javax.jws-api.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/javax.persistence-api.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/javax.servlet-api.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/javax.ws.rs-api.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/javax.xml.soap-api.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/jaxb-api.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/jaxb-core.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/jaxb-impl.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/jaxb-jxc.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/jaxb-runtime.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/jaxb-xjc.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/jaxws-api.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/jaxws-eclipselink-plugin.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/jaxws-rt.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/jaxws-tools.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/jboss-rmi-api_1.0_spec.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/jetty-continuation.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/jetty-http.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/jetty-io.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/jetty-security.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/jetty-server.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/jetty-util.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/junit.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/log4j.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/plexus-archiver.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/plexus-container-default.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/plexus-io.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/plexus-utils.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/slf4j-api.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/slf4j-log4j12.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/spring-aop.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/spring-beans.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/spring-context.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/spring-core.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/spring-expression.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/spring-tx.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/stax2-api.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/velocity.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/wsdl2rest-impl.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/wsdl2rest-util.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/wsdl4j.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/xml-resolver.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/xmlschema-core.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/commonj.sdo.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/FastInfoset.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/gmbal-api-only.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/ha-api.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/istack-commons-runtime.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/javax.activation-api.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/javax.activation.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/javax.json.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/javax.jws-api.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/javax.persistence-api.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/javax.xml.soap-api.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/jaxb-api.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/jaxb-jxc.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/jaxb-runtime.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/jaxws-api.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/jaxws-eclipselink-plugin.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/jaxws-rt.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/jaxws-tools.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/mail.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/management-api.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/mimepull.jar"/>
@@ -98,34 +90,38 @@
 	<classpathentry exported="true" kind="lib" path="libs/org.eclipse.persistence.core.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/org.eclipse.persistence.moxy.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/org.eclipse.persistence.sdo.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/oro.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/plexus-archiver.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/plexus-io.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/plexus-utils.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/policy.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/relaxng-datatype.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/rngom.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/saaj-impl.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/sdo-eclipselink-plugin.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/slf4j-api.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/slf4j-log4j12.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/snappy.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/spring-aop.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/spring-beans.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/spring-context.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/spring-core.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/spring-expression.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/spring-jcl.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/spring-tx.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/stax2-api.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/stax-ex.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/streambuffer.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/txw2.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/validation-api.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/woodstox-core.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/velocity.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/velocity-engine-core.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/jakarta.activation-api.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/jakarta.ws.rs-api.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/jakarta.xml.bind-api.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/activation.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/codemodel.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/commons-compress.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/commons-io.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/commons-text.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/cxf-rt-security.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/dtd-parser.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/geronimo-jta_1.1_spec.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/geronimo-ws-metadata_2.0_spec.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/istack-commons-tools.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/jboss-rmi-api_1.0_spec.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/oro.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/relaxng-datatype.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/rngom.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/snappy.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/spring-jcl.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/woodstox-core.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/wsdl2rest-impl.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/wsdl2rest-util.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/wsdl4j.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/xml-resolver.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/xmlschema-core.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/xsom.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/xz.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
