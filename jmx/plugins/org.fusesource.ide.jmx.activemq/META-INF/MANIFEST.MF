@@ -19,6 +19,6 @@ Require-Bundle: org.jboss.tools.jmx.core;bundle-version="1.6.0",
  org.fusesource.ide.foundation.ui;bundle-version="10.0.0"
 Bundle-Activator: org.fusesource.ide.jmx.activemq.ActiveMQJMXPlugin
 Bundle-ClassPath: .,
- libs/activemq-osgi-5.11.0.redhat-630187.jar,
+ libs/activemq-osgi-5.11.0.redhat-630495.jar,
  libs/geronimo-jms_1.1_spec-1.1.1.jar
 Bundle-ActivationPolicy: lazy
