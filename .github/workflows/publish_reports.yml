@@ -2,7 +2,7 @@ name: Publish reports
 
 on:
   workflow_run:
-    workflows: ["Build And Test"]
+    workflows: ["Build and launch main tests on Pull Requests", "Build and launch template tests on Pull Requests"]
     types:
       - completed
 
