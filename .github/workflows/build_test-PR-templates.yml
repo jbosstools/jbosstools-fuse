@@ -1,4 +1,4 @@
-name: Build and Test main tests on Pull Requests
+name: Build and launch template tests on Pull Requests
 
 on:
   pull_request:
@@ -47,7 +47,7 @@ jobs:
     - name: Build/Compile and run unit tests
       uses: GabrielBB/xvfb-action@v1
       with:
-        run: mvn clean verify -Ppack200 -P!templates-integration-test,without-templates-integration-test -U -fae --settings build-ci/maven-settings.xml -DskipITests=true -Dmaven.test.error.ignore=true -Dmaven.test.failure.ignore=true --quiet
+        run: mvn clean verify -Ppack200 -Ptemplates-integration-test -U -fae --settings build-ci/maven-settings.xml -DskipITests=true -Dmaven.test.error.ignore=true -Dmaven.test.failure.ignore=true --quiet
 
     # Archive artifacts to be applied in Publish Reports workflow
     - name: Archiving test artifacts
