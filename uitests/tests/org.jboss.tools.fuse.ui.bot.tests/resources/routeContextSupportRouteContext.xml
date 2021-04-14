@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="    http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd    http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+    <routeContext id="ExternalRoutes" xmlns="http://camel.apache.org/schema/spring">
+        <route id="cbr-route">
+            <from id="_from1" uri="file:work/cbr/input"/>
+            <log id="_log1" message="Receiving order ${file:name}"/>
+            <choice id="_choice1">
+                <when id="_when1">
+                    <xpath id="_xpath1">/order/customer/country = 'UK'</xpath>
+                    <log id="_log2" message="Sending order ${file:name} to the UK"/>
+                    <to id="_to1" uri="file:work/cbr/output/uk"/>
+                </when>
+                <when id="_when2">
+                    <xpath id="_xpath2">/order/customer/country = 'US'</xpath>
+                    <log id="_log3" message="Sending order ${file:name} to the US"/>
+                    <to id="_to2" uri="file:work/cbr/output/us"/>
+                </when>
+                <otherwise id="_otherwise1">
+                    <log id="_log4" message="Sending order ${file:name} to another country"/>
+                    <to id="_to3" uri="file:work/cbr/output/others"/>
+                </otherwise>
+            </choice>
+            <log id="_log5" message="Done processing ${file:name}"/>
+        </route>
+    </routeContext>
+</beans>
