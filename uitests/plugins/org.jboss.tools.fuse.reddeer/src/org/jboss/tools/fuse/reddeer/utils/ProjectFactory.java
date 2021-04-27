@@ -95,12 +95,7 @@ public class ProjectFactory {
 		NewFuseIntegrationProjectWizardRuntimePage secondPage = new NewFuseIntegrationProjectWizardRuntimePage(wiz);
 		if (version != null) {
 			secondPage.typeCamelVersion(version);
-		} else {
-			if(runtimeType != NewFuseIntegrationProjectWizardRuntimeType.SPRINGBOOT) {
-				secondPage.typeCamelVersion(SupportedCamelVersions.CAMEL_2_21_0_FUSE_770);
-			}
 		}
-		
 		if (deploymentType != null) {
 			secondPage.setDeploymentType(deploymentType);
 		}
