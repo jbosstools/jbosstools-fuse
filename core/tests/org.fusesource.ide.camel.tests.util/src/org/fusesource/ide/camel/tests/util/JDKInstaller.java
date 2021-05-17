@@ -30,9 +30,12 @@ public class JDKInstaller {
 	}
 
 	private File findJDK8VM() {
-		String userDefinedLocation = System.getProperty(JDK_8_LOCATION);
-		if (userDefinedLocation != null) {
-			return new File(userDefinedLocation);
+		String userDefinedLocationByProperty = System.getProperty(JDK_8_LOCATION);
+		String userDefinedLocationByEnv = System.getenv(JDK_8_LOCATION);
+		if (userDefinedLocationByProperty != null) {
+			return new File(userDefinedLocationByProperty);
+		} else if (userDefinedLocationByEnv != null) {
+			return new File(userDefinedLocationByEnv);
 		} else if (isWindows()) {
 			File parentJVMFolder = new File("C:\\Program Files\\Java");
 			for(File jvmFolder : parentJVMFolder.listFiles()) {
@@ -48,7 +51,7 @@ public class JDKInstaller {
 		}
 		throw new IllegalStateException("No JDK 8 has been found.\n"
 				+ "JDK 8 is required to launch a part of the test suite.\n"
-				+ "Please install it and/or provide JDK_8_LOCATION as system property.");
+				+ "Please install it and/or provide JDK_8_LOCATION as system property or environment variable.");
 	}
 
 	public static boolean isWindows() {
