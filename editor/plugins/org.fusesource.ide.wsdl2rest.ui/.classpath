@@ -1,5 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
+	<classpathentry exported="true" kind="lib" path="libs/gmbal-api-only.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/jakarta.activation.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/jakarta.annotation-api.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/jakarta.jws-api.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/jakarta.mail.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/jakarta.mail-api.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/jakarta.persistence-api.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/jakarta.xml.soap-api.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/jakarta.xml.ws-api.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/javax.activation-api.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/javax.json.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/javax.jws-api.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/javax.persistence-api.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/mail.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/pfl-asm.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/pfl-basic.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/pfl-basic-tools.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/pfl-dynamic.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/pfl-tf.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/pfl-tf-tools.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/validation-api.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8">
 		<attributes>
 			<attribute name="maven.pomderived" value="true"/>
@@ -47,7 +68,7 @@
 	<classpathentry exported="true" kind="lib" path="libs/FastInfoset.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/geronimo-jta_1.1_spec.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/geronimo-ws-metadata_2.0_spec.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/gmbal-api-only.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/gmbal.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/ha-api.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/istack-commons-runtime.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/istack-commons-tools.jar"/>
@@ -57,11 +78,7 @@
 	<classpathentry exported="true" kind="lib" path="libs/jakarta.xml.bind-api.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/javaparser-core.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/javax.activation.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/javax.activation-api.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/javax.annotation-api.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/javax.json.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/javax.jws-api.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/javax.persistence-api.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/javax.servlet-api.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/javax.ws.rs-api.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/javax.xml.soap-api.jar"/>
@@ -83,7 +100,6 @@
 	<classpathentry exported="true" kind="lib" path="libs/jetty-server.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/jetty-util.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/log4j.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/mail.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/management-api.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/mimepull.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/org.eclipse.persistence.asm.jar"/>
@@ -113,7 +129,6 @@
 	<classpathentry exported="true" kind="lib" path="libs/stax-ex.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/streambuffer.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/txw2.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/validation-api.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/velocity.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/velocity-engine-core.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/woodstox-core.jar"/>
