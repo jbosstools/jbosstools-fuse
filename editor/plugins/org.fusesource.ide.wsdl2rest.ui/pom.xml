@@ -19,7 +19,7 @@
 		<version.args4j>2.33</version.args4j>
 		<version.javaparser>2.5.1</version.javaparser>
 		<version.javax.ws.rs.api>2.1.1.redhat-00002</version.javax.ws.rs.api>
-		<version.jaxws-ri>2.3.1</version.jaxws-ri>
+		<version.jaxws-ri>2.3.2-1</version.jaxws-ri>
 		<version.jaxws-api>2.1</version.jaxws-api>
 		<version.jaxb-api>2.3.0</version.jaxb-api>
 		<version.wsdl4j>1.6.3.redhat-2</version.wsdl4j>
