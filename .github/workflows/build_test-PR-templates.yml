@@ -62,6 +62,7 @@ jobs:
     # Archive artifacts to be applied in Publish Reports workflow
     - name: Archiving test artifacts
       uses: actions/upload-artifact@v2
+      if: ${{ always() }}
       with: 
         name: ${{ matrix.os }}-test-reports
         path: |
