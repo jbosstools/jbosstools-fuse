@@ -19,11 +19,14 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import java.util.List;
 
 import org.eclipse.reddeer.jface.text.contentassist.ContentAssistant;
+import org.eclipse.reddeer.junit.execution.annotation.RunIf;
 import org.eclipse.reddeer.junit.runner.RedDeerSuite;
 import org.eclipse.reddeer.requirements.cleanerrorlog.CleanErrorLogRequirement;
 import org.eclipse.reddeer.requirements.cleanworkspace.CleanWorkspaceRequirement;
 import org.eclipse.reddeer.requirements.cleanworkspace.CleanWorkspaceRequirement.CleanWorkspace;
 import org.eclipse.reddeer.requirements.openperspective.OpenPerspectiveRequirement.OpenPerspective;
+import org.jboss.tools.fuse.reddeer.condition.IssueIsClosed;
+import org.jboss.tools.fuse.reddeer.condition.IssueIsClosed.Jira;
 import org.jboss.tools.fuse.reddeer.editor.CamelEditor;
 import org.jboss.tools.fuse.reddeer.editor.SourceEditor;
 import org.jboss.tools.fuse.reddeer.perspectives.FuseIntegrationPerspective;
@@ -167,6 +170,8 @@ public class CamelLSPCompletionTest {
 	 * Tests duplicate endpoint options are filtered out
 	 */
 	@Test
+	@Jira("FUSETOOLS-3478") // https://issues.redhat.com/browse/FUSETOOLS-3478
+	@RunIf(conditionClass = IssueIsClosed.class)
 	public void testDuplicateOptionsFilltering() {
 		editor = new SourceEditor();
 

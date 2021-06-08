@@ -227,7 +227,7 @@ public class CamelEditorTest extends DefaultTest {
 	 * </ol>
 	 */
 	@Test
-	@Jira("FUSETOOLS-2281")
+	@Jira("FUSETOOLS-3478") // https://issues.redhat.com/browse/FUSETOOLS-3478
 	@RunIf(conditionClass = IssueIsClosed.class)
 	public void testCodeCompletion() {
 		new CamelProject(PROJECT_NAME).openCamelContext(CAMEL_CONTEXT);
