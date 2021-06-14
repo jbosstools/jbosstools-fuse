@@ -4,7 +4,7 @@
        xmlns:camel="http://camel.apache.org/schema/spring"
        xsi:schemaLocation="
        http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
-       http://camel.apache.org/schema/spring https://camel.apache.org/schema/spring/camel-spring.xsd">
+       http://camel.apache.org/schema/spring https://camel.apache.org/schema/spring/camel-spring-2.17.7.xsd">
 
   <!-- Define a traditional camel context here -->
   <camelContext id="camel" xmlns="http://camel.apache.org/schema/spring">
