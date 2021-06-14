@@ -5,7 +5,7 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="
        http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
-       http://camel.apache.org/schema/spring https://camel.apache.org/schema/spring/camel-spring.xsd">
+       http://camel.apache.org/schema/spring https://camel.apache.org/schema/spring/camel-spring-2.23.3.xsd">
 
   <!-- here is a sample which processes the input files
          (leaving them in place - see the 'noop' flag)
