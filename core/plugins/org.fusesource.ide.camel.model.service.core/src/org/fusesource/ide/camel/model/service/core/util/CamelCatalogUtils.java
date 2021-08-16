@@ -127,7 +127,7 @@ public class CamelCatalogUtils {
 			TEST_CAMEL_VERSIONS.add(CAMEL_VERSION_LATEST_PRODUCTIZED_62);
 			TEST_CAMEL_VERSIONS.add(CAMEL_VERSION_LATEST_PRODUCTIZED_63);
 			TEST_CAMEL_VERSIONS.add(CAMEL_VERSION_LATEST_FIS_20);
-			TEST_CAMEL_VERSIONS.add(CamelForFuseOnOpenShiftToBomMapper.FUSE_780_CAMEL_VERSION);
+			TEST_CAMEL_VERSIONS.add(CamelForFuseOnOpenShiftToBomMapper.FUSE_790_CAMEL_VERSION);
 		}
 	}
 
@@ -158,6 +158,7 @@ public class CamelCatalogUtils {
 		toTest.add(CAMEL_VERSION_LATEST_FIS_20);
 		toTest.add(CamelForFuseOnOpenShiftToBomMapper.FUSE_770_CAMEL_VERSION); // last version using JMX connector debug
 		toTest.add(CamelForFuseOnOpenShiftToBomMapper.FUSE_780_CAMEL_VERSION);
+		toTest.add(CamelForFuseOnOpenShiftToBomMapper.FUSE_790_CAMEL_VERSION);
 		return toTest;
 	}
 	
