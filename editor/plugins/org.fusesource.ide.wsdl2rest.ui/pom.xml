@@ -12,10 +12,9 @@
 	<packaging>eclipse-plugin</packaging>
 	<name>Red Hat Fuse Tooling :: Camel Editor :: Plugins :: Wsdl2Rest UI</name>
 
-<properties>
-		<version.apache.camel>2.23.2.fuse-780036-redhat-00001</version.apache.camel>
-		<version.apache.cxf>3.3.6.fuse-780029-redhat-00001</version.apache.cxf>
-		<version.apache.velocity>1.7.0.redhat-5</version.apache.velocity>
+    <properties>
+		<version.apache.camel>2.23.2.fuse-790054-redhat-00001</version.apache.camel>
+		<version.apache.cxf>3.3.6.fuse-790049-redhat-00001</version.apache.cxf>
 		<version.args4j>2.33</version.args4j>
 		<version.javaparser>2.5.1</version.javaparser>
 		<version.javax.ws.rs.api>2.1.1.redhat-00002</version.javax.ws.rs.api>
@@ -24,8 +23,8 @@
 		<version.jaxb-api>2.3.0</version.jaxb-api>
 		<version.wsdl4j>1.6.3.redhat-2</version.wsdl4j>
 		<version.commons.validator>1.7</version.commons.validator>
-		<version.wsdl2rest>0.8.0.fuse-sb2-780036-redhat-00001</version.wsdl2rest>
-		<version.commons.collections>3.2.2</version.commons.collections>
+		<version.wsdl2rest>0.8.0.fuse-sb2-790035-redhat-00001</version.wsdl2rest>
+		<version.commons.collections>3.2.2-redhat-2</version.commons.collections>
 		<version.commons.lang>2.4</version.commons.lang>
         <version.commons.lang3>3.8.1</version.commons.lang3>
 		<version.oro>2.0.8</version.oro>
@@ -73,8 +72,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.velocity</groupId>
-			<artifactId>velocity</artifactId>
-			<version>${version.apache.velocity}</version>
+			<artifactId>velocity-engine-core</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>wsdl4j</groupId>
