@@ -70,7 +70,7 @@ Example:
 	2.21.0.fuse-720050-redhat-00001=5.2.0.fuse-720023-redhat-00001
 
 
-## fisBomToFabric8MavenPlugin.fuse7.properties
+## fisBomToFabric8MavenPlugin.fuse7.properties (!!!! NO LONGER MAINTAINED !!!!)
 see camel2bom.fuse7.properties above with some slight changes. Here we map the Fabric8 version to a specific Fabric8 Maven Plugin version.
 
 Syntax:
