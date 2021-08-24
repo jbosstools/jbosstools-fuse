@@ -36,18 +36,11 @@ public class BaseConfigPropertyProvider implements
 		loadPropertiesFromFile();
 	}
 	
-	/*
-	 * (non-Javadoc)
-	 * @see org.fusesource.ide.server.karaf.core.server.IKarafConfigurationPropertyProvider#getConfigurationProperty(java.lang.String)
-	 */
 	@Override
 	public String getConfigurationProperty(String propertyName) {
 		return getConfigurationProperty(propertyName, null);
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.fusesource.ide.server.karaf.core.server.IKarafConfigurationPropertyProvider#getConfigurationProperty(java.lang.String, java.lang.String)
-	 */
 	@Override
 	public String getConfigurationProperty(String propertyName,
 			String defaultValue) {
