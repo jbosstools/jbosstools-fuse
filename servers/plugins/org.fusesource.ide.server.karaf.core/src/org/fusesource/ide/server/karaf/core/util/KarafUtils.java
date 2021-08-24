@@ -495,7 +495,7 @@ public class KarafUtils {
 		BaseConfigPropertyProvider manProv = new BaseConfigPropertyProvider(server.getRuntime().getLocation().append("etc").append("org.apache.karaf.management.cfg").toFile());
 		BaseConfigPropertyProvider sysProv = new BaseConfigPropertyProvider(server.getRuntime().getLocation().append("etc").append("system.properties").toFile());
 		
-		String url = manProv.getConfigurationProperty("serviceUrl");
+		String url = manProv.getEnvironmentResolvedConfigurationProperty("serviceUrl");
 		if (url == null) {
 			return null;
 		}
@@ -504,9 +504,9 @@ public class KarafUtils {
 		while ((pos = url.indexOf("${")) != -1) {
 			retVal.append(url.substring(0, pos));
 			String placeHolder = url.substring(url.indexOf("${")+2, url.indexOf('}')).trim();
-			String replacement = manProv.getConfigurationProperty(placeHolder);
+			String replacement = manProv.getEnvironmentResolvedConfigurationProperty(placeHolder);
 			if (replacement == null) {
-				replacement = sysProv.getConfigurationProperty(placeHolder);
+				replacement = sysProv.getEnvironmentResolvedConfigurationProperty(placeHolder);
 			}
 			if (replacement == null) {
 				return null;
