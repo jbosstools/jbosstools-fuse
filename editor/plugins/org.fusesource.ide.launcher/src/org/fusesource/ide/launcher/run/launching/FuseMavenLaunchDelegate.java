@@ -130,10 +130,21 @@ public abstract class FuseMavenLaunchDelegate extends MavenLaunchDelegate {
 		sb.append(" -DECLIPSE_PROCESS_NAME=\"'" + getEclipseProcessName() + "'\"");
 		// switch the test flag
 		sb.append(" -Dmaven.test.skip=" + this.skipTests);
-		// enable JMX RMI Connector - allows remote debug for Fuse 7.8-
-		sb.append(" -Dorg.apache.camel.jmx.createRmiConnector=True");
-		
 		return sb.toString();
+	}
+	
+	@Override
+	public String getVMArguments(ILaunchConfiguration configuration, String mode) throws CoreException {
+		if (ILaunchManager.DEBUG_MODE.equals(mode)) {
+			StringBuilder sb = new StringBuilder();
+			sb.append(" ").append(super.getVMArguments(configuration, mode));
+			// enable JMX RMI Connector - allows remote debug for Fuse 7.8-
+			sb.append(" -Dorg.apache.camel.jmx.createRmiConnector=True");
+			// ensure process is not forked so that current implementation of Camel Debugger can still automatically connect with Fuse 7.9+
+			sb.append(" -Dspring-boot.run.fork=false");
+			return sb.toString();
+		}
+		return super.getVMArguments(configuration, mode);
 	}
 
 	/**
