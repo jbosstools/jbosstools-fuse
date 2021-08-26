@@ -237,4 +237,5 @@
 			<url>https://maven.repository.redhat.com/ga</url>
 		</repository>
     </repositories>
+    
 </project>

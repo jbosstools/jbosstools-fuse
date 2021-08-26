@@ -42,6 +42,7 @@ import org.fusesource.ide.projecttemplates.impl.simple.EAPSpringTemplateForFuse6
 import org.fusesource.ide.projecttemplates.impl.simple.EAPSpringTemplateForFuse7;
 import org.fusesource.ide.projecttemplates.impl.simple.EAPSpringTemplateForFuse71;
 import org.fusesource.ide.projecttemplates.impl.simple.EAPSpringTemplateForFuse78;
+import org.fusesource.ide.projecttemplates.impl.simple.EAPSpringTemplateForFuse79;
 import org.fusesource.ide.projecttemplates.util.NewFuseIntegrationProjectMetaData;
 import org.fusesource.ide.projecttemplates.wizards.pages.model.EnvironmentData;
 import org.fusesource.ide.projecttemplates.wizards.pages.model.FuseDeploymentPlatform;
@@ -67,7 +68,13 @@ public class FuseIntegrationProjectCreatorRunnableForEAPSpringIT extends FuseInt
 	
 	@Test
 	public void testEAPSpringProjectCreation() throws Exception {
-        testProjectCreation("-EAPSpringProject-"+camelVersion, CamelDSLType.SPRING, "src/main/webapp/META-INF/jboss-camel-context.xml", null);
+		String camelFilePath = "src/main/webapp/";
+		if(isNewerThan2232fuse790()){
+			camelFilePath += "WEB-INF/camel-context.xml";
+		} else {
+			camelFilePath += "META-INF/jboss-camel-context.xml";
+		}
+        testProjectCreation("-EAPSpringProject-"+camelVersion, CamelDSLType.SPRING, camelFilePath, null);
 	}
 	
 	@Override
@@ -79,6 +86,8 @@ public class FuseIntegrationProjectCreatorRunnableForEAPSpringIT extends FuseInt
 			} else {
 				newProjectMetadata.setTemplate(new EAPSpringTemplateForFuse6());
 			}
+		} else if(isNewerThan2232fuse790()){
+			newProjectMetadata.setTemplate(new EAPSpringTemplateForFuse79());
 		} else if(isNewerThan2232fuse780()){
 			newProjectMetadata.setTemplate(new EAPSpringTemplateForFuse78());
 		} else if(isNewerThan221()){
