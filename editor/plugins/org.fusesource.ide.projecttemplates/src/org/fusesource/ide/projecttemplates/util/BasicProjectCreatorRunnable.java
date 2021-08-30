@@ -11,6 +11,8 @@
 package org.fusesource.ide.projecttemplates.util;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -137,23 +139,28 @@ public abstract class BasicProjectCreatorRunnable implements IRunnableWithProgre
 	}
 	
 	private void checkJRECompatibility(AbstractProjectTemplate template, IProgressMonitor monitor) {
-		String javaExecutionEnvironment = template.getJavaExecutionEnvironment();
-		if (!hasStrictlyCompatibleVM(javaExecutionEnvironment)) {
+		List<String> javaExecutionEnvironments = template.getJavaExecutionEnvironments();
+		if (!hasStrictlyCompatibleVM(javaExecutionEnvironments, monitor)) {
 			MessageDialog.openWarning(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
 					Messages.noStrictlyCompliantJREWarningTitle,
-					NLS.bind(Messages.noStrictlyCompliantJREWarningMessage, javaExecutionEnvironment));
+					NLS.bind(Messages.noStrictlyCompliantJREWarningMessage, javaExecutionEnvironments.stream().collect(Collectors.joining())));
 		}
 	}
 
-	private boolean hasStrictlyCompatibleVM(String environmentId) {
-		IExecutionEnvironment executionEnvironment = JavaRuntime.getExecutionEnvironmentsManager().getEnvironment(environmentId);
-		IVMInstallType[] vmInstallTypes = JavaRuntime.getVMInstallTypes();
-		for (IVMInstallType vmInstallType : vmInstallTypes) {
-			for (IVMInstall vmInstall : vmInstallType.getVMInstalls()) {
-				if (executionEnvironment.isStrictlyCompatible(vmInstall)) {
-					return true;
+	private boolean hasStrictlyCompatibleVM(List<String> environmentIds, IProgressMonitor monitor) {
+		SubMonitor subMonitor = SubMonitor.convert(monitor, Messages.searchStrictlyCompatibleJRE, environmentIds.size());
+		for (String environmentId : environmentIds) {	
+			IExecutionEnvironment executionEnvironment = JavaRuntime.getExecutionEnvironmentsManager().getEnvironment(environmentId);
+			IVMInstallType[] vmInstallTypes = JavaRuntime.getVMInstallTypes();
+			for (IVMInstallType vmInstallType : vmInstallTypes) {
+				for (IVMInstall vmInstall : vmInstallType.getVMInstalls()) {
+					if (executionEnvironment.isStrictlyCompatible(vmInstall)) {
+						subMonitor.setWorkRemaining(0);
+						return true;
+					}
 				}
 			}
+			subMonitor.split(1);
 		}
 		return false;
 	}
