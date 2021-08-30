@@ -10,6 +10,9 @@
  ******************************************************************************/ 
 package org.fusesource.ide.projecttemplates.adopters;
 
+import java.util.Collections;
+import java.util.List;
+
 import org.apache.maven.model.Dependency;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -107,7 +110,7 @@ public abstract class AbstractProjectTemplate {
 		return false;
 	}
 
-	public String getJavaExecutionEnvironment() {
-		return "JavaSE-1.8";
+	public List<String> getJavaExecutionEnvironments() {
+		return Collections.singletonList("JavaSE-1.8");
 	}
 }

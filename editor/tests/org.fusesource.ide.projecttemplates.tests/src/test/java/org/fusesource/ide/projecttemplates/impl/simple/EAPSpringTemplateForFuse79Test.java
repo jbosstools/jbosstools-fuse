@@ -51,6 +51,8 @@ public class EAPSpringTemplateForFuse79Test {
 	
 	@Test
 	public void testIsCompatible() throws Exception {
-		assertThat(new EAPSpringTemplateForFuse79().isCompatible(new EnvironmentData(version, FuseDeploymentPlatform.STANDALONE, FuseRuntimeKind.WILDFLY))).isEqualTo(isCompatible);
+		EAPSpringTemplateForFuse79 template = new EAPSpringTemplateForFuse79();
+		assertThat(template.isCompatible(new EnvironmentData(version, FuseDeploymentPlatform.STANDALONE, FuseRuntimeKind.WILDFLY))).isEqualTo(isCompatible);
+		assertThat(template.getJavaExecutionEnvironments()).containsOnly("JavaSE-1.8", "JavaSE-11");
 	}
 }

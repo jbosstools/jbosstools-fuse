@@ -100,6 +100,7 @@ public class Messages extends NLS {
 	
 	public static String noStrictlyCompliantJREWarningTitle;
 	public static String noStrictlyCompliantJREWarningMessage;
+	public static String searchStrictlyCompatibleJRE;
 
 	static {
         // initialize resource bundle

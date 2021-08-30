@@ -10,6 +10,9 @@
  ******************************************************************************/
 package org.fusesource.ide.projecttemplates.impl.simple;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.fusesource.ide.camel.model.service.core.util.FuseBomFilter;
 import org.fusesource.ide.foundation.core.util.VersionUtil;
 import org.fusesource.ide.projecttemplates.adopters.configurators.TemplateConfiguratorSupport;
@@ -37,6 +40,11 @@ public class OSESpringBootXMLTemplateForFuse79 extends AbstractOSESpringBootXMLT
 				&& new VersionUtil().isStrictlyGreaterThan(environment.getCamelVersion(), MINIMAL_COMPATIBLE_CAMEL_VERSION)
 				// exceptionally using a string comparator as it needs to compare 2.23.2.xxx with 2.23.2.yyy. And Maven Comparator used is not doing it
 				&& environment.getCamelVersion().compareTo(MINIMAL_COMPATIBLE_CAMEL_VERSION) > 0;
+	}
+	
+	@Override
+	public List<String> getJavaExecutionEnvironments() {
+		return Arrays.asList("JavaSE-1.8", "JavaSE-11");
 	}
 
 }

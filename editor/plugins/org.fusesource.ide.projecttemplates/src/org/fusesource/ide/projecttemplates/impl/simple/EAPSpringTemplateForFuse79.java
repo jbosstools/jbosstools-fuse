@@ -10,6 +10,9 @@
  ******************************************************************************/
 package org.fusesource.ide.projecttemplates.impl.simple;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.fusesource.ide.camel.model.service.core.util.FuseBomFilter;
 import org.fusesource.ide.foundation.core.util.VersionUtil;
 import org.fusesource.ide.projecttemplates.adopters.configurators.MavenTemplateConfigurator;
@@ -36,6 +39,11 @@ private static final String MINIMAL_COMPATIBLE_CAMEL_VERSION = "2.23.2.fuse-790"
 	public boolean isCompatible(EnvironmentData environment) {
 		return super.isCompatible(environment)
 				&& new VersionUtil().isStrictlyGreaterThan(environment.getCamelVersion(), MINIMAL_COMPATIBLE_CAMEL_VERSION);
+	}
+	
+	@Override
+	public List<String> getJavaExecutionEnvironments() {
+		return Arrays.asList("JavaSE-1.8", "JavaSE-11");
 	}
 
 }

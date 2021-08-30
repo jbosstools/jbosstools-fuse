@@ -51,7 +51,9 @@ public class OSESpringBootXMLTemplateForFuse78Test {
 	
 	@Test
 	public void testIsCompatible() throws Exception {
-		assertThat(new OSESpringBootXMLTemplateForFuse78().isCompatible(new EnvironmentData(version, null, FuseRuntimeKind.SPRINGBOOT))).isEqualTo(isCompatible);
+		OSESpringBootXMLTemplateForFuse78 template = new OSESpringBootXMLTemplateForFuse78();
+		assertThat(template.isCompatible(new EnvironmentData(version, null, FuseRuntimeKind.SPRINGBOOT))).isEqualTo(isCompatible);
+		assertThat(template.getJavaExecutionEnvironments()).containsOnly("JavaSE-1.8");
 	}
 
 }
