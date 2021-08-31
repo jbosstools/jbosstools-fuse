@@ -29,9 +29,6 @@ public final class WizardMessages extends NLS {
 	public static String CheckedTableSelectionDialog_deselectAll;
 	public static String NewCamelTestWizardPageOne_title;
 	public static String NewCamelTestWizardPageOne_description;
-	public static String NewCamelTestWizardPageOne_methodStub_setUp;
-	public static String NewCamelTestWizardPageOne_methodStub_tearDown;
-	public static String NewCamelTestWizardPageOne_methodStub_constructor;
 	public static String NewCamelTestWizardPageOne_method_Stub_label;
 	public static String NewCamelTestWizardPageOne_class_to_test_label;
 	public static String NewCamelTestWizardPageOne_class_to_test_browse;
@@ -113,8 +110,6 @@ public final class WizardMessages extends NLS {
 	public static String NewCamelTestWizardPageOne_junit3_radio_label;
 	public static String NewCamelTestWizardPageOne_junit4_radio_label;
 	public static String NewCamelTestWizardPageOne_linkedtext_java5required;
-	public static String NewCamelTestWizardPageOne_methodStub_setUpBeforeClass;
-	public static String NewCamelTestWizardPageOne_methodStub_tearDownAfterClass;
 	public static String NewCamelTestWizardPageOne_not_implemented_define_expectations;
 	public static String NewCamelTestWizardPageOne_not_implemented_sending_messages;
 	public static String NewCamelTestWizardPageOne_producer_template_fields;

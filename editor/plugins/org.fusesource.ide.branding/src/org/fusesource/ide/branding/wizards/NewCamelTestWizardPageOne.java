@@ -56,6 +56,7 @@ import org.eclipse.jdt.internal.junit.util.LayoutUtil;
 import org.eclipse.jdt.internal.junit.wizards.MethodStubsSelectionButtonGroup;
 import org.eclipse.jdt.internal.ui.refactoring.contentassist.ControlContentAssistHelper;
 import org.eclipse.jdt.internal.ui.refactoring.contentassist.JavaTypeCompletionProcessor;
+import org.eclipse.jdt.junit.wizards.NewTestCaseWizardPageOne.JUnitVersion;
 import org.eclipse.jdt.ui.CodeGeneration;
 import org.eclipse.jdt.ui.wizards.NewTypeWizardPage;
 import org.eclipse.jface.dialogs.Dialog;
@@ -179,15 +180,9 @@ public class NewCamelTestWizardPageOne extends NewTypeWizardPage {
 		setTitle(WizardMessages.NewCamelTestWizardPageOne_title);
 		setDescription(WizardMessages.NewCamelTestWizardPageOne_description);
 
-		String[] buttonNames = new String[] {
-				/* IDX_SETUP_CLASS */WizardMessages.NewCamelTestWizardPageOne_methodStub_setUpBeforeClass,
-				/* IDX_TEARDOWN_CLASS */WizardMessages.NewCamelTestWizardPageOne_methodStub_tearDownAfterClass,
-				/* IDX_SETUP */WizardMessages.NewCamelTestWizardPageOne_methodStub_setUp,
-				/* IDX_TEARDOWN */WizardMessages.NewCamelTestWizardPageOne_methodStub_tearDown,
-				/* IDX_CONSTRUCTOR */WizardMessages.NewCamelTestWizardPageOne_methodStub_constructor };
 		enableCommentControl(true);
 
-		fMethodStubsButtons = new MethodStubsSelectionButtonGroup(SWT.CHECK, buttonNames, 2);
+		fMethodStubsButtons = new MethodStubsSelectionButtonGroup(SWT.CHECK, JUnitVersion.VERSION_4, 2);
 		fMethodStubsButtons.setLabelText(WizardMessages.NewCamelTestWizardPageOne_method_Stub_label);
 
 		fXmlFileToTestCompletionProcessor = new JavaTypeCompletionProcessor(false, false, true);
