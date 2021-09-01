@@ -10,11 +10,8 @@
  ******************************************************************************/
 package org.jboss.tools.fuse.reddeer.wizard;
 
-import java.util.List;
-
 import org.eclipse.reddeer.common.wait.TimePeriod;
 import org.eclipse.reddeer.common.wait.WaitUntil;
-import org.eclipse.reddeer.swt.api.TreeItem;
 import org.eclipse.reddeer.swt.condition.ShellIsAvailable;
 import org.eclipse.reddeer.swt.impl.button.OkButton;
 import org.eclipse.reddeer.swt.impl.menu.ShellMenuItem;
@@ -47,22 +44,7 @@ public class CheatSheetsWizard {
 
 	public void selectCheatSheet(String... path) {
 		DefaultTree tree = new DefaultTree(shell);
-		TreeItem item = tree.getItem(path[0]);
-		item.expand();
-
-		for (int i = 1; i < path.length; i++) {
-			List<TreeItem> items = item.getItems();
-			for (TreeItem treeItem : items) {
-				if (treeItem.getText().equals(path[i])) {
-					if (i == (path.length - 1)) {
-						treeItem.select();
-					} else {
-						item.expand();
-						item = tree.getItem(path[i]);
-					}
-				}
-			}
-		}
+		tree.getItem(path).select();
 	}
 
 	public void finish() {
