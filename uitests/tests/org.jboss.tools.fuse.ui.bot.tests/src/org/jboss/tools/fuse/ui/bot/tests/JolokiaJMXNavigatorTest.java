@@ -37,8 +37,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 /**
- * This test requires an external Camel route specified by the requirement
- * restriction. The Camel route is started and stopped by the requirement logic.
+ * This test requires an external Camel route specified by the requirement restriction. The Camel route is started and
+ * stopped by the requirement logic.
  * 
  * @author djelinek
  *
@@ -55,9 +55,9 @@ public class JolokiaJMXNavigatorTest {
 
 	@RequirementRestriction
 	public static RequirementMatcher getRequirementMatcher() {
-		return new CamelExampleRequirementMatcher("camel-example-spring-boot", "2.20.1");
+		return new CamelExampleRequirementMatcher("camel-example-spring-boot", "2.23.4");
 	}
-	
+
 	/**
 	 * Prepares test environment
 	 */
@@ -103,8 +103,8 @@ public class JolokiaJMXNavigatorTest {
 		connectionWizard.selectConnection(ConnectionType.JOLOKIA);
 		connectionWizard.next();
 		connectionWizard.setTextConnectionName(conf.getName());
-		connectionWizard.setTextJolokiaURL(conf.getUrl());	
-		if(!conf.isVerifySSL())
+		connectionWizard.setTextJolokiaURL(conf.getUrl());
+		if (!conf.isVerifySSL())
 			connectionWizard.toggleDoNOTVerifySSLCertificatesCHB(true);
 		connectionWizard.finish();
 
@@ -114,16 +114,17 @@ public class JolokiaJMXNavigatorTest {
 		new WaitUntil(new JMXConnectionIsAvailable("User-Defined Connections", connectionName + "[Connected]"));
 
 		log.info("Try to access route components via new Jolokia connection");
-		assertJMXNode("User-Defined Connections", connectionName, "MBeans", "java.util.logging", "Logging", "LoggerNames");
+		assertJMXNode("User-Defined Connections", connectionName, "MBeans", "java.util.logging", "Logging",
+				"LoggerNames");
 		jmxView.collapseAll();
-		assertJMXNode("User-Defined Connections", connectionName, "Camel", "SampleCamel", "Endpoints", "stream", "out");
+		assertJMXNode("User-Defined Connections", connectionName, "Camel", "MyCamel", "Endpoints", "stream", "out");
 		jmxView.collapseAll();
-		assertJMXNode("User-Defined Connections", connectionName, "Camel", "SampleCamel", "Routes", "route1",
-						"timer:hello?period={{timer.period}}", "Transform transform1", "stream:out");
+		assertJMXNode("User-Defined Connections", connectionName, "Camel", "MyCamel", "Routes", "hello",
+				"timer:hello?period={{timer.period}}", "Transform transform1", "Filter filter1", "stream:out");
 		jmxView.collapseAll();
 		assertTrue("There are some errors in Error Log", LogGrapper.getPluginErrors("fuse").size() == 0);
 	}
-	
+
 	private void assertJMXNode(String... path) {
 		StringJoiner msg = new StringJoiner("/");
 		for (String part : path) {
@@ -134,5 +135,4 @@ public class JolokiaJMXNavigatorTest {
 		jmx.open();
 		assertNotNull("The following path is inaccesible: " + msg.toString(), jmx.getNode(path));
 	}
-
 }
