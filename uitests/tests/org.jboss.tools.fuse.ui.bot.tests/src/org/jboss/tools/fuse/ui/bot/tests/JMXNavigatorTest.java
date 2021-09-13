@@ -61,7 +61,7 @@ public class JMXNavigatorTest {
 
 	@RequirementRestriction
 	public static RequirementMatcher getRequirementMatcher() {
-		return new CamelExampleRequirementMatcher("camel-example-spring-boot", "2.20.1");
+		return new CamelExampleRequirementMatcher("camel-example-spring-boot", "2.23.4");
 	}
 
 	/**
@@ -91,11 +91,11 @@ public class JMXNavigatorTest {
 	 * <b>Steps:</b>
 	 * <ol>
 	 * <li>open JMX Navigator View</li>
-	 * <li>try to access node "Local Camel Context", "Camel", "SampleCamel",
+	 * <li>try to access node "Local Camel Context", "Camel", "MyCamel",
 	 * "Endpoints", "stream", "out"</li>
-	 * <li>try to access node "Local Camel Context", "Camel", "SampleCamel",
+	 * <li>try to access node "Local Camel Context", "Camel", "MyCamel",
 	 * "Endpoints", "timer", "hello?period=2000"</li>
-	 * <li>try to access node "Local Camel Context", "Camel", "SampleCamel",
+	 * <li>try to access node "Local Camel Context", "Camel", "MyCamel",
 	 * "Routes", "route1", "timer:hello?period={{timer.period}}"</li>
 	 * <li>check errors in Error Log</li>
 	 * </ol>
@@ -103,10 +103,10 @@ public class JMXNavigatorTest {
 	@Test
 	public void testProcessesView() {
 		String root = camelExample.getConfiguration().getJarFile().getName();
-		assertJMXNode("Local Processes", root, "Camel", "SampleCamel", "Endpoints", "stream", "out");
-		assertJMXNode("Local Processes", root, "Camel", "SampleCamel", "Endpoints", "timer", "hello?period=2000");
-		assertJMXNode("Local Processes", root, "Camel", "SampleCamel", "Routes", "route1", "timer:hello?period={{timer.period}}",
-				"Transform transform1", "stream:out");
+		assertJMXNode("Local Processes", root, "Camel", "MyCamel", "Endpoints", "stream", "out");
+		assertJMXNode("Local Processes", root, "Camel", "MyCamel", "Endpoints", "timer", "hello?period=2000");
+		assertJMXNode("Local Processes", root, "Camel", "MyCamel", "Routes", "hello", "timer:hello?period={{timer.period}}",
+				"Transform transform1", "Filter filter1", "stream:out");
 		assertTrue("There are some errors in Error Log", LogGrapper.getPluginErrors("fuse").size() == 0);
 	}
 
@@ -118,10 +118,10 @@ public class JMXNavigatorTest {
 	 * <b>Steps:</b>
 	 * <ol>
 	 * <li>open JMX Navigator View</li>
-	 * <li>select node "Local Camel Context", "Camel", "SampleCamel"</li>
+	 * <li>select node "Local Camel Context", "Camel", "MyCamel"</li>
 	 * <li>select the context menu option Suspend Camel Context</li>
 	 * <li>check if the camel output contains the text "is suspended in"</li>
-	 * <li>select node "Local Camel Context", "Camel", "SampleCamel"</li>
+	 * <li>select node "Local Camel Context", "Camel", "MyCamel"</li>
 	 * <li>select the context menu option Resume Camel Context</li>
 	 * <li>check if the camel output contains the text "resumed in"</li>
 	 * </ol>
@@ -132,13 +132,13 @@ public class JMXNavigatorTest {
 		CamelExampleRunner runner = camelExample.getRunner();
 		FuseJMXNavigator jmx = new FuseJMXNavigator();
 		jmx.open();
-		assertTrue("Suspension was not performed", jmx.suspendCamelContext("Local Processes", root, "Camel", "SampleCamel"));
+		assertTrue("Suspension was not performed", jmx.suspendCamelContext("Local Processes", root, "Camel", "MyCamel"));
 		try {
 			runner.waitForOutputWithPattern(IS_SUSPENDED_PATTERN);
 		} catch (WaitTimeoutExpiredException e) {
 			fail("Camel context was not suspended!\n" + runner.getOutput());
 		}
-		assertTrue("Resume of Camel Context was not performed", jmx.resumeCamelContext("Local Processes", root, "Camel", "SampleCamel"));
+		assertTrue("Resume of Camel Context was not performed", jmx.resumeCamelContext("Local Processes", root, "Camel", "MyCamel"));
 		try {
 			runner.waitForOutputWithPattern(IS_RESUMED_PATTERN);
 		} catch (WaitTimeoutExpiredException e) {
