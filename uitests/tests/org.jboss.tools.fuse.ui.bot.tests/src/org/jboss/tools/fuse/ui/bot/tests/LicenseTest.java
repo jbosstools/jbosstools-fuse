@@ -25,7 +25,6 @@ import org.eclipse.reddeer.swt.api.TreeItem;
 import org.eclipse.reddeer.swt.impl.button.PushButton;
 import org.eclipse.reddeer.swt.impl.menu.ShellMenuItem;
 import org.eclipse.reddeer.swt.impl.shell.DefaultShell;
-import org.eclipse.reddeer.swt.impl.tab.DefaultTabItem;
 import org.eclipse.reddeer.swt.impl.text.DefaultText;
 import org.eclipse.reddeer.swt.impl.tree.DefaultTree;
 import org.eclipse.reddeer.swt.impl.tree.DefaultTreeItem;
@@ -59,16 +58,15 @@ public class LicenseTest {
 	 * 
 	 * @return List of all available Fuse plugins
 	 */
-	@Parameters
+	@Parameters(name = "{0}")
 	public static Collection<String> setupData() {
 		new ShellMenuItem(new WorkbenchShell(), "Help", "About Red Hat CodeReady Studio").select();
 		Shell shell = new DefaultShell("About Red Hat CodeReady Studio");
 		new PushButton(shell, "Installation Details").click();
 		shell = new DefaultShell("Red Hat CodeReady Studio Installation Details");
-		new DefaultTabItem(shell, "Installed Software").activate();
 		List<String> fusePlugins = new ArrayList<String>();
 		for (TreeItem item : new DefaultTree(shell).getItems()) {
-			if (item.getText().startsWith("Red Hat Fuse Tools")) {
+			if (item.getText().startsWith("Red Hat Fuse Tooling")) {
 				fusePlugins.add(item.getText());
 			}
 		}
