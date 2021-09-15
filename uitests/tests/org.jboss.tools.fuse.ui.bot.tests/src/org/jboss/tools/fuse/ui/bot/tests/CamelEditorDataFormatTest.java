@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Red Hat, Inc. 
+ * Copyright (c) 2021 Red Hat, Inc. 
  * Distributed under license by Red Hat, Inc. All rights reserved. 
  * This program is made available under the terms of the 
  * Eclipse Public License v1.0 which accompanies this distribution, 
@@ -21,6 +21,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
@@ -96,6 +98,29 @@ public class CamelEditorDataFormatTest {
 		this.dataFormat = dataFormat;
 	}
 
+	/**
+	 * Checks if used Camel Version is newer than input.
+	 *
+	 * @param version
+	 *                    Integer representing required version for true return. f.e. 7 -> 7.0.0, 73 -> 7.3.0, 731 ->
+	 *                    7.3.1
+	 * @return true if actual version is equal to required or newer
+	 * @return false if actual version is older then required
+	 */
+	private static boolean IsCamelVersionNewerThan(Integer version) {
+		Pattern p = Pattern.compile("(?<=fuse-)\\d+");
+		Matcher m = p.matcher(camelCatalogRequirement.getConfiguration().getVersion());
+		if (m.find()) {
+			if (Integer.parseInt((String) m.group(0).subSequence(0, String.valueOf(version).length())) >= version) {
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			return false;
+		}
+	}
+
 	@Parameters(name = "{0}")
 	public static Collection<String> getCamelLanguages() {
 		List<String> camelDataFormats = new ArrayList<>();
@@ -134,7 +159,11 @@ public class CamelEditorDataFormatTest {
 		camelDataFormats.add("univocity-tsv");
 		camelDataFormats.add("xmlBeans");
 		camelDataFormats.add("xmljson");
-		camelDataFormats.add("xmlrpc");
+		// checking if Camel version is Fuse 7.8 or newer --> if yes, skip 'xmlrpc' which is no more available in this
+		// version
+		if (!IsCamelVersionNewerThan(78)) {
+			camelDataFormats.add("xmlrpc");
+		}
 		camelDataFormats.add("xstream");
 		camelDataFormats.add("zip");
 		camelDataFormats.add("zipFile");
