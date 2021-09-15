@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Red Hat, Inc. 
+ * Copyright (c) 2021 Red Hat, Inc. 
  * Distributed under license by Red Hat, Inc. All rights reserved. 
  * This program is made available under the terms of the 
  * Eclipse Public License v1.0 which accompanies this distribution, 
@@ -21,6 +21,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
@@ -57,6 +59,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized.Parameters;
 import org.junit.runners.Parameterized.UseParametersRunnerFactory;
+import org.osgi.framework.Version;
 import org.xml.sax.SAXException;
 
 /**
@@ -94,6 +97,31 @@ public class CamelEditorDataFormatTest {
 
 	public CamelEditorDataFormatTest(String dataFormat) {
 		this.dataFormat = dataFormat;
+	}
+
+	/**
+	 * Checks if used Camel Version is newer than input.
+	 *
+	 * @return Fuse version as String
+	 */
+	private static String getFuseVersion() {
+
+		String fuseVersion = null;
+		String camelVersion = camelCatalogRequirement.getConfiguration().getVersion();
+
+		Pattern p = Pattern.compile("(?<=fuse-)\\d+");
+		Matcher m = p.matcher(camelVersion);
+		m.find();
+
+		if (m.group(0).length() == 6) {
+			fuseVersion = m.group(0).substring(0, 1) + "." + m.group(0).substring(1, 2) + "."
+					+ m.group(0).substring(2, 3);
+		} else if (m.group(0).length() == 7) { // handle f.e. 7.10.0
+			fuseVersion = m.group(0).substring(0, 1) + "." + m.group(0).substring(1, 3) + "."
+					+ m.group(0).substring(3, 4);
+		}
+
+		return fuseVersion;
 	}
 
 	@Parameters(name = "{0}")
@@ -134,7 +162,11 @@ public class CamelEditorDataFormatTest {
 		camelDataFormats.add("univocity-tsv");
 		camelDataFormats.add("xmlBeans");
 		camelDataFormats.add("xmljson");
-		camelDataFormats.add("xmlrpc");
+		// checking if Camel version is Fuse 7.8 or newer --> if yes, skip 'xmlrpc' which is no more available in this
+		// version
+		if (new Version(getFuseVersion()).compareTo(new Version("7.8.0")) < 0) {
+			camelDataFormats.add("xmlrpc");
+		}
 		camelDataFormats.add("xstream");
 		camelDataFormats.add("zip");
 		camelDataFormats.add("zipFile");
