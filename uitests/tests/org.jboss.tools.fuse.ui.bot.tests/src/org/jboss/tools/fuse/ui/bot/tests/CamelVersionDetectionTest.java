@@ -19,6 +19,7 @@ import static org.junit.Assert.assertTrue;
 import org.eclipse.reddeer.eclipse.ui.views.log.LogView;
 import org.eclipse.reddeer.junit.requirement.inject.InjectRequirement;
 import org.eclipse.reddeer.junit.runner.RedDeerSuite;
+import org.eclipse.reddeer.requirements.jre.JRERequirement.JRE;
 import org.eclipse.reddeer.workbench.handler.WorkbenchShellHandler;
 import org.jboss.tools.fuse.reddeer.requirement.FuseRequirement;
 import org.jboss.tools.fuse.reddeer.requirement.FuseRequirement.Fuse;
@@ -36,6 +37,7 @@ import org.junit.runner.RunWith;
  * 
  * @author djelinek
  */
+@JRE
 @Fuse(state = PRESENT)
 @RunWith(RedDeerSuite.class)
 public class CamelVersionDetectionTest {
