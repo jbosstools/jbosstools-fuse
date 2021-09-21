@@ -72,7 +72,7 @@ public class OpenShiftRequirement extends AbstractConfigurableRequirement<OpenSh
 		if (explorer.isConnectionPresent(connection_name)) {
 			return;
 		}
-		
+
 		// create a new connection in OpenShift Explorer
 		explorer.clickNewConnection();
 		NewOpenShiftConnectionWizard wizard = new NewOpenShiftConnectionWizard();
@@ -81,7 +81,8 @@ public class OpenShiftRequirement extends AbstractConfigurableRequirement<OpenSh
 		wizard.setTextUsername(config.getUsername());
 		wizard.setTextPassword(config.getPassword());
 		wizard.clickAdvancedBTN();
-		wizard.toggleOverrideOcLocationCHB(false);
+		wizard.toggleOverrideOcLocationCHB(true);
+		wizard.setOCLocation(config.getOc());
 		wizard.finish();
 	}
 
