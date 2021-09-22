@@ -21,13 +21,18 @@ import java.io.IOException;
 
 import org.eclipse.reddeer.common.wait.TimePeriod;
 import org.eclipse.reddeer.common.wait.WaitUntil;
+import org.eclipse.reddeer.common.wait.WaitWhile;
 import org.eclipse.reddeer.swt.condition.ShellIsAvailable;
+import org.eclipse.reddeer.swt.impl.button.FinishButton;
+import org.eclipse.reddeer.workbench.core.condition.JobIsRunning;
 import org.jboss.tools.fuse.reddeer.FileUtils;
 import org.jboss.tools.fuse.reddeer.ResourceHelper;
+import org.jboss.tools.fuse.reddeer.SupportedCamelVersions;
 import org.jboss.tools.fuse.reddeer.editor.CamelEditor;
 import org.jboss.tools.fuse.reddeer.editor.DataTransformationEditor;
 import org.jboss.tools.fuse.reddeer.editor.SourceEditor;
 import org.jboss.tools.fuse.reddeer.projectexplorer.CamelProject;
+import org.jboss.tools.fuse.reddeer.utils.JDK8Check;
 import org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizard;
 import org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardAdvancedPage;
 import org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardDeploymentType;
@@ -45,11 +50,12 @@ import org.jboss.tools.fuse.reddeer.wizard.NewFuseTransformationWizard.TypeDefin
  */
 public class DataTransformationDefaultTest extends DefaultTest {
 
-	public static final String DEPLOYMENT_TYPE = System.getProperty("fuseDeploymentType", "OpenShift");
-	public static final String RUNTIME_TYPE = System.getProperty("fuseRuntimeType", "SpringBoot");
+	public static final String DEPLOYMENT_TYPE = System.getProperty("fuseDeploymentType", "Standalone");
+	public static final String RUNTIME_TYPE = System.getProperty("fuseRuntimeType", "Karaf");
 	public static final String CAMEL_VERSION = System.getProperty("fuseCamelVersion", "2.17.0.redhat-630343");
 	public static final String DSL = System.getProperty("fuseDSL", "Blueprint");
 	public static final String STAGING_REPOS = System.getProperty("staging.repositories", "false");
+	public static final String JDK_WARNING_MESSAGE = "No Strictly compliant JRE detected";
 
 	protected static final String PROJECT_NAME = "data-transformation-test";
 
@@ -139,6 +145,7 @@ public class DataTransformationDefaultTest extends DefaultTest {
 			runtimeType = KARAF;
 		}
 
+		boolean hasJava8 = JDK8Check.isJava8Available();
 		NewFuseIntegrationProjectWizard wiz = new NewFuseIntegrationProjectWizard();
 		wiz.open();
 		NewFuseIntegrationProjectWizardFirstPage firstPage = new NewFuseIntegrationProjectWizardFirstPage(wiz);
@@ -147,7 +154,12 @@ public class DataTransformationDefaultTest extends DefaultTest {
 		NewFuseIntegrationProjectWizardRuntimePage secondPage = new NewFuseIntegrationProjectWizardRuntimePage(wiz);
 		secondPage.setDeploymentType(deploymentType);
 		secondPage.setRuntimeType(runtimeType);
-		secondPage.typeCamelVersion(CAMEL_VERSION);
+		String camelVersion = SupportedCamelVersions.getCamelVersionsWithLabels().get(CAMEL_VERSION);
+		if(camelVersion != null) {
+			secondPage.selectCamelVersion(camelVersion);
+		} else {
+			secondPage.typeCamelVersion(CAMEL_VERSION);
+		}
 		wiz.next();
 		NewFuseIntegrationProjectWizardAdvancedPage lastPage = new NewFuseIntegrationProjectWizardAdvancedPage(wiz);
 		if ("Standalone".equals(DEPLOYMENT_TYPE) && "Karaf".equals(RUNTIME_TYPE)) {
@@ -159,7 +171,14 @@ public class DataTransformationDefaultTest extends DefaultTest {
 		} else {
 			lastPage.selectTemplate(lastPage.getAllAvailableTemplates().get(0));
 		}
-		wiz.finish(TimePeriod.VERY_LONG);
+		new FinishButton(wiz).click();
+		
+		if(!hasJava8 && runtimeType == NewFuseIntegrationProjectWizardRuntimeType.KARAF) {
+			JDK8Check.handleMissingJava8();
+		}
+		
+		new WaitWhile(new JobIsRunning(), TimePeriod.VERY_LONG);
+		new WaitWhile(new ShellIsAvailable("New Fuse Integration Project"), TimePeriod.getCustom(1200));
 	}
 
 	/**
@@ -194,8 +213,9 @@ public class DataTransformationDefaultTest extends DefaultTest {
 	protected void addDataTransformation() {
 		CamelEditor editor = new CamelEditor();
 		editor.addCamelComponent("Data Transformation", "SetHeader _setHeader1");
-		new WaitUntil(new ShellIsAvailable("New Fuse Transformation"), TimePeriod.VERY_LONG);
+		new WaitUntil(new ShellIsAvailable("New Fuse Transformation"), TimePeriod.getCustom(600));
 		NewFuseTransformationWizard wizard = new NewFuseTransformationWizard();
+		wizard.activate(TimePeriod.DEFAULT);
 		wizard.setTransformationID("xml2json");
 		wizard.setSourceType(TransformationType.XML);
 		wizard.setTargetType(TransformationType.JSON);
@@ -207,7 +227,7 @@ public class DataTransformationDefaultTest extends DefaultTest {
 		wizard.setJSONTargetFile("xyz-order.json - data-transformation-test/src/data");
 		wizard.finish(TimePeriod.VERY_LONG);
 		editor.activate();
-		editor.addCamelComponent("Log", "ref:xml2json");
+		editor.addCamelComponent("Log", "Route _route1");
 		editor.setProperty("Log", "Message *", "${body}");
 		editor.close(true);
 	}
