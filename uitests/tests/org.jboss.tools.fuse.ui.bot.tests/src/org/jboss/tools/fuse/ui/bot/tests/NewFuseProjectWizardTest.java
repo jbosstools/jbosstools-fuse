@@ -26,20 +26,27 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.eclipse.reddeer.common.wait.TimePeriod;
+import org.eclipse.reddeer.common.wait.WaitUntil;
+import org.eclipse.reddeer.common.wait.WaitWhile;
 import org.eclipse.reddeer.direct.project.Project;
-import org.eclipse.reddeer.eclipse.ui.views.log.LogView;
 import org.eclipse.reddeer.eclipse.ui.views.markers.ProblemsView;
 import org.eclipse.reddeer.junit.runner.RedDeerSuite;
+import org.eclipse.reddeer.requirements.cleanerrorlog.CleanErrorLogRequirement;
+import org.eclipse.reddeer.requirements.cleanworkspace.CleanWorkspaceRequirement;
 import org.eclipse.reddeer.swt.api.TreeItem;
+import org.eclipse.reddeer.swt.condition.ShellIsAvailable;
+import org.eclipse.reddeer.swt.impl.button.FinishButton;
 import org.eclipse.reddeer.swt.impl.tree.DefaultTree;
+import org.eclipse.reddeer.workbench.core.condition.JobIsRunning;
 import org.eclipse.reddeer.workbench.handler.WorkbenchShellHandler;
 import org.jboss.tools.fuse.reddeer.FileUtils;
 import org.jboss.tools.fuse.reddeer.LogGrapper;
 import org.jboss.tools.fuse.reddeer.ResourceHelper;
 import org.jboss.tools.fuse.reddeer.SupportedCamelVersions;
 import org.jboss.tools.fuse.reddeer.dialog.WhereToFindMoreTemplatesMessageDialog;
+import org.jboss.tools.fuse.reddeer.utils.JDK8Check;
 import org.jboss.tools.fuse.reddeer.utils.LogChecker;
-import org.jboss.tools.fuse.reddeer.utils.ProjectFactory;
 import org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizard;
 import org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardAdvancedPage;
 import org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardFirstPage;
@@ -61,10 +68,8 @@ public class NewFuseProjectWizardTest {
 	 */
 	@After
 	public void setupDeleteProjects() {
-		ProjectFactory.deleteAllProjects();
-		LogView log = new LogView();
-		log.open();
-		log.deleteLog();
+		new CleanErrorLogRequirement().fulfill();
+		new CleanWorkspaceRequirement().fulfill();
 		WorkbenchShellHandler.getInstance().closeAllNonWorbenchShells();
 	}
 
@@ -97,7 +102,7 @@ public class NewFuseProjectWizardTest {
 		wiz.next();
 		NewFuseIntegrationProjectWizardAdvancedPage lastPage = new NewFuseIntegrationProjectWizardAdvancedPage(wiz);
 		lastPage.selectTemplate(SPRINGBOOT);
-		wiz.finish();
+		new FinishButton(wiz).click();
 		File actualLocation = new File(Project.getLocation("test"));
 		assertEquals("Location of a project is different!", targetLocation, actualLocation);
 		assertTrue("There are some errors in Error Log", LogGrapper.getPluginErrors("fuse").size() == 0);
@@ -120,6 +125,7 @@ public class NewFuseProjectWizardTest {
 	 */
 	@Test
 	public void testCamelVersion() {
+		boolean hasJava8 = JDK8Check.isJava8Available();
 		NewFuseIntegrationProjectWizard wiz = new NewFuseIntegrationProjectWizard();
 		wiz.open();
 		NewFuseIntegrationProjectWizardFirstPage firstPage = new NewFuseIntegrationProjectWizardFirstPage(wiz);
@@ -132,7 +138,13 @@ public class NewFuseProjectWizardTest {
 		wiz.next();
 		NewFuseIntegrationProjectWizardAdvancedPage lastPage = new NewFuseIntegrationProjectWizardAdvancedPage(wiz);
 		lastPage.selectTemplate(EMPTY_BLUEPRINT);
-		wiz.finish();
+		new FinishButton(wiz).click();
+		if (!hasJava8) {
+			JDK8Check.handleMissingJava8();
+		}
+
+		new WaitWhile(new JobIsRunning(), TimePeriod.VERY_LONG);
+		new WaitWhile(new ShellIsAvailable("New Fuse Integration Project"), TimePeriod.getCustom(1200));
 		assertFalse("Project was created with errors", hasErrors());
 		assertTrue("There are some errors in Error Log", LogGrapper.getPluginErrors("fuse").size() == 0);
 		try {
@@ -161,7 +173,6 @@ public class NewFuseProjectWizardTest {
 	 */
 	@Test
 	public void testSupportedCamelVersions() {
-
 		NewFuseIntegrationProjectWizard wiz = new NewFuseIntegrationProjectWizard();
 		wiz.open();
 		NewFuseIntegrationProjectWizardFirstPage firstPage = new NewFuseIntegrationProjectWizardFirstPage(wiz);
@@ -185,7 +196,6 @@ public class NewFuseProjectWizardTest {
 			}
 			fail(build.toString());
 		}
-
 	}
 
 	/**
@@ -215,14 +225,15 @@ public class NewFuseProjectWizardTest {
 		NewFuseIntegrationProjectWizardAdvancedPage lastPage = new NewFuseIntegrationProjectWizardAdvancedPage(wiz);
 		lastPage.selectMoreExamplesLink();
 		WhereToFindMoreTemplatesMessageDialog moreExamplesDialog = new WhereToFindMoreTemplatesMessageDialog();
+		new WaitUntil(new ShellIsAvailable(moreExamplesDialog), TimePeriod.MEDIUM);
 		assertThat(moreExamplesDialog.getMessage()).contains("https://github.com/apache/camel/tree/master/examples",
 				"https://github.com/fabric8-quickstarts");
+		moreExamplesDialog.close();
 		wiz.cancel();
 		LogChecker.assertNoFuseError();
 	}
 
 	private boolean hasErrors() {
-
 		new ProblemsView().open();
 		for (TreeItem item : new DefaultTree().getItems()) {
 			if (item.getText().toLowerCase().contains("error"))
