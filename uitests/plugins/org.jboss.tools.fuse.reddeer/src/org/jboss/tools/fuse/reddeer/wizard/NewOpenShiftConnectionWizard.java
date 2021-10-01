@@ -53,16 +53,17 @@ public class NewOpenShiftConnectionWizard extends WizardDialog {
 
 		// Accept 'Untrusted SSL Certificate'
 		WaitCondition condition = new ShellIsAvailable(SSL_CERT);
-		new WaitUntil(condition, false);
-		if (condition.test()) {
-			new YesButton().click();
-			new WaitWhile(condition);
+		for (int i = 0; i < 2; i++) {
+			new WaitUntil(condition, false);
+			if (condition.test()) {
+				new YesButton().click();
+				new WaitWhile(condition);
+			}
 		}
-		
+
 		new WaitWhile(new WindowIsAvailable(this), TimePeriod.LONG);
 		new WaitWhile(new JobIsRunning(), TimePeriod.LONG);
 	}
-
 
 	public LabeledCombo getServerCMB() {
 		return new LabeledCombo(this, "Server:");
@@ -87,11 +88,11 @@ public class NewOpenShiftConnectionWizard extends WizardDialog {
 	public CheckBox getUseDefaultServerCHB() {
 		return new CheckBox(this, "Use default server");
 	}
-	
+
 	public void toggleUseDefaultServerCHB(boolean choice) {
 		new CheckBox(this, "Use default server").toggle(choice);
 	}
-	
+
 	public void clickBrowseBTN() {
 		new PushButton(this, "Browse...").click();
 	}
@@ -153,7 +154,8 @@ public class NewOpenShiftConnectionWizard extends WizardDialog {
 	}
 
 	public CheckBox getSaveTokenCouldTriggerSecureStorageLoginCHBgroup() {
-		return new CheckBox(new DefaultGroup(this, "Authentication"), "Save token (could trigger secure storage login)");
+		return new CheckBox(new DefaultGroup(this, "Authentication"),
+				"Save token (could trigger secure storage login)");
 	}
 
 	public String getTextSaveTokenCouldTriggerSecureStorageLogin() {
@@ -170,12 +172,13 @@ public class NewOpenShiftConnectionWizard extends WizardDialog {
 	}
 
 	public CheckBox getSavePasswordCouldTriggerSecureStorageLoginCHBgroup() {
-		return new CheckBox(new DefaultGroup(this, "Authentication"), "Save password (could trigger secure storage login)");
+		return new CheckBox(new DefaultGroup(this, "Authentication"),
+				"Save password (could trigger secure storage login)");
 	}
 
 	public String getTextSavePasswordCouldTriggerSecureStorageLogin() {
-		return new CheckBox(new DefaultGroup(this, "Authentication"), "Save password (could trigger secure storage login)")
-				.getText();
+		return new CheckBox(new DefaultGroup(this, "Authentication"),
+				"Save password (could trigger secure storage login)").getText();
 	}
 
 	public LabeledText getPasswordTXT() {
@@ -260,8 +263,8 @@ public class NewOpenShiftConnectionWizard extends WizardDialog {
 	}
 
 	public boolean isCheckedSavePasswordCouldTriggerSecureStorageLoginGroup() {
-		return new CheckBox(new DefaultGroup(this, "Authentication"), "Save password (could trigger secure storage login)")
-				.isChecked();
+		return new CheckBox(new DefaultGroup(this, "Authentication"),
+				"Save password (could trigger secure storage login)").isChecked();
 	}
 
 	public boolean isCheckedUseDefaultServerCHB() {

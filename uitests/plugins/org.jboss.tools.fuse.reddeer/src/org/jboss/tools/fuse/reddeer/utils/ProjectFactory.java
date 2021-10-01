@@ -94,7 +94,12 @@ public class ProjectFactory {
 		wiz.next();
 		NewFuseIntegrationProjectWizardRuntimePage secondPage = new NewFuseIntegrationProjectWizardRuntimePage(wiz);
 		if (version != null) {
-			secondPage.typeCamelVersion(version);
+			String camelVersion = SupportedCamelVersions.getCamelVersionsWithLabels().get(version);
+			if(camelVersion != null) {
+				secondPage.selectCamelVersion(camelVersion);
+			} else {
+				secondPage.typeCamelVersion(version);
+			}
 		}
 		if (deploymentType != null) {
 			secondPage.setDeploymentType(deploymentType);
@@ -111,7 +116,7 @@ public class ProjectFactory {
 		}
 		new FinishButton(wiz).click();
 				
-		if(!hasJava8) {
+		if(!hasJava8 && runtimeType == NewFuseIntegrationProjectWizardRuntimeType.KARAF) {
 			JDK8Check.handleMissingJava8();
 		}
 		

@@ -55,7 +55,7 @@ public class FuseOnOpenShiftTest {
 	public static final String DEPLOYMENT_OK = "INFO  org.mycompany.Application - Started Application in";
 	public static final String OPENSHIFT_DEPLOYMENT = "camel-ose-springboot-xml";
 	public static final String OPENSHIFT_PROJECT_NAME = "test";
-	public static final String USERNAME = "developer";
+	public static final String USERNAME = "developer-fuse";
 	public static final String PROJECT_NAME = "test-ose";
 	public static final String MAVEN_BUILD_CONF = "Deploy test-ose on OpenShift";
 	public static final String IP_MATCH_REGEX = "https:\\/\\/(?:[0-9]{1,3}.){4}:[0-9]{1,4}";
@@ -86,6 +86,7 @@ public class FuseOnOpenShiftTest {
 
 	@After
 	public void deleteProjects() {
+
 		new ProjectExplorer().deleteAllProjects();
 		OpenShiftExplorer explorer = new OpenShiftExplorer();
 		explorer.open();
@@ -103,7 +104,7 @@ public class FuseOnOpenShiftTest {
 	 * <li>create a new connection in OpenShift Explorer</li>
 	 * <li>create a new project on OpenShift - test</li>
 	 * <li>open Maven Build launch configuration "Deploy ${project.name} on OpenShift"</li>
-	 * <li>change VM argument 'kubernetes.master'</li>
+	 * <li>change VM arguments 'kubernetes.master' and 'kubernetes.auth.basic.username'</li>
 	 * <li>run the build and wait until the end of the build</li>
 	 * <li>check the deployment</li>
 	 * </ol>
@@ -116,6 +117,7 @@ public class FuseOnOpenShiftTest {
 
 		// create a new project on OpenShift
 		OpenShiftExplorer explorer = new OpenShiftExplorer();
+
 		explorer.open();
 		explorer.selectConnection(OPENSHIFT_CONNECTION);
 		explorer.clickNewProject();
@@ -130,9 +132,10 @@ public class FuseOnOpenShiftTest {
 		DefaultLaunchConfigurationJRETab jreTab = new DefaultLaunchConfigurationJRETab();
 		jreTab.activate();
 
-		// change VM argument 'kubernetes.master'
+		// change VM arguments 'kubernetes.master' and 'kubernetes.auth.basic.username'
 		String vmArgs = jreTab.getTextVMArgumentsTXT();
 		vmArgs = vmArgs.replaceFirst(IP_MATCH_REGEX, OPENSHIFT_URL);
+		vmArgs = vmArgs.replaceFirst("developer", USERNAME);
 		jreTab.setTextVMArgumentsTXT(vmArgs);
 		jreTab.clickApplyBTN();
 

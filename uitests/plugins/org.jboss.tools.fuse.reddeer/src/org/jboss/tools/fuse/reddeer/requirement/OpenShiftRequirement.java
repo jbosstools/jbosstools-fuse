@@ -81,7 +81,8 @@ public class OpenShiftRequirement extends AbstractConfigurableRequirement<OpenSh
 		wizard.setTextUsername(config.getUsername());
 		wizard.setTextPassword(config.getPassword());
 		wizard.clickAdvancedBTN();
-		wizard.toggleOverrideOcLocationCHB(false);
+		wizard.toggleOverrideOcLocationCHB(true);
+		wizard.setOCLocation(config.getOc());
 		wizard.finish();
 	}
 
