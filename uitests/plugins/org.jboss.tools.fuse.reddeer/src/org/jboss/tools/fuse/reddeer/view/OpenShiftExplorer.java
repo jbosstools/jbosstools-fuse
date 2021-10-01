@@ -129,7 +129,7 @@ public class OpenShiftExplorer extends WorkbenchView {
 				treeItem = treeItem.getItems().get(0);
 			}
 		}
-		new WaitUntil(new OpenShiftPodIsRunning(treeItem), TimePeriod.getCustom(20));
+		new WaitUntil(new OpenShiftPodIsRunning(treeItem), TimePeriod.getCustom(600));
 		treeItem.select();
 		selectedConnection = null;
 		new WaitUntil(new ContextMenuHasItem(new ContextMenu(treeItem), "Pod Log..."), TimePeriod.getCustom(20));
