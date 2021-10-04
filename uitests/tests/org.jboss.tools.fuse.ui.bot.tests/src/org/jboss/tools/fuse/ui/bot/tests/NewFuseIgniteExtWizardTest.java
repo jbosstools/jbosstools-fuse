@@ -23,6 +23,7 @@ import org.eclipse.reddeer.junit.runner.RedDeerSuite;
 import org.eclipse.reddeer.requirements.openperspective.OpenPerspectiveRequirement.OpenPerspective;
 import org.eclipse.reddeer.swt.condition.ControlIsEnabled;
 import org.eclipse.reddeer.swt.impl.button.FinishButton;
+import org.eclipse.reddeer.workbench.core.condition.JobIsRunning;
 import org.jboss.tools.fuse.reddeer.perspectives.FuseIntegrationPerspective;
 import org.jboss.tools.fuse.reddeer.utils.LogChecker;
 import org.jboss.tools.fuse.reddeer.wizard.NewFuseIgniteExtensionProjectFirstPage;
@@ -96,7 +97,7 @@ public class NewFuseIgniteExtWizardTest {
 		assertFalse(wizard.isFinishEnabled());
 		assertTrue(wizard.isBackEnabled());
 		assertEquals(MessageTypeEnum.ERROR, wizard.getMessageType());
-		
+
 		firstPage.setTextProjectName("MyNewIgniteExt");
 
 		assertFalse(wizard.isNextEnabled());
@@ -182,11 +183,13 @@ public class NewFuseIgniteExtWizardTest {
 		NewFuseIgniteExtensionProjectSecondPage lastPage = new NewFuseIgniteExtensionProjectSecondPage(wizard);
 		lastPage.setTextVersion("asd");
 
+		new WaitUntil(new JobIsRunning(), TimePeriod.MEDIUM, false);
 		assertEquals(MessageTypeEnum.ERROR, wizard.getMessageType());
 		assertFalse(wizard.isFinishEnabled());
 
 		lastPage.setTextVersion("1.0.");
 
+		new WaitUntil(new JobIsRunning(), TimePeriod.MEDIUM, false);
 		assertEquals(MessageTypeEnum.ERROR, wizard.getMessageType());
 		assertFalse(wizard.isFinishEnabled());
 
@@ -196,7 +199,10 @@ public class NewFuseIgniteExtWizardTest {
 		assertFalse(wizard.isNextEnabled());
 		assertTrue(wizard.isFinishEnabled());
 		assertTrue(wizard.isBackEnabled());
+
+		new WaitUntil(new JobIsRunning(), TimePeriod.MEDIUM, false);
 		assertNotEquals(MessageTypeEnum.ERROR, wizard.getMessageType());
+
 		LogChecker.assertNoFuseError();
 	}
 }
