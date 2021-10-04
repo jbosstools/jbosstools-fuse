@@ -17,6 +17,7 @@ import org.eclipse.reddeer.common.condition.WaitCondition;
 import org.eclipse.reddeer.common.wait.AbstractWait;
 import org.eclipse.reddeer.common.wait.TimePeriod;
 import org.eclipse.reddeer.common.wait.WaitUntil;
+import org.eclipse.reddeer.common.wait.WaitWhile;
 import org.eclipse.reddeer.eclipse.condition.ConsoleHasText;
 import org.eclipse.reddeer.eclipse.ui.navigator.resources.ProjectExplorer;
 import org.eclipse.reddeer.eclipse.ui.views.markers.ProblemsView;
@@ -25,14 +26,20 @@ import org.eclipse.reddeer.junit.runner.RedDeerSuite;
 import org.eclipse.reddeer.requirements.cleanerrorlog.CleanErrorLogRequirement;
 import org.eclipse.reddeer.requirements.cleanworkspace.CleanWorkspaceRequirement;
 import org.eclipse.reddeer.requirements.openperspective.OpenPerspectiveRequirement.OpenPerspective;
+import org.eclipse.reddeer.swt.condition.ShellIsAvailable;
+import org.eclipse.reddeer.swt.impl.button.FinishButton;
+import org.eclipse.reddeer.swt.impl.button.OkButton;
+import org.eclipse.reddeer.swt.impl.shell.DefaultShell;
 import org.eclipse.reddeer.workbench.core.condition.JobIsRunning;
 import org.jboss.tools.fuse.reddeer.JiraIssue;
 import org.jboss.tools.fuse.reddeer.perspectives.FuseIntegrationPerspective;
 import org.jboss.tools.fuse.reddeer.projectexplorer.CamelProject;
+import org.jboss.tools.fuse.reddeer.utils.JDK8Check;
 import org.jboss.tools.fuse.reddeer.wizard.NewFuseIgniteExtensionProjectFirstPage;
 import org.jboss.tools.fuse.reddeer.wizard.NewFuseIgniteExtensionProjectSecondPage;
 import org.jboss.tools.fuse.reddeer.wizard.NewFuseIgniteExtensionProjectWizard;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -45,6 +52,15 @@ import org.junit.runner.RunWith;
 @OpenPerspective(FuseIntegrationPerspective.class)
 @RunWith(RedDeerSuite.class)
 public class NewFuseIgniteProjectTest extends DefaultTest {
+
+	public static final String JDK_WARNING_MESSAGE = "No Strictly compliant JRE detected";
+
+	protected static boolean hasJava8;
+
+	@BeforeClass
+	public static void jreDetection() {
+		hasJava8 = JDK8Check.isJava8Available();
+	}
 
 	@Before
 	public void setupDeleteProjects() {
@@ -74,7 +90,8 @@ public class NewFuseIgniteProjectTest extends DefaultTest {
 		firstPage.setTextProjectName("CustomStepCamelRoute");
 		AbstractWait.sleep(TimePeriod.SHORT);
 		wizard.next();
-		wizard.finish(TimePeriod.VERY_LONG);
+		new FinishButton(wizard).click();
+		waitUntilJREIsDetected(hasJava8);
 		checkProject("CustomStepCamelRoute");
 	}
 
@@ -102,7 +119,8 @@ public class NewFuseIgniteProjectTest extends DefaultTest {
 		NewFuseIgniteExtensionProjectSecondPage secondPage = new NewFuseIgniteExtensionProjectSecondPage(wizard);
 		secondPage.toggleJavaBeanRDB(true);
 		AbstractWait.sleep(TimePeriod.SHORT);
-		wizard.finish(TimePeriod.VERY_LONG);
+		new FinishButton(wizard).click();
+		waitUntilJREIsDetected(hasJava8);
 		checkProject("CustomStepJavaRoute");
 	}
 
@@ -130,12 +148,14 @@ public class NewFuseIgniteProjectTest extends DefaultTest {
 		NewFuseIgniteExtensionProjectSecondPage secondPage = new NewFuseIgniteExtensionProjectSecondPage(wizard);
 		secondPage.toggleCustomConnectorRDB(true);
 		AbstractWait.sleep(TimePeriod.SHORT);
-		wizard.finish(TimePeriod.VERY_LONG);
+		new FinishButton(wizard).click();
+		waitUntilJREIsDetected(hasJava8);
 		checkProject("CustomConnector");
 	}
 
 	private void checkProject(String name) {
-		assertTrue("Project 'CustomStepCamelRoute' is not present in Project Explorer", new ProjectExplorer().containsProject(name));
+		assertTrue("Project 'CustomStepCamelRoute' is not present in Project Explorer",
+				new ProjectExplorer().containsProject(name));
 		if (hasErrors()) {
 			new CamelProject(name).update();
 			new WaitUntil(new JobIsRunning(), TimePeriod.LONG);
@@ -144,18 +164,30 @@ public class NewFuseIgniteProjectTest extends DefaultTest {
 		new ProjectExplorer().getProject(name).getResource().runAs("Maven clean verify");
 		WaitCondition wait = new ConsoleHasText("BUILD SUCCESS");
 		new WaitUntil(wait, TimePeriod.VERY_LONG, false);
-		if (wait.getResult() == null && new ConsoleHasText("Failed to execute goal io.syndesis.extension").test()) {
+		if (wait.getResult() == null && new ConsoleHasText("FUSETOOLS-3249").test()) {
 			throw new JiraIssue("FUSETOOLS-3249");
 		}
 	}
 
 	private boolean hasErrors() {
-
 		ProblemsView view = new ProblemsView();
 		view.open();
 		view.close();
 		AbstractWait.sleep(TimePeriod.getCustom(5));
 		view.open();
 		return !view.getProblems(ProblemType.ERROR).isEmpty();
+	}
+
+	private void waitUntilJREIsDetected(boolean hasJava8) {
+		if (!hasJava8) {
+			DefaultShell warningMessage = new DefaultShell(JDK_WARNING_MESSAGE);
+			WaitCondition wait = new ShellIsAvailable(warningMessage);
+			new WaitUntil(wait, TimePeriod.getCustom(1200), false);
+			if (wait.getResult() != null) {
+				new OkButton(warningMessage).click();
+			}
+		}
+		new WaitWhile(new JobIsRunning(), TimePeriod.VERY_LONG);
+		new WaitWhile(new ShellIsAvailable(NewFuseIgniteExtensionProjectWizard.SHELL_NAME), TimePeriod.getCustom(1200));
 	}
 }
