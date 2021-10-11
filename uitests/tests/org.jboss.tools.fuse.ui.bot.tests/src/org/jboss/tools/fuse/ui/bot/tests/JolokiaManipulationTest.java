@@ -22,9 +22,9 @@ import org.eclipse.reddeer.common.wait.WaitUntil;
 import org.eclipse.reddeer.eclipse.condition.LaunchIsSuspended;
 import org.eclipse.reddeer.eclipse.debug.ui.views.breakpoints.BreakpointsView;
 import org.eclipse.reddeer.eclipse.debug.ui.views.launch.ResumeButton;
-import org.eclipse.reddeer.eclipse.ui.views.log.LogMessage;
 import org.eclipse.reddeer.eclipse.ui.views.log.LogView;
 import org.eclipse.reddeer.junit.annotation.RequirementRestriction;
+import org.eclipse.reddeer.junit.execution.annotation.RunIf;
 import org.eclipse.reddeer.junit.requirement.inject.InjectRequirement;
 import org.eclipse.reddeer.junit.requirement.matcher.RequirementMatcher;
 import org.eclipse.reddeer.junit.runner.RedDeerSuite;
@@ -38,9 +38,9 @@ import org.eclipse.reddeer.swt.impl.button.PushButton;
 import org.eclipse.reddeer.swt.impl.menu.ContextMenuItem;
 import org.eclipse.reddeer.swt.impl.shell.DefaultShell;
 import org.eclipse.reddeer.workbench.handler.EditorHandler;
-import org.jboss.tools.fuse.reddeer.JiraIssue;
-import org.jboss.tools.fuse.reddeer.LogGrapper;
+import org.jboss.tools.fuse.reddeer.condition.IssueIsClosed;
 import org.jboss.tools.fuse.reddeer.condition.JMXConnectionIsAvailable;
+import org.jboss.tools.fuse.reddeer.condition.IssueIsClosed.Jira;
 import org.jboss.tools.fuse.reddeer.debug.IsRunning;
 import org.jboss.tools.fuse.reddeer.editor.CamelEditor;
 import org.jboss.tools.fuse.reddeer.perspectives.FuseIntegrationPerspective;
@@ -95,7 +95,7 @@ public class JolokiaManipulationTest {
 
 	@RequirementRestriction
 	public static RequirementMatcher getRequirementMatcher() {
-		return new CamelExampleRequirementMatcher("camel-example-spring-boot", "2.20.1");
+		return new CamelExampleRequirementMatcher("camel-example-spring-boot", "2.23.4");
 	}
 
 	@BeforeClass
@@ -142,13 +142,15 @@ public class JolokiaManipulationTest {
 	 * <li>Verify Error log does not contains any <i>Fuse</i> errors</li>
 	 * </ul>
 	 */
+	@Jira("FUSETOOLS-2853")
+	@RunIf(conditionClass = IssueIsClosed.class)
 	@Test
 	public void testEditingRoute() throws Exception {
 
 		activateRouteEditing();
 
 		// Activate editor and edit route
-		CamelEditor editor = new CamelEditor("<connected>Remote CamelContext: SampleCamel");
+		CamelEditor editor = new CamelEditor("<connected>Remote CamelContext: MyCamel");
 		editor.activate();
 		editor.clickOnEditPart("timer:hello?period={{timer.period}}");
 		propertiesView.open();
@@ -170,8 +172,7 @@ public class JolokiaManipulationTest {
 
 		assertTrue("Message 'Hello world' was not changed to '" + MESSAGE + "' correctly",
 				camelExample.getRunner().getOutput().toString().contains(MESSAGE));
-
-		testIssue2853();
+		
 		LogChecker.assertNoFuseError();
 	}
 
@@ -197,7 +198,7 @@ public class JolokiaManipulationTest {
 	@Test
 	public void testTracingRoute() {
 
-		TreeItem item = jmxView.getNode("User-Defined Connections", conf.getName(), "Camel", "SampleCamel");
+		TreeItem item = jmxView.getNode("User-Defined Connections", conf.getName(), "Camel", "MyCamel");
 		item.select();
 		new ContextMenuItem(item, "Start Tracing").select();
 		AbstractWait.sleep(TimePeriod.MEDIUM);
@@ -237,7 +238,7 @@ public class JolokiaManipulationTest {
 		activateRouteEditing();
 
 		// Activate editor and set breakpoint
-		CamelEditor editor = new CamelEditor("<connected>Remote CamelContext: SampleCamel");
+		CamelEditor editor = new CamelEditor("<connected>Remote CamelContext: MyCamel");
 		editor.activate();
 		editor.setBreakpoint("Transform transform1");
 
@@ -314,7 +315,7 @@ public class JolokiaManipulationTest {
 	 * Select running route
 	 */
 	private void activateRouteEditing() {
-		TreeItem item = jmxView.getNode("User-Defined Connections", conf.getName(), "Camel", "SampleCamel");
+		TreeItem item = jmxView.getNode("User-Defined Connections", conf.getName(), "Camel", "MyCamel");
 		item.select();
 		new ContextMenuItem(item, "Edit Routes").select();
 		WaitCondition saveCondition = new ShellIsAvailable("Save Resource");
@@ -324,18 +325,4 @@ public class JolokiaManipulationTest {
 			new PushButton(shell, "Save").click();
 		}
 	}
-	
-	/**
-	 * https://issues.jboss.org/browse/FUSETOOLS-2853
-	 */
-	private void testIssue2853() {
-		if(LogChecker.noFuseError())
-			return;
-		for (LogMessage msg : LogGrapper.getPluginErrors("fuse")) {
-			if (msg.getMessage().contains("<no message>") || msg.getMessage().contains("Resource '/.FuseRemoteCamelContextData/pom.xml' does not exist.")) {
-				throw new JiraIssue("FUSETOOLS-2853");
-			}
-		}
-	}
-
 }
