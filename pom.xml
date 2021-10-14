@@ -221,9 +221,10 @@
 				<executions>
 					<execution>
 						<id>attach-p2-metadata</id>
-						<phase>package</phase>
+						<phase>verify</phase>
 						<goals>
 							<goal>p2-metadata</goal>
+							<goal>feature-p2-metadata</goal>
 						</goals>
 					</execution>
 				</executions>
