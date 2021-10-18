@@ -20,6 +20,8 @@ import static org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizar
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.eclipse.reddeer.common.wait.AbstractWait;
 import org.eclipse.reddeer.common.wait.TimePeriod;
@@ -46,6 +48,7 @@ import org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardDeploy
 import org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardFirstPage;
 import org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardRuntimePage;
 import org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardRuntimeType;
+import org.osgi.framework.Version;
 
 /**
  * Can create new Fuse projects or import existing
@@ -53,7 +56,7 @@ import org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardRuntim
  * @author tsedmik
  */
 public class ProjectFactory {
-		
+
 	private String name;
 	private String version;
 	private NewFuseIntegrationProjectWizardRuntimeType runtimeType;
@@ -93,7 +96,10 @@ public class ProjectFactory {
 		firstPage.setProjectName(name);
 		wiz.next();
 		NewFuseIntegrationProjectWizardRuntimePage secondPage = new NewFuseIntegrationProjectWizardRuntimePage(wiz);
-		if (version != null) {
+		String camelVersion = SupportedCamelVersions.getCamelVersionsWithLabels().get(version);
+		if (camelVersion != null) {
+			secondPage.selectCamelVersion(camelVersion);
+		} else {
 			secondPage.typeCamelVersion(version);
 		}
 		if (deploymentType != null) {
@@ -110,11 +116,11 @@ public class ProjectFactory {
 			lastPage.selectTemplate(SPRINGBOOT);
 		}
 		new FinishButton(wiz).click();
-				
-		if(!hasJava8) {
+
+		if (!hasJava8 && (new Version(getFuseVersionFromString(camelVersion)).compareTo(new Version("7.9.0")) < 0)) {
 			JDK8Check.handleMissingJava8();
 		}
-		
+
 		new WaitWhile(new JobIsRunning(), TimePeriod.LONG);
 		new WaitWhile(new ShellIsAvailable("New Fuse Integration Project"), TimePeriod.getCustom(900));
 	}
@@ -150,13 +156,13 @@ public class ProjectFactory {
 	 * Import existing project into workspace
 	 * 
 	 * @param path
-	 *            Path to the project
+	 *                  Path to the project
 	 * @param name
-	 *            Name of the project
+	 *                  Name of the project
 	 * @param maven
-	 *            true - if the imported project is Maven project
+	 *                  true - if the imported project is Maven project
 	 * @param fuse
-	 *            true - if the imported project is Fuse project
+	 *                  true - if the imported project is Fuse project
 	 */
 	public static void importExistingProject(String path, String name, boolean maven) {
 
@@ -249,5 +255,23 @@ public class ProjectFactory {
 		}
 		wiz.cancel();
 		return templates;
+	}
+
+	private static String getFuseVersionFromString(String camelVersion) {
+
+		String fuseVersion = null;
+		Pattern p = Pattern.compile("(?<=fuse-)\\d+");
+		Matcher m = p.matcher(camelVersion);
+		m.find();
+
+		if (m.group(0).length() == 6) {
+			fuseVersion = m.group(0).substring(0, 1) + "." + m.group(0).substring(1, 2) + "."
+					+ m.group(0).substring(2, 3);
+		} else if (m.group(0).length() == 7) { // handle f.e. 7.10.0
+			fuseVersion = m.group(0).substring(0, 1) + "." + m.group(0).substring(1, 3) + "."
+					+ m.group(0).substring(3, 4);
+		}
+
+		return fuseVersion;
 	}
 }
