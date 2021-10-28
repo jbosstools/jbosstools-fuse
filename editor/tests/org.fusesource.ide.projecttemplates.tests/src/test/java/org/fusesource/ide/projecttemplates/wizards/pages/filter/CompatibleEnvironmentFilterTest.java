@@ -111,7 +111,6 @@ public class CompatibleEnvironmentFilterTest {
 	}
 	
 	protected CompatibleEnvironmentFilter createFilter(String camelVersion, FuseDeploymentPlatform platform, FuseRuntimeKind runtime) {
-		doReturn(camelVersion).when(page).getSelectedCamelVersion();
 		return new CompatibleEnvironmentFilter(new EnvironmentData(camelVersion, platform, runtime));
 	}
 }

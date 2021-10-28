@@ -40,7 +40,6 @@ public class GlobalConfigLabelProviderTest {
 	@Test
 	public void testGetImage_RobustToNullParent() throws Exception {
 		doReturn(xmlNode).when(cme).getXmlNode();
-		doReturn("nodeName").when(xmlNode).getNodeName();
 		globalConfigLabelProvider.getImage(cme);
 	}
 

@@ -43,7 +43,6 @@ public class CreateFigureFeatureTest {
 	@Test
 	public void testDetermineEIP_returnConvert_To_To_From_WhenRouteHasNoChild() throws Exception {
 		CreateFigureFeature createFigureFeature = spy(new CreateFigureFeature(null, null, null, eipTo));
-		doReturn(eipTo).when(createFigureFeature).getEipByName(AbstractCamelModelElement.ENDPOINT_TYPE_TO);
 		doReturn(eipFrom).when(createFigureFeature).getEipByName(AbstractCamelModelElement.ENDPOINT_TYPE_FROM);
 		AbstractCamelModelElement cmeParent = new CamelRouteElement(null, null);
 		
@@ -53,8 +52,6 @@ public class CreateFigureFeatureTest {
 	@Test
 	public void testDetermineEIP_returnKeep_OtherEip_WhenRouteHasNoChild() throws Exception {
 		CreateFigureFeature createFigureFeature = spy(new CreateFigureFeature(null, null, null, eipOther));
-		doReturn(eipTo).when(createFigureFeature).getEipByName(AbstractCamelModelElement.ENDPOINT_TYPE_TO);
-		doReturn(eipFrom).when(createFigureFeature).getEipByName(AbstractCamelModelElement.ENDPOINT_TYPE_FROM);
 		AbstractCamelModelElement cmeParent = new CamelRouteElement(null, null);
 		
 		assertThat(createFigureFeature.determineEIP(cmeParent)).isEqualTo(eipOther);
@@ -63,8 +60,6 @@ public class CreateFigureFeatureTest {
 	@Test
 	public void testDetermineEIP_return_To_WhenRouteHasChildren() throws Exception {
 		CreateFigureFeature createFigureFeature = spy(new CreateFigureFeature(null, null, null, eipTo));
-		doReturn(eipTo).when(createFigureFeature).getEipByName(AbstractCamelModelElement.ENDPOINT_TYPE_TO);
-		doReturn(eipFrom).when(createFigureFeature).getEipByName(AbstractCamelModelElement.ENDPOINT_TYPE_FROM);
 		AbstractCamelModelElement cmeParent = new CamelRouteElement(null, null);
 		cmeParent.addChildElement(new CamelEndpoint(""));
 		

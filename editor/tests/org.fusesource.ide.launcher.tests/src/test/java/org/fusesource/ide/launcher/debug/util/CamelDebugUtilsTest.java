@@ -59,7 +59,6 @@ public class CamelDebugUtilsTest {
 	@Test
 	public void testBreakpointMatchesSelection_ReturnFalseforbreakpointNullValues() throws Exception {
 		String endpointId = "myEndpointID";
-		doReturn(endpointId).when(breakpoint).getEndpointNodeId();
 		
 		assertThat(CamelDebugUtils.breakpointMatchesSelection(null , fileName, endpointId, projectName)).isFalse();
 	}

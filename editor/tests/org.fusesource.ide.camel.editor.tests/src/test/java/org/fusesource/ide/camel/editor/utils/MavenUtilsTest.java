@@ -65,8 +65,8 @@ public class MavenUtilsTest {
 
 	@Before
 	public void setup() throws CoreException {
-		doReturn(pomFile).when(mavenUtils).getPomFile(project);
-		doNothing().when(mavenUtils).writeNewPomFile(eq(project), eq(pomFile), any(Model.class), any(IProgressMonitor.class));
+//		doReturn(pomFile).when(mavenUtils).getPomFile(project);
+//		doNothing().when(mavenUtils).writeNewPomFile(eq(project), eq(pomFile), any(Model.class), any(IProgressMonitor.class));
 		when(mavenProjectFacade.getMavenProject(Mockito.any(NullProgressMonitor.class)).getCompileDependencies()).thenReturn(Collections.emptyList());
 		// TODO: repair this broken test
 		// mavenUtils.setCamelMavenUtils(camelMavenUtils);

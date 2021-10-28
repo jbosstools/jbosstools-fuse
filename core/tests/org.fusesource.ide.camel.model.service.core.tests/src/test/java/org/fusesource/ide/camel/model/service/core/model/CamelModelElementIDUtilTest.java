@@ -42,7 +42,6 @@ public class CamelModelElementIDUtilTest {
 	public void setUp() throws Exception {
 		doReturn(parentCme).when(cme).getParent();
 		doReturn(ID_TO_BE_RETURNED).when(cme).getNewID();
-		doReturn(CME_NAME).when(cme).getName();
 	}
 
 	@Test
