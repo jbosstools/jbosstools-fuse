@@ -24,7 +24,7 @@ import org.fusesource.ide.foundation.core.xml.namespace.BlueprintNamespaceHandle
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
