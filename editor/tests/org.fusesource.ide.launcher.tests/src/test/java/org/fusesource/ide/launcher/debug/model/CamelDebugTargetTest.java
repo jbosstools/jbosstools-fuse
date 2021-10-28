@@ -40,12 +40,6 @@ public class CamelDebugTargetTest {
 	
 	private CamelDebugTarget camelDebugTarget;
 
-	
-	@Before
-	public void setup() throws CoreException {
-		doReturn(true).when(process).canTerminate();
-	}
-
 	@Test
 	public void testTerminateNotAvailableForRemoteDebug() throws Exception {
 		createRemoteDebugTarget();
@@ -68,7 +62,6 @@ public class CamelDebugTargetTest {
 		camelDebugTarget.terminate();
 		
 		verify(process).terminate();
-		doReturn(true).when(process).isTerminated();
 		
 		assertThat(camelDebugTarget.isTerminated()).isTrue();
 		assertThat(camelDebugTarget.canTerminate()).isFalse();

@@ -21,7 +21,6 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.fusesource.ide.foundation.ui.io.CamelXMLEditorInput;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -35,11 +34,6 @@ public class CamelLocalLaunchPropertyTesterTest {
 	@Mock
 	private IFile file;
 	
-	@Before
-	public void setup(){
-		doReturn(project).when(file).getProject();
-	}
-
 	@Test
 	public void test_ReturnTrue_ForProject() throws Exception {
 		CamelLocalLaunchPropertyTester camelLocalLaunchPropertyTester = spy(new CamelLocalLaunchPropertyTester());
@@ -61,8 +55,6 @@ public class CamelLocalLaunchPropertyTesterTest {
 	@Test
 	public void test_ReturnFalse_WhenNoBuildInMavenModel() throws Exception {
 		CamelLocalLaunchPropertyTester camelLocalLaunchPropertyTester = spy(new CamelLocalLaunchPropertyTester());
-		Model mavenModel = new Model();
-		doReturn(mavenModel ).when(camelLocalLaunchPropertyTester).retrieveMavenModel(project);
 		
 		boolean res = camelLocalLaunchPropertyTester.test(project, CamelLocalLaunchPropertyTester.IS_LOCAL_LAUNCH_AVAILABLE, null, null);
 		
@@ -98,7 +90,6 @@ public class CamelLocalLaunchPropertyTesterTest {
 		build.getPlugins().add(camelPlugin);
 		mavenModel.setBuild(build);
 		doReturn(mavenModel).when(camelLocalLaunchPropertyTester).retrieveMavenModel(file);
-		doReturn(file).when(file).getAdapter(IResource.class);
 		
 		boolean res = camelLocalLaunchPropertyTester.test(new CamelXMLEditorInput(file, null), CamelLocalLaunchPropertyTester.IS_LOCAL_LAUNCH_AVAILABLE, null, null);
 		
@@ -108,7 +99,6 @@ public class CamelLocalLaunchPropertyTesterTest {
 	@Test
 	public void test_ReturnFalse_ForNotMavenProject() throws Exception {
 		CamelLocalLaunchPropertyTester camelLocalLaunchPropertyTester = spy(new CamelLocalLaunchPropertyTester());
-		doReturn(null).when(camelLocalLaunchPropertyTester).retrieveMavenModel(project);
 		
 		boolean res = camelLocalLaunchPropertyTester.test(project, CamelLocalLaunchPropertyTester.IS_LOCAL_LAUNCH_AVAILABLE, null, null);
 		

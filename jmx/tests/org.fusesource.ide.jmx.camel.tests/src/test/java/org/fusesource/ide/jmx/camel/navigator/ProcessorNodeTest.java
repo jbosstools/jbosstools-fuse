@@ -34,12 +34,7 @@ public class ProcessorNodeTest {
 	
 	@Mock
 	IConnectionProvider connectionProvider;
-	
-	@Before
-	public void setup(){
-		doReturn(connectionProvider).when(connectionWrapper).getProvider();
-	}
-	
+		
 	@Test
 	public void testHashCodeDifferentForSameIdInDifferentRoute() throws Exception {
 		CamelRouteElement route1 = new CamelRouteElement(null, null);

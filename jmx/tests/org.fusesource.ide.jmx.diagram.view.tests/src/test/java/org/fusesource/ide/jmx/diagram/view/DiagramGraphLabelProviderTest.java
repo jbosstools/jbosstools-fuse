@@ -77,7 +77,6 @@ public class DiagramGraphLabelProviderTest {
 
 	private DiagramGraphLabelProvider initializeLabelProvider() {
 		DiagramGraphLabelProvider labelProvider = spy(new DiagramGraphLabelProvider(new DiagramView()));
-		doReturn("myNodeId").when(endpointMBean).getCamelId();
 		doReturn(stats).when(labelProvider).getStatsFor("myNodeId");
 		return labelProvider;
 	}

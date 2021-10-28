@@ -68,7 +68,6 @@ public class GoToMarkerForCamelEditorTest {
 		doReturn(designEditor).when(camelEditor).getDesignEditor();
 		doReturn(configEditor).when(camelEditor).getGlobalConfigEditor();
 		doReturn(true).when(marker).exists();
-		doReturn(10).when(marker).getAttribute(IMarker.LINE_NUMBER);
 	}
 
 	@Test

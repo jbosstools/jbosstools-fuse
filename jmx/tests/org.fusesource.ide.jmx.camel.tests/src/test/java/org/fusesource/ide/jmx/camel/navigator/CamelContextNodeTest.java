@@ -11,7 +11,6 @@
 package org.fusesource.ide.jmx.camel.navigator;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.spy;
 
 import java.util.HashMap;
@@ -49,10 +48,6 @@ public class CamelContextNodeTest {
 		String connectionName2 = "Test Connection 2";
 		connection1 = createConnection(connectionName1);
 		connection2 = createConnection(connectionName2);
-		doReturn(provider).when(connection1).getProvider();
-		doReturn(provider).when(connection2).getProvider();
-		doReturn(connectionName1).when(provider).getName(connection1);
-		doReturn(connectionName2).when(provider).getName(connection2);
 		
 		camelContext1 = new CamelContextMBean() {
 			

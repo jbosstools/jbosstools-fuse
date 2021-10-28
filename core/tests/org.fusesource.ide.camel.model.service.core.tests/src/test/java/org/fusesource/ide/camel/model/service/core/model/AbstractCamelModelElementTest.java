@@ -52,7 +52,6 @@ public class AbstractCamelModelElementTest {
 	
 	@Test
 	public void testIsEndpointElement_returnTrueForEndpointWithNoURI() throws Exception {
-		doReturn(null).when(cme).getParameter(AbstractCamelModelElement.URI_PARAMETER_KEY);
 		doReturn("endpoint").when(cme).getNodeTypeId();
 		
 		assertThat(cme.isEndpointElement()).isTrue();
@@ -89,12 +88,10 @@ public class AbstractCamelModelElementTest {
 	@Test
 	public void testgetIconNameReturnsReference() throws Exception {
 		doReturn("to").when(cme).getNodeTypeId();
-		doReturn("ref:aRef").when(cme).getParameter(AbstractCamelModelElement.URI_PARAMETER_KEY);
 		AbstractCamelModelElement referencedEndpoint = Mockito.mock(AbstractCamelModelElement.class);
 		doReturn("bean:example").when(cme).getParameter(AbstractCamelModelElement.URI_PARAMETER_KEY);
 		Map<String, AbstractCamelModelElement> map = new HashMap<>();
 		map.put("aRef", referencedEndpoint);
-		doReturn(map).when(context).getEndpointDefinitions();
 		
 		assertThat(cme.getIconName()).isEqualTo("bean");
 	}
@@ -102,12 +99,10 @@ public class AbstractCamelModelElementTest {
 	@Test
 	public void testgetIconNamehandleReferenceWithBadScheme() throws Exception {
 		doReturn("to").when(cme).getNodeTypeId();
-		doReturn("ref:aRef").when(cme).getParameter(AbstractCamelModelElement.URI_PARAMETER_KEY);
 		AbstractCamelModelElement referencedEndpoint = Mockito.mock(AbstractCamelModelElement.class);
 		doReturn("bean").when(cme).getParameter(AbstractCamelModelElement.URI_PARAMETER_KEY);
 		Map<String, AbstractCamelModelElement> map = new HashMap<>();
 		map.put("aRef", referencedEndpoint);
-		doReturn(map).when(context).getEndpointDefinitions();
 		
 		assertThat(cme.getIconName()).isEqualTo("endpoint");
 	}
