@@ -5,7 +5,7 @@ Bundle-SymbolicName: org.fusesource.ide.preferences.tests.integration
 Bundle-Version: 11.13.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Require-Bundle: org.junit,
- org.assertj.core;bundle-version="2.1.0",
+ org.assertj;bundle-version="3.20.2",
  org.eclipse.core.runtime;bundle-version="3.11.1",
  org.eclipse.core.resources;bundle-version="3.10.1",
  org.eclipse.jface;bundle-version="3.11.1",
