@@ -22,7 +22,6 @@ import static org.mockito.Mockito.when;
 import java.io.File;
 
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
 import org.eclipse.wst.server.core.IRuntime;
@@ -54,7 +53,7 @@ public class Karaf2xStartupLaunchConfiguratorIT {
 		doReturn("-Djava.ext.dirs=\"whatever\" -Djava.endorsed.dirs=whateverAgain").when(launchConfig).getAttribute(eq(IJavaLaunchConfigurationConstants.ATTR_VM_ARGUMENTS),
 				anyString());
 		when(server.getRuntime()).thenReturn(runtime);
-		when(server.getRuntime().loadAdapter(eq(IKarafRuntime.class), any(IProgressMonitor.class))).thenReturn(karafRuntime);
+		when(server.getRuntime().loadAdapter(eq(IKarafRuntime.class), any())).thenReturn(karafRuntime);
 		doNothing().when(karaf2xStartupLaunchConfigurator).configureJRE(launchConfig, karafRuntime, "karafInstallDir");
 		when(karafRuntime.getVM().getInstallLocation()).thenReturn(new File("install"));
 		when(runtime.getLocation().toOSString()).thenReturn("karafInstallDir");

@@ -37,13 +37,13 @@ public class CamelRunMavenLaunchDelegateTest {
 	public void setup() throws Exception {
 		doReturn("file:C:\\my%20path%20with%20space").when(launchConfig).getAttribute(CamelContextLaunchConfigConstants.ATTR_FILE, (String) null);
 		doReturn(null).when(camelRunMavenLaunchDelegate).getFileInWorkspace(anyString());
-		doReturn(false).when(camelRunMavenLaunchDelegate).isWarPackaging(any(IFile.class));
+		doReturn(false).when(camelRunMavenLaunchDelegate).isWarPackaging(any());
 	}
 
 	@Test
 	public void testGetGoalsForNonSpringBootNonProductizedGroupId() throws Exception {
-		doReturn(false).when(camelRunMavenLaunchDelegate).isSpringBoot(any(IFile.class));
-		doReturn(false).when(camelRunMavenLaunchDelegate).isProductizedMavenPluginUsed(any(IFile.class));
+		doReturn(false).when(camelRunMavenLaunchDelegate).isSpringBoot(any());
+		doReturn(false).when(camelRunMavenLaunchDelegate).isProductizedMavenPluginUsed(any());
 		
 		assertThat(camelRunMavenLaunchDelegate.getGoals(launchConfig))
 				.isEqualTo("-U clean package org.apache.camel:camel-maven-plugin:run -Dcamel.fileApplicationContextUri=\"file:C:\\my path with space\"");
@@ -51,8 +51,8 @@ public class CamelRunMavenLaunchDelegateTest {
 	
 	@Test
 	public void testGetGoalsForNonSpringBootAndProductizedGroupId() throws Exception {
-		doReturn(false).when(camelRunMavenLaunchDelegate).isSpringBoot(any(IFile.class));
-		doReturn(true).when(camelRunMavenLaunchDelegate).isProductizedMavenPluginUsed(any(IFile.class));
+		doReturn(false).when(camelRunMavenLaunchDelegate).isSpringBoot(any());
+		doReturn(true).when(camelRunMavenLaunchDelegate).isProductizedMavenPluginUsed(any());
 		
 		assertThat(camelRunMavenLaunchDelegate.getGoals(launchConfig))
 				.isEqualTo("-U clean package org.jboss.redhat-fuse:camel-maven-plugin:run -Dcamel.fileApplicationContextUri=\"file:C:\\my path with space\"");
@@ -60,8 +60,8 @@ public class CamelRunMavenLaunchDelegateTest {
 	
 	@Test
 	public void testGetGoalsForSpringBootNonProductizedGroupId() throws Exception {
-		doReturn(true).when(camelRunMavenLaunchDelegate).isSpringBoot(any(IFile.class));
-		doReturn(false).when(camelRunMavenLaunchDelegate).isProductizedMavenPluginUsed(any(IFile.class));
+		doReturn(true).when(camelRunMavenLaunchDelegate).isSpringBoot(any());
+		doReturn(false).when(camelRunMavenLaunchDelegate).isProductizedMavenPluginUsed(any());
 		
 		assertThat(camelRunMavenLaunchDelegate.getGoals(launchConfig))
 				.isEqualTo("-U clean package org.springframework.boot:spring-boot-maven-plugin:run -Dcamel.fileApplicationContextUri=\"file:C:\\my path with space\"");
@@ -69,8 +69,8 @@ public class CamelRunMavenLaunchDelegateTest {
 	
 	@Test
 	public void testGetGoalsForSpringBootAndProductizedGroupId() throws Exception {
-		doReturn(true).when(camelRunMavenLaunchDelegate).isSpringBoot(any(IFile.class));
-		doReturn(true).when(camelRunMavenLaunchDelegate).isProductizedMavenPluginUsed(any(IFile.class));
+		doReturn(true).when(camelRunMavenLaunchDelegate).isSpringBoot(any());
+		doReturn(true).when(camelRunMavenLaunchDelegate).isProductizedMavenPluginUsed(any());
 		
 		assertThat(camelRunMavenLaunchDelegate.getGoals(launchConfig))
 				.isEqualTo("-U clean package org.jboss.redhat-fuse:spring-boot-maven-plugin:run -Dcamel.fileApplicationContextUri=\"file:C:\\my path with space\"");
