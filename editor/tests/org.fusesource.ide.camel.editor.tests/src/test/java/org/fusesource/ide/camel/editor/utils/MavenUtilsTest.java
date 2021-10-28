@@ -11,9 +11,8 @@
 package org.fusesource.ide.camel.editor.utils;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.doNothing;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -29,7 +28,6 @@ import org.apache.maven.model.Plugin;
 import org.apache.maven.model.PluginManagement;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.fusesource.ide.camel.model.service.core.catalog.Dependency;
@@ -40,6 +38,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Answers;
 import org.mockito.ArgumentCaptor;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -67,7 +66,7 @@ public class MavenUtilsTest {
 	public void setup() throws CoreException {
 //		doReturn(pomFile).when(mavenUtils).getPomFile(project);
 //		doNothing().when(mavenUtils).writeNewPomFile(eq(project), eq(pomFile), any(Model.class), any(IProgressMonitor.class));
-		when(mavenProjectFacade.getMavenProject(Mockito.any(NullProgressMonitor.class)).getCompileDependencies()).thenReturn(Collections.emptyList());
+		when(mavenProjectFacade.getMavenProject(any(NullProgressMonitor.class)).getCompileDependencies()).thenReturn(Collections.emptyList());
 		// TODO: repair this broken test
 		// mavenUtils.setCamelMavenUtils(camelMavenUtils);
 	}

@@ -11,8 +11,8 @@
 package org.fusesource.ide.launcher.debug.model;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Matchers.anySetOf;
-import static org.mockito.Matchers.anyString;
+import static org.mockito.ArgumentMatchers.anySet;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doCallRealMethod;
 
 import java.util.HashSet;
@@ -35,7 +35,7 @@ public class CamelDebugFacadeTest {
 	
 	@Before
 	public void setup() {
-		doCallRealMethod().when(cdf).findDebugger(anyString(), anySetOf(ObjectInstance.class));
+		doCallRealMethod().when(cdf).findDebugger(anyString(), anySet());
 	}
 
 	@Test

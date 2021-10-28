@@ -11,7 +11,7 @@
 package org.fusesource.ide.camel.editor.properties;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Matchers.anyListOf;
+import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.doCallRealMethod;
 
 import java.util.ArrayList;
@@ -33,7 +33,7 @@ public class AdvancedEndpointPropertiesSectionTest {
 	
 	@Before
 	public void setup(){
-		doCallRealMethod().when(advancedEndpointPropertiesSection).computeTabsToCreate(anyListOf(Parameter.class));
+		doCallRealMethod().when(advancedEndpointPropertiesSection).computeTabsToCreate(anyList());
 	}
 
 	@Test
