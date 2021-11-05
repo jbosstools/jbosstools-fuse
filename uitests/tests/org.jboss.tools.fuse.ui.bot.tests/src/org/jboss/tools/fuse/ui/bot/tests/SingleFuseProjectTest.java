@@ -35,12 +35,15 @@ import org.eclipse.reddeer.eclipse.ui.console.ConsoleView;
 import org.eclipse.reddeer.eclipse.ui.navigator.resources.ProjectExplorer;
 import org.eclipse.reddeer.eclipse.ui.views.markers.ProblemsView;
 import org.eclipse.reddeer.eclipse.ui.views.markers.ProblemsView.ProblemType;
+import org.eclipse.reddeer.junit.execution.annotation.RunIf;
 import org.eclipse.reddeer.junit.internal.runner.ParameterizedRequirementsRunnerFactory;
 import org.eclipse.reddeer.junit.runner.RedDeerSuite;
 import org.eclipse.reddeer.requirements.cleanworkspace.CleanWorkspaceRequirement.CleanWorkspace;
 import org.eclipse.reddeer.workbench.impl.shell.WorkbenchShell;
 import org.eclipse.reddeer.workbench.ui.dialogs.WorkbenchPreferenceDialog;
 import org.jboss.tools.fuse.reddeer.ProjectType;
+import org.jboss.tools.fuse.reddeer.condition.IssueIsClosed;
+import org.jboss.tools.fuse.reddeer.condition.IssueIsClosed.Jira;
 import org.jboss.tools.fuse.reddeer.editor.CamelEditor;
 import org.jboss.tools.fuse.reddeer.preference.StagingRepositoriesPreferencePage;
 import org.jboss.tools.fuse.reddeer.projectexplorer.CamelProject;
@@ -208,7 +211,9 @@ public class SingleFuseProjectTest extends DefaultTest {
 			if (console.getConsoleText().contains("BUILD FAILURE") || console.getConsoleText().contains("[ERROR]")
 					|| console.consoleIsTerminated()) {
 				log.warn("There is a problem with building '" + name + "' project");
-				return false;
+				if(!console.getConsoleText().contains("[ERROR] WARNING:")) {
+					return false;
+				}
 			}
 		} catch (EclipseLayerException e) {
 			log.warn("There is no Camel Context file in '" + name + "' project");
@@ -266,6 +271,8 @@ public class SingleFuseProjectTest extends DefaultTest {
 	 * </ol>
 	 */
 	@Test
+	@Jira("FUSETOOLS-3258")
+	@RunIf(conditionClass = IssueIsClosed.class)
 	public void testArchetype() {
 		createProject(project);
 		assertTrue("Project '" + project + "' is not present in Project Explorer", isPresent(PROJECT_NAME));
