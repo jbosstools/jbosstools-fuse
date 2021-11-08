@@ -47,15 +47,16 @@ import org.junit.rules.TestWatcher;
 public class DefaultTest {
 
 	private static Logger log = Logger.getLogger(DefaultTest.class);
-	
+
 	@Rule
 	public final TestWatcher watchman = new TestWatcher() {
-		
+
 		@Override
 		protected void failed(Throwable e, org.junit.runner.Description description) {
 			Path logFile = Platform.getLogFileLocation().toFile().toPath();
 			try {
-				Files.copy(logFile, logFile.resolveSibling(description.getClassName() + "."+description.getMethodName()+".log"));
+				Files.copy(logFile, logFile
+						.resolveSibling(description.getClassName() + "." + description.getMethodName() + ".log"));
 			} catch (IOException ex) {
 				log.error("Cannot backup workspace log file", ex);
 			}
@@ -86,8 +87,6 @@ public class DefaultTest {
 	@Before
 	public void defaultSetup() {
 
-		new WorkbenchShell();
-
 		log.info("Deleting Error Log.");
 		new LogView().deleteLog();
 	}
@@ -97,8 +96,6 @@ public class DefaultTest {
 	 */
 	@After
 	public void defaultClean() {
-
-		new WorkbenchShell();
 
 		log.info("Closing all non workbench shells.");
 		WorkbenchShellHandler.getInstance().closeAllNonWorbenchShells();
@@ -128,8 +125,6 @@ public class DefaultTest {
 	@AfterClass
 	public static void defaultFinalClean() {
 
-		new WorkbenchShell();
-
 		log.info("Deleting all projects");
 		ProjectFactory.deleteAllProjects();
 
@@ -144,7 +139,7 @@ public class DefaultTest {
 	 * @return number of error messages from fuse plugins
 	 */
 	protected int getErrorMessages() {
-
+		
 		log.info("Receiving count of errors from fuse plugins");
 		int count = 0;
 		LogView errorLog = new LogView();
@@ -160,7 +155,7 @@ public class DefaultTest {
 	 * Deletes Error Log
 	 */
 	protected void deleteErrorLog() {
-
+		
 		log.info("Deleting error log");
 		LogView errorLog = new LogView();
 		errorLog.deleteLog();
