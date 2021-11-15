@@ -247,7 +247,7 @@ public abstract class BaseKarafStartupLaunchConfigurator extends LaunchConfigura
 		return vmArguments.toString();
 	}
 
-	private boolean isJigsawRunning(IVMInstall vm) {
+	protected boolean isJigsawRunning(IVMInstall vm) {
 		return vm instanceof AbstractVMInstall && JavaUtilities.isJigsawRunning(((AbstractVMInstall) vm).getJavaVersion());
 	}
 
