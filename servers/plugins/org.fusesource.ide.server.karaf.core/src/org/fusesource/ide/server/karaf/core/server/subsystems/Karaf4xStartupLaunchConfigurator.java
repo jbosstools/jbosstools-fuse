@@ -18,6 +18,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.jdt.launching.JavaRuntime;
 import org.eclipse.wst.server.core.IServer;
 import org.fusesource.ide.foundation.core.util.Strings;
+import org.fusesource.ide.server.karaf.core.runtime.IKarafRuntime;
 import org.fusesource.ide.server.karaf.core.util.IKarafToolingConstants;
 
 /**
@@ -43,7 +44,13 @@ public class Karaf4xStartupLaunchConfigurator extends Karaf3xStartupLaunchConfig
 				String libName = lib.getName();
 				IPath p = path.append(libName);
 				if (lib.isFile()) {
-					if (libName.toLowerCase().indexOf("karaf")!=-1 || lib.getPath().toLowerCase().indexOf("boot")!=-1) {
+					if (libName.toLowerCase().indexOf("karaf")!=-1
+							|| lib.getPath().toLowerCase().indexOf("boot")!=-1
+							|| lib.getPath().indexOf("endorsed") != -1) {
+						cp.add(JavaRuntime.newArchiveRuntimeClasspathEntry(p));
+					}
+					if(isJigsawRunning(((IKarafRuntime)runtime.loadAdapter(IKarafRuntime.class, null)).getVM())
+							&& lib.getPath().indexOf("jdk9plus") != -1) {
 						cp.add(JavaRuntime.newArchiveRuntimeClasspathEntry(p));
 					}
 				} else {
