@@ -17,7 +17,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
-import java.util.List;
 
 import org.eclipse.reddeer.common.condition.AbstractWaitCondition;
 import org.eclipse.reddeer.common.exception.RedDeerException;
@@ -27,8 +26,6 @@ import org.eclipse.reddeer.core.util.FileUtil;
 import org.eclipse.reddeer.eclipse.ui.perspectives.JavaEEPerspective;
 import org.eclipse.reddeer.eclipse.ui.views.log.LogView;
 import org.eclipse.reddeer.gef.view.PaletteView;
-import org.eclipse.reddeer.jface.text.contentassist.ContentAssistant;
-import org.eclipse.reddeer.junit.execution.annotation.RunIf;
 import org.eclipse.reddeer.junit.runner.RedDeerSuite;
 import org.eclipse.reddeer.requirements.autobuilding.AutoBuildingRequirement.AutoBuilding;
 import org.eclipse.reddeer.requirements.cleanworkspace.CleanWorkspaceRequirement.CleanWorkspace;
@@ -41,8 +38,6 @@ import org.jboss.tools.fuse.reddeer.component.Atom;
 import org.jboss.tools.fuse.reddeer.component.File;
 import org.jboss.tools.fuse.reddeer.component.Log;
 import org.jboss.tools.fuse.reddeer.component.Otherwise;
-import org.jboss.tools.fuse.reddeer.condition.IssueIsClosed;
-import org.jboss.tools.fuse.reddeer.condition.IssueIsClosed.Jira;
 import org.jboss.tools.fuse.reddeer.editor.CamelComponentEditPart;
 import org.jboss.tools.fuse.reddeer.editor.CamelEditor;
 import org.jboss.tools.fuse.reddeer.editor.SourceEditor;
@@ -206,60 +201,6 @@ public class CamelEditorTest extends DefaultTest {
 		String file = FileUtil.readFile(editor.getAssociatedFile().getAbsolutePath());
 
 		assertEquals("XML file from file system is different from content of Camel editor 'Source' tab", source, file);
-	}
-
-	/**
-	 * <p>
-	 * Test tries to code completion assistant in the Camel Editor on Source tab.
-	 * </p>
-	 * <ol>
-	 * <li>create a new project from template 'Content Based Router'</li>
-	 * <li>open Project Explorer view</li>
-	 * <li>open camel-context.xml file</li>
-	 * <li>switch to Source tab in the Camel Editor</li>
-	 * <li>invoke content assistant on from element</li>
-	 * <li>check available entries (id, ref)</li>
-	 * <li>check that already set attribute uri is not present</li>
-	 * <li>add id attribute</li>
-	 * <li>check that id attribute is not present in content assistant</li>
-	 * <li>invoke content assistant within route element</li>
-	 * <li>insert to element</li>
-	 * </ol>
-	 */
-	@Test
-	@Jira("FUSETOOLS-2281")
-	@RunIf(conditionClass = IssueIsClosed.class)
-	public void testCodeCompletion() {
-		new CamelProject(PROJECT_NAME).openCamelContext(CAMEL_CONTEXT);
-		CamelEditor.switchTab("Source");
-		EditorManipulator.copyFileContentToCamelXMLEditor("resources/camel-context-all.xml");
-		SourceEditor editor = new SourceEditor();
-		int i = editor.getText().indexOf("<from");
-		editor.setCursorPosition(i + 6);
-		ContentAssistant assistent = editor.openContentAssistant();
-		List<String> proposals = assistent.getProposals();
-		assertTrue("Content Assistent does not contain 'id' value", proposals.contains("id"));
-		assertTrue("Content Assistent does not contain 'ref' value", proposals.contains("ref"));
-		assertFalse("Content Assistent does contain 'uri' value. The attribute is already set",
-				proposals.contains("uri"));
-		assistent.close();
-		editor.insertText("id=\"test\" ");
-		assistent = editor.openContentAssistant();
-		proposals = assistent.getProposals();
-		assertFalse("Content Assistent does contain 'id' value", proposals.contains("id"));
-		assistent.close();
-		editor.setCursorPosition(i - 3);
-		assistent = editor.openContentAssistant();
-		assistent.chooseProposal("to");
-		assertTrue("Editor does not contain generated text", editor.getText().contains("<to></to>"));
-		i = editor.getText().indexOf("<to");
-		editor.setCursorPosition(i + 3);
-		editor.insertText(" ");
-		editor.setCursorPosition(i + 4);
-		assistent = editor.openContentAssistant();
-		proposals = assistent.getProposals();
-		assertTrue("Content Assistent does not contain 'uri' value", proposals.contains("uri"));
-		LogChecker.assertNoFuseError();
 	}
 
 	/**
