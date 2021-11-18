@@ -11,7 +11,6 @@
 package org.jboss.tools.fuse.ui.bot.tests;
 
 import static org.jboss.tools.fuse.reddeer.ProjectTemplate.CBR_SPRING;
-import static org.jboss.tools.fuse.reddeer.SupportedCamelVersions.CAMEL_2_17_0_REDHAT_630187;
 import static org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardDeploymentType.STANDALONE;
 import static org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardRuntimeType.KARAF;
 import static org.junit.Assert.assertEquals;
@@ -81,15 +80,15 @@ public class ConfigurationsEditorEndpointTest {
 			"Control Bus - The controlbus component provides easy management of Camel applications based on the Control Bus EIP pattern.",
 			"CXF - The cxf component is used for SOAP WebServices using Apache CXF.",
 			"CXF-RS - The cxfrs component is used for JAX-RS REST services using Apache CXF.",
-			"Direct - The direct component provides direct synchronous call to another endpoint from the same CamelContext.",
-			"Direct VM - The direct-vm component provides direct synchronous call to another endpoint from any CamelContext in the same JVM.",
+			"Direct - The direct component provides direct, synchronous call to another endpoint from the same CamelContext.",
+			"Direct VM - The direct-vm component provides direct, synchronous call to another endpoint from any CamelContext in the same JVM.",
 			"EJB - The ejb component is for invoking EJB Java beans from Camel.",
 			"File - The file component is used for reading or writing files.",
 			"FTP - The ftp component is used for uploading or downloading files from FTP servers.",
 			"FTPS - The ftps (FTP secure SSL/TLS) component is used for uploading or downloading files from FTP servers.",
-			"IMAP - To send or receive emails using imap/pop3 or stmp protocols.",
-			"IMAPS - To send or receive emails using imap/pop3 or stmp protocols.",
-			"JDBC - The jdbc component enables you to access databases through JDBC where SQL queries are sent in the message body.",
+			"IMAP - To send or receive emails using imap/pop3 or smtp protocols.",
+			"IMAPS (Secure) - To send or receive emails using imap/pop3 or smtp protocols.",
+			"JDBC - The jdbc component enables you to access databases through JDBC, where SQL queries are sent in the message body.",
 			"JGroups - The jgroups component provides exchange of messages between Camel and JGroups clusters.",
 			"JMS - The jms component allows messages to be sent to (or consumed from) a JMS Queue or Topic.",
 			"Language - The language component allows you to send a message to an endpoint which executes a script by any of the supported Languages in Camel.",
@@ -101,8 +100,8 @@ public class ConfigurationsEditorEndpointTest {
 			"Netty HTTP - Netty HTTP server and client using the Netty 3.x library.",
 			"Netty4 - Socket level networking using TCP or UDP with the Netty 4.x library.",
 			"Netty4 HTTP - Netty HTTP server and client using the Netty 4.x library.",
-			"POP3 - To send or receive emails using imap/pop3 or stmp protocols.",
-			"POP3S - To send or receive emails using imap/pop3 or stmp protocols.",
+			"POP3 - To send or receive emails using imap/pop3 or smtp protocols.",
+			"POP3S - To send or receive emails using imap/pop3 or smtp protocols.",
 			"Quartz - Provides a scheduled delivery of messages using the Quartz 1.x scheduler.",
 			"Quartz2 - Provides a scheduled delivery of messages using the Quartz 2.x scheduler.",
 			"Restlet - Component for consuming and producing Restful resources using Restlet.",
@@ -113,10 +112,10 @@ public class ConfigurationsEditorEndpointTest {
 			"SEDA - The seda component provides asynchronous call to another endpoint from any CamelContext in the same JVM.",
 			"Servlet - To use a HTTP Servlet as entry for Camel routes when running in a servlet container.",
 			"SFTP - The sftp (FTP over SSH) component is used for uploading or downloading files from SFTP servers.",
-			"SMTP - To send or receive emails using imap/pop3 or stmp protocols.",
-			"SMTPS - To send or receive emails using imap/pop3 or stmp protocols.",
+			"SMTP - To send or receive emails using imap/pop3 or smtp protocols.",
+			"SMTPS - To send or receive emails using imap/pop3 or smtp protocols.",
 			"SNMP - The snmp component gives you the ability to poll SNMP capable devices or receiving traps.",
-			"SQL - The sql component can be used to perform SQL query to a database.",
+			"SQL - The sql component allows you to work with databases using JDBC SQL queries.",
 			"Timer - The timer component is used for generating message exchanges when a timer fires.",
 			"VM - The vm component provides asynchronous call to another endpoint from the same CamelContext.",
 			"XQuery - Transforms the message using a XQuery template using Saxon.",
@@ -131,7 +130,7 @@ public class ConfigurationsEditorEndpointTest {
 	public static Collection<String> setupData() {
 		createProject();
 		new CamelProject(PROJECT_NAME).openCamelContext(CONTEXT);
-		CamelEditor.switchTab("Configurations");
+		CamelEditor.switchTab(CamelEditor.CONFIGURATIONS_TAB);
 		return ConfigurationsEditor.getEndpoints();
 	}
 
@@ -152,13 +151,13 @@ public class ConfigurationsEditorEndpointTest {
 	public void initialSetup() {
 		new CleanErrorLogRequirement().fulfill();
 		new CamelProject(PROJECT_NAME).openCamelContext(CONTEXT);
-		CamelEditor.switchTab("Configurations");
+		CamelEditor.switchTab(CamelEditor.CONFIGURATIONS_TAB);
 	}
 
 	@After
 	public void clearEnviroment() {
 		new CamelProject(PROJECT_NAME).openCamelContext(CONTEXT);
-		CamelEditor.switchTab("Source");
+		CamelEditor.switchTab(CamelEditor.SOURCE_TAB);
 		EditorManipulator.copyFileContentToCamelXMLEditor("resources/camel-context-cbr.xml");
 	}
 
@@ -279,8 +278,7 @@ public class ConfigurationsEditorEndpointTest {
 	}
 
 	private static void createProject() {
-		ProjectFactory.newProject(PROJECT_NAME).deploymentType(STANDALONE).runtimeType(KARAF)
-				.version(CAMEL_2_17_0_REDHAT_630187).template(CBR_SPRING).create();
+		ProjectFactory.newProject(PROJECT_NAME).deploymentType(STANDALONE).runtimeType(KARAF).template(CBR_SPRING).create();
 	}
 
 	private void createEndpoint() {
