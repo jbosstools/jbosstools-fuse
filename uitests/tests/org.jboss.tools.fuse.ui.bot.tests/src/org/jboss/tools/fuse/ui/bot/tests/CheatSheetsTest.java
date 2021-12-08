@@ -26,7 +26,6 @@ import org.jboss.tools.fuse.reddeer.wizard.CheatSheetsWizard;
 import org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizard;
 import org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardFirstPage;
 import org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardRuntimePage;
-import org.jboss.tools.fuse.reddeer.utils.JDK8Check;
 
 import org.junit.AfterClass;
 import org.junit.Test;
@@ -75,11 +74,6 @@ public class CheatSheetsTest {
 	 */
 	@Test
 	public void testCheatSheets() {
-
-		/*
-		 * For JRE8 check.
-		 */
-		boolean hasJava8 = JDK8Check.isJava8Available();
 
 		/*
 		 * Open Help -> Cheat Sheets -> Red Hat Fuse -> Create a Fuse...
@@ -133,13 +127,6 @@ public class CheatSheetsTest {
 		secondPage.setDeploymentType(STANDALONE);
 		wiz.next();
 		new FinishButton(wiz).click();
-
-		/*
-		 * JRE8 missing handle.
-		 */
-		if (!hasJava8) {
-			JDK8Check.handleMissingJava8();
-		}
 		new WaitWhile(new JobIsRunning(), TimePeriod.LONG);
 		new WaitWhile(new ShellIsAvailable("New Fuse Integration Project"), TimePeriod.getCustom(900));
 	}
