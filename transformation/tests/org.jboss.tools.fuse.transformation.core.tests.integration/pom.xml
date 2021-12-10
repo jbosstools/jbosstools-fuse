@@ -13,4 +13,43 @@
   <artifactId>org.jboss.tools.fuse.transformation.core.tests.integration</artifactId>
   <packaging>eclipse-test-plugin</packaging>
   <name>Red Hat Fuse Tooling :: Core Transformation :: Tests :: Core Transformation Integration Tests</name>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>get-lib</id>
+						<goals>
+							<goal>copy</goal>
+						</goals>
+						<phase>generate-resources</phase>
+					</execution>
+				</executions>
+				<configuration>
+					<artifactItems>
+						<artifactItem>
+							<groupId>org.jsonschema2pojo</groupId>
+    <artifactId>jsonschema2pojo-core</artifactId>
+    <version>1.1.1</version>
+						</artifactItem>
+					</artifactItems>
+					<outputDirectory>${basedir}/lib/</outputDirectory>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-clean-plugin</artifactId>
+				<configuration>
+					<filesets>
+						<fileset>
+							<directory>${basedir}/lib</directory>
+						</fileset>
+					</filesets>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 </project>
+
