@@ -12,7 +12,8 @@ Require-Bundle: org.junit;bundle-version="4.12.0",
  org.jboss.tools.fuse.transformation.core;bundle-version="10.0.0",
  org.fusesource.ide.camel.model.service.core,
  org.fusesource.ide.camel.model.service.impl,
- org.jboss.tools.locus.jsonschema2pojo.jsonschema2pojo-core;bundle-version="0.4.13",
  org.eclipse.core.runtime;bundle-version="3.11.1",
  org.eclipse.ui.workbench,
  org.jboss.tools.common.jaxb;resolution:=optional
+Bundle-ClassPath: lib/jsonschema2pojo-core-1.1.1.jar,
+ .
