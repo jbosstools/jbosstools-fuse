@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  
+  <modelVersion>4.0.0</modelVersion>
+  
+  <parent>
+    <groupId>org.fusesource.ide.core</groupId>
+    <artifactId>plugins</artifactId>
+    <version>11.13.0-SNAPSHOT</version>
+    <relativePath>..</relativePath>
+  </parent>
+
+  <artifactId>org.fusesource.ide.camel.model.service.impl.v2232fuse7_10_000020redhat00001</artifactId>
+  <packaging>eclipse-plugin</packaging>
+  <name>Red Hat Fuse Tooling :: Core :: Plugins :: Camel Dynamic Service Implementation for 2.23.2.fuse-7_10_0-00020-redhat-00001</name>
+  
+  <properties>
+  		<bundle.camel.version>2.23.2.fuse-7_10_0-00020-redhat-00001</bundle.camel.version>
+  		<bundle.slf4j.version>1.7.25.redhat-00001</bundle.slf4j.version>
+  </properties>
+  <build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>get-deps</id>
+						<goals>
+							<goal>copy</goal>
+						</goals>
+						<phase>generate-resources</phase>
+					</execution>
+				</executions>
+				<configuration>
+					<artifactItems>
+						<artifactItem>
+							<groupId>org.apache.camel</groupId>
+            						<artifactId>camel-catalog</artifactId>
+							<version>${bundle.camel.version}</version>
+						</artifactItem>
+						<artifactItem>
+							<groupId>org.apache.camel</groupId>
+							<artifactId>camel-catalog-maven</artifactId>
+							<version>${bundle.camel.version}</version>
+						</artifactItem>
+						<artifactItem>
+							<groupId>org.apache.camel</groupId>
+							<artifactId>camel-catalog-provider-karaf</artifactId>
+							<version>${bundle.camel.version}</version>
+						</artifactItem>
+						<artifactItem>
+							<groupId>org.apache.camel</groupId>
+							<artifactId>camel-catalog-provider-springboot</artifactId>
+							<version>${bundle.camel.version}</version>
+						</artifactItem>
+						<artifactItem>
+							<groupId>org.apache.camel</groupId>
+            						<artifactId>camel-core</artifactId>
+							<version>${bundle.camel.version}</version>
+						</artifactItem>
+						<artifactItem>
+							<groupId>org.apache.camel</groupId>
+            						<artifactId>camel-spring</artifactId>
+							<version>${bundle.camel.version}</version>
+						</artifactItem>
+						<artifactItem>
+							<groupId>org.apache.camel</groupId>
+            						<artifactId>camel-blueprint</artifactId>
+							<version>${bundle.camel.version}</version>
+						</artifactItem>
+					        <artifactItem>
+							<groupId>org.slf4j</groupId>
+							<artifactId>slf4j-api</artifactId>
+							<version>${bundle.slf4j.version}</version>
+						</artifactItem>
+						<artifactItem>
+							<groupId>org.slf4j</groupId>
+							<artifactId>log4j-over-slf4j</artifactId>
+							<version>${bundle.slf4j.version}</version>
+						</artifactItem>
+						<artifactItem>
+							<groupId>org.slf4j</groupId>
+							<artifactId>slf4j-simple</artifactId>
+							<version>${bundle.slf4j.version}</version>
+						</artifactItem>
+					</artifactItems>
+					<useBaseVersion>true</useBaseVersion>
+					<skip>false</skip>
+					<outputDirectory>${basedir}/libs/</outputDirectory>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<!-- make sure lib dir is removed after clean to avoid "dirty" build -->
+				<artifactId>maven-clean-plugin</artifactId>
+				<configuration>
+					<filesets>
+						<fileset>
+							<directory>${basedir}/libs</directory>
+						</fileset>
+					</filesets>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
