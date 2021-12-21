@@ -25,7 +25,7 @@
 		<enable.debug.log>false</enable.debug.log>
 		<org.jboss.tools.fuse.camel2bom.url>https://raw.githubusercontent.com/jbosstools/jbosstools-fuse/master/configuration/camel2bom.properties</org.jboss.tools.fuse.camel2bom.url>
 		<org.jboss.tools.fuse.fismarker.url>https://raw.githubusercontent.com/jbosstools/jbosstools-fuse/master/configuration/fismarker.properties</org.jboss.tools.fuse.fismarker.url>
-		<ideConfig>-Dorg.jboss.tools.fuse.camel2bom.url=${org.jboss.tools.fuse.camel2bom.url} -Dorg.jboss.tools.fuse.fismarker.url=${org.jboss.tools.fuse.fismarker.url}</ideConfig>
+		<ideConfig>-Dorg.jboss.tools.fuse.camel2bom.url=${org.jboss.tools.fuse.camel2bom.url} -Dorg.jboss.tools.fuse.fismarker.url=${org.jboss.tools.fuse.fismarker.url} ${additionalSystemProperties}</ideConfig>
 		<systemProperties>${integrationTestsSystemProperties} ${reddeerConfig} ${ideConfig}</systemProperties>
 		<test.class>AllTests</test.class>
 		<customization.file>resources/settings/plugin_customization.ini</customization.file>
@@ -38,7 +38,8 @@
 		<fuseDeploymentType>OpenShift</fuseDeploymentType>
 		<fuseRuntimeType>SpringBoot</fuseRuntimeType>
 		<fuseCamelVersion>2.18.1.redhat-000021</fuseCamelVersion>
-		<apicuritoProject>none</apicuritoProject>	
+		<apicuritoProject>none</apicuritoProject>
+		<additionalSystemProperties>--add-exports=jdk.internal.jvmstat/sun.jvmstat.monitor=ALL-UNNAMED</additionalSystemProperties>
 	</properties>
 
 	<repositories>
