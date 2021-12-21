@@ -226,6 +226,23 @@
 				<version.maven.war.plugin>3.2.2</version.maven.war.plugin>
 			</properties>
 		</profile>
+        <profile>
+			<!-- Provided as a best effort to help future migration to JDK 17 -->
+            <id>java17-build</id>
+			<activation>
+				<jdk>[17,)</jdk>
+			</activation>
+            <properties>
+				<version.maven.war.plugin>3.3.2</version.maven.war.plugin>
+			</properties>
+			<dependencies>
+                <dependency>
+					<groupId>com.sun.xml.bind</groupId>
+					<artifactId>jaxb-impl</artifactId>
+                    <version>2.3.5</version>
+				</dependency>
+			</dependencies>
+		</profile>
 	</profiles>
     <!-- Repositories -->
     <repositories>
