@@ -115,6 +115,15 @@
     </projectTemplate>
     <projectTemplate
           category="fuse.projecttemplates.jbossfuse.simple"
+          class="org.fusesource.ide.projecttemplates.impl.simple.CBRTemplateForFuse710"
+          description="%template.simple.cbr.description"
+          id="org.fusesource.ide.projecttemplates.cbrTemplateSimplev710"
+          keywords="fuse cbr content based router"
+          name="%template.simple.cbr.name"
+          weight="0">
+    </projectTemplate>
+    <projectTemplate
+          category="fuse.projecttemplates.jbossfuse.simple"
           class="org.fusesource.ide.projecttemplates.impl.simple.AMQTemplate"
           description="%template.simple.amq.description"
           id="org.fusesource.ide.projecttemplates.amqTemplateSimple"
