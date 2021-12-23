@@ -25,7 +25,7 @@ import org.junit.runners.Parameterized.Parameter;
 import org.junit.runners.Parameterized.Parameters;
 
 @RunWith(Parameterized.class)
-public class CXfCodeFirstProjectTemplateForFuse76Test {
+public class CXfCodeFirstProjectTemplateForFuse710Test {
 
 	@Parameter
 	public String version;
@@ -36,14 +36,14 @@ public class CXfCodeFirstProjectTemplateForFuse76Test {
 	@Parameters(name = "{0} should be compatible? {1}")
 	public static Collection<Object[]> data() {
 		return Arrays.asList(new Object[][] {
-			{ "2.24.0", false },
-			{ "2.23.2.fuse-7_XXX-redhat-X", false },
-			{ "2.23.2.fuse-790XXX-redhat-X", true },
-			{ "2.21.0.fuse-760XXX-redhat-X", true },
+			{ "2.24.0", true },
+			{ "2.23.2.fuse-7_XXX-redhat-X", true },
+			{ "2.23.2.fuse-790XXX-redhat-X", false },
+			{ "2.21.0.fuse-760XXX-redhat-X", false },
 			{ "2.21.0.fuse-750XXX-redhat-X", false },
-			{ "2.21.1", true },
+			{ "2.21.1", false },
 			{ "2.21.0.fuse-000XXX-redhat-X", false },
-			{ "2.22.0", true },
+			{ "2.22.0", false },
 			{ "2.21.0", false },
 			{ "2.20.0", false },
 			{ "2.19.9", false }
@@ -52,6 +52,6 @@ public class CXfCodeFirstProjectTemplateForFuse76Test {
 	
 	@Test
 	public void testIsCompatible() throws Exception {
-		assertThat(new CXfCodeFirstProjectTemplateForFuse76().isCompatible(new EnvironmentData(version, FuseDeploymentPlatform.STANDALONE, FuseRuntimeKind.KARAF))).isEqualTo(isCompatible);
+		assertThat(new CXfCodeFirstProjectTemplateForFuse710().isCompatible(new EnvironmentData(version, FuseDeploymentPlatform.STANDALONE, FuseRuntimeKind.KARAF))).isEqualTo(isCompatible);
 	}
 }

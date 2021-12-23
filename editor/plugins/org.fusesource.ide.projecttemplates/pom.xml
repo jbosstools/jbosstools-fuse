@@ -460,6 +460,42 @@
             			</configuration>
           			</execution>
           			
+          			<!-- MEDIUM-CXF-CODEFIRST-JAVA TEMPLATE Fuse 7.10 -->
+          			<execution>
+            			<id>create-template-medium-cxf-codefirst-java-fuse7.10</id>
+            			<goals>
+              				<goal>copy</goal>
+            			</goals>
+            			<phase>generate-resources</phase>
+            			<configuration>
+              				<fileset>
+                				<directory>template-sources/medium/cxf-code-first/medium-fuse-cxf-code-first-java-fuse7.10</directory>
+                				<includes>
+                  					<include>**</include>
+                				</includes>
+                				<outputDirectory>templates/template-medium-cxf-codefirst-java-fuse7.10.zip</outputDirectory>
+              				</fileset>
+            			</configuration>
+          			</execution>
+          			
+          			<!-- MEDIUM-CXF-CODEFIRST-SPRING TEMPLATE Fuse 7.10-->
+          			<execution>
+            			<id>create-template-medium-cxf-codefirst-spring-fuse7.10</id>
+            			<goals>
+              				<goal>copy</goal>
+            			</goals>
+            			<phase>generate-resources</phase>
+            			<configuration>
+              				<fileset>
+                				<directory>template-sources/medium/cxf-code-first/medium-fuse-cxf-code-first-spring-fuse7.10</directory>
+                				<includes>
+                  					<include>**</include>
+                				</includes>
+                				<outputDirectory>templates/template-medium-cxf-codefirst-spring-fuse7.10.zip</outputDirectory>
+              				</fileset>
+            			</configuration>
+          			</execution>
+         			
           			<!-- MEDIUM-EAP-WILDFLY-SPRING TEMPLATE FIS-->
           			<execution>
             			<id>create-template-medium-eap-wildfly-spring-fusefis</id>

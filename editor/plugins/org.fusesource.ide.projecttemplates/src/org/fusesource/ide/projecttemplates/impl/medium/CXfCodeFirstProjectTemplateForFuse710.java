@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Red Hat, Inc.
+ * Copyright (c) 2021 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v1.0 which accompanies this distribution,
@@ -10,6 +10,9 @@
  ******************************************************************************/
 package org.fusesource.ide.projecttemplates.impl.medium;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.fusesource.ide.camel.model.service.core.util.FuseBomFilter;
 import org.fusesource.ide.foundation.core.util.VersionUtil;
 import org.fusesource.ide.projecttemplates.adopters.configurators.MavenTemplateConfigurator;
@@ -18,12 +21,10 @@ import org.fusesource.ide.projecttemplates.adopters.creators.TemplateCreatorSupp
 import org.fusesource.ide.projecttemplates.util.CommonNewProjectMetaData;
 import org.fusesource.ide.projecttemplates.wizards.pages.model.EnvironmentData;
 
-public class CXfCodeFirstProjectTemplateForFuse76 extends AbstractCxfCodeFirstProjectTemplate {
+public class CXfCodeFirstProjectTemplateForFuse710 extends AbstractCxfCodeFirstProjectTemplate {
 
-	private static final String FIRST_INCOMPATIBLE_CAMEL_VERSION = "2.24";
-	private static final String FUSE_7_7_INCOMPATIBLE_CAMEL_VERSION = "2.23.2.fuse-77";
-	private static final String MINIMAL_COMPATIBLE_CAMEL_VERSION = "2.21.0.fuse-760";
-	private static final String MAXIMAL_COMPATIBLE_PRODUCTIZED_CAMEL_VERSION_PREFIX = "2.23.2.fuse-7_";
+	private static final String MINIMAL_COMPATIBLE_CAMEL_VERSION_PREFIX = "2.23.2.fuse-7_";
+	private static final String MINIMAL_COMPATIBLE_CAMEL_VERSION = "2.24.0";
 
 	@Override
 	public TemplateConfiguratorSupport getConfigurator() {
@@ -32,17 +33,19 @@ public class CXfCodeFirstProjectTemplateForFuse76 extends AbstractCxfCodeFirstPr
 
 	@Override
 	public TemplateCreatorSupport getCreator(CommonNewProjectMetaData projectMetaData) {
-		return new CXfCodeFirstUnzipTemplateCreator("7.6");
+		return new CXfCodeFirstUnzipTemplateCreator("7.10");
 	}
 	
 	@Override
 	public boolean isCompatible(EnvironmentData environment) {
 		return super.isCompatible(environment)
-				&& new VersionUtil().isStrictlyGreaterThan(environment.getCamelVersion(), MINIMAL_COMPATIBLE_CAMEL_VERSION)
-				&& !environment.getCamelVersion().startsWith(FUSE_7_7_INCOMPATIBLE_CAMEL_VERSION)
-				// exceptionally using a string comparator as it needs to compare 2.23.2.xxx with 2.23.2.yyy. And Maven Comparator used is not doing it
-				&& !environment.getCamelVersion().startsWith(MAXIMAL_COMPATIBLE_PRODUCTIZED_CAMEL_VERSION_PREFIX)
-				&& new VersionUtil().isStrictlyGreaterThan(FIRST_INCOMPATIBLE_CAMEL_VERSION, environment.getCamelVersion());
+				&& (environment.getCamelVersion().startsWith(MINIMAL_COMPATIBLE_CAMEL_VERSION_PREFIX)
+						|| new VersionUtil().isGreaterThan(environment.getCamelVersion(), MINIMAL_COMPATIBLE_CAMEL_VERSION));
+	}
+
+	@Override
+	public List<String> getJavaExecutionEnvironments() {
+		return Arrays.asList("JavaSE-1.8", "JavaSE-11");
 	}
 
 }
