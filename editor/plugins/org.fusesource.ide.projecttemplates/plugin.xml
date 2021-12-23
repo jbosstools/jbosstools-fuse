@@ -263,6 +263,15 @@
           name="%template.medium.cxf.code.first.name"
           weight="50">
     </projectTemplate>
+    <projectTemplate
+          category="fuse.projecttemplates.jbossfuse.advanced"
+          class="org.fusesource.ide.projecttemplates.impl.medium.CXfCodeFirstProjectTemplateForFuse710"
+          description="%template.medium.cxf.code.first.description"
+          id="org.fusesource.ide.projecttemplates.cxfCodeFirstMediumv710"
+          keywords="cxf"
+          name="%template.medium.cxf.code.first.name"
+          weight="50">
+    </projectTemplate>
     <projectTemplateCategory
           id="fuse.projecttemplates.EMPTY_CATEGORY"
           name="%template.category.empty"
