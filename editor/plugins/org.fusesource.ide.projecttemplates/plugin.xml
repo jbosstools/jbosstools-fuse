@@ -300,6 +300,14 @@
           name="%template.empty.name"
           weight="50">
     </projectTemplate>
+    <projectTemplate
+          category="fuse.projecttemplates.EMPTY_CATEGORY"
+          class="org.fusesource.ide.projecttemplates.impl.simple.EmptyProjectTemplateForFuse710"
+          description="%template.empty.description"
+          id="org.fusesource.ide.projecttemplates.emptyv710"
+          name="%template.empty.name"
+          weight="50">
+    </projectTemplate>
  </extension>
  
  <!-- Maven configurator  -->
