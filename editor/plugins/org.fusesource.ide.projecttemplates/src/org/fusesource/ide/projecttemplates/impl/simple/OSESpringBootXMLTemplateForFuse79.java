@@ -23,6 +23,7 @@ import org.fusesource.ide.projecttemplates.wizards.pages.model.EnvironmentData;
 public class OSESpringBootXMLTemplateForFuse79 extends AbstractOSESpringBootXMLTemplate {
 
 	private static final String MINIMAL_COMPATIBLE_CAMEL_VERSION = "2.23.2.fuse-790";
+	private static final String MINIMAL_COMPATIBLE_CAMEL_VERSION_PREFIX = "2.23.2.fuse-7_";
 
 	@Override
 	public TemplateConfiguratorSupport getConfigurator() {
@@ -37,9 +38,10 @@ public class OSESpringBootXMLTemplateForFuse79 extends AbstractOSESpringBootXMLT
 	@Override
 	public boolean isCompatible(EnvironmentData environment) {
 		return super.isCompatible(environment)
-				&& new VersionUtil().isStrictlyGreaterThan(environment.getCamelVersion(), MINIMAL_COMPATIBLE_CAMEL_VERSION)
-				// exceptionally using a string comparator as it needs to compare 2.23.2.xxx with 2.23.2.yyy. And Maven Comparator used is not doing it
-				&& environment.getCamelVersion().compareTo(MINIMAL_COMPATIBLE_CAMEL_VERSION) > 0;
+				&& (new VersionUtil().isStrictlyGreaterThan(environment.getCamelVersion(), MINIMAL_COMPATIBLE_CAMEL_VERSION)
+						// exceptionally using a string comparator as it needs to compare 2.23.2.xxx with 2.23.2.yyy. And Maven Comparator used is not doing it
+						&& environment.getCamelVersion().compareTo(MINIMAL_COMPATIBLE_CAMEL_VERSION) > 0
+					|| environment.getCamelVersion().startsWith(MINIMAL_COMPATIBLE_CAMEL_VERSION_PREFIX));
 	}
 	
 	@Override
