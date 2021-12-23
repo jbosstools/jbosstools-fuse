@@ -20,6 +20,7 @@ import org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType;
 import org.fusesource.ide.projecttemplates.impl.simple.OSESpringBootXMLTemplateForFuse6;
 import org.fusesource.ide.projecttemplates.impl.simple.OSESpringBootXMLTemplateForFuse7;
 import org.fusesource.ide.projecttemplates.impl.simple.OSESpringBootXMLTemplateForFuse71;
+import org.fusesource.ide.projecttemplates.impl.simple.OSESpringBootXMLTemplateForFuse710;
 import org.fusesource.ide.projecttemplates.impl.simple.OSESpringBootXMLTemplateForFuse77;
 import org.fusesource.ide.projecttemplates.impl.simple.OSESpringBootXMLTemplateForFuse78;
 import org.fusesource.ide.projecttemplates.impl.simple.OSESpringBootXMLTemplateForFuse79;
@@ -54,6 +55,8 @@ public class FuseIntegrationProjectCreatorRunnableForOSESringBootIT extends Fuse
 	NewFuseIntegrationProjectMetaData newProjectMetadata = super.createDefaultNewProjectMetadata(dsl, projectName);
 		if (isOlderThan220()) {
 			newProjectMetadata.setTemplate(new OSESpringBootXMLTemplateForFuse6());
+		} else if (isNewerThan2232fuse7_10_0()) {
+			newProjectMetadata.setTemplate(new OSESpringBootXMLTemplateForFuse710());
 		} else if (isNewerThan2232fuse790()){
 			newProjectMetadata.setTemplate(new OSESpringBootXMLTemplateForFuse79());
 		} else if (isNewerThan2232fuse780()){
