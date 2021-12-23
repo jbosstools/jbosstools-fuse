@@ -23,7 +23,8 @@ import org.fusesource.ide.projecttemplates.wizards.pages.model.EnvironmentData;
 
 public class EAPSpringTemplateForFuse79 extends AbstractEAPSpringTemplate {
 
-private static final String MINIMAL_COMPATIBLE_CAMEL_VERSION = "2.23.2.fuse-790";
+	private static final String MINIMAL_COMPATIBLE_CAMEL_VERSION = "2.23.2.fuse-790";
+	private static final String MINIMAL_COMPATIBLE_CAMEL_VERSION_PREFIX = "2.23.2.fuse-7_";
 	
 	@Override
 	public TemplateConfiguratorSupport getConfigurator() {
@@ -38,7 +39,8 @@ private static final String MINIMAL_COMPATIBLE_CAMEL_VERSION = "2.23.2.fuse-790"
 	@Override
 	public boolean isCompatible(EnvironmentData environment) {
 		return super.isCompatible(environment)
-				&& new VersionUtil().isStrictlyGreaterThan(environment.getCamelVersion(), MINIMAL_COMPATIBLE_CAMEL_VERSION);
+				&& (new VersionUtil().isStrictlyGreaterThan(environment.getCamelVersion(), MINIMAL_COMPATIBLE_CAMEL_VERSION)
+						|| environment.getCamelVersion().startsWith(MINIMAL_COMPATIBLE_CAMEL_VERSION_PREFIX));
 	}
 	
 	@Override
