@@ -35,6 +35,7 @@ public class OSESpringBootXMLTemplateForFuse77Test {
 	@Parameters(name = "{0} should be compatible? {1}")
 	public static Collection<Object[]> data() {
 		return Arrays.asList(new Object[][] {
+			{ "2.23.2.fuse-7_XXX-redhat-X", false },
 			{ "2.23.2.fuse-780XXX-redhat-X", false },
 			{ "2.23.2.fuse-770010-redhat-00001", true },
 			{ "2.21.0.fuse-710XXX-redhat-X", false },
