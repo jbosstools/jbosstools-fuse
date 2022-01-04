@@ -129,6 +129,7 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
 		CONNECTORS_WHITELIST.add("jdbc");
 		CONNECTORS_WHITELIST.add("jgroups");
 		CONNECTORS_WHITELIST.add("jms");
+		CONNECTORS_WHITELIST.add("kafka");
 		CONNECTORS_WHITELIST.add("language");
 		CONNECTORS_WHITELIST.add("linkedin");
 		CONNECTORS_WHITELIST.add("mina2");
