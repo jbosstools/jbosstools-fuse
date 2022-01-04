@@ -56,7 +56,7 @@ public abstract class AbstractFileParameterPropertyUICreator extends AbstractTex
 
 	@Override
 	protected GridData createPropertyFieldLayoutData() {
-		return GridDataFactory.fillDefaults().grab(true, false).indent(5, 0).create();
+		return GridDataFactory.fillDefaults().grab(true, false).indent(5, 0).span(getColumnSpan() - 1, 1).create();
 	}
 
 }
