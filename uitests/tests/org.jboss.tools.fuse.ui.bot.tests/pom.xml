@@ -41,14 +41,6 @@
 		<apicuritoProject>none</apicuritoProject>	
 	</properties>
 
-	<repositories>
-		<repository>
-			<id>jbosstools-fuse-tooling</id>
-			<url>${jbosstools-fuse-site}</url>
-			<layout>p2</layout>
-		</repository>
-	</repositories>
-
 	<build>
 		<plugins>
 
