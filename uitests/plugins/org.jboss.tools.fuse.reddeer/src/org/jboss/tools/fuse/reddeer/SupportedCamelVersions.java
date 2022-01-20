@@ -13,6 +13,8 @@ package org.jboss.tools.fuse.reddeer;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 
@@ -68,11 +70,12 @@ public class SupportedCamelVersions {
 	public static final String CAMEL_2_23_2_FUSE_770010_REDHAT_00001 = "2.23.2.fuse-770010-redhat-00001";
 	public static final String CAMEL_2_23_2_FUSE_780036_REDHAT_00001 = "2.23.2.fuse-780036-redhat-00001";
 	public static final String CAMEL_2_23_2_FUSE_790054_REDHAT_00001 = "2.23.2.fuse-790054-redhat-00001";
+	public static final String CAMEL_2_23_2_FUSE_7_10_0_00020_REDHAT_00001 = "2.23.2.fuse-7_10_0-00020-redhat-00001";
 
-	public static final String CAMEL_LATEST = CAMEL_2_18_1_REDHAT_000015;
+	public static final String CAMEL_LATEST = CAMEL_2_23_2_FUSE_7_10_0_00020_REDHAT_00001;
 	public static final String CAMEL_LATEST_FUSE_6_2 = CAMEL_2_15_1_REDHAT_621216;
 	public static final String CAMEL_LATEST_FUSE_6_3 = CAMEL_2_17_0_REDHAT_630356;
-	public static final String CAMEL_LATEST_FUSE_7 = CAMEL_2_23_2_FUSE_770010_REDHAT_00001;
+	public static final String CAMEL_LATEST_FUSE_7 = CAMEL_2_23_2_FUSE_7_10_0_00020_REDHAT_00001;
 	public static final String CAMEL_LATEST_FIS = CAMEL_2_18_1_REDHAT_000026;
 
 	public static Collection<String> getCamelVersions() {
@@ -119,6 +122,7 @@ public class SupportedCamelVersions {
 		versions.add(CAMEL_2_23_2_FUSE_770010_REDHAT_00001);
 		versions.add(CAMEL_2_23_2_FUSE_780036_REDHAT_00001);
 		versions.add(CAMEL_2_23_2_FUSE_790054_REDHAT_00001);
+		versions.add(CAMEL_2_23_2_FUSE_7_10_0_00020_REDHAT_00001);
 		return versions;
 	}
 
@@ -169,6 +173,24 @@ public class SupportedCamelVersions {
 		versions.put(CAMEL_2_23_2_FUSE_770010_REDHAT_00001, CAMEL_2_23_2_FUSE_770010_REDHAT_00001 + " (Fuse 7.7.0 GA)");
 		versions.put(CAMEL_2_23_2_FUSE_780036_REDHAT_00001, CAMEL_2_23_2_FUSE_780036_REDHAT_00001 + " (Fuse 7.8.0 GA)");
 		versions.put(CAMEL_2_23_2_FUSE_790054_REDHAT_00001, CAMEL_2_23_2_FUSE_790054_REDHAT_00001 + " (Fuse 7.9.0 GA)");
+		versions.put(CAMEL_2_23_2_FUSE_7_10_0_00020_REDHAT_00001, CAMEL_2_23_2_FUSE_7_10_0_00020_REDHAT_00001 + " (Fuse 7.10.0 GA)");
 		return versions;
+	}
+
+	public static String getFuseVersionFromString(String camelVersion) {
+
+		String fuseVersion = null;
+		Pattern p = Pattern.compile("(?<=fuse-)\\d+\\w+");
+		Matcher m = p.matcher(camelVersion);
+		m.find();
+
+		if(camelVersion.contains("_")) { // handle f.e. 2.23.2.fuse-7_10_0-00020-redhat-00001
+			fuseVersion = m.group(0).replaceAll("_", ".");
+		} else {
+			fuseVersion = m.group(0).substring(0, 1) + "." + m.group(0).substring(1, 2) + "."
+					+ m.group(0).substring(2, 3);
+		}
+
+		return fuseVersion;
 	}
 }

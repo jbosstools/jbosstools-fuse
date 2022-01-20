@@ -13,6 +13,7 @@ package org.jboss.tools.fuse.ui.bot.tests;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.jboss.tools.fuse.reddeer.ProjectTemplate.EMPTY_BLUEPRINT;
 import static org.jboss.tools.fuse.reddeer.ProjectTemplate.SPRINGBOOT;
+import static org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizard.SHELL_NAME;
 import static org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardDeploymentType.STANDALONE;
 import static org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardRuntimeType.KARAF;
 import static org.junit.Assert.assertEquals;
@@ -41,16 +42,17 @@ import org.eclipse.reddeer.swt.impl.tree.DefaultTree;
 import org.eclipse.reddeer.workbench.core.condition.JobIsRunning;
 import org.eclipse.reddeer.workbench.handler.WorkbenchShellHandler;
 import org.jboss.tools.fuse.reddeer.FileUtils;
-import org.jboss.tools.fuse.reddeer.LogGrapper;
 import org.jboss.tools.fuse.reddeer.ResourceHelper;
 import org.jboss.tools.fuse.reddeer.SupportedCamelVersions;
 import org.jboss.tools.fuse.reddeer.dialog.WhereToFindMoreTemplatesMessageDialog;
-import org.jboss.tools.fuse.reddeer.utils.JDK8Check;
+import org.jboss.tools.fuse.reddeer.utils.JDKCheck;
+import org.jboss.tools.fuse.reddeer.utils.JDKTemplateCompatibleChecker;
 import org.jboss.tools.fuse.reddeer.utils.LogChecker;
 import org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizard;
 import org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardAdvancedPage;
 import org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardFirstPage;
 import org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardRuntimePage;
+import org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardRuntimeType;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -88,6 +90,10 @@ public class NewFuseProjectWizardTest {
 	 */
 	@Test
 	public void testDifferentWorkspaceLocation() {
+		boolean hasJava8 = JDKCheck.isJava8Available();
+		boolean hasJava11 = JDKCheck.isJava11Available();
+		boolean hasJava17 = JDKCheck.isJava17Available();
+
 		File targetLocation = new File(
 				ResourceHelper.getResourceAbsolutePath(Activator.PLUGIN_ID, "resources/projects") + "/test");
 		NewFuseIntegrationProjectWizard wiz = new NewFuseIntegrationProjectWizard();
@@ -99,13 +105,22 @@ public class NewFuseProjectWizardTest {
 		firstPage.useDefaultLocation(false);
 		firstPage.setLocation(targetLocation.getAbsolutePath());
 		wiz.next();
+		NewFuseIntegrationProjectWizardRuntimePage secondPage = new NewFuseIntegrationProjectWizardRuntimePage(wiz);
+		String camelVersion = secondPage.getSelectedCamelVersion();
 		wiz.next();
 		NewFuseIntegrationProjectWizardAdvancedPage lastPage = new NewFuseIntegrationProjectWizardAdvancedPage(wiz);
 		lastPage.selectTemplate(SPRINGBOOT);
 		new FinishButton(wiz).click();
+
+		JDKTemplateCompatibleChecker jdkChecker = new JDKTemplateCompatibleChecker(NewFuseIntegrationProjectWizardRuntimeType.SPRINGBOOT, camelVersion);
+		jdkChecker.handleNoStrictlyCompliantJRETemplates(hasJava8, hasJava11, hasJava17);
+
+		new WaitWhile(new JobIsRunning(), TimePeriod.VERY_LONG);
+		new WaitWhile(new ShellIsAvailable("New Fuse Integration Project"), TimePeriod.getCustom(1200));
+
 		File actualLocation = new File(Project.getLocation("test"));
 		assertEquals("Location of a project is different!", targetLocation, actualLocation);
-		assertTrue("There are some errors in Error Log", LogGrapper.getPluginErrors("fuse").size() == 0);
+		LogChecker.assertNoFuseError();
 	}
 
 	/**
@@ -125,7 +140,12 @@ public class NewFuseProjectWizardTest {
 	 */
 	@Test
 	public void testCamelVersion() {
-		boolean hasJava8 = JDK8Check.isJava8Available();
+		String testCamelVersion = SupportedCamelVersions.CAMEL_LATEST;
+
+		boolean hasJava8 = JDKCheck.isJava8Available();
+		boolean hasJava11 = JDKCheck.isJava11Available();
+		boolean hasJava17 = JDKCheck.isJava17Available();
+
 		NewFuseIntegrationProjectWizard wiz = new NewFuseIntegrationProjectWizard();
 		wiz.open();
 		NewFuseIntegrationProjectWizardFirstPage firstPage = new NewFuseIntegrationProjectWizardFirstPage(wiz);
@@ -134,22 +154,22 @@ public class NewFuseProjectWizardTest {
 		NewFuseIntegrationProjectWizardRuntimePage secondPage = new NewFuseIntegrationProjectWizardRuntimePage(wiz);
 		secondPage.setDeploymentType(STANDALONE);
 		secondPage.setRuntimeType(KARAF);
-		secondPage.typeCamelVersion("2.17.3");
+		secondPage.selectCamelVersion(SupportedCamelVersions.getCamelVersionsWithLabels().get(testCamelVersion));
 		wiz.next();
 		NewFuseIntegrationProjectWizardAdvancedPage lastPage = new NewFuseIntegrationProjectWizardAdvancedPage(wiz);
 		lastPage.selectTemplate(EMPTY_BLUEPRINT);
 		new FinishButton(wiz).click();
-		if (!hasJava8) {
-			JDK8Check.handleMissingJava8();
-		}
+
+		JDKTemplateCompatibleChecker jdkChecker = new JDKTemplateCompatibleChecker(KARAF, testCamelVersion);
+		jdkChecker.handleNoStrictlyCompliantJRETemplates(hasJava8, hasJava11, hasJava17);
 
 		new WaitWhile(new JobIsRunning(), TimePeriod.VERY_LONG);
-		new WaitWhile(new ShellIsAvailable("New Fuse Integration Project"), TimePeriod.getCustom(1200));
+		new WaitWhile(new ShellIsAvailable(SHELL_NAME), TimePeriod.getCustom(1200));
 		assertFalse("Project was created with errors", hasErrors());
-		assertTrue("There are some errors in Error Log", LogGrapper.getPluginErrors("fuse").size() == 0);
+		LogChecker.assertNoFuseError();
 		try {
 			String pom = FileUtils.getFileContent(Project.getLocation("test") + "/pom.xml");
-			assertTrue(pom.contains("<version>2.17.3</version>"));
+			assertTrue(pom.contains("<camel.version>" + testCamelVersion + "</camel.version>"));
 		} catch (IOException e) {
 			fail("Cannot access project's pom.xml file!");
 		}
@@ -180,6 +200,7 @@ public class NewFuseProjectWizardTest {
 		wiz.next();
 		NewFuseIntegrationProjectWizardRuntimePage secondPage = new NewFuseIntegrationProjectWizardRuntimePage(wiz);
 		List<String> versions = secondPage.getAllAvailableCamelVersions();
+		wiz.cancel();
 		Collection<String> supported = SupportedCamelVersions.getCamelVersions();
 		List<String> missing = new ArrayList<>();
 		for (String sup : supported) {

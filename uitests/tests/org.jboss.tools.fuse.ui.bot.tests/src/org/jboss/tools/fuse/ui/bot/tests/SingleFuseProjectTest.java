@@ -20,6 +20,7 @@ import static org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizar
 import static org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardRuntimeType.SPRINGBOOT;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assume.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -33,6 +34,7 @@ import org.eclipse.reddeer.core.exception.CoreLayerException;
 import org.eclipse.reddeer.eclipse.exception.EclipseLayerException;
 import org.eclipse.reddeer.eclipse.ui.console.ConsoleView;
 import org.eclipse.reddeer.eclipse.ui.navigator.resources.ProjectExplorer;
+import org.eclipse.reddeer.eclipse.ui.problems.Problem;
 import org.eclipse.reddeer.eclipse.ui.views.markers.ProblemsView;
 import org.eclipse.reddeer.eclipse.ui.views.markers.ProblemsView.ProblemType;
 import org.eclipse.reddeer.junit.internal.runner.ParameterizedRequirementsRunnerFactory;
@@ -41,10 +43,12 @@ import org.eclipse.reddeer.requirements.cleanworkspace.CleanWorkspaceRequirement
 import org.eclipse.reddeer.workbench.impl.shell.WorkbenchShell;
 import org.eclipse.reddeer.workbench.ui.dialogs.WorkbenchPreferenceDialog;
 import org.jboss.tools.fuse.reddeer.ProjectType;
+import org.jboss.tools.fuse.reddeer.SupportedCamelVersions;
 import org.jboss.tools.fuse.reddeer.editor.CamelEditor;
 import org.jboss.tools.fuse.reddeer.preference.StagingRepositoriesPreferencePage;
 import org.jboss.tools.fuse.reddeer.projectexplorer.CamelProject;
 import org.jboss.tools.fuse.reddeer.utils.FuseProjectDefinition;
+import org.jboss.tools.fuse.reddeer.utils.JDKCheck;
 import org.jboss.tools.fuse.reddeer.utils.ProjectFactory;
 import org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizard;
 import org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardAdvancedPage;
@@ -121,7 +125,12 @@ public class SingleFuseProjectTest extends DefaultTest {
 		NewFuseIntegrationProjectWizardRuntimePage secondPage = new NewFuseIntegrationProjectWizardRuntimePage(wiz);
 		secondPage.setDeploymentType(deploymentType);
 		secondPage.setRuntimeType(runtimeType);
-		secondPage.typeCamelVersion(CAMEL_VERSION);
+		String camelVersion = SupportedCamelVersions.getCamelVersionsWithLabels().get(CAMEL_VERSION);
+		if(camelVersion != null) {
+			secondPage.selectCamelVersion(camelVersion);
+		} else {
+			secondPage.typeCamelVersion(CAMEL_VERSION);
+		}
 		wiz.next();
 		NewFuseIntegrationProjectWizardAdvancedPage lastPage = new NewFuseIntegrationProjectWizardAdvancedPage(wiz);
 		List<FuseProjectDefinition> projects = new ArrayList<>();
@@ -174,14 +183,12 @@ public class SingleFuseProjectTest extends DefaultTest {
 	}
 
 	private void createProject(FuseProjectDefinition project) {
-
 		ProjectFactory.newProject(PROJECT_NAME).deploymentType(project.getDeploymentType())
 				.runtimeType(project.getRuntimeType()).version(project.getCamelVersion())
 				.template(project.getTemplate()).create();
 	}
 
 	private boolean hasErrors() {
-
 		ProblemsView view = new ProblemsView();
 		view.close();
 		AbstractWait.sleep(TimePeriod.getCustom(5));
@@ -190,12 +197,10 @@ public class SingleFuseProjectTest extends DefaultTest {
 	}
 
 	private boolean isPresent(String name) {
-
 		return new ProjectExplorer().containsProject(name);
 	}
 
 	private boolean canBeRun(String name) {
-
 		try {
 			log.info("Trying to run the project as Local Camel Context");
 			try {
@@ -208,7 +213,9 @@ public class SingleFuseProjectTest extends DefaultTest {
 			if (console.getConsoleText().contains("BUILD FAILURE") || console.getConsoleText().contains("[ERROR]")
 					|| console.consoleIsTerminated()) {
 				log.warn("There is a problem with building '" + name + "' project");
-				return false;
+				if(!console.getConsoleText().contains("[ERROR] WARNING:")) {
+					return false;
+				}
 			}
 		} catch (EclipseLayerException e) {
 			log.warn("There is no Camel Context file in '" + name + "' project");
@@ -221,7 +228,6 @@ public class SingleFuseProjectTest extends DefaultTest {
 	}
 
 	private boolean isEditorOK() {
-
 		/*
 		 * Possible variants of Camel Context XML, for Fuse project types Spring DSL and Blueprint DSL
 		 */
@@ -267,13 +273,16 @@ public class SingleFuseProjectTest extends DefaultTest {
 	 */
 	@Test
 	public void testArchetype() {
+		assumeTrue("Please see https://issues.redhat.com/browse/FUSETOOLS-3373", !issue_3373());
 		createProject(project);
 		assertTrue("Project '" + project + "' is not present in Project Explorer", isPresent(PROJECT_NAME));
 		if (hasErrors()) {
 			log.warn("Project '" + project + "' was created with errors! Trying to update the project.");
 			new CamelProject(PROJECT_NAME).update();
 		}
-		assertFalse("Project '" + project + "' was created with errors", hasErrors());
+		if(!issue_3258()) {
+			assertFalse("Project '" + project + "' was created with errors", hasErrors());
+		}
 		if (project.getDsl() != JAVA) {
 			assertTrue("Project '" + project + "' has something with Camel Editor", isEditorOK());
 			if (project.getTemplate()[project.getTemplate().length - 1].toLowerCase().contains("empty")
@@ -281,8 +290,56 @@ public class SingleFuseProjectTest extends DefaultTest {
 							.contains("spring bean - spring dsl") && project.getRuntimeType().equals(EAP)) {
 				return;
 			}
-			assertTrue("Project '" + project + "' cannot be run as Local Camel Context", canBeRun(PROJECT_NAME));
+			if(!issue_3213()) {
+				assertTrue("Project '" + project + "' cannot be run as Local Camel Context", canBeRun(PROJECT_NAME));
+			}
 		}
 
 	}
+
+	/**
+	 * ActiveMQ template - Spring and Blueprint DSL - Camel 2.15.x, 2.17.x, 2.18.x is created with errors
+	 * Please see https://issues.jboss.org/browse/FUSETOOLS-3258
+	 *
+	 * @return true/false
+	 */
+	private boolean issue_3258() {
+		ProblemsView view = new ProblemsView();
+		view.open();
+		List<Problem> errors = view.getProblems(ProblemType.ERROR);
+		for (Problem problem : errors) {
+			if (!"Language Servers".equals(problem.getType())) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	/**
+	 * Fuse Integration Project - FIS example is not working with JDK 11
+	 * Please see https://issues.jboss.org/browse/FUSETOOLS-3213
+	 *
+	 * @return true/false
+	 */
+	private boolean issue_3213() {
+		if (!JDKCheck.isJava8Available() && project.getCamelVersion().startsWith("2.18.1") && "Spring Boot".equals(project.getRuntimeType().getLabel())) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Fuse Integration Project is created with error for camel version Fuse 7.2 and 7.1 with java 11
+	 * Please see https://issues.redhat.com/browse/FUSETOOLS-3373
+	 *
+	 * @return true/false
+	 */
+	private boolean issue_3373() {
+		String camelVersion = project.getCamelVersion();
+		if ((camelVersion.contains("710018") || camelVersion.contains("720050")) && "Karaf/Fuse on Karaf".equals(project.getRuntimeType().getLabel())) {
+			return true;
+		}
+		return false;
+	}
+
 }
