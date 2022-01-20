@@ -12,7 +12,6 @@ package org.jboss.tools.fuse.ui.bot.tests;
 
 import static org.jboss.tools.fuse.reddeer.ProjectTemplate.SPRINGBOOT;
 import static org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardDeploymentType.OPENSHIFT;
-import static org.junit.Assert.assertTrue;
 
 import org.eclipse.reddeer.common.wait.TimePeriod;
 import org.eclipse.reddeer.common.wait.WaitUntil;
@@ -25,13 +24,13 @@ import org.eclipse.reddeer.junit.requirement.inject.InjectRequirement;
 import org.eclipse.reddeer.junit.runner.RedDeerSuite;
 import org.eclipse.reddeer.requirements.openperspective.OpenPerspectiveRequirement.OpenPerspective;
 import org.eclipse.reddeer.workbench.impl.shell.WorkbenchShell;
-import org.jboss.tools.fuse.reddeer.LogGrapper;
 import org.jboss.tools.fuse.reddeer.launchconfigurations.DefaultLaunchConfigurationJRETab;
 import org.jboss.tools.fuse.reddeer.launchconfigurations.MavenBuildLaunchConfiguration;
 import org.jboss.tools.fuse.reddeer.perspectives.FuseIntegrationPerspective;
 import org.jboss.tools.fuse.reddeer.preference.ConsolePreferenceUtil;
 import org.jboss.tools.fuse.reddeer.requirement.OpenShiftRequirement;
 import org.jboss.tools.fuse.reddeer.requirement.OpenShiftRequirement.OpenShift;
+import org.jboss.tools.fuse.reddeer.utils.LogChecker;
 import org.jboss.tools.fuse.reddeer.utils.ProjectFactory;
 import org.jboss.tools.fuse.reddeer.view.OpenShiftExplorer;
 import org.jboss.tools.fuse.reddeer.wizard.CreateOpenShiftProjectWizard;
@@ -42,6 +41,8 @@ import org.junit.runner.RunWith;
 
 /**
  * Tests deployment of a Fuse Integration Project to OpenShift
+ *
+ * Using OCP 4.6 CodeReady Studio QE team cluster - https://console-openshift-console.apps.openshift4.cluster.adapters-crs-qe.com/
  * 
  * @author tsedmik
  */
@@ -54,11 +55,12 @@ public class FuseOnOpenShiftTest {
 	public static final String DEPLOYMENT_OK2 = "timer://foo] INFO  simple-route - >>>";
 	public static final String DEPLOYMENT_OK = "INFO  org.mycompany.Application - Started Application in";
 	public static final String OPENSHIFT_DEPLOYMENT = "camel-ose-springboot-xml";
-	public static final String OPENSHIFT_PROJECT_NAME = "test";
-	public static final String USERNAME = "developer-fuse";
+	public static final String OPENSHIFT_PROJECT_NAME = "fuse-tooling-test";
 	public static final String PROJECT_NAME = "test-ose";
-	public static final String MAVEN_BUILD_CONF = "Deploy test-ose on OpenShift";
+	public static final String MAVEN_BUILD_CONF = "Deploy " + PROJECT_NAME + " on OpenShift";
 	public static final String IP_MATCH_REGEX = "https:\\/\\/(?:[0-9]{1,3}.){4}:[0-9]{1,4}";
+	private final String USERNAME = openShift.getConfiguration().getUsername();
+	private final String PASSWORD = openShift.getConfiguration().getPassword();
 	private final String OPENSHIFT_URL = "https://" + openShift.getConfiguration().getHost() + ":"
 			+ openShift.getConfiguration().getPort();
 	private final String OPENSHIFT_CONNECTION = USERNAME + " " + OPENSHIFT_URL;
@@ -135,14 +137,16 @@ public class FuseOnOpenShiftTest {
 		// change VM arguments 'kubernetes.master' and 'kubernetes.auth.basic.username'
 		String vmArgs = jreTab.getTextVMArgumentsTXT();
 		vmArgs = vmArgs.replaceFirst(IP_MATCH_REGEX, OPENSHIFT_URL);
+		vmArgs = vmArgs.replaceFirst("test", OPENSHIFT_PROJECT_NAME);
 		vmArgs = vmArgs.replaceFirst("developer", USERNAME);
+		vmArgs = vmArgs.replaceFirst("developer", PASSWORD);
 		jreTab.setTextVMArgumentsTXT(vmArgs);
 		jreTab.clickApplyBTN();
 
 		// run the build and wait until the end of the build
 		dialog.run();
 		new ConsoleView().open();
-		new WaitUntil(new ConsoleHasText(BUILD_OK), TimePeriod.getCustom(600));
+		new WaitUntil(new ConsoleHasText(BUILD_OK), TimePeriod.getCustom(1200));
 
 		// check the deployment
 		explorer.activate();
@@ -151,6 +155,6 @@ public class FuseOnOpenShiftTest {
 		explorer.activate();
 		explorer.openPodLog(OPENSHIFT_CONNECTION, OPENSHIFT_PROJECT_NAME, OPENSHIFT_DEPLOYMENT);
 		new WaitUntil(new ConsoleHasText(DEPLOYMENT_OK2));
-		assertTrue("There are some errors in Error Log", LogGrapper.getPluginErrors("fuse").size() == 0);
+		LogChecker.assertNoFuseError();
 	}
 }
