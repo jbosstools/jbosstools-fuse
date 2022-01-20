@@ -10,6 +10,7 @@
  ******************************************************************************/
 package org.jboss.tools.fuse.ui.bot.tests;
 
+import static org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizard.SHELL_NAME;
 import static org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardDeploymentType.OPENSHIFT;
 import static org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardDeploymentType.STANDALONE;
 import static org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardRuntimeType.EAP;
@@ -21,13 +22,19 @@ import java.io.IOException;
 
 import org.eclipse.reddeer.common.wait.TimePeriod;
 import org.eclipse.reddeer.common.wait.WaitUntil;
+import org.eclipse.reddeer.common.wait.WaitWhile;
 import org.eclipse.reddeer.swt.condition.ShellIsAvailable;
+import org.eclipse.reddeer.swt.impl.button.FinishButton;
+import org.eclipse.reddeer.workbench.core.condition.JobIsRunning;
 import org.jboss.tools.fuse.reddeer.FileUtils;
 import org.jboss.tools.fuse.reddeer.ResourceHelper;
+import org.jboss.tools.fuse.reddeer.SupportedCamelVersions;
 import org.jboss.tools.fuse.reddeer.editor.CamelEditor;
 import org.jboss.tools.fuse.reddeer.editor.DataTransformationEditor;
 import org.jboss.tools.fuse.reddeer.editor.SourceEditor;
 import org.jboss.tools.fuse.reddeer.projectexplorer.CamelProject;
+import org.jboss.tools.fuse.reddeer.utils.JDKCheck;
+import org.jboss.tools.fuse.reddeer.utils.JDKTemplateCompatibleChecker;
 import org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizard;
 import org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardAdvancedPage;
 import org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardDeploymentType;
@@ -122,6 +129,10 @@ public class DataTransformationDefaultTest extends DefaultTest {
 	 *                 Name of the Fuse Integration Project
 	 */
 	protected void createProject(String name) {
+		boolean hasJava8 = JDKCheck.isJava8Available();
+		boolean hasJava11 = JDKCheck.isJava11Available();
+		boolean hasJava17 = JDKCheck.isJava17Available();
+
 		NewFuseIntegrationProjectWizardDeploymentType deploymentType = DEPLOYMENT_TYPE.equals("OpenShift") ? OPENSHIFT
 				: STANDALONE;
 		NewFuseIntegrationProjectWizardRuntimeType runtimeType;
@@ -147,7 +158,12 @@ public class DataTransformationDefaultTest extends DefaultTest {
 		NewFuseIntegrationProjectWizardRuntimePage secondPage = new NewFuseIntegrationProjectWizardRuntimePage(wiz);
 		secondPage.setDeploymentType(deploymentType);
 		secondPage.setRuntimeType(runtimeType);
-		secondPage.typeCamelVersion(CAMEL_VERSION);
+		String camelVersion = SupportedCamelVersions.getCamelVersionsWithLabels().get(CAMEL_VERSION);
+		if (camelVersion != null) {
+			secondPage.selectCamelVersion(camelVersion);
+		} else {
+			camelVersion = secondPage.getSelectedCamelVersion();
+		}
 		wiz.next();
 		NewFuseIntegrationProjectWizardAdvancedPage lastPage = new NewFuseIntegrationProjectWizardAdvancedPage(wiz);
 		if ("Standalone".equals(DEPLOYMENT_TYPE) && "Karaf".equals(RUNTIME_TYPE)) {
@@ -159,7 +175,13 @@ public class DataTransformationDefaultTest extends DefaultTest {
 		} else {
 			lastPage.selectTemplate(lastPage.getAllAvailableTemplates().get(0));
 		}
-		wiz.finish(TimePeriod.VERY_LONG);
+		new FinishButton(wiz).click();
+
+		JDKTemplateCompatibleChecker jdkChecker = new JDKTemplateCompatibleChecker(runtimeType, camelVersion);
+		jdkChecker.handleNoStrictlyCompliantJRETemplates(hasJava8, hasJava11, hasJava17);
+
+		new WaitWhile(new JobIsRunning(), TimePeriod.LONG);
+		new WaitWhile(new ShellIsAvailable(SHELL_NAME), TimePeriod.getCustom(900));
 	}
 
 	/**

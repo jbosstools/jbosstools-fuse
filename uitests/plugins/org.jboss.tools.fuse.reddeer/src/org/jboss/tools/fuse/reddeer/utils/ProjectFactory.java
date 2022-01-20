@@ -14,14 +14,13 @@ import static org.jboss.tools.fuse.reddeer.ProjectTemplate.SPRINGBOOT;
 import static org.jboss.tools.fuse.reddeer.ProjectType.BLUEPRINT;
 import static org.jboss.tools.fuse.reddeer.ProjectType.JAVA;
 import static org.jboss.tools.fuse.reddeer.ProjectType.SPRING;
+import static org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizard.SHELL_NAME;
 import static org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardDeploymentType.OPENSHIFT;
 import static org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardDeploymentType.STANDALONE;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.eclipse.reddeer.common.wait.AbstractWait;
 import org.eclipse.reddeer.common.wait.TimePeriod;
@@ -48,7 +47,6 @@ import org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardDeploy
 import org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardFirstPage;
 import org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardRuntimePage;
 import org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardRuntimeType;
-import org.osgi.framework.Version;
 
 /**
  * Can create new Fuse projects or import existing
@@ -90,7 +88,9 @@ public class ProjectFactory {
 	public void create() {
 
 		PreferencesUtil.setOpenAssociatedPerspective("never");
-		boolean hasJava8 = JDK8Check.isJava8Available();
+		boolean hasJava8 = JDKCheck.isJava8Available();
+		boolean hasJava11 = JDKCheck.isJava11Available();
+		boolean hasJava17 = JDKCheck.isJava17Available();
 
 		NewFuseIntegrationProjectWizard wiz = new NewFuseIntegrationProjectWizard();
 		wiz.open();
@@ -104,8 +104,7 @@ public class ProjectFactory {
 		if (camelVersion != null) {
 			secondPage.selectCamelVersion(camelVersion);
 		} else {
-			secondPage.selectCamelVersion(
-					SupportedCamelVersions.getCamelVersionsWithLabels().get("2.23.2.fuse-790054-redhat-00001"));
+			camelVersion = secondPage.getSelectedCamelVersion();
 		}
 		if (deploymentType != null) {
 			secondPage.setDeploymentType(deploymentType);
@@ -123,18 +122,11 @@ public class ProjectFactory {
 		}
 		new FinishButton(wiz).click();
 
-		if (camelVersion != null) {
-			if (!hasJava8 && new Version(getFuseVersionFromString(camelVersion)).compareTo(new Version("7.9.0")) < 0) {
-				JDK8Check.handleMissingJava8();
-			}
-		} else {
-			if (!hasJava8) {
-				JDK8Check.handleMissingJava8();
-			}
-		}
+		JDKTemplateCompatibleChecker jdkChecker = new JDKTemplateCompatibleChecker(runtimeType, camelVersion);
+		jdkChecker.handleNoStrictlyCompliantJRETemplates(hasJava8, hasJava11, hasJava17);
 
 		new WaitWhile(new JobIsRunning(), TimePeriod.LONG);
-		new WaitWhile(new ShellIsAvailable("New Fuse Integration Project"), TimePeriod.getCustom(900));
+		new WaitWhile(new ShellIsAvailable(SHELL_NAME), TimePeriod.getCustom(900));
 	}
 
 	public static ProjectFactory newProject(String name) {
@@ -269,21 +261,4 @@ public class ProjectFactory {
 		return templates;
 	}
 
-	private static String getFuseVersionFromString(String camelVersion) {
-
-		String fuseVersion = null;
-		Pattern p = Pattern.compile("(?<=fuse-)\\d+");
-		Matcher m = p.matcher(camelVersion);
-		m.find();
-
-		if (m.group(0).length() == 6) {
-			fuseVersion = m.group(0).substring(0, 1) + "." + m.group(0).substring(1, 2) + "."
-					+ m.group(0).substring(2, 3);
-		} else if (m.group(0).length() == 7) { // handle f.e. 7.10.0
-			fuseVersion = m.group(0).substring(0, 1) + "." + m.group(0).substring(1, 3) + "."
-					+ m.group(0).substring(3, 4);
-		}
-
-		return fuseVersion;
-	}
 }

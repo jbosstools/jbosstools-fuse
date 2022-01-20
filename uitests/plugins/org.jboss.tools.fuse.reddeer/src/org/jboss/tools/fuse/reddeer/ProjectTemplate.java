@@ -23,5 +23,6 @@ public class ProjectTemplate {
 	public static final String[] AMQ_SPRING = {"Beginner", "ActiveMQ - Spring DSL"};
 	public static final String[] CXF_BLUEPRINT = {"Advanced", "CXF code first - Blueprint DSL"};
 	public static final String[] CXF_SPRING = {"Advanced", "CXF code first - Spring DSL"};
+	public static final String[] CXF_JAVA = {"Advanced", "CXF code first - JAVA DSL"};
 	public static final String[] EAP_SPRING = {"Spring Bean - Spring DSL"};
 }
