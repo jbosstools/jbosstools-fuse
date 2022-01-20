@@ -35,10 +35,13 @@ import org.eclipse.reddeer.junit.runner.RedDeerSuite;
 import org.eclipse.reddeer.requirements.cleanerrorlog.CleanErrorLogRequirement;
 import org.eclipse.reddeer.requirements.cleanworkspace.CleanWorkspaceRequirement;
 import org.eclipse.reddeer.requirements.cleanworkspace.CleanWorkspaceRequirement.CleanWorkspace;
+import org.eclipse.reddeer.requirements.jre.JRERequirement.JRE;
 import org.eclipse.reddeer.requirements.openperspective.OpenPerspectiveRequirement.OpenPerspective;
 import org.jboss.tools.fuse.reddeer.ProjectType;
 import org.jboss.tools.fuse.reddeer.ResourceHelper;
+import org.jboss.tools.fuse.reddeer.SupportedCamelVersions;
 import org.jboss.tools.fuse.reddeer.perspectives.FuseIntegrationPerspective;
+import org.jboss.tools.fuse.reddeer.projectexplorer.CamelProject;
 import org.jboss.tools.fuse.reddeer.requirement.FuseRequirement;
 import org.jboss.tools.fuse.reddeer.requirement.FuseRequirement.Fuse;
 import org.jboss.tools.fuse.reddeer.utils.FuseProjectDefinition;
@@ -74,6 +77,7 @@ import org.junit.runners.Parameterized.UseParametersRunnerFactory;
  * @author djelinek
  *
  */
+@JRE(setDefault = true)
 @CleanWorkspace
 @RunWith(RedDeerSuite.class)
 @Fuse(state = RUNNING)
@@ -139,7 +143,12 @@ public class DeploymentTest {
 		NewFuseIntegrationProjectWizardRuntimePage secondPage = new NewFuseIntegrationProjectWizardRuntimePage(wiz);
 		secondPage.setDeploymentType(deploymentType);
 		secondPage.setRuntimeType(runtimeType);
-		secondPage.typeCamelVersion(camelVersion);
+		String detectedCamelVersion = SupportedCamelVersions.getCamelVersionsWithLabels().get(camelVersion);
+		if(detectedCamelVersion != null) {
+			secondPage.selectCamelVersion(detectedCamelVersion);
+		} else {
+			secondPage.typeCamelVersion(camelVersion);
+		}
 		wiz.next();
 		NewFuseIntegrationProjectWizardAdvancedPage lastPage = new NewFuseIntegrationProjectWizardAdvancedPage(wiz);
 		List<FuseProjectDefinition> projects = new ArrayList<>();
@@ -176,6 +185,7 @@ public class DeploymentTest {
 		ProjectFactory.newProject(PROJECT_NAME).deploymentType(project.getDeploymentType())
 				.runtimeType(project.getRuntimeType()).version(project.getCamelVersion())
 				.template(project.getTemplate()).create();
+		new CamelProject(PROJECT_NAME).update();
 	}
 
 	@After
