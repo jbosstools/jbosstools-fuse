@@ -16,6 +16,7 @@ import static org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizar
 import static org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardRuntimeType.KARAF;
 import static org.junit.Assert.fail;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.List;
 
@@ -75,9 +76,9 @@ public class ComponentTest extends DefaultTest {
 		return components;
 	}
 
-	public ComponentTest(String component) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
+	public ComponentTest(String component) throws ClassNotFoundException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
 		Class<?> clazz = Class.forName("org.jboss.tools.fuse.reddeer.component." + component.replaceAll("\\s|-|\\(Secure\\)", ""));
-		this.component = (CamelComponent) clazz.newInstance();
+		this.component = (CamelComponent)clazz.getDeclaredConstructor().newInstance();
 	}
 
 	/**
