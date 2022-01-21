@@ -10,7 +10,6 @@
  ******************************************************************************/
 package org.jboss.tools.fuse.ui.bot.tests;
 
-import static org.jboss.tools.fuse.reddeer.SupportedCamelVersions.CAMEL_2_17_0_REDHAT_630187;
 import static org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardDeploymentType.STANDALONE;
 import static org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardRuntimeType.KARAF;
 import static org.junit.Assert.assertEquals;
@@ -38,15 +37,16 @@ import org.eclipse.reddeer.requirements.openperspective.OpenPerspectiveRequireme
 import org.eclipse.reddeer.swt.api.TreeItem;
 import org.eclipse.reddeer.swt.impl.styledtext.DefaultStyledText;
 import org.eclipse.reddeer.swt.impl.tree.DefaultTree;
-import org.jboss.tools.fuse.reddeer.JiraIssue;
 import org.jboss.tools.fuse.reddeer.LogGrapper;
 import org.jboss.tools.fuse.reddeer.ProjectTemplate;
 import org.jboss.tools.fuse.reddeer.debug.IsRunning;
 import org.jboss.tools.fuse.reddeer.debug.StepOverButton;
 import org.jboss.tools.fuse.reddeer.editor.CamelEditor;
 import org.jboss.tools.fuse.reddeer.projectexplorer.CamelProject;
+import org.jboss.tools.fuse.reddeer.utils.LogChecker;
 import org.jboss.tools.fuse.reddeer.utils.ProjectFactory;
 import org.junit.After;
+import org.junit.Assume;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -75,7 +75,7 @@ public class DebuggerTest extends DefaultTest {
 	public static void setupInitial() {
 
 		ProjectFactory.newProject(PROJECT_NAME).deploymentType(STANDALONE).runtimeType(KARAF)
-				.version(CAMEL_2_17_0_REDHAT_630187).template(ProjectTemplate.CBR_SPRING).create();
+				.template(ProjectTemplate.CBR_SPRING).create();
 		CamelEditor editor = new CamelEditor(CAMEL_CONTEXT);
 		editor.selectEditPart("file:work/cbr/input");
 		editor.setProperty("Uri *", "file:src/main/data?noop=true");
@@ -149,7 +149,7 @@ public class DebuggerTest extends DefaultTest {
 		view.open();
 		view.getBreakpoint(LOG_ID).remove();
 		assertFalse(editor.isBreakpointSet(LOG));
-		assertTrue(LogGrapper.getPluginErrors("fuse").size() == 0);
+		LogChecker.assertNoFuseError();
 	}
 
 	/**
@@ -261,8 +261,8 @@ public class DebuggerTest extends DefaultTest {
 		// all breakpoints should be processed
 		new WaitUntil(new IsRunning(), TimePeriod.DEFAULT);
 		new TerminateButton().click();
-		testIssue2306();
-		assertTrue(LogGrapper.getPluginErrors("fuse").size() == 0);
+		Assume.assumeFalse(testIssue2306());
+		LogChecker.assertNoFuseError();
 	}
 
 	/**
@@ -315,22 +315,23 @@ public class DebuggerTest extends DefaultTest {
 		assertTrue(new ConsoleHasText("Receiving order order3.xml").test());
 		assertTrue(new ConsoleHasText("Receiving order order4.xml").test());
 		new TerminateButton().click();
-		testIssue2306();
-		assertTrue(LogGrapper.getPluginErrors("fuse").size() == 0);
+		Assume.assumeFalse(testIssue2306());
+		LogChecker.assertNoFuseError();
 	}
 
 	/**
 	 * https://issues.jboss.org/browse/FUSETOOLS-2306
 	 */
-	private void testIssue2306() {
+	private boolean testIssue2306() {
 		List<LogMessage> errors = LogGrapper.getPluginErrors("fuse");
 		if (errors.isEmpty()) {
-			return;
+			return false;
 		}
 		for (LogMessage msg : errors) {
 			if (msg.getMessage().contains("Connection refused to host")) {
-				throw new JiraIssue("FUSETOOLS-2306");
+				return true;
 			}
 		}
+		return false;
 	}
 }
