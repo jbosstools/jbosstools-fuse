@@ -11,10 +11,10 @@
 package org.jboss.tools.fuse.ui.bot.tests;
 
 import static org.jboss.tools.fuse.reddeer.ProjectTemplate.CBR_SPRING;
-import static org.jboss.tools.fuse.reddeer.SupportedCamelVersions.CAMEL_2_17_0_REDHAT_630187;
 import static org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardDeploymentType.STANDALONE;
 import static org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardRuntimeType.KARAF;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assume.assumeFalse;
 import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
@@ -37,7 +37,6 @@ import org.eclipse.reddeer.requirements.cleanworkspace.CleanWorkspaceRequirement
 import org.eclipse.reddeer.requirements.openperspective.OpenPerspectiveRequirement.OpenPerspective;
 import org.eclipse.reddeer.swt.impl.tree.DefaultTree;
 import org.eclipse.reddeer.workbench.impl.shell.WorkbenchShell;
-import org.jboss.tools.fuse.reddeer.JiraIssue;
 import org.jboss.tools.fuse.reddeer.condition.TreeHasItem;
 import org.jboss.tools.fuse.reddeer.editor.CamelDataFormatDialog;
 import org.jboss.tools.fuse.reddeer.editor.CamelEditor;
@@ -77,28 +76,54 @@ public class ConfigurationsEditorDataFormatTest {
 	private String dataFormatName;
 	private String[] path;
 
-	private List<String> availableDataFormats = Arrays.asList("avro - Camel Avro data format",
-			"barcode - Camel Barcode (e.g. QRcode, PDF417, DataMatrix) support",
-			"base64 - Camel Base64 data format support", "beanio - Camel BeanIO data format support",
-			"bindy-csv - Camel Bindy data format support", "bindy-fixed - Camel Bindy data format support",
-			"bindy-kvp - Camel Bindy data format support", "boon - Camel Boon support",
-			"castor - Camel Castor data format support", "crypto - Camel Cryptographic Support",
-			"csv - Camel CSV data format support", "flatpack - Camel FlatPack support",
-			"gzip - The Core Camel Java DSL based router", "hessian - Hessian serialization support",
-			"hl7 - Camel HL7 support", "ical - Camel iCal component", "jacksonxml - Camel Jackson XML support",
-			"jaxb - Camel JAXB support", "jibx - Camel Jibx support", "json-gson - Camel Gson support",
-			"json-jackson - Camel Jackson support", "json-xstream - Camel XStream support", "lzf - Camel LZF support",
-			"mime-multipart - Camel Mail support", "pgp - Camel Cryptographic Support", "protobuf - Camel Components",
-			"rss - Camel RSS support", "secureXML - Camel Partial XML Encryption/Decryption and XML Signature support",
-			"serialization - The Core Camel Java DSL based router", "soapjaxb - Camel SOAP support",
-			"string - The Core Camel Java DSL based router", "syslog - Camel Syslog support",
-			"tarfile - Camel Tar file support", "tidyMarkup - Camel TagSoup support",
-			"univocity-csv - Camel UniVocity parsers data format support",
-			"univocity-fixed - Camel UniVocity parsers data format support",
-			"univocity-tsv - Camel UniVocity parsers data format support", "xmlBeans - Camel XMLBeans support",
-			"xmljson - Camel XML JSON Data Format", "xmlrpc - Camel XML RPC support", "xstream - Camel XStream support",
-			"yaml-snakeyaml - Camel SnakeYAML support", "zip - The Core Camel Java DSL based router",
-			"zipfile - Camel Zip file support");
+	private List<String> availableDataFormats = Arrays.asList(
+			"avro - The Avro data format is used for serialization and deserialization of messages using Apache Avro binary dataformat.",
+			"asn1 - The ASN.1 data format is used for file transfer with telecommunications protocols.",
+			"barcode - The Barcode data format is used for creating barccode images (such as QR-Code)",
+			"base64 - The Base64 data format is used for base64 encoding and decoding.",
+			"beanio - The BeanIO data format is used for working with flat payloads (such as CSV, delimited, or fixed length formats).",
+			"bindy-csv - The Bindy data format is used for working with flat payloads (such as CSV, delimited, fixed length formats, or FIX messages).",
+			"bindy-fixed - The Bindy data format is used for working with flat payloads (such as CSV, delimited, fixed length formats, or FIX messages).",
+			"bindy-kvp - The Bindy data format is used for working with flat payloads (such as CSV, delimited, fixed length formats, or FIX messages).",
+			"boon - Boon data format is used for unmarshal a JSon payload to POJO or to marshal POJO back to JSon payload.",
+			"castor - Castor data format is used for unmarshal a XML payload to POJO or to marshal POJO back to XML payload.",
+			"crypto - Crypto data format is used for encrypting and decrypting of messages using Java Cryptographic Extension.",
+			"csv - The CSV data format is used for handling CSV payloads.",
+			"flatpack - The Flatpack data format is used for working with flat payloads (such as CSV, delimited, or fixed length formats).",
+			"gzip - The GZip data format is a message compression and de-compression format (which works with the popular gzip/gunzip tools).",
+			"hessian - Hessian data format is used for marshalling and unmarshalling messages using Cauchos Hessian format.",
+			"hl7 - The HL7 data format can be used to marshal or unmarshal HL7 (Health Care) model objects.",
+			"ical - The iCal dataformat is used for working with iCalendar messages.",
+			"jacksonxml - JacksonXML data format is used for unmarshal a XML payload to POJO or to marshal POJO back to XML payload.",
+			"jaxb - JAXB data format uses the JAXB2 XML marshalling standard to unmarshal an XML payload into Java objects or to marshal Java objects into an XML payload.",
+			"jibx - JiBX data format is used for unmarshal a XML payload to POJO or to marshal POJO back to XML payload.",
+			"json-fastjson - JSon data format is used for unmarshal a JSon payload to POJO or to marshal POJO back to JSon payload.",
+			"json-gson - JSon data format is used for unmarshal a JSon payload to POJO or to marshal POJO back to JSon payload.",
+			"json-jackson - JSon data format is used for unmarshal a JSon payload to POJO or to marshal POJO back to JSon payload.",
+			"json-johnzon - JSon data format is used for unmarshal a JSon payload to POJO or to marshal POJO back to JSon payload.",
+			"json-xstream - JSon data format is used for unmarshal a JSon payload to POJO or to marshal POJO back to JSon payload.",
+			"lzf - The LZF data format is a message compression and de-compression format (uses the LZF deflate algorithm).",
+			"mime-multipart - The MIME Multipart data format can marshal a Camel message with attachments into a Camel message having a MIME-Multipart message as message body (and no attachments), and vise-versa when unmarshalling.",
+			"pgp - PGP data format is used for encrypting and decrypting of messages using Java Cryptographic Extension and PGP.",
+			"protobuf - The Protobuf data format is used for serializing between Java objects and the Google Protobuf protocol.",
+			"rss - RSS data format is used for working with RSS sync feed Java Objects and transforming to XML and vice-versa.",
+			"secureXML - The XML Security data format facilitates encryption and decryption of XML payloads.",
+			"serialization - Serialization is a data format which uses the standard Java Serialization mechanism to unmarshal a binary payload into Java objects or to marshal Java objects into a binary blob.",
+			"soapjaxb - SOAP is a data format which uses JAXB2 and JAX-WS annotations to marshal and unmarshal SOAP payloads.",
+			"string - String data format is a textual based format that supports character encoding.",
+			"syslog - The Syslog dataformat is used for working with RFC3164 and RFC5424 messages (logging and monitoring).",
+			"tarfile - The Tar File data format is a message compression and de-compression format of tar files.",
+			"thrift - The Thrift data format is used for serialization and deserialization of messages using Apache Thrift binary dataformat.",
+			"tidyMarkup - TidyMarkup data format is used for parsing HTML and return it as pretty well-formed HTML.",
+			"univocity-csv - The uniVocity CSV data format is used for working with CSV (Comma Separated Values) flat payloads.",
+			"univocity-fixed - The uniVocity Fixed Length data format is used for working with fixed length flat payloads.",
+			"univocity-tsv - The uniVocity TSV data format is used for working with TSV (Tabular Separated Values) flat payloads.",
+			"xmlBeans - XML Beans data format is used for unmarshal a XML payload to POJO or to marshal POJO back to XML payload.",
+			"xmljson - XML JSon data format can convert from XML to JSON and vice-versa directly, without stepping through intermediate POJOs.",
+			"xstream - XSTream data format is used for unmarshal a XML payload to POJO or to marshal POJO back to XML payload.",
+			"yaml-snakeyaml - YAML is a data format to marshal and unmarshal Java objects to and from YAML.",
+			"zip - Zip Deflate Compression data format is a message compression and de-compression format (not zip files).",
+			"zipfile - The Zip File data format is a message compression and de-compression format of zip files.");
 
 	/**
 	 * Sets parameters for parameterized test
@@ -254,9 +279,7 @@ public class ConfigurationsEditorDataFormatTest {
 			throw new RuntimeException(e);
 		}
 		boolean result = evalResult.equals(name);
-		if (!result) {
-			testIssue_1930();
-		}
+		assumeFalse("https://issues.jboss.org/browse/FUSETOOLS-1930", testIssue_1930());
 		assertEquals("DataFormat - " + name, expected, result);
 	}
 
@@ -265,8 +288,7 @@ public class ConfigurationsEditorDataFormatTest {
 	}
 
 	private static void createProject() {
-		ProjectFactory.newProject(PROJECT_NAME).deploymentType(STANDALONE).runtimeType(KARAF)
-				.version(CAMEL_2_17_0_REDHAT_630187).template(CBR_SPRING).create();
+		ProjectFactory.newProject(PROJECT_NAME).deploymentType(STANDALONE).runtimeType(KARAF).template(CBR_SPRING).create();
 	}
 
 	private void createDataFormat() {
@@ -288,9 +310,10 @@ public class ConfigurationsEditorDataFormatTest {
 	/**
 	 * https://issues.jboss.org/browse/FUSETOOLS-1930
 	 */
-	private void testIssue_1930() {
-		if (dataFormat.equals("zipfile - Camel Zip file support")) {
-			throw new JiraIssue("FUSETOOLS-1930");
+	private boolean testIssue_1930() {
+		if (dataFormat.contains("zipfile")) {
+			return true;
 		}
+		return false;
 	}
 }
