@@ -22,10 +22,8 @@ import java.io.IOException;
 
 import org.eclipse.reddeer.common.wait.TimePeriod;
 import org.eclipse.reddeer.common.wait.WaitUntil;
-import org.eclipse.reddeer.common.wait.WaitWhile;
 import org.eclipse.reddeer.swt.condition.ShellIsAvailable;
 import org.eclipse.reddeer.swt.impl.button.FinishButton;
-import org.eclipse.reddeer.workbench.core.condition.JobIsRunning;
 import org.jboss.tools.fuse.reddeer.FileUtils;
 import org.jboss.tools.fuse.reddeer.ResourceHelper;
 import org.jboss.tools.fuse.reddeer.SupportedCamelVersions;
@@ -54,7 +52,7 @@ public class DataTransformationDefaultTest extends DefaultTest {
 
 	public static final String DEPLOYMENT_TYPE = System.getProperty("fuseDeploymentType", "OpenShift");
 	public static final String RUNTIME_TYPE = System.getProperty("fuseRuntimeType", "SpringBoot");
-	public static final String CAMEL_VERSION = System.getProperty("fuseCamelVersion", "2.17.0.redhat-630343");
+	public static final String CAMEL_VERSION = System.getProperty("fuseCamelVersion", "2.17.0.redhat-630377");
 	public static final String DSL = System.getProperty("fuseDSL", "Blueprint");
 	public static final String STAGING_REPOS = System.getProperty("staging.repositories", "false");
 
@@ -178,10 +176,7 @@ public class DataTransformationDefaultTest extends DefaultTest {
 		new FinishButton(wiz).click();
 
 		JDKTemplateCompatibleChecker jdkChecker = new JDKTemplateCompatibleChecker(runtimeType, camelVersion);
-		jdkChecker.handleNoStrictlyCompliantJRETemplates(hasJava8, hasJava11, hasJava17);
-
-		new WaitWhile(new JobIsRunning(), TimePeriod.LONG);
-		new WaitWhile(new ShellIsAvailable(SHELL_NAME), TimePeriod.getCustom(900));
+		jdkChecker.handleNoStrictlyCompliantJRETemplates(hasJava8, hasJava11, hasJava17, SHELL_NAME);
 	}
 
 	/**
