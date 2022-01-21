@@ -149,7 +149,7 @@ public class TransformationDragAndDropManager {
 				try {
 					robot = new Robot();
 					robot.mouseMove(fromCoords.x, fromCoords.y);
-					robot.mousePress(InputEvent.BUTTON1_MASK);
+					robot.mousePress(InputEvent.BUTTON2_DOWN_MASK);
 					int i = fromCoords.y;
 					if (fromCoords.y > toCoords.y) {
 						while (i > toCoords.y) {
@@ -184,7 +184,7 @@ public class TransformationDragAndDropManager {
 					robot = new Robot();
 					robot.mouseMove(toCoords.x, toCoords.y);
 					robot.delay(2000);
-					robot.mouseRelease(InputEvent.BUTTON1_MASK);
+					robot.mouseRelease(InputEvent.BUTTON2_DOWN_MASK);
 				} catch (AWTException e) {
 					log.error("Error during AWT Robot manipulation");
 				}
