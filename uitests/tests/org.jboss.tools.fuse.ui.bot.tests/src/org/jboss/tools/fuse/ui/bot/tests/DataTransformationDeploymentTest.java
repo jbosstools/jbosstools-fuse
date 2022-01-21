@@ -13,6 +13,7 @@ package org.jboss.tools.fuse.ui.bot.tests;
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import static org.eclipse.reddeer.requirements.server.ServerRequirementState.RUNNING;
 import static org.junit.Assert.fail;
+import static org.junit.Assume.assumeFalse;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,12 +21,12 @@ import java.nio.file.Files;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.reddeer.common.exception.WaitTimeoutExpiredException;
-import org.eclipse.reddeer.common.matcher.RegexMatcher;
 import org.eclipse.reddeer.common.wait.WaitUntil;
 import org.eclipse.reddeer.eclipse.condition.ConsoleHasText;
 import org.eclipse.reddeer.eclipse.ui.console.ConsoleView;
 import org.eclipse.reddeer.junit.requirement.inject.InjectRequirement;
 import org.eclipse.reddeer.junit.runner.RedDeerSuite;
+import org.eclipse.reddeer.requirements.jre.JRERequirement.JRE;
 import org.jboss.tools.fuse.reddeer.ResourceHelper;
 import org.jboss.tools.fuse.reddeer.condition.FuseLogContainsText;
 import org.jboss.tools.fuse.reddeer.projectexplorer.CamelProject;
@@ -52,12 +53,12 @@ import org.junit.runner.RunWith;
  * 
  * @author tsedmik
  */
+@JRE(setDefault = true)
 @RunWith(RedDeerSuite.class)
 @Fuse(state = RUNNING)
 public class DataTransformationDeploymentTest extends DataTransformationDefaultTest {
 
-	public static final String TRANSFORMATION_LOG_MSG = "{\"custId\":\"ACME-123\",\"priority\":\"GOLD\",\"orderId\":\"ORDER1\",\"origin\":\"ORIGIN\",\"approvalCode\":\"AUTO_OK\",\"lineItems\":[{\"itemId\":\"PICKLE\",\"amount\":1000,\"cost\":2.25},{\"itemId\":\"BANANA\",\"amount\":400,\"cost\":1.25}]}";
-	public static final String EXAMPLE_KARAF_RUNTIME_PATH = "/src/data/abc-order.xml";
+	public static final String EXAMPLE_KARAF_RUNTIME_PATH = "/data/abc-order.xml";
 	public static final String EXAMPLE_EAP_RUNTIME_PATH = "/bin/src/data/abc-order.xml";
 	public static final String EXAMPLE_XML_PATH = "resources/datatransformation/data/abc-order.xml";
 	public static final String EAP_CONSOLE_NAME = "Fuse on EAP";
@@ -99,25 +100,29 @@ public class DataTransformationDeploymentTest extends DataTransformationDefaultT
 	 */
 	@Test
 	public void testDeployment() {
-
 		FuseServerManipulator.addModule(serverRequirement.getConfiguration().getServer().getName(), PROJECT_NAME);
 		copyExample();
 		checkTransformation();
 	}
 
 	private void checkTransformation() {
+		String transformation_log_msg = "{\"custId\":\"ACME-123\",\"priority\":\"GOLD\",\"orderId\":\"ORDER1\",\"origin\":\"ORIGIN\",\"approvalCode\":\"AUTO_OK\",\"lineItems\":[{\"itemId\":\"PICKLE\",\"amount\":1000,\"cost\":2.25},{\"itemId\":\"BANANA\",\"amount\":400,\"cost\":1.25}]}";
+		if (serverRequirement.getConfiguration().getServer().getName().contains("Fuse 7")) {
+			transformation_log_msg = "{\"custId\":\"ACME-123\",\"priority\":\"GOLD\",\"orderId\":\"ORDER1\",\"origin\":\"${ORIGIN}\",\"approvalCode\":\"AUTO_OK\",\"lineItems\":[{\"itemId\":\"PICKLE\",\"amount\":1000,\"cost\":2.25},{\"itemId\":\"BANANA\",\"amount\":400,\"cost\":1.25}]}";
+		}
 		if (serverRequirement.getConfiguration().getServer().getClass().getName().contains("EAP")) {
 			try {
-				new ConsoleView().switchConsole(new RegexMatcher(".*" + EAP_CONSOLE_NAME + ".*"));
-				new WaitUntil(new ConsoleHasText(TRANSFORMATION_LOG_MSG));
+				new ConsoleView().activate();
+				new WaitUntil(new ConsoleHasText(transformation_log_msg));
 			} catch (WaitTimeoutExpiredException e) {
-				fail("Transformation is broken! \n\n" + new ConsoleView().getConsoleText());
+				fail("Transformation is broken! (EAP) \n\n" + new ConsoleView().getConsoleText());
 			}
 		} else {
 			try {
-				new WaitUntil(new FuseLogContainsText(TRANSFORMATION_LOG_MSG));
+				new WaitUntil(new FuseLogContainsText(transformation_log_msg));
 			} catch (WaitTimeoutExpiredException e) {
-				fail("Transformation is broken! \n\n" + new FuseShellSSH().execute("log:display"));
+				assumeFalse("https://issues.redhat.com/browse/FUSETOOLS-3337", issue_3337());
+				fail("Transformation is broken! (Karaf) \n\n" + new FuseShellSSH().execute("log:display"));
 			}
 		}
 	}
@@ -132,7 +137,23 @@ public class DataTransformationDeploymentTest extends DataTransformationDefaultT
 			Files.copy(new File(from).toPath(), new File(to).toPath(), REPLACE_EXISTING);
 		} catch (IOException e) {
 			e.printStackTrace();
-			fail("Tests cannot copy XML file to home folder of Red Hat Fuse Runtime!");
+			assumeFalse("https://issues.redhat.com/browse/FUSETOOLS-3337", issue_3337());
+			fail("Tests cannot copy XML file to home folder of Red Hat Fuse Runtime! \n\n"
+					+ new FuseShellSSH().execute("log:display"));
 		}
 	}
+
+	/**
+	 * For more details please see https://issues.redhat.com/browse/FUSETOOLS-3337
+	 */
+	private boolean issue_3337() {
+		String fuseConsoleLog = new FuseShellSSH().execute("log:display");
+		String to = serverRequirement.getConfiguration().getServer().getHome() + EXAMPLE_KARAF_RUNTIME_PATH;
+		if (fuseConsoleLog.contains("Unresolved constraint") || fuseConsoleLog.contains("Unresolved requirements")
+				|| !(new File(to).exists()) || fuseConsoleLog.contains("java.lang.ClassNotFoundException")) {
+			return true;
+		}
+		return false;
+	}
+
 }
