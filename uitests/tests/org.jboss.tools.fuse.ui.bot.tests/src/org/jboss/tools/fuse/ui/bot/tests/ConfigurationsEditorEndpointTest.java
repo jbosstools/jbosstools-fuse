@@ -91,6 +91,7 @@ public class ConfigurationsEditorEndpointTest {
 			"JDBC - The jdbc component enables you to access databases through JDBC, where SQL queries are sent in the message body.",
 			"JGroups - The jgroups component provides exchange of messages between Camel and JGroups clusters.",
 			"JMS - The jms component allows messages to be sent to (or consumed from) a JMS Queue or Topic.",
+			"Kafka - The kafka component allows messages to be sent to (or consumed from) Apache Kafka brokers.",
 			"Language - The language component allows you to send a message to an endpoint which executes a script by any of the supported Languages in Camel.",
 			"Linkedin - The linkedin component is uses for retrieving LinkedIn user profiles connections companies groups posts etc.",
 			"Mina2 - Socket level networking using TCP or UDP with the Apache Mina 2.x library.",
