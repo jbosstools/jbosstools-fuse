@@ -30,7 +30,7 @@ The general idea is to keep your 'main' branch in-sync with the 'upstream/main'.
 
 ## Building Red Hat Fuse Tooling
 
-To build _Red Hat Fuse Tooling_ requires specific versions of Java (1.8+) and +Maven (3.0+). See this [link](./Build.md) for more information on how to setup, run and configure build.
+To build _Red Hat Fuse Tooling_, it requires specific versions of Java (11) and +Maven (3.0+). See this [link](./Build.md) for more information on how to setup, run and configure build.
 
 This command will run the build:
 
