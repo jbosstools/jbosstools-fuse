@@ -21,8 +21,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
@@ -45,6 +43,7 @@ import org.eclipse.reddeer.workbench.impl.shell.WorkbenchShell;
 import org.jboss.tools.fuse.reddeer.CamelCatalogUtils;
 import org.jboss.tools.fuse.reddeer.MavenDependency;
 import org.jboss.tools.fuse.reddeer.ProjectType;
+import org.jboss.tools.fuse.reddeer.SupportedCamelVersions;
 import org.jboss.tools.fuse.reddeer.component.Marshal;
 import org.jboss.tools.fuse.reddeer.editor.CamelEditor;
 import org.jboss.tools.fuse.reddeer.projectexplorer.CamelProject;
@@ -99,31 +98,6 @@ public class CamelEditorDataFormatTest {
 		this.dataFormat = dataFormat;
 	}
 
-	/**
-	 * Checks if used Camel Version is newer than input.
-	 *
-	 * @return Fuse version as String
-	 */
-	private static String getFuseVersion() {
-
-		String fuseVersion = null;
-		String camelVersion = camelCatalogRequirement.getConfiguration().getVersion();
-
-		Pattern p = Pattern.compile("(?<=fuse-)\\d+");
-		Matcher m = p.matcher(camelVersion);
-		m.find();
-
-		if (m.group(0).length() == 6) {
-			fuseVersion = m.group(0).substring(0, 1) + "." + m.group(0).substring(1, 2) + "."
-					+ m.group(0).substring(2, 3);
-		} else if (m.group(0).length() == 7) { // handle f.e. 7.10.0
-			fuseVersion = m.group(0).substring(0, 1) + "." + m.group(0).substring(1, 3) + "."
-					+ m.group(0).substring(3, 4);
-		}
-
-		return fuseVersion;
-	}
-
 	@Parameters(name = "{0}")
 	public static Collection<String> getCamelLanguages() {
 		List<String> camelDataFormats = new ArrayList<>();
@@ -164,7 +138,9 @@ public class CamelEditorDataFormatTest {
 		camelDataFormats.add("xmljson");
 		// checking if Camel version is Fuse 7.8 or newer --> if yes, skip 'xmlrpc' which is no more available in this
 		// version
-		if (new Version(getFuseVersion()).compareTo(new Version("7.8.0")) < 0) {
+		if (new Version(SupportedCamelVersions
+				.getFuseVersionFromString(camelCatalogRequirement.getConfiguration().getVersion()))
+						.compareTo(new Version("7.8.0")) < 0) {
 			camelDataFormats.add("xmlrpc");
 		}
 		camelDataFormats.add("xstream");
