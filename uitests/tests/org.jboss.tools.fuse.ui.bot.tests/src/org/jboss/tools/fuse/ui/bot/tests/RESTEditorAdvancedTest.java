@@ -13,6 +13,7 @@ package org.jboss.tools.fuse.ui.bot.tests;
 import static org.jboss.tools.fuse.reddeer.ResourceHelper.getResourceAbsolutePath;
 import static org.jboss.tools.fuse.reddeer.utils.ProjectFactory.importExistingProject;
 import static org.jboss.tools.fuse.ui.bot.tests.Activator.PLUGIN_ID;
+import static org.junit.Assume.assumeTrue;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.not;
 
@@ -323,9 +324,8 @@ public class RESTEditorAdvancedTest {
 		if (restEditor.isDirty()) {
 			restEditor.save();
 		}
-		if (!restEditor.getRestOperations().isEmpty()) {
-			throw new JiraIssue("FUSETOOLS-3155");
-		}
+		// Please see https://issues.jboss.org/browse/FUSETOOLS-3155
+		assumeTrue(new JiraIssue("FUSETOOLS-3155").getMessage(), restEditor.getRestOperations().isEmpty());
 		errorCollector.checkThat(restEditor.getRestOperations().isEmpty(), equalTo(true));
 		errorCollector.checkThat(
 				restEditor.getRestOperations().contains(AddRESTOperationWizard.OPERATION_TYPE_GET + " " + OPERATION),
