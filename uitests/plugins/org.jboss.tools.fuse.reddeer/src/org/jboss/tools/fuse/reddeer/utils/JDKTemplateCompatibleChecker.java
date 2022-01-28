@@ -31,6 +31,11 @@ public class JDKTemplateCompatibleChecker {
 		this.camelVersion = camelVersion;
 	}
 
+	public JDKTemplateCompatibleChecker(String camelVersion) {
+		this.runtimeType = null;
+		this.camelVersion = camelVersion;
+	}
+
 	public boolean isJDK11Compatible() {
 		Version fuseVersion;
 		try {

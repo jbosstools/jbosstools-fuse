@@ -10,8 +10,10 @@
  ******************************************************************************/
 package org.jboss.tools.fuse.ui.bot.tests;
 
+import static org.jboss.tools.fuse.reddeer.wizard.NewFuseIgniteExtensionProjectWizard.SHELL_NAME;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assume.assumeFalse;
 
 import org.eclipse.reddeer.common.condition.WaitCondition;
 import org.eclipse.reddeer.common.wait.AbstractWait;
@@ -25,14 +27,18 @@ import org.eclipse.reddeer.junit.runner.RedDeerSuite;
 import org.eclipse.reddeer.requirements.cleanerrorlog.CleanErrorLogRequirement;
 import org.eclipse.reddeer.requirements.cleanworkspace.CleanWorkspaceRequirement;
 import org.eclipse.reddeer.requirements.openperspective.OpenPerspectiveRequirement.OpenPerspective;
+import org.eclipse.reddeer.swt.impl.button.FinishButton;
 import org.eclipse.reddeer.workbench.core.condition.JobIsRunning;
 import org.jboss.tools.fuse.reddeer.JiraIssue;
 import org.jboss.tools.fuse.reddeer.perspectives.FuseIntegrationPerspective;
 import org.jboss.tools.fuse.reddeer.projectexplorer.CamelProject;
+import org.jboss.tools.fuse.reddeer.utils.JDKCheck;
+import org.jboss.tools.fuse.reddeer.utils.JDKTemplateCompatibleChecker;
 import org.jboss.tools.fuse.reddeer.wizard.NewFuseIgniteExtensionProjectFirstPage;
 import org.jboss.tools.fuse.reddeer.wizard.NewFuseIgniteExtensionProjectSecondPage;
 import org.jboss.tools.fuse.reddeer.wizard.NewFuseIgniteExtensionProjectWizard;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -45,6 +51,17 @@ import org.junit.runner.RunWith;
 @OpenPerspective(FuseIntegrationPerspective.class)
 @RunWith(RedDeerSuite.class)
 public class NewFuseIgniteProjectTest extends DefaultTest {
+
+	private static boolean hasJava8;
+	private static boolean hasJava11;
+	private static boolean hasJava17;
+
+	@BeforeClass
+	public static void jdkCheck() {
+		hasJava8 = JDKCheck.isJava8Available();
+		hasJava11 = JDKCheck.isJava11Available();
+		hasJava17 = JDKCheck.isJava17Available();
+	}
 
 	@Before
 	public void setupDeleteProjects() {
@@ -74,7 +91,11 @@ public class NewFuseIgniteProjectTest extends DefaultTest {
 		firstPage.setTextProjectName("CustomStepCamelRoute");
 		AbstractWait.sleep(TimePeriod.SHORT);
 		wizard.next();
-		wizard.finish(TimePeriod.VERY_LONG);
+		new FinishButton(wizard).click();
+
+		JDKTemplateCompatibleChecker jdkChecker = new JDKTemplateCompatibleChecker(new NewFuseIgniteExtensionProjectSecondPage(wizard).getSelectionFuseIgniteVersion());
+		jdkChecker.handleNoStrictlyCompliantJRETemplates(hasJava8, hasJava11, hasJava17, SHELL_NAME);
+
 		checkProject("CustomStepCamelRoute");
 	}
 
@@ -102,7 +123,11 @@ public class NewFuseIgniteProjectTest extends DefaultTest {
 		NewFuseIgniteExtensionProjectSecondPage secondPage = new NewFuseIgniteExtensionProjectSecondPage(wizard);
 		secondPage.toggleJavaBeanRDB(true);
 		AbstractWait.sleep(TimePeriod.SHORT);
-		wizard.finish(TimePeriod.VERY_LONG);
+		new FinishButton(wizard).click();
+
+		JDKTemplateCompatibleChecker jdkChecker = new JDKTemplateCompatibleChecker(secondPage.getSelectionFuseIgniteVersion());
+		jdkChecker.handleNoStrictlyCompliantJRETemplates(hasJava8, hasJava11, hasJava17, SHELL_NAME);
+
 		checkProject("CustomStepJavaRoute");
 	}
 
@@ -130,7 +155,11 @@ public class NewFuseIgniteProjectTest extends DefaultTest {
 		NewFuseIgniteExtensionProjectSecondPage secondPage = new NewFuseIgniteExtensionProjectSecondPage(wizard);
 		secondPage.toggleCustomConnectorRDB(true);
 		AbstractWait.sleep(TimePeriod.SHORT);
-		wizard.finish(TimePeriod.VERY_LONG);
+		new FinishButton(wizard).click();
+
+		JDKTemplateCompatibleChecker jdkChecker = new JDKTemplateCompatibleChecker(secondPage.getSelectionFuseIgniteVersion());
+		jdkChecker.handleNoStrictlyCompliantJRETemplates(hasJava8, hasJava11, hasJava17, SHELL_NAME);
+
 		checkProject("CustomConnector");
 	}
 
@@ -143,14 +172,14 @@ public class NewFuseIgniteProjectTest extends DefaultTest {
 		assertFalse("Project '" + name + "' was created with errors", hasErrors());
 		new ProjectExplorer().getProject(name).getResource().runAs("Maven clean verify");
 		WaitCondition wait = new ConsoleHasText("BUILD SUCCESS");
-		new WaitUntil(wait, TimePeriod.VERY_LONG, false);
-		if (wait.getResult() == null && new ConsoleHasText("Failed to execute goal io.syndesis.extension").test()) {
-			throw new JiraIssue("FUSETOOLS-3249");
-		}
+		new WaitUntil(wait, TimePeriod.LONG, false);
+
+		// See https://issues.jboss.org/browse/FUSETOOLS-3249 for more details.
+		boolean issue_3249 = wait.getResult() == null && new ConsoleHasText("The Maven version must be a 3.5.x version to work correctly").test();
+		assumeFalse(new JiraIssue("FUSETOOLS-3249").getMessage(), issue_3249);
 	}
 
 	private boolean hasErrors() {
-
 		ProblemsView view = new ProblemsView();
 		view.open();
 		view.close();
