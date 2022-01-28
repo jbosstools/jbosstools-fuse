@@ -16,6 +16,7 @@ import static org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizar
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assume.assumeFalse;
 
 import org.eclipse.reddeer.common.wait.AbstractWait;
 import org.eclipse.reddeer.common.wait.TimePeriod;
@@ -29,7 +30,8 @@ import org.eclipse.reddeer.requirements.cleanworkspace.CleanWorkspaceRequirement
 import org.eclipse.reddeer.requirements.openperspective.OpenPerspectiveRequirement.OpenPerspective;
 import org.eclipse.reddeer.swt.condition.ControlIsEnabled;
 import org.eclipse.reddeer.swt.impl.button.FinishButton;
-import org.jboss.tools.fuse.reddeer.JiraIssue;
+import org.eclipse.reddeer.swt.impl.button.NextButton;
+import org.eclipse.reddeer.swt.impl.button.PredefinedButton;
 import org.jboss.tools.fuse.reddeer.ResourceHelper;
 import org.jboss.tools.fuse.reddeer.perspectives.FuseIntegrationPerspective;
 import org.jboss.tools.fuse.reddeer.utils.LogChecker;
@@ -37,7 +39,6 @@ import org.jboss.tools.fuse.reddeer.utils.ProjectFactory;
 import org.jboss.tools.fuse.reddeer.wizard.CamelRestDSLFromWSDLAdvancedPage;
 import org.jboss.tools.fuse.reddeer.wizard.CamelRestDSLFromWSDLFirstPage;
 import org.jboss.tools.fuse.reddeer.wizard.CamelRestDSLFromWSDLWizard;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -82,7 +83,14 @@ public class CamelRestDSLFromWSDLWizardTest {
 	private CamelRestDSLFromWSDLAdvancedPage secondPage;
 
 	@Before
+	public void clean() {
+		new CleanWorkspaceRequirement().fulfill();
+		new CleanErrorLogRequirement().fulfill();
+	}
+
+	@Before
 	public void initSetup() {
+		new CleanWorkspaceRequirement().fulfill();
 		new CleanErrorLogRequirement().fulfill();
 		ProjectFactory.newProject(PROJECT_NAME).deploymentType(STANDALONE).runtimeType(KARAF).template(CBR_SPRING)
 				.create();
@@ -92,11 +100,6 @@ public class CamelRestDSLFromWSDLWizardTest {
 		wizard = new CamelRestDSLFromWSDLWizard();
 		wizard.open();
 		firstPage = new CamelRestDSLFromWSDLFirstPage(wizard);
-	}
-
-	@After
-	public void cleanWorkspace() {
-		new CleanWorkspaceRequirement().fulfill();
 	}
 
 	/**
@@ -120,15 +123,15 @@ public class CamelRestDSLFromWSDLWizardTest {
 
 		path = ResourceHelper.getResourceAbsolutePath(Activator.PLUGIN_ID, WSDL_FILE_EXAMPLE_ERROR_PATH);
 		firstPage.setTextWSDLFile("file:" + path);
-		waitFinishBTNCondition(false);
-		assertFalse("Still able to finish Camel Rest DSL from WSDL wizard", wizard.isFinishEnabled());
+		assertNextButtonEnabled(false);
+		assertFinishButtonEnabled(false);
 
 		path = ResourceHelper.getResourceAbsolutePath(Activator.PLUGIN_ID, WSDL_FILE_EXAMPLE_PATH);
 		firstPage.setTextWSDLFile("file:" + path);
-		waitFinishBTNCondition(true);
-		assertTrue("Cannot finish Camel Rest DSL from WSDL wizard", wizard.isFinishEnabled());
-		wizard.finish(TimePeriod.DEFAULT);
+		assertFinishButtonEnabled(false);
+		assertNextButtonEnabled(true);
 
+		wizard.cancel();
 		LogChecker.assertNoFuseError();
 	}
 
@@ -153,10 +156,12 @@ public class CamelRestDSLFromWSDLWizardTest {
 
 		path = ResourceHelper.getResourceAbsolutePath(Activator.PLUGIN_ID, WSDL_FILE_EMPTY_PATH);
 		firstPage.setTextWSDLFile("file:" + path);
-		canFinish_issue_3001();
+		assertFinishButtonEnabled(false);
 		wizard.next();
-		canFinish_issue_3001();
-
+		AbstractWait.sleep(TimePeriod.MEDIUM);
+		boolean finishEnabled = wizard.isFinishEnabled();
+		wizard.cancel();
+		assumeFalse("https://issues.jboss.org/browse/FUSETOOLS-3001", finishEnabled);
 		LogChecker.assertNoFuseError();
 	}
 
@@ -181,9 +186,12 @@ public class CamelRestDSLFromWSDLWizardTest {
 
 		path = ResourceHelper.getResourceAbsolutePath(Activator.PLUGIN_ID, WSDL_FILE_INVALID_PATH);
 		firstPage.setTextWSDLFile("file:" + path);
-		canFinish_issue_3001();
+		assertFinishButtonEnabled(false);
 		wizard.next();
-		canFinish_issue_3001();
+		AbstractWait.sleep(TimePeriod.MEDIUM);
+		boolean finishEnabled = wizard.isFinishEnabled();
+		wizard.cancel();
+		assumeFalse("https://issues.jboss.org/browse/FUSETOOLS-3001", finishEnabled);
 
 		LogChecker.assertNoFuseError();
 	}
@@ -208,19 +216,22 @@ public class CamelRestDSLFromWSDLWizardTest {
 	@Test
 	public void testEnablingDisablingButtons() {
 		assertDestinationProjectFieldCompletion();
-		assertButtonsEnabled(false);
+		assertNextButtonEnabled(false);
 
 		path = ResourceHelper.getResourceAbsolutePath(Activator.PLUGIN_ID, WSDL_FILE_EXAMPLE_PATH);
 		firstPage.setTextWSDLFile("file:" + path);
-		assertButtonsEnabled(true);
+		assertNextButtonEnabled(true);
+		assertFinishButtonEnabled(false);
 
 		firstPage.setTextDestinationProject("");
-		assertButtonsEnabled(false);
+		assertNextButtonEnabled(false);
+		assertFinishButtonEnabled(false);
 
 		firstPage.setTextDestinationProject(PROJECT_NAME);
-		assertButtonsEnabled(true);
+		assertNextButtonEnabled(true);
+		assertFinishButtonEnabled(false);
 
-		wizard.finish(TimePeriod.DEFAULT);
+		wizard.cancel();
 		LogChecker.assertNoFuseError();
 	}
 
@@ -254,7 +265,7 @@ public class CamelRestDSLFromWSDLWizardTest {
 		secondPage.setTextDestinationCamelFolder("");
 		assertButtonsEnabled(false);
 		secondPage.setTextDestinationCamelFolder(tmp);
-		waitFinishBTNCondition(true);
+		waitBTNCondition(true, new FinishButton(wizard));
 		assertTrue(wizard.isFinishEnabled());
 
 		wizard.finish(TimePeriod.DEFAULT);
@@ -290,7 +301,7 @@ public class CamelRestDSLFromWSDLWizardTest {
 		secondPage.setTextDestinationCamelFolder("");
 		assertButtonsEnabled(false);
 		secondPage.clickDestinationCamelFolderBTN(DESTINATION_CAMEL_FOLDER_PATH);
-		waitFinishBTNCondition(true);
+		waitBTNCondition(true, new FinishButton(wizard));
 		assertTrue(wizard.isFinishEnabled());
 
 		wizard.finish(TimePeriod.DEFAULT);
@@ -327,7 +338,7 @@ public class CamelRestDSLFromWSDLWizardTest {
 		secondPage.setTextDestinationJavaFolder("");
 		assertButtonsEnabled(false);
 		secondPage.setTextDestinationJavaFolder(tmp);
-		waitFinishBTNCondition(true);
+		waitBTNCondition(true, new FinishButton(wizard));
 		assertTrue(wizard.isFinishEnabled());
 
 		wizard.finish(TimePeriod.DEFAULT);
@@ -364,7 +375,7 @@ public class CamelRestDSLFromWSDLWizardTest {
 		assertButtonsEnabled(false);
 		secondPage.clickDestinationJavaFolderBTN(DESTINATION_JAVA_FOLDER_PATH);
 		secondPage.setTextDestinationJavaFolder(secondPage.getTextDestinationJavaFolder() + "/java");
-		waitFinishBTNCondition(true);
+		waitBTNCondition(true, new FinishButton(wizard));
 		assertTrue(wizard.isFinishEnabled());
 
 		wizard.finish(TimePeriod.DEFAULT);
@@ -376,16 +387,9 @@ public class CamelRestDSLFromWSDLWizardTest {
 				firstPage.getTextDestinationProject());
 	}
 
-	private void canFinish_issue_3001() {
-		AbstractWait.sleep(TimePeriod.MEDIUM);
-		if (wizard.isFinishEnabled()) {
-			wizard.cancel();
-			throw new JiraIssue("FUSETOOLS-3001");
-		}
-	}
-
 	private void assertButtonsEnabled(boolean enabled) {
-		waitFinishBTNCondition(enabled);
+		waitBTNCondition(enabled, new NextButton(wizard));
+		waitBTNCondition(enabled, new FinishButton(wizard));
 		boolean next = wizard.isNextEnabled();
 		boolean finish = wizard.isFinishEnabled();
 		if (enabled) {
@@ -395,8 +399,28 @@ public class CamelRestDSLFromWSDLWizardTest {
 		}
 	}
 	
-	private void waitFinishBTNCondition(boolean enabled) {
-		ControlIsEnabled controlIsEnabled = new ControlIsEnabled(new FinishButton(wizard));
+	private void assertNextButtonEnabled(boolean enabled) {
+		waitBTNCondition(enabled, new NextButton(wizard));
+		boolean next = wizard.isNextEnabled();
+		if (enabled) {
+			assertTrue(next);
+		} else {
+			assertFalse(next);
+		}
+	}
+
+	private void assertFinishButtonEnabled(boolean enabled) {
+		waitBTNCondition(enabled, new FinishButton(wizard));
+		boolean finish = wizard.isFinishEnabled();
+		if (enabled) {
+			assertTrue(finish);
+		} else {
+			assertFalse(finish);
+		}
+	}
+
+	private void waitBTNCondition(boolean enabled, PredefinedButton btn) {
+		ControlIsEnabled controlIsEnabled = new ControlIsEnabled(btn);
 		if (enabled) {
 			new WaitUntil(controlIsEnabled, TimePeriod.DEFAULT);
 		} else {
