@@ -20,7 +20,7 @@ import org.eclipse.reddeer.eclipse.selectionwizard.NewMenuWizard;
  */
 public class CamelRestDSLFromWSDLWizard extends NewMenuWizard {
 
-	public static final String SHELL_NAME = "Camel Rest DSL from WSDL - Deprecated";
+	public static final String SHELL_NAME = "Camel Rest DSL from WSDL";
 	public static final String WIZARD_CATEGORY = "Red Hat Fuse";
 	public static final String WIZARD_NAME = "Camel Rest DSL from WSDL - Deprecated";
 
