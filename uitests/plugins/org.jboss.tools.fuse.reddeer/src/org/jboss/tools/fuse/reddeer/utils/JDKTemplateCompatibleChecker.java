@@ -13,6 +13,10 @@ package org.jboss.tools.fuse.reddeer.utils;
 import static org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardRuntimeType.EAP;
 import static org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardRuntimeType.KARAF;
 
+import org.eclipse.reddeer.common.wait.TimePeriod;
+import org.eclipse.reddeer.common.wait.WaitWhile;
+import org.eclipse.reddeer.swt.condition.ShellIsAvailable;
+import org.eclipse.reddeer.workbench.core.condition.JobIsRunning;
 import org.jboss.tools.fuse.reddeer.SupportedCamelVersions;
 import org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardRuntimeType;
 import org.osgi.framework.Version;
@@ -70,15 +74,17 @@ public class JDKTemplateCompatibleChecker {
 		return false;
 	}
 
-	public void handleNoStrictlyCompliantJRETemplates() {
+	public void handleNoStrictlyCompliantJRETemplates(String shell) {
 		JDKCheck.handleJDKWarningDialog();
+		waitForProjectDependencies(shell);
 	}
 
-	public void handleNoStrictlyCompliantJRETemplates(boolean hasJava8, boolean hasJava11, boolean hasJava17) {
+	public void handleNoStrictlyCompliantJRETemplates(boolean hasJava8, boolean hasJava11, boolean hasJava17, String shell) {
 		if(hasJava11) {
 			if(!this.isJDK11Compatible()) {
 				if(!hasJava8) {
 					JDKCheck.handleJDKWarningDialog();
+					waitForProjectDependencies(shell);
 				}
 			}
 		}
@@ -86,9 +92,15 @@ public class JDKTemplateCompatibleChecker {
 			if(!this.isJDK17Compatible()) {
 				if(!hasJava8 || !hasJava11) {
 					JDKCheck.handleJDKWarningDialog();
+					waitForProjectDependencies(shell);
 				}
 			}
 		}
+	}
+
+	private void waitForProjectDependencies(String shell) {
+		new WaitWhile(new JobIsRunning(), TimePeriod.LONG);
+		new WaitWhile(new ShellIsAvailable(shell), TimePeriod.getCustom(900));
 	}
 
 }
