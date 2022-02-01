@@ -31,7 +31,6 @@ import org.eclipse.reddeer.eclipse.ui.wizards.datatransfer.ExternalProjectImport
 import org.eclipse.reddeer.eclipse.ui.wizards.datatransfer.WizardProjectsImportPage;
 import org.eclipse.reddeer.eclipse.utils.DeleteUtils;
 import org.eclipse.reddeer.swt.api.Shell;
-import org.eclipse.reddeer.swt.condition.ShellIsAvailable;
 import org.eclipse.reddeer.swt.impl.button.CheckBox;
 import org.eclipse.reddeer.swt.impl.button.FinishButton;
 import org.eclipse.reddeer.swt.impl.button.PushButton;
@@ -123,10 +122,7 @@ public class ProjectFactory {
 		new FinishButton(wiz).click();
 
 		JDKTemplateCompatibleChecker jdkChecker = new JDKTemplateCompatibleChecker(runtimeType, camelVersion);
-		jdkChecker.handleNoStrictlyCompliantJRETemplates(hasJava8, hasJava11, hasJava17);
-
-		new WaitWhile(new JobIsRunning(), TimePeriod.LONG);
-		new WaitWhile(new ShellIsAvailable(SHELL_NAME), TimePeriod.getCustom(900));
+		jdkChecker.handleNoStrictlyCompliantJRETemplates(hasJava8, hasJava11, hasJava17, SHELL_NAME);
 	}
 
 	public static ProjectFactory newProject(String name) {

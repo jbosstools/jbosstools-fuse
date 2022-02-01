@@ -29,7 +29,6 @@ import java.util.List;
 
 import org.eclipse.reddeer.common.wait.TimePeriod;
 import org.eclipse.reddeer.common.wait.WaitUntil;
-import org.eclipse.reddeer.common.wait.WaitWhile;
 import org.eclipse.reddeer.direct.project.Project;
 import org.eclipse.reddeer.eclipse.ui.views.markers.ProblemsView;
 import org.eclipse.reddeer.junit.runner.RedDeerSuite;
@@ -39,7 +38,6 @@ import org.eclipse.reddeer.swt.api.TreeItem;
 import org.eclipse.reddeer.swt.condition.ShellIsAvailable;
 import org.eclipse.reddeer.swt.impl.button.FinishButton;
 import org.eclipse.reddeer.swt.impl.tree.DefaultTree;
-import org.eclipse.reddeer.workbench.core.condition.JobIsRunning;
 import org.eclipse.reddeer.workbench.handler.WorkbenchShellHandler;
 import org.jboss.tools.fuse.reddeer.FileUtils;
 import org.jboss.tools.fuse.reddeer.ResourceHelper;
@@ -113,10 +111,7 @@ public class NewFuseProjectWizardTest {
 		new FinishButton(wiz).click();
 
 		JDKTemplateCompatibleChecker jdkChecker = new JDKTemplateCompatibleChecker(NewFuseIntegrationProjectWizardRuntimeType.SPRINGBOOT, camelVersion);
-		jdkChecker.handleNoStrictlyCompliantJRETemplates(hasJava8, hasJava11, hasJava17);
-
-		new WaitWhile(new JobIsRunning(), TimePeriod.VERY_LONG);
-		new WaitWhile(new ShellIsAvailable("New Fuse Integration Project"), TimePeriod.getCustom(1200));
+		jdkChecker.handleNoStrictlyCompliantJRETemplates(hasJava8, hasJava11, hasJava17, SHELL_NAME);
 
 		File actualLocation = new File(Project.getLocation("test"));
 		assertEquals("Location of a project is different!", targetLocation, actualLocation);
@@ -161,10 +156,8 @@ public class NewFuseProjectWizardTest {
 		new FinishButton(wiz).click();
 
 		JDKTemplateCompatibleChecker jdkChecker = new JDKTemplateCompatibleChecker(KARAF, testCamelVersion);
-		jdkChecker.handleNoStrictlyCompliantJRETemplates(hasJava8, hasJava11, hasJava17);
+		jdkChecker.handleNoStrictlyCompliantJRETemplates(hasJava8, hasJava11, hasJava17, SHELL_NAME);
 
-		new WaitWhile(new JobIsRunning(), TimePeriod.VERY_LONG);
-		new WaitWhile(new ShellIsAvailable(SHELL_NAME), TimePeriod.getCustom(1200));
 		assertFalse("Project was created with errors", hasErrors());
 		LogChecker.assertNoFuseError();
 		try {
