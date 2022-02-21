@@ -14,7 +14,7 @@ import static org.jboss.tools.fuse.reddeer.ProjectTemplate.CBR_SPRING;
 import static org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardDeploymentType.STANDALONE;
 import static org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardRuntimeType.KARAF;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assume.assumeFalse;
+import static org.junit.Assume.assumeTrue;
 import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
@@ -37,6 +37,7 @@ import org.eclipse.reddeer.requirements.cleanworkspace.CleanWorkspaceRequirement
 import org.eclipse.reddeer.requirements.openperspective.OpenPerspectiveRequirement.OpenPerspective;
 import org.eclipse.reddeer.swt.impl.tree.DefaultTree;
 import org.eclipse.reddeer.workbench.impl.shell.WorkbenchShell;
+import org.jboss.tools.fuse.reddeer.JiraClient;
 import org.jboss.tools.fuse.reddeer.condition.TreeHasItem;
 import org.jboss.tools.fuse.reddeer.editor.CamelDataFormatDialog;
 import org.jboss.tools.fuse.reddeer.editor.CamelEditor;
@@ -256,6 +257,7 @@ public class ConfigurationsEditorDataFormatTest {
 	 */
 	@Test
 	public void testSourceXML() {
+		assumeTrue(!checkForReportedParameters()); //Run only if parameter is not reported as issue.
 		createDataFormat();
 		editor.close(true);
 		assertXPath(true, dataFormatName);
@@ -279,7 +281,6 @@ public class ConfigurationsEditorDataFormatTest {
 			throw new RuntimeException(e);
 		}
 		boolean result = evalResult.equals(name);
-		assumeFalse("https://issues.jboss.org/browse/FUSETOOLS-1930", testIssue_1930());
 		assertEquals("DataFormat - " + name, expected, result);
 	}
 
@@ -288,7 +289,8 @@ public class ConfigurationsEditorDataFormatTest {
 	}
 
 	private static void createProject() {
-		ProjectFactory.newProject(PROJECT_NAME).deploymentType(STANDALONE).runtimeType(KARAF).template(CBR_SPRING).create();
+		ProjectFactory.newProject(PROJECT_NAME).deploymentType(STANDALONE).runtimeType(KARAF).template(CBR_SPRING)
+				.create();
 	}
 
 	private void createDataFormat() {
@@ -306,14 +308,18 @@ public class ConfigurationsEditorDataFormatTest {
 			assertEquals("DataFormat - " + dataFormatName, expected, wait.getResult());
 		}
 	}
-
-	/**
-	 * https://issues.jboss.org/browse/FUSETOOLS-1930
-	 */
-	private boolean testIssue_1930() {
-		if (dataFormat.contains("zipfile")) {
-			return true;
+	
+	/*
+	 * Checks if JIRA issue is opened. If yes, checks if actual parameter is reported one.
+	 * https://issues.redhat.com/browse/FUSETOOLS-1930
+	 * @return true if parameter is still reported with issue
+	 * @return false else
+	 * */
+	public boolean checkForReportedParameters() {
+		if (new JiraClient().isIssueClosed("FUSETOOLS-1930")) {
+			return false;
+		} else {
+			return "zipfile - The Zip File data format is a message compression and de-compression format of zip files.".equals(dataFormat);
 		}
-		return false;
 	}
 }
