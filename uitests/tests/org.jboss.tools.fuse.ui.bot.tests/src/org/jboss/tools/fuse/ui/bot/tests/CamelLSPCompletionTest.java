@@ -18,6 +18,8 @@ import static org.hamcrest.CoreMatchers.equalTo;
 
 import java.util.List;
 
+import org.eclipse.reddeer.common.wait.AbstractWait;
+import org.eclipse.reddeer.common.wait.TimePeriod;
 import org.eclipse.reddeer.jface.text.contentassist.ContentAssistant;
 import org.eclipse.reddeer.junit.runner.RedDeerSuite;
 import org.eclipse.reddeer.requirements.cleanerrorlog.CleanErrorLogRequirement;
@@ -197,6 +199,7 @@ public class CamelLSPCompletionTest {
 	}
 
 	private void assertDuplicateOptionsFilltering(String proposal) {
+		AbstractWait.sleep(TimePeriod.getCustom(1));
 		collector.checkThat(proposal, editor.getCompletionProposals().contains(proposal), equalTo(true));
 		selectCompletionProposal(proposal);
 		collector.checkThat(proposal, editor.getCompletionProposals().contains(proposal), equalTo(false));
@@ -205,9 +208,11 @@ public class CamelLSPCompletionTest {
 	private void tryEndpointOptionsCompletion() {
 		editor.insertText("?e");
 		editor.setCursorPosition(cursorPosition += 2);
+		AbstractWait.sleep(TimePeriod.getCustom(1));
 		assistant = editor.openContentAssistant();
 		collector.checkThat(assistant.getProposals().isEmpty(), equalTo(false));
 		assistant.chooseProposal("exchangePattern");
+		AbstractWait.sleep(TimePeriod.getCustom(1));
 		assistant = editor.openContentAssistant();
 		collector.checkThat(assistant.getProposals().isEmpty(), equalTo(false));
 		assistant.chooseProposal("InOnly");
@@ -217,6 +222,7 @@ public class CamelLSPCompletionTest {
 	private void tryAdditionalOptionsCompletion() {
 		editor.insertText("?fileName=testFileName&amp;");
 		editor.setCursorPosition(cursorPosition += 27);
+		AbstractWait.sleep(TimePeriod.getCustom(1));
 		assistant = editor.openContentAssistant();
 		collector.checkThat(assistant.getProposals().isEmpty(), equalTo(false));
 		assistant.chooseProposal("allowNullBody");
@@ -224,6 +230,7 @@ public class CamelLSPCompletionTest {
 	}
 
 	private void selectCompletionProposal(String option) {
+		AbstractWait.sleep(TimePeriod.getCustom(1));	
 		editor.openContentAssistant().chooseProposal(option);
 		editor.setCursorPosition(cursorPosition += 6);
 		editor.insertText(INSERT_SPACE);
