@@ -46,7 +46,6 @@
    <bundle id="org.fusesource.ide.syndesis.extension.ui.tests.integration"><category name="AllTests"/></bundle>
    <bundle id="org.jboss.tools.fuse.transformation.core.tests.integration"><category name="AllTests"/></bundle>
    <bundle id="org.jboss.tools.fuse.transformation.editor.tests.integration"><category name="AllTests"/></bundle>
-   <bundle id="org.fusesource.ide.wsdl2rest.ui.tests.integration"><category name="AllTests"/></bundle>
 
    <!-- sources -->
 
@@ -90,7 +89,6 @@
    <bundle id="org.fusesource.ide.syndesis.extension.ui.tests.integration.source"><category name="AllTests"/></bundle>
    <bundle id="org.jboss.tools.fuse.transformation.core.tests.integration.source"><category name="AllTests"/></bundle>
    <bundle id="org.jboss.tools.fuse.transformation.editor.tests.integration.source"><category name="AllTests"/></bundle>
-   <bundle id="org.fusesource.ide.wsdl2rest.ui.tests.integration.source"><category name="AllTests"/></bundle>
 
    <!-- reddeer tests -->
 

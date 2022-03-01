@@ -29,11 +29,6 @@
             <topic label="Editing Rest DSL components in the graphical view" href="RESTdsl.html#_editing_rest_dsl_components_in_the_graphical_view"/>
             <topic label="Viewing and editing the Rest DSL source code" href="RESTdsl.html#_viewing_and_editing_the_rest_dsl_source_code"/>
          </topic>
-         <topic label="Migrating a SOAP application to RESTful web services" href="wsdl2rest.html">
-            <topic label="Wizard workflow" href="wsdl2rest.html#_wizard_workflow"/>
-            <topic label="Prerequisites" href="wsdl2rest.html#_prerequisites_9"/>
-            <topic label="Migrating a sample SOAP application to RESTful web services" href="wsdl2rest.html#_migrating_a_sample_soap_application_to_restful_web_services"/>
-         </topic>
          <topic label="Creating a new Apache Camel JUnit test case" href="newCamelTestCase.html"/>
          <topic label="Running routes inside Red Hat Fuse Tooling" href="RiderRunning.html">
             <topic label="Running routes as a local Camel context" href="RiderRunning.html#RiderRunningProfile"/>

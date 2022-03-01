@@ -18,7 +18,6 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/x
                 <module>org.fusesource.ide.launcher.ui</module>
                 <module>org.fusesource.ide.project</module>
                 <module>org.fusesource.ide.projecttemplates</module>
-                <module>org.fusesource.ide.wsdl2rest.ui</module>
 	</modules>
 </project>
 	
