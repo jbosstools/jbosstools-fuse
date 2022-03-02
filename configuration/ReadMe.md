@@ -1,5 +1,5 @@
 # Configuration Folder Description
-This folder contains configuration read by the tooling at runtime directly from Github master repository. That said you should make changes in here very carefully as your changes will affect any user directly and immediately! 
+This folder contains configuration read by the tooling at runtime directly from Github main repository. That said you should make changes in here very carefully as your changes will affect any user directly and immediately! 
 
 ## Where can I lookup the versions?
 Each release of Fuse Runtime has its own redhat-fuse pom which defines the versions it uses. The versions can be looked up at:
