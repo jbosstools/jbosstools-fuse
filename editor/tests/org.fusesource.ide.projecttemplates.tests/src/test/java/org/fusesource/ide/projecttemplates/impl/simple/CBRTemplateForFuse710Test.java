@@ -36,8 +36,10 @@ public class CBRTemplateForFuse710Test {
 	@Parameters(name = "{0} should be compatible? {1}")
 	public static Collection<Object[]> data() {
 		return Arrays.asList(new Object[][] {
-			{ "2.24.0", true },
-			{ "2.23.2.fuse-7_10XXX-redhat-X", true },
+			{ "2.24.0", false },
+			{ "2.23.2.fuse-7_10_1-redhat-X", false },
+			{ "2.23.2.fuse-7_11", false },
+			{ "2.23.2.fuse-7_10_0-redhat-X", true },
 			{ "2.23.2.fuse-79XXX-redhat-X", false },
 			{ "2.21.0.fuse-760XXX-redhat-X", false },
 			{ "2.21.0.fuse-750XXX-redhat-X", false },
