@@ -22,8 +22,9 @@ import org.fusesource.ide.projecttemplates.util.CommonNewProjectMetaData;
 import org.fusesource.ide.projecttemplates.wizards.pages.model.EnvironmentData;
 
 public class CBRTemplateForFuse710 extends AbstractCBRTemplate {
-
-	private static final String MINIMAL_COMPATIBLE_CAMEL_VERSION_PREFIX = "2.23.2.fuse-7_";
+	
+	private static final String FIRST_INCOMPATIBLE_CAMEL_VERSION = "2.24";
+	private static final String MINIMAL_COMPATIBLE_CAMEL_VERSION_PREFIX = "2.23.2.fuse-7_10_0";
 	private static final String MINIMAL_COMPATIBLE_CAMEL_VERSION = "2.24.0";
 
 	@Override
@@ -40,7 +41,8 @@ public class CBRTemplateForFuse710 extends AbstractCBRTemplate {
 	public boolean isCompatible(EnvironmentData environment) {
 		return super.isCompatible(environment)
 				&& (environment.getCamelVersion().startsWith(MINIMAL_COMPATIBLE_CAMEL_VERSION_PREFIX)
-						|| new VersionUtil().isGreaterThan(environment.getCamelVersion(), MINIMAL_COMPATIBLE_CAMEL_VERSION));
+						|| new VersionUtil().isGreaterThan(environment.getCamelVersion(), MINIMAL_COMPATIBLE_CAMEL_VERSION))
+				&& new VersionUtil().isStrictlyGreaterThan(FIRST_INCOMPATIBLE_CAMEL_VERSION, environment.getCamelVersion());
 	}
 	
 	@Override

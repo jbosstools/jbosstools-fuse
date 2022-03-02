@@ -28,6 +28,10 @@ public class CamelForSpringBootFuse77ToBomMapper extends OnlineVersionMapper {
 	protected Map<String, String> createFallbackMapping() {
 		Map<String, String> mapping = new HashMap<>();
 		mapping.put(CamelForFuseOnOpenShiftToBomMapper.FUSE_770_CAMEL_VERSION, "7.7.0.fuse-sb2-770010-redhat-00001");
+		mapping.put(CamelForFuseOnOpenShiftToBomMapper.FUSE_780_CAMEL_VERSION, "7.8.0.fuse-sb2-780038-redhat-00001");
+		mapping.put(CamelForFuseOnOpenShiftToBomMapper.FUSE_790_CAMEL_VERSION, "7.9.0.fuse-sb2-790065-redhat-00001");
+		mapping.put(CamelForFuseOnOpenShiftToBomMapper.FUSE_7100_CAMEL_VERSION, "7.10.0.fuse-sb2-7_10_0-00014-redhat-00001");
+		mapping.put(CamelForFuseOnOpenShiftToBomMapper.FUSE_7101_CAMEL_VERSION, "7.10.0.fuse-sb2-7_10_1-00008-redhat-00001");
 		return mapping;
 	}
 

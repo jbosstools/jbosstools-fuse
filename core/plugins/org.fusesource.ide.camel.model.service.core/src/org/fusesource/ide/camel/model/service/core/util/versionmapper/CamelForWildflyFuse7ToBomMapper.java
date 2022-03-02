@@ -41,6 +41,7 @@ public class CamelForWildflyFuse7ToBomMapper extends OnlineVersionMapper {
 		fallbackMappings.put(CamelForFuseOnOpenShiftToBomMapper.FUSE_780_CAMEL_VERSION, "5.6.0.fuse-780026-redhat-00001");
 		fallbackMappings.put(CamelForFuseOnOpenShiftToBomMapper.FUSE_790_CAMEL_VERSION, "5.7.0.fuse-790049-redhat-00001");
 		fallbackMappings.put(CamelForFuseOnOpenShiftToBomMapper.FUSE_7100_CAMEL_VERSION, "5.8.0.fuse-7_10_0-00010-redhat-00001");
+		fallbackMappings.put(CamelForFuseOnOpenShiftToBomMapper.FUSE_7101_CAMEL_VERSION, "5.8.0.fuse-7_10_1-00008-redhat-00001");
 		return fallbackMappings;
 	}
 

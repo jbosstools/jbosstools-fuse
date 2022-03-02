@@ -21,6 +21,7 @@ import org.fusesource.ide.projecttemplates.impl.medium.CXfCodeFirstProjectTempla
 import org.fusesource.ide.projecttemplates.impl.medium.CXfCodeFirstProjectTemplateForFuse7;
 import org.fusesource.ide.projecttemplates.impl.medium.CXfCodeFirstProjectTemplateForFuse71;
 import org.fusesource.ide.projecttemplates.impl.medium.CXfCodeFirstProjectTemplateForFuse710;
+import org.fusesource.ide.projecttemplates.impl.medium.CXfCodeFirstProjectTemplateForFuse7101;
 import org.fusesource.ide.projecttemplates.impl.medium.CXfCodeFirstProjectTemplateForFuse76;
 import org.fusesource.ide.projecttemplates.util.NewFuseIntegrationProjectMetaData;
 import org.junit.Ignore;
@@ -71,6 +72,8 @@ public class FuseIntegrationProjectCreatorRunnableForCXFCodeFirstIT extends Fuse
 		NewFuseIntegrationProjectMetaData newProjectMetadata = super.createDefaultNewProjectMetadata(dsl, projectName);
 		if(isOlderThan220()){
 			newProjectMetadata.setTemplate(new CXfCodeFirstProjectTemplateForFuse6());
+		} else if(isNewerThan2232fuse7101()){
+			newProjectMetadata.setTemplate(new CXfCodeFirstProjectTemplateForFuse7101());
 		} else if(isNewerThan2232fuse7100()){
 			newProjectMetadata.setTemplate(new CXfCodeFirstProjectTemplateForFuse710());
 		} else if(isNewerThan221For76()) {
