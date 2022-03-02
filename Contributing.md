@@ -20,13 +20,13 @@ The easiest way to get started with the code is to [create your own fork](https:
     cd jbosstools-fuse
     git remote add upstream https://github.com/jbosstools/jbosstools-fuse.git
 
-At any time, you can pull changes from the upstream and merge them onto your master:
+At any time, you can pull changes from the upstream and merge them onto your main:
 
-    git checkout master               # switches to the 'master' branch
-    git pull --rebase upstream master # fetches all 'upstream' changes and merges 'upstream/master' onto your 'master' branch
+    git checkout main               # switches to the 'main' branch
+    git pull --rebase upstream main # fetches all 'upstream' changes and merges 'upstream/main' onto your 'main' branch
     git push origin                   # pushes all the updates to your fork, which should be in-sync with 'upstream'
 
-The general idea is to keep your 'master' branch in-sync with the 'upstream/master'.
+The general idea is to keep your 'main' branch in-sync with the 'upstream/main'.
 
 ## Building Red Hat Fuse Tooling
 
@@ -57,11 +57,11 @@ After you're happy with your changes and a full build (with tests) runs successf
 Don't forget the code sign-off (_-s_) in the above comment or your PR will not be accepted.
 Then it's time to check for any recent changes that were made in the official repository meanwhile:
 
-    git checkout master               # switches to the 'master' branch
-    git pull --rebase upstream master # fetches all 'upstream' changes and merges 'upstream/master' onto your 'master' branch
+    git checkout main               # switches to the 'main' branch
+    git pull --rebase upstream main # fetches all 'upstream' changes and merges 'upstream/main' onto your 'main' branch
     git checkout FUSETOOLS-1234       # switches to your topic branch
-    git rebase upstream master        # re-applies your changes on top of the latest in master
-                                      (i.e., the latest from master will be the new base for your changes)
+    git rebase upstream main        # re-applies your changes on top of the latest in main
+                                      (i.e., the latest from main will be the new base for your changes)
 
 If the pull grabbed a lot of changes, you should rerun your build with tests enabled to make sure your changes are still good.
 
@@ -92,7 +92,7 @@ In case, the Target Platform doesn't resolve:
 - Build the targetplaform (_mvn clean verify -Pmultiple2repo -Dmirror-target-to-repo.includeSources=true_)
 - copy the generated repository folder under the 'target' subfolder to a safe place and reference it in Eclipse Target Platform Definition
 
-If the build fails then most likely a version has been changed upstream and we need to update our target definition file. To do that follow these [instructions](https://github.com/jbosstools/jbosstools-devdoc/blob/master/building/target_platforms/target_platforms_updates.adoc#update-versions-of-ius-in-the-target-files).
+If the build fails then most likely a version has been changed upstream and we need to update our target definition file. To do that follow these [instructions](https://github.com/jbosstools/jbosstools-devdoc/blob/main/building/target_platforms/target_platforms_updates.adoc#update-versions-of-ius-in-the-target-files).
 
 ## Testing the Update Site
 
@@ -109,7 +109,7 @@ If you introduced new dependencies or changed versions it is always a good idea 
 
 ## Changing versions before / after a release
 
-There is a bash script called [_changeVersion.sh_](https://github.com/fusesource/fuseide/blob/master/changeVersion.sh "Version Change Script") in the root folder of the project. You can use that for changing the bundle and Maven versions in an easy way.
+There is a bash script called [_changeVersion.sh_](https://github.com/jbosstools/jbosstools-fuse/blob/main/changeVersion.sh "Version Change Script") in the root folder of the project. You can use that for changing the bundle and Maven versions in an easy way.
 
 *Invocation:*
 

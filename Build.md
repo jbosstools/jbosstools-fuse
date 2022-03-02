@@ -10,13 +10,13 @@ The easiest way to get started with the code is to [create your own fork](https:
     cd jbosstools-fuse
     git remote add upstream https://github.com/jbosstools/jbosstools-fuse.git
 
-At any time, you can pull changes from the upstream and merge them onto your master:
+At any time, you can pull changes from the upstream and merge them onto your main:
 
-    git checkout master               # switches to the 'master' branch
-    git pull --rebase upstream master # fetches all 'upstream' changes and merges 'upstream/master' onto your 'master' branch
+    git checkout main               # switches to the 'main' branch
+    git pull --rebase upstream main # fetches all 'upstream' changes and merges 'upstream/main' onto your 'main' branch
     git push origin                   # pushes all the updates to your fork, which should be in-sync with 'upstream'
 
-The general idea is to keep your 'master' branch in-sync with the 'upstream/master'.
+The general idea is to keep your 'main' branch in-sync with the 'upstream/main'.
 
 ## Building Red Hat Fuse Tooling
 
@@ -43,7 +43,7 @@ Once the build is done you end up with a file *fuse-multiple.target* inside the 
 
 ## Eclipse Setup
 
-At _master_ branch we always try to use the latest Eclipse version. Please refer to the target platform plugin to see which versions of Eclipse are supported. The _master_ branch was using *Eclipse Luna* when this document was created.
+At _main_ branch we always try to use the latest Eclipse version. Please refer to the target platform plugin to see which versions of Eclipse are supported. The _main_ branch was using *Eclipse Luna* when this document was created.
 
 Now its time to open your Eclipse if you haven't done so.
 

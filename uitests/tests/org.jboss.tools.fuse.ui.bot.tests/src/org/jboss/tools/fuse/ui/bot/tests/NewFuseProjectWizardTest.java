@@ -240,7 +240,7 @@ public class NewFuseProjectWizardTest {
 		lastPage.selectMoreExamplesLink();
 		WhereToFindMoreTemplatesMessageDialog moreExamplesDialog = new WhereToFindMoreTemplatesMessageDialog();
 		new WaitUntil(new ShellIsAvailable(moreExamplesDialog), TimePeriod.MEDIUM);
-		assertThat(moreExamplesDialog.getMessage()).contains("https://github.com/apache/camel/tree/master/examples",
+		assertThat(moreExamplesDialog.getMessage()).contains("https://github.com/apache/camel/tree/main/examples",
 				"https://github.com/fabric8-quickstarts");
 		moreExamplesDialog.close();
 		wiz.cancel();

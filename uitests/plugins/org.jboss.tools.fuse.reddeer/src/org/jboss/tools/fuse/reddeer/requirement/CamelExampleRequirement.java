@@ -23,7 +23,7 @@ import org.jboss.tools.fuse.reddeer.requirement.CamelExampleRequirement.CamelExa
 /**
  * Requirement for an existing Camel example. The camel example must be one of
  * the examples at <a href=
- * "https://github.com/apache/camel/tree/master/examples">https://github.com/apache/camel/tree/master/examples</a>.
+ * "https://github.com/apache/camel/tree/main/examples">https://github.com/apache/camel/tree/main/examples</a>.
  * <p>
  * Optionally, you can specify configuration for JMX or Jolokia. If you do not
  * specify JMX configuration then the camel example will not be accessible via

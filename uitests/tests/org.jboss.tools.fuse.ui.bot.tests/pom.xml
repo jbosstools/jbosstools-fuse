@@ -23,8 +23,8 @@
 		<rd.config>${project.build.directory}/requirements/karaf-3.0.3.json</rd.config>
 		<reddeerConfig>-Drd.config=${rd.config}</reddeerConfig>
 		<enable.debug.log>false</enable.debug.log>
-		<org.jboss.tools.fuse.camel2bom.url>https://raw.githubusercontent.com/jbosstools/jbosstools-fuse/master/configuration/camel2bom.properties</org.jboss.tools.fuse.camel2bom.url>
-		<org.jboss.tools.fuse.fismarker.url>https://raw.githubusercontent.com/jbosstools/jbosstools-fuse/master/configuration/fismarker.properties</org.jboss.tools.fuse.fismarker.url>
+		<org.jboss.tools.fuse.camel2bom.url>https://raw.githubusercontent.com/jbosstools/jbosstools-fuse/main/configuration/camel2bom.properties</org.jboss.tools.fuse.camel2bom.url>
+		<org.jboss.tools.fuse.fismarker.url>https://raw.githubusercontent.com/jbosstools/jbosstools-fuse/main/configuration/fismarker.properties</org.jboss.tools.fuse.fismarker.url>
 		<ideConfig>-Dorg.jboss.tools.fuse.camel2bom.url=${org.jboss.tools.fuse.camel2bom.url} -Dorg.jboss.tools.fuse.fismarker.url=${org.jboss.tools.fuse.fismarker.url} ${additionalSystemProperties}</ideConfig>
 		<systemProperties>${integrationTestsSystemProperties} ${reddeerConfig} ${ideConfig}</systemProperties>
 		<test.class>AllTests</test.class>
