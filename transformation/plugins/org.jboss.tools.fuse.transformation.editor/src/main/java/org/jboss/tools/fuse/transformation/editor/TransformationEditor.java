@@ -23,6 +23,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
+import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IPath;
@@ -322,9 +323,13 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
         setPartName(input.getName());
 
         IFile configFile = ((FileEditorInput)getEditorInput()).getFile();
-        IJavaProject javaProject = JavaCore.create(configFile.getProject());
+        IProject project = configFile.getProject();
+        IJavaProject javaProject = JavaCore.create(project);
         IProgressMonitor monitor = new NullProgressMonitor();
         try {
+            project.build(IncrementalProjectBuilder.INCREMENTAL_BUILD, monitor);
+            waitJavaBuild(20, null, monitor, ResourcesPlugin.FAMILY_MANUAL_BUILD);
+
             loader = (URLClassLoader)JavaUtil.getProjectClassLoader(javaProject, getClass().getClassLoader());
 
             new DozerMigrator().migrateIfNecessary(site, this, configFile, monitor);
@@ -342,11 +347,10 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
             if (!latestVersion) prefs.setValue(VERSION_PREFERENCE, version);
 
             // Ensure Maven will compile transformations folder
-            IProject project = manager.project();
-			File pomFile = project.getLocation().append(IMavenConstants.POM_FILE_NAME).toFile(); //$NON-NLS-1$
-			MavenUtils mavenUtils = new MavenUtils();
-			mavenUtils.addResourceFolder(project, pomFile, Util.TRANSFORMATIONS_FOLDER);
-			mavenUtils.addResourceFolder(project, pomFile, MavenUtils.RESOURCES_PATH);
+            File pomFile = project.getLocation().append(IMavenConstants.POM_FILE_NAME).toFile(); //$NON-NLS-1$
+            MavenUtils mavenUtils = new MavenUtils();
+            mavenUtils.addResourceFolder(project, pomFile, Util.TRANSFORMATIONS_FOLDER);
+            mavenUtils.addResourceFolder(project, pomFile, MavenUtils.RESOURCES_PATH);
 
             // Ensure Java project source classpath entry exists for main Java source & transformations folder
             Util.ensureSourceFolderExists(javaProject, Util.TRANSFORMATIONS_FOLDER, monitor);
@@ -354,13 +358,13 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
             project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
 
             // Ensure build of Java classes has completed
-            waitJavaBuild(20, null, monitor);
+            waitJavaBuild(20, null, monitor, ResourcesPlugin.FAMILY_AUTO_BUILD);
         } catch (final Exception e) {
             throw new PartInitException("Error initializing editor", e); //$NON-NLS-1$
         }
     }
 
-	private void waitJavaBuild(int decreasingCounter, InterruptedException interruptedException, IProgressMonitor monitor) {
+	private void waitJavaBuild(int decreasingCounter, InterruptedException interruptedException, IProgressMonitor monitor, Object familyBuild) {
 		if (decreasingCounter <= 0) {
 			if(interruptedException != null){
 				Activator.error(interruptedException);
@@ -368,11 +372,11 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
 			return;
 		}
 		try{
-			Job.getJobManager().join(ResourcesPlugin.FAMILY_AUTO_BUILD, monitor);
+			Job.getJobManager().join(familyBuild, monitor);
 		} catch(InterruptedException ie){
 			//try to wait a second time
 			//ugly workaround to bug https://bugs.eclipse.org/bugs/show_bug.cgi?id=335251
-			waitJavaBuild(decreasingCounter - 1, ie, monitor);
+			waitJavaBuild(decreasingCounter - 1, ie, monitor, familyBuild);
 			Thread.currentThread().interrupt();
 		}
 	}
