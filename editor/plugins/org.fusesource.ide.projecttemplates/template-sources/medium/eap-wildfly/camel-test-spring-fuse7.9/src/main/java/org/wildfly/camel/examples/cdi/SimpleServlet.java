@@ -21,7 +21,7 @@ package org.wildfly.camel.examples.cdi;
 
 import java.io.IOException;
 
-import javax.inject.Inject;
+import javax.annotation.Resource;
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.annotation.WebServlet;
@@ -36,7 +36,7 @@ import org.apache.camel.ProducerTemplate;
 @WebServlet(name = "HttpServiceServlet", urlPatterns = { "/*" }, loadOnStartup = 1)
 public class SimpleServlet extends HttpServlet
 {
-	@Inject
+	@Resource(lookup = "java:jboss/camel/context/spring-context")
 	private CamelContext camelctx;
 
     @Override
