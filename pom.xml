@@ -14,7 +14,7 @@
 
 	<groupId>org.fusesource.ide</groupId>
 	<artifactId>project</artifactId>
-	<version>11.14.0-SNAPSHOT</version>
+	<version>11.15.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>Red Hat Fuse Tooling</name>
 	<url>https://tools.jboss.org/features/fusetools.html</url>

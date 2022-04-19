@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %Bundle-Name
 Bundle-SymbolicName: org.fusesource.ide.preferences.tests.integration
-Bundle-Version: 11.14.0.qualifier
+Bundle-Version: 11.15.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Require-Bundle: org.junit,
  org.assertj;bundle-version="3.20.2",

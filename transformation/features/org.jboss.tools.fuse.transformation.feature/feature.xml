@@ -2,7 +2,7 @@
 <feature
       id="org.jboss.tools.fuse.transformation.feature"
       label="%featureName"
-      version="11.14.0.qualifier"
+      version="11.15.0.qualifier"
       provider-name="%providerName"
       license-feature="org.jboss.tools.foundation.license.feature"
       license-feature-version="0.0.0"
