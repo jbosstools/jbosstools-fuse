@@ -35,6 +35,7 @@ public class CamelForFuseOnOpenShiftToBomMapper extends OnlineVersionMapper {
 	public static final String FUSE_790_CAMEL_VERSION = "2.23.2.fuse-790054-redhat-00001";
 	public static final String FUSE_7100_CAMEL_VERSION = "2.23.2.fuse-7_10_0-00020-redhat-00001";
 	public static final String FUSE_7101_CAMEL_VERSION = "2.23.2.fuse-7_10_1-00008-redhat-00001";
+	public static final String FUSE_7102_CAMEL_VERSION = "2.23.2.fuse-7_10_2-00001-redhat-00005";
 
 	public CamelForFuseOnOpenShiftToBomMapper() {
 		super(FUSE_ON_OPENSHIFT_MAPPING_PROPERTY, FUSE_ON_OPENSHIFT_MAPPING_DEFAULT_URL);
@@ -56,6 +57,7 @@ public class CamelForFuseOnOpenShiftToBomMapper extends OnlineVersionMapper {
 		mapping.put(FUSE_790_CAMEL_VERSION, "3.0.11.fuse-770009-redhat-00002");
 		mapping.put(FUSE_7100_CAMEL_VERSION, "3.0.11.fuse-770009-redhat-00002");
 		mapping.put(FUSE_7101_CAMEL_VERSION, "3.0.11.fuse-770009-redhat-00002");
+		mapping.put(FUSE_7102_CAMEL_VERSION, "3.0.11.fuse-770009-redhat-00002");
 		return mapping;
 	}
 
