@@ -31,8 +31,10 @@ Require-Bundle: org.jboss.tools.foundation.ui;bundle-version="1.1.0",
  org.fusesource.ide.jmx.karaf,
  org.eclipse.wst.server.core,
  org.fusesource.ide.server.karaf.core,
- org.fusesource.ide.camel.editor,
- org.jboss.tools.common.jaxb;resolution:=optional
+ org.fusesource.ide.camel.editor
+Import-Package: com.sun.xml.bind.v2;version="2.3.3",
+ javax.xml.bind;version="2.3.3",
+ javax.xml.bind.annotation;version="2.3.3"
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: org.fusesource.ide.jmx.camel.CamelJMXPlugin
 Bundle-ClassPath: .

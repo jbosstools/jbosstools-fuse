@@ -26,8 +26,10 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.equinox.p2.ui,
  org.eclipse.equinox.p2.engine,
  org.eclipse.jdt.core,
- org.jboss.tools.foundation.core,
- org.jboss.tools.common.jaxb;resolution:=optional
+ org.jboss.tools.foundation.core
+Import-Package: com.sun.xml.bind.v2;version="2.3.3",
+ javax.xml.bind;version="2.3.3",
+ javax.xml.bind.annotation;version="2.3.3"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Bundle-Localization: OSGI-INF/l10n/bundle

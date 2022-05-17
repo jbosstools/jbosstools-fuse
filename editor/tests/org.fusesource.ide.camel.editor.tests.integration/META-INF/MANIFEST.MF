@@ -44,7 +44,6 @@ Require-Bundle: org.junit;bundle-version="4.12.0",
  org.fusesource.ide.camel.model.service.impl.v2223;bundle-version="10.3.0",
  org.fusesource.ide.camel.model.service.impl.v2210fuse000112redhat3;bundle-version="11.0.0",
  org.fusesource.ide.camel.model.service.impl.v2210fuse710018redhat00001;bundle-version="11.0.0",
- org.jboss.tools.common.jaxb;resolution:=optional,
  org.fusesource.ide.camel.model.service.impl.v2210fuse720050redhat00001;bundle-version="11.10.0",
  org.fusesource.ide.camel.model.service.impl.v2210fuse730078redhat00001;bundle-version="11.10.0",
  org.fusesource.ide.camel.model.service.impl.v2210fuse731003redhat00003;bundle-version="11.10.0",
@@ -52,4 +51,6 @@ Require-Bundle: org.junit;bundle-version="4.12.0",
  org.fusesource.ide.camel.model.service.impl.v2210fuse750033redhat00001;bundle-version="11.10.0",
  org.fusesource.ide.camel.model.service.impl.v2210fuse760027redhat00001;bundle-version="11.10.0",
  org.fusesource.ide.camel.model.service.impl.v2210fuse770013redhat00001;bundle-version="11.10.0"
+Import-Package: com.sun.xml.bind.v2;version="2.3.3",
+ javax.xml.bind;version="2.3.3"
 Bundle-Activator: org.fusesource.ide.camel.editor.tests.integration.Activator

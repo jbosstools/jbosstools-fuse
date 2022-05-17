@@ -58,6 +58,7 @@
       <import plugin="org.apache.commons.io" version="2.0.1" match="greaterOrEqual"/>
       <import plugin="org.jboss.tools.usage"/>
       <import feature="org.jboss.tools.jmx.feature" version="1.6.0" match="greaterOrEqual"/>
+      <import plugin="jakarta.xml.bind" version="2.3.3" match="greaterOrEqual"/>
    </requires>
 
    <plugin
@@ -220,23 +221,16 @@
          install-size="0"
          version="0.0.0"
          unpack="false"/>
-         
+
    <plugin
          id="org.fusesource.ide.camel.model.service.impl.v2210fuse760027redhat00001"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
-         
-   <plugin
-         id="org.fusesource.ide.camel.model.service.impl.v2210fuse770013redhat00001"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
 
    <plugin
-         id="org.jboss.tools.common.jaxb"
+         id="org.fusesource.ide.camel.model.service.impl.v2210fuse770013redhat00001"
          download-size="0"
          install-size="0"
          version="0.0.0"
@@ -255,39 +249,40 @@
          install-size="0"
          version="0.0.0"
          unpack="false"/>
-         
+
    <plugin
          id="org.fusesource.ide.camel.model.service.impl.v2232fuse780036redhat00001"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
-         
+
    <plugin
          id="org.fusesource.ide.camel.model.service.impl.v2232fuse790054redhat00001"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
-         
-    <plugin
+
+   <plugin
          id="org.fusesource.ide.camel.model.service.impl.v2232fuse7_10_000020redhat00001"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
-         
-    <plugin
+
+   <plugin
          id="org.fusesource.ide.camel.model.service.impl.v2232fuse7_10_100008redhat00001"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
-    
-    <plugin
+
+   <plugin
          id="org.fusesource.ide.camel.model.service.impl.v2232fuse7_10_200001redhat00005"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
+
 </feature>
