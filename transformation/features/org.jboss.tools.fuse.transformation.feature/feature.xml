@@ -4,11 +4,11 @@
       label="%featureName"
       version="11.15.0.qualifier"
       provider-name="%providerName"
+      plugin="org.fusesource.ide.tooling"
       license-feature="org.jboss.tools.foundation.license.feature"
-      license-feature-version="0.0.0"
-      plugin="org.fusesource.ide.tooling">
+      license-feature-version="0.0.0">
 
-<description url="https://tools.jboss.org/features/fusetools.html">
+   <description url="https://tools.jboss.org/features/fusetools.html">
       %description
    </description>
 
@@ -23,7 +23,6 @@
    <requires>
       <import feature="org.fusesource.ide.core.feature" version="10.0.0" match="greaterOrEqual"/>
       <import feature="org.fusesource.ide.camel.editor.feature" version="10.0.0" match="greaterOrEqual"/>
-      
       <import plugin="org.eclipse.ui"/>
       <import plugin="org.eclipse.core.resources" version="3.9.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.core.runtime" version="3.10.0" match="greaterOrEqual"/>
@@ -38,6 +37,8 @@
       <import plugin="org.eclipse.graphiti.mm" version="0.10.2" match="greaterOrEqual"/>
       <import plugin="org.eclipse.graphiti.pattern" version="0.10.2" match="greaterOrEqual"/>
       <import plugin="org.eclipse.graphiti.ui" version="0.10.2" match="greaterOrEqual"/>
+      <import plugin="com.sun.xml.bind"/>
+      <import plugin="jakarta.xml.bind"/>
    </requires>
 
    <plugin

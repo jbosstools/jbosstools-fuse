@@ -13,7 +13,8 @@ Require-Bundle: com.fasterxml.jackson.core.jackson-annotations,
  org.apache.commons.lang3,
  javax.validation,
  javax.annotation;bundle-version="1.2.0"
-Import-Package: com.sun.xml.bind.v2;version="2.3.3",
+Import-Package: com.sun.codemodel,
+ com.sun.xml.bind.v2;version="2.3.3",
  javax.xml.bind;version="2.3.3"
 Export-Package: org.jsonschema2pojo,
  org.jsonschema2pojo.exception,
