@@ -8,6 +8,7 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Require-Bundle: org.junit;bundle-version="4.12.0",
  org.assertj;bundle-version="3.20.2",
  com.fasterxml.jackson.core.jackson-annotations;bundle-version="2.5.0",
- org.jboss.tools.common.jaxb;resolution:=optional,
  javax.annotation
+Import-Package: com.sun.xml.bind.v2;version="2.3.3",
+ javax.xml.bind;version="2.3.3"
 Bundle-Vendor: %Bundle-Vendor

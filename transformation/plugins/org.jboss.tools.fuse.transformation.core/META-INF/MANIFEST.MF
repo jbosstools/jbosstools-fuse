@@ -20,8 +20,12 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.11.0",
  org.fusesource.ide.foundation.core;bundle-version="10.0.0",
  org.fusesource.ide.foundation.ui;bundle-version="10.0.0",
  org.fusesource.ide.camel.editor;bundle-version="10.0.0",
- org.jboss.tools.common.jaxb;resolution:=optional,
  org.fusesource.ide.jsonschema2pojo-0.4.13;bundle-version="11.10.0"
+Import-Package: com.sun.codemodel,
+ com.sun.tools.xjc.api,
+ com.sun.xml.bind.v2;version="2.3.3",
+ javax.xml.bind;version="2.3.3",
+ javax.xml.bind.annotation;version="2.3.3"
 Export-Package: com.google.gson;x-friends:="org.jboss.tools.fuse.transformation.editor",
  com.google.gson.annotations;x-friends:="org.jboss.tools.fuse.transformation.editor",
  com.google.gson.internal;x-friends:="org.jboss.tools.fuse.transformation.editor",

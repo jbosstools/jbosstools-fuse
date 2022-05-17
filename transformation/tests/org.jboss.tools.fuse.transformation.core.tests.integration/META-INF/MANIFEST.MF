@@ -13,7 +13,9 @@ Require-Bundle: org.junit;bundle-version="4.12.0",
  org.fusesource.ide.camel.model.service.core,
  org.fusesource.ide.camel.model.service.impl,
  org.eclipse.core.runtime;bundle-version="3.11.1",
- org.eclipse.ui.workbench,
- org.jboss.tools.common.jaxb;resolution:=optional
+ org.eclipse.ui.workbench
+Import-Package: com.sun.codemodel,
+ com.sun.xml.bind.v2;version="2.3.3",
+ javax.xml.bind;version="2.3.3"
 Bundle-ClassPath: lib/jsonschema2pojo-core-1.1.1.jar,
  .

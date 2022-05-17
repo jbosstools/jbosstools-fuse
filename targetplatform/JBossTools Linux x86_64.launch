@@ -1110,7 +1110,6 @@
         <setEntry value="org.jboss.tools.common.el.core@default:default"/>
         <setEntry value="org.jboss.tools.common.el.ui@default:default"/>
         <setEntry value="org.jboss.tools.common.gef@default:default"/>
-        <setEntry value="org.jboss.tools.common.jaxb@default:default"/>
         <setEntry value="org.jboss.tools.common.jdt.debug.ui@default:default"/>
         <setEntry value="org.jboss.tools.common.jdt.debug@default:default"/>
         <setEntry value="org.jboss.tools.common.jdt.ui@default:default"/>
