@@ -26,6 +26,7 @@ import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.camel.model.service.core.model.CamelRouteElement;
 import org.fusesource.ide.camel.validation.diagram.IFuseMarker;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -38,6 +39,7 @@ import org.w3c.dom.Node;
  *
  */
 @RunWith(MockitoJUnitRunner.class)
+@Ignore
 public class GoToMarkerForCamelEditorTest {
 
 	@Mock
