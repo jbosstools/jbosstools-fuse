@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Red Hat Fuse Tooling model service integration tests
 Bundle-SymbolicName: org.fusesource.ide.camel.model.service.impl.tests.integration
-Bundle-Version: 11.15.0.qualifier
+Bundle-Version: 11.16.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Require-Bundle: assertj-core;bundle-version="3.22.0",
  org.junit;bundle-version="4.12.0",
