@@ -20,7 +20,7 @@
         <version.jboss.bom.eap>6.4.0.GA</version.jboss.bom.eap>
 
         <!-- Other versions -->
-        <camel.version>2.17.0.redhat-630187</camel.version>
+        <camel.version>2.24.0</camel.version>
         <version.junit>4.11</version.junit>
 
         <!-- Plugin versions -->
