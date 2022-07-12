@@ -286,6 +286,13 @@
          unpack="false"/>
 
    <plugin
+         id="org.fusesource.ide.camel.model.service.impl.v2232fuse7_11_000037redhat00001"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
          id="org.fusesource.ide.jaxb-xjc-2.3.3"
          download-size="0"
          install-size="0"
