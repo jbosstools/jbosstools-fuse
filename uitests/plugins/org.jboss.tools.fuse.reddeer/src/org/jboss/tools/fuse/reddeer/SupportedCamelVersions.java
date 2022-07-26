@@ -71,11 +71,14 @@ public class SupportedCamelVersions {
 	public static final String CAMEL_2_23_2_FUSE_780036_REDHAT_00001 = "2.23.2.fuse-780036-redhat-00001";
 	public static final String CAMEL_2_23_2_FUSE_790054_REDHAT_00001 = "2.23.2.fuse-790054-redhat-00001";
 	public static final String CAMEL_2_23_2_FUSE_7_10_0_00020_REDHAT_00001 = "2.23.2.fuse-7_10_0-00020-redhat-00001";
+	public static final String CAMEL_2_23_2_FUSE_7_10_1_00008_REDHAT_00001 = "2.23.2.fuse-7_10_1-00008-redhat-00001";
+	public static final String CAMEL_2_23_2_FUSE_7_10_2_00001_REDHAT_00005 = "2.23.2.fuse-7_10_2-00001-redhat-00005";
+	public static final String CAMEL_2_23_2_FUSE_7_11_0_00037_REDHAT_00001 = "2.23.2.fuse-7_11_0-00037-redhat-00001";
 
-	public static final String CAMEL_LATEST = CAMEL_2_23_2_FUSE_7_10_0_00020_REDHAT_00001;
+	public static final String CAMEL_LATEST = CAMEL_2_23_2_FUSE_7_11_0_00037_REDHAT_00001;
 	public static final String CAMEL_LATEST_FUSE_6_2 = CAMEL_2_15_1_REDHAT_621216;
 	public static final String CAMEL_LATEST_FUSE_6_3 = CAMEL_2_17_0_REDHAT_630356;
-	public static final String CAMEL_LATEST_FUSE_7 = CAMEL_2_23_2_FUSE_7_10_0_00020_REDHAT_00001;
+	public static final String CAMEL_LATEST_FUSE_7 = CAMEL_2_23_2_FUSE_7_11_0_00037_REDHAT_00001;
 	public static final String CAMEL_LATEST_FIS = CAMEL_2_18_1_REDHAT_000026;
 
 	public static Collection<String> getCamelVersions() {
@@ -123,6 +126,9 @@ public class SupportedCamelVersions {
 		versions.add(CAMEL_2_23_2_FUSE_780036_REDHAT_00001);
 		versions.add(CAMEL_2_23_2_FUSE_790054_REDHAT_00001);
 		versions.add(CAMEL_2_23_2_FUSE_7_10_0_00020_REDHAT_00001);
+		versions.add(CAMEL_2_23_2_FUSE_7_10_1_00008_REDHAT_00001);
+		versions.add(CAMEL_2_23_2_FUSE_7_10_2_00001_REDHAT_00005);
+		versions.add(CAMEL_2_23_2_FUSE_7_11_0_00037_REDHAT_00001);
 		return versions;
 	}
 
@@ -174,6 +180,9 @@ public class SupportedCamelVersions {
 		versions.put(CAMEL_2_23_2_FUSE_780036_REDHAT_00001, CAMEL_2_23_2_FUSE_780036_REDHAT_00001 + " (Fuse 7.8.0 GA)");
 		versions.put(CAMEL_2_23_2_FUSE_790054_REDHAT_00001, CAMEL_2_23_2_FUSE_790054_REDHAT_00001 + " (Fuse 7.9.0 GA)");
 		versions.put(CAMEL_2_23_2_FUSE_7_10_0_00020_REDHAT_00001, CAMEL_2_23_2_FUSE_7_10_0_00020_REDHAT_00001 + " (Fuse 7.10.0 GA)");
+		versions.put(CAMEL_2_23_2_FUSE_7_10_1_00008_REDHAT_00001, CAMEL_2_23_2_FUSE_7_10_1_00008_REDHAT_00001 + " (Fuse 7.10.1 GA)");
+		versions.put(CAMEL_2_23_2_FUSE_7_10_2_00001_REDHAT_00005, CAMEL_2_23_2_FUSE_7_10_2_00001_REDHAT_00005 + " (Fuse 7.10.2 GA)");
+		versions.put(CAMEL_2_23_2_FUSE_7_11_0_00037_REDHAT_00001, CAMEL_2_23_2_FUSE_7_11_0_00037_REDHAT_00001 + " (Fuse 7.11.0 GA)");
 		return versions;
 	}
 
