@@ -35,7 +35,11 @@ public class JDKTemplateCompatibleChecker {
 		this.runtimeType = null;
 		this.camelVersion = camelVersion;
 	}
-
+	
+	public boolean isJDK8Compatible() {
+		return true;
+	}
+	
 	public boolean isJDK11Compatible() {
 		Version fuseVersion;
 		try {
@@ -85,22 +89,15 @@ public class JDKTemplateCompatibleChecker {
 	}
 
 	public void handleNoStrictlyCompliantJRETemplates(boolean hasJava8, boolean hasJava11, boolean hasJava17, String shell) {
-		if(hasJava11) {
-			if(!this.isJDK11Compatible()) {
-				if(!hasJava8) {
-					JDKCheck.handleJDKWarningDialog();
-					waitForProjectDependencies(shell);
-				}
-			}
+		if(!hasCompliantJDK(hasJava8, hasJava11, hasJava17)) {
+			handleNoStrictlyCompliantJRETemplates(shell);
 		}
-		if(hasJava17) {
-			if(!this.isJDK17Compatible()) {
-				if(!hasJava8 || !hasJava11) {
-					JDKCheck.handleJDKWarningDialog();
-					waitForProjectDependencies(shell);
-				}
-			}
-		}
+	}
+
+	private boolean hasCompliantJDK(boolean hasJava8, boolean hasJava11, boolean hasJava17) {
+		return this.isJDK17Compatible() && hasJava17
+				|| this.isJDK11Compatible() && hasJava11
+				|| this.isJDK8Compatible() && hasJava8;
 	}
 
 	private void waitForProjectDependencies(String shell) {
