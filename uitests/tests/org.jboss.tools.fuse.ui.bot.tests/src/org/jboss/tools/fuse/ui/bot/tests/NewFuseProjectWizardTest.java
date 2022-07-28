@@ -29,12 +29,14 @@ import java.util.List;
 
 import org.eclipse.reddeer.common.wait.TimePeriod;
 import org.eclipse.reddeer.common.wait.WaitUntil;
+import org.eclipse.reddeer.common.wait.WaitWhile;
 import org.eclipse.reddeer.direct.project.Project;
 import org.eclipse.reddeer.eclipse.ui.views.markers.ProblemsView;
 import org.eclipse.reddeer.junit.runner.RedDeerSuite;
 import org.eclipse.reddeer.requirements.cleanerrorlog.CleanErrorLogRequirement;
 import org.eclipse.reddeer.requirements.cleanworkspace.CleanWorkspaceRequirement;
 import org.eclipse.reddeer.swt.api.TreeItem;
+import org.eclipse.reddeer.swt.condition.ShellIsActive;
 import org.eclipse.reddeer.swt.condition.ShellIsAvailable;
 import org.eclipse.reddeer.swt.impl.button.FinishButton;
 import org.eclipse.reddeer.swt.impl.tree.DefaultTree;
@@ -108,7 +110,7 @@ public class NewFuseProjectWizardTest {
 		wiz.next();
 		NewFuseIntegrationProjectWizardAdvancedPage lastPage = new NewFuseIntegrationProjectWizardAdvancedPage(wiz);
 		lastPage.selectTemplate(SPRINGBOOT);
-		new FinishButton(wiz).click();
+		this.finishProject(wiz);
 
 		JDKTemplateCompatibleChecker jdkChecker = new JDKTemplateCompatibleChecker(NewFuseIntegrationProjectWizardRuntimeType.SPRINGBOOT, camelVersion);
 		jdkChecker.handleNoStrictlyCompliantJRETemplates(hasJava8, hasJava11, hasJava17, SHELL_NAME);
@@ -153,7 +155,7 @@ public class NewFuseProjectWizardTest {
 		wiz.next();
 		NewFuseIntegrationProjectWizardAdvancedPage lastPage = new NewFuseIntegrationProjectWizardAdvancedPage(wiz);
 		lastPage.selectTemplate(EMPTY_BLUEPRINT);
-		new FinishButton(wiz).click();
+		this.finishProject(wiz);
 
 		JDKTemplateCompatibleChecker jdkChecker = new JDKTemplateCompatibleChecker(KARAF, testCamelVersion);
 		jdkChecker.handleNoStrictlyCompliantJRETemplates(hasJava8, hasJava11, hasJava17, SHELL_NAME);
@@ -254,5 +256,10 @@ public class NewFuseProjectWizardTest {
 				return true;
 		}
 		return false;
+	}
+
+	private void finishProject(NewFuseIntegrationProjectWizard wiz) {
+		new FinishButton(wiz).click();
+		new WaitWhile(new ShellIsActive(wiz.getShell()), TimePeriod.VERY_LONG);
 	}
 }
