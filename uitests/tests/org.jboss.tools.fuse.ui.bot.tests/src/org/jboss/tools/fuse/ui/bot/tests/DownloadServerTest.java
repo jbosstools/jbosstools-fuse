@@ -84,13 +84,10 @@ public class DownloadServerTest extends DefaultTest {
 	@Parameters(name = "{0}")
 	public static Collection<Object[]> data() {
 		return Arrays.asList(new Object[][] {
-			// Karaf
-			{ "Apache", "Karaf 4.1+", false },
 			// Fuse on Karaf
 			{ "Red Hat JBoss Middleware", "Red Hat Fuse 7+", true },
-			{ "JBoss Community", "JBoss 6.x Runtime", false },
 			// Fuse on EAP
-			{ "Red Hat JBoss Middleware", "Red Hat JBoss Enterprise Application Platform 7.3 Runtime", true }, });
+			{ "Red Hat JBoss Middleware", "Red Hat JBoss Enterprise Application Platform 7.4 Runtime", true }, });
 	}
 
 	/*
@@ -100,7 +97,7 @@ public class DownloadServerTest extends DefaultTest {
 	public static void setCredentials() {
 		WorkbenchPreferenceDialog prefs = new WorkbenchPreferenceDialog();
 		prefs.open();
-		PreferencePage pp = new PreferencePage(prefs, "JBoss Tools", "Credentials");
+		PreferencePage pp = new PreferencePage(prefs, "Credentials");
 		prefs.select(pp);
 		new PushButton("Add User...").click();
 		new DefaultCombo().setSelection("access.redhat.com");
