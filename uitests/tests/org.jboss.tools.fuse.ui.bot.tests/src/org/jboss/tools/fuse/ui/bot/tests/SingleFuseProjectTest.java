@@ -85,7 +85,7 @@ public class SingleFuseProjectTest extends DefaultTest {
 
 	public static final String DEPLOYMENT_TYPE = System.getProperty("fuseDeploymentType", "OpenShift");
 	public static final String RUNTIME_TYPE = System.getProperty("fuseRuntimeType", "SpringBoot");
-	public static final String CAMEL_VERSION = System.getProperty("fuseCamelVersion", "2.18.1.redhat-000021");
+	public static final String CAMEL_VERSION = System.getProperty("fuseCamelVersion", "2.23.2.fuse-7_11_0-00037-redhat-00001");
 	public static final String STAGING_REPOS = System.getProperty("staging.repositories", "false");
 
 	private static final String PROJECT_NAME = "rfhaSS234ss";

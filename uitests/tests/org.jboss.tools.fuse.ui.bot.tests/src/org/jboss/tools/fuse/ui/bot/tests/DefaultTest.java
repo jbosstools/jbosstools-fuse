@@ -25,6 +25,7 @@ import org.eclipse.reddeer.core.matcher.WithTooltipTextMatcher;
 import org.eclipse.reddeer.eclipse.ui.console.ConsoleView;
 import org.eclipse.reddeer.eclipse.ui.views.log.LogMessage;
 import org.eclipse.reddeer.eclipse.ui.views.log.LogView;
+import org.eclipse.reddeer.eclipse.ui.views.markers.ProblemsView;
 import org.eclipse.reddeer.swt.impl.toolbar.DefaultToolItem;
 import org.eclipse.reddeer.workbench.core.condition.JobIsRunning;
 import org.eclipse.reddeer.workbench.handler.WorkbenchShellHandler;
@@ -79,6 +80,9 @@ public class DefaultTest {
 		log.info("Disable showing Error Log view after changes");
 		new LogView().open();
 		new LogView().setActivateOnNewEvents(false);
+
+		log.info("Open Problems View");
+		new ProblemsView().open();
 	}
 
 	/**
