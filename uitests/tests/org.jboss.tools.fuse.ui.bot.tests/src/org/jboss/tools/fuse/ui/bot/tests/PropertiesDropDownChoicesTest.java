@@ -90,6 +90,7 @@ public class PropertiesDropDownChoicesTest {
 		editor.activate();
 		editor.addComponent("Direct", "Log");
 		FusePropertiesView properties = new FusePropertiesView();
+		properties.open();
 		properties.setDetailsProperty(DetailsProperty.PATTERN, "InOnly");
 		editor.save();
 
@@ -109,6 +110,7 @@ public class PropertiesDropDownChoicesTest {
 		editor.activate();
 		editor.clickOnEditPart(COMPONENT);
 		FusePropertiesView properties2 = new FusePropertiesView();
+		properties2.open();
 		properties2.setDetailsProperty(DetailsProperty.PATTERN, "");
 		editor.save();
 
