@@ -26,6 +26,7 @@ import org.eclipse.reddeer.junit.requirement.inject.InjectRequirement;
 import org.eclipse.reddeer.junit.requirement.matcher.RequirementMatcher;
 import org.eclipse.reddeer.junit.runner.RedDeerSuite;
 import org.eclipse.reddeer.requirements.cleanworkspace.CleanWorkspaceRequirement.CleanWorkspace;
+import org.eclipse.reddeer.requirements.jre.JRERequirement.JRE;
 import org.eclipse.reddeer.requirements.openperspective.OpenPerspectiveRequirement.OpenPerspective;
 import org.eclipse.reddeer.requirements.server.ServerRequirementState;
 import org.eclipse.reddeer.swt.api.TreeItem;
@@ -33,7 +34,6 @@ import org.eclipse.reddeer.swt.impl.menu.ContextMenu;
 import org.eclipse.reddeer.workbench.core.condition.JobIsRunning;
 import org.eclipse.reddeer.workbench.impl.editor.DefaultEditor;
 import org.eclipse.reddeer.workbench.impl.shell.WorkbenchShell;
-import org.jboss.tools.fuse.reddeer.LogGrapper;
 import org.jboss.tools.fuse.reddeer.ResourceHelper;
 import org.jboss.tools.fuse.reddeer.editor.CamelEditor;
 import org.jboss.tools.fuse.reddeer.perspectives.FuseIntegrationPerspective;
@@ -45,6 +45,7 @@ import org.jboss.tools.fuse.reddeer.runtime.ServerTypeMatcher;
 import org.jboss.tools.fuse.reddeer.runtime.impl.ServerFuse;
 import org.jboss.tools.fuse.reddeer.utils.FuseServerManipulator;
 import org.jboss.tools.fuse.reddeer.utils.FuseShellSSH;
+import org.jboss.tools.fuse.reddeer.utils.LogChecker;
 import org.jboss.tools.fuse.reddeer.utils.ProjectFactory;
 import org.jboss.tools.fuse.reddeer.view.FuseJMXNavigator;
 import org.jboss.tools.fuse.reddeer.view.MessagesView;
@@ -61,6 +62,7 @@ import org.junit.runner.RunWith;
  * 
  * @author tsedmik
  */
+@JRE(setDefault = true)
 @Fuse(state = ServerRequirementState.RUNNING)
 @CleanWorkspace
 @OpenPerspective(FuseIntegrationPerspective.class)
@@ -173,7 +175,7 @@ public class RouteManipulationServerTest {
 		CamelEditor.switchTab("Design");
 		jmx.refreshLocalProcesses();
 		assertNull(jmx.getNode("Local Processes", "Red Hat Fuse", "Camel", "_context1", "Routes", "_route1", "timer:EverySecondTimer", "SetBody _setBody1", "Choice", "Otherwise"));
-		assertTrue(LogGrapper.getPluginErrors("fuse").size() == 0);
+		LogChecker.assertNoFuseError();
 	}
 
 	/**
@@ -209,6 +211,6 @@ public class RouteManipulationServerTest {
 		MessagesView msg = new MessagesView();
 		msg.open();
 		assertTrue(msg.getAllMessages().size() > 4);
-		assertTrue(LogGrapper.getPluginErrors("fuse").size() == 0);
+		LogChecker.assertNoFuseError();
 	}
 }
