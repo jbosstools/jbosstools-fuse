@@ -67,7 +67,7 @@ import org.junit.runners.Parameterized.UseParametersRunnerFactory;
  * 
  * @author tsedmik, fpospisi
  */
-@JRE
+@JRE(setDefault = true)
 @CleanWorkspace
 @OpenPerspective(FuseIntegrationPerspective.class)
 @RunWith(RedDeerSuite.class)
