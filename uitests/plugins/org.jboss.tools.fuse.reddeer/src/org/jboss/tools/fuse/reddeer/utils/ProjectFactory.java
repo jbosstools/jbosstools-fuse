@@ -22,8 +22,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.eclipse.reddeer.common.condition.WaitCondition;
 import org.eclipse.reddeer.common.wait.AbstractWait;
 import org.eclipse.reddeer.common.wait.TimePeriod;
+import org.eclipse.reddeer.common.wait.WaitUntil;
 import org.eclipse.reddeer.common.wait.WaitWhile;
 import org.eclipse.reddeer.direct.preferences.PreferencesUtil;
 import org.eclipse.reddeer.eclipse.ui.navigator.resources.ProjectExplorer;
@@ -32,9 +34,11 @@ import org.eclipse.reddeer.eclipse.ui.wizards.datatransfer.WizardProjectsImportP
 import org.eclipse.reddeer.eclipse.utils.DeleteUtils;
 import org.eclipse.reddeer.swt.api.Shell;
 import org.eclipse.reddeer.swt.condition.ShellIsActive;
+import org.eclipse.reddeer.swt.condition.ShellIsAvailable;
 import org.eclipse.reddeer.swt.impl.button.CheckBox;
 import org.eclipse.reddeer.swt.impl.button.FinishButton;
 import org.eclipse.reddeer.swt.impl.button.PushButton;
+import org.eclipse.reddeer.swt.impl.button.YesButton;
 import org.eclipse.reddeer.swt.impl.menu.ContextMenuItem;
 import org.eclipse.reddeer.swt.impl.shell.DefaultShell;
 import org.eclipse.reddeer.workbench.core.condition.JobIsRunning;
@@ -174,7 +178,15 @@ public class ProjectFactory {
 		page.copyProjectsIntoWorkspace(true);
 		page.setRootDirectory(path);
 		page.selectProjects(name);
-		dialog.finish(TimePeriod.VERY_LONG);
+		new PushButton("Finish").click();
+		new WaitWhile(new ShellIsActive("Import"), TimePeriod.VERY_LONG);
+		// Handle Question dialog
+		DefaultShell questionDialog = new DefaultShell("Question");
+		WaitCondition wait = new ShellIsAvailable(questionDialog);
+		new WaitUntil(wait, TimePeriod.LONG, false);
+		if (wait.getResult() != null) {
+			new YesButton(questionDialog).click();
+		}
 
 		if (maven) {
 			new ProjectExplorer().selectProjects(name);
