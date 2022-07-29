@@ -41,7 +41,6 @@ import org.eclipse.reddeer.swt.impl.menu.ContextMenu;
 import org.eclipse.reddeer.swt.impl.menu.ContextMenuItem;
 import org.eclipse.reddeer.workbench.impl.editor.DefaultEditor;
 import org.eclipse.reddeer.workbench.impl.shell.WorkbenchShell;
-import org.jboss.tools.fuse.reddeer.LogGrapper;
 import org.jboss.tools.fuse.reddeer.ProjectTemplate;
 import org.jboss.tools.fuse.reddeer.editor.CamelEditor;
 import org.jboss.tools.fuse.reddeer.perspectives.FuseIntegrationPerspective;
@@ -186,7 +185,7 @@ public class RouteManipulationTest extends DefaultTest {
 		if(console.getConsoleLabel().contains("Camel LSP")) {
 			console.switchConsole(new RegexMatcher(".*Run camel-spring.*"));
 		}
-		new WaitUntil(new ConsoleHasText(console,"INFO  XXX"), TimePeriod.getCustom(600));
+		new WaitUntil(new ConsoleHasText(console,"INFO cbr-route - XXX"), TimePeriod.getCustom(600));
 	
 		editor.activate();
 		CamelEditor.switchTab("Source");
@@ -197,7 +196,7 @@ public class RouteManipulationTest extends DefaultTest {
 		if(console.getConsoleLabel().contains("Camel LSP")) {
 			console.switchConsole(new RegexMatcher(".*Run camel-spring.*"));
 		}
-		new WaitUntil(new ConsoleHasText(console,"INFO  YYY"), TimePeriod.getCustom(600));
+		new WaitUntil(new ConsoleHasText(console,"INFO cbr-route - YYY"), TimePeriod.getCustom(600));
 		
 		jmx.activate();
 		assertNotNull(jmx.getNode("Local Processes", "Local Camel Context", "Camel", "cbr-example-context", "Routes",
@@ -268,6 +267,6 @@ public class RouteManipulationTest extends DefaultTest {
 		assertEquals("_choice1", msg.getMessage(3).getTraceNode());
 		assertEquals("_log4", msg.getMessage(4).getTraceNode());
 		assertEquals("_to3", msg.getMessage(5).getTraceNode());
-		assertTrue(LogGrapper.getPluginErrors("fuse").size() == 0);
+		LogChecker.assertNoFuseError();
 	}
 }
