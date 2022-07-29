@@ -10,6 +10,7 @@
  ******************************************************************************/
 package org.jboss.tools.fuse.ui.bot.tests;
 
+import static org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizard.SHELL_NAME;
 import static org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardDeploymentType.STANDALONE;
 import static org.junit.Assert.assertTrue;
 
@@ -18,15 +19,17 @@ import org.eclipse.reddeer.common.wait.WaitUntil;
 import org.eclipse.reddeer.common.wait.WaitWhile;
 import org.eclipse.reddeer.junit.runner.RedDeerSuite;
 import org.eclipse.reddeer.requirements.cleanworkspace.CleanWorkspaceRequirement;
+import org.eclipse.reddeer.swt.condition.ShellIsActive;
 import org.eclipse.reddeer.swt.condition.ShellIsAvailable;
 import org.eclipse.reddeer.swt.impl.button.FinishButton;
-import org.eclipse.reddeer.workbench.core.condition.JobIsRunning;
+import org.jboss.tools.fuse.reddeer.utils.JDKCheck;
+import org.jboss.tools.fuse.reddeer.utils.JDKTemplateCompatibleChecker;
 import org.jboss.tools.fuse.reddeer.view.CheatSheetsView;
 import org.jboss.tools.fuse.reddeer.wizard.CheatSheetsWizard;
 import org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizard;
 import org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardFirstPage;
 import org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardRuntimePage;
-
+import org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardRuntimeType;
 import org.junit.AfterClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -75,6 +78,10 @@ public class CheatSheetsTest {
 	@Test
 	public void testCheatSheets() {
 
+		boolean hasJava8 = JDKCheck.isJava8Available();
+		boolean hasJava11 = JDKCheck.isJava11Available();
+		boolean hasJava17 = JDKCheck.isJava17Available();
+
 		/*
 		 * Open Help -> Cheat Sheets -> Red Hat Fuse -> Create a Fuse...
 		 */
@@ -111,6 +118,7 @@ public class CheatSheetsTest {
 		 * Open the New Fuse Project wizard part After activating 'Click to perform' wizardLink text changes to 'Click
 		 * to redo'.
 		 */
+		cheatsheets.activate();
 		assertTrue("Wizard text not matching.", cheatsheets.sectionHasText("Open the New Fuse Project wizard", WIZARD));
 		cheatsheets.selectHyperlink("Click to perform");
 
@@ -124,10 +132,13 @@ public class CheatSheetsTest {
 		firstPage.setProjectName("CheatSheetsTest");
 		wiz.next();
 		NewFuseIntegrationProjectWizardRuntimePage secondPage = new NewFuseIntegrationProjectWizardRuntimePage(wiz);
+		String camelVersion = secondPage.getSelectedCamelVersion();
 		secondPage.setDeploymentType(STANDALONE);
+		NewFuseIntegrationProjectWizardRuntimeType runtimeType = secondPage.getRuntimeType();
 		wiz.next();
 		new FinishButton(wiz).click();
-		new WaitWhile(new JobIsRunning(), TimePeriod.LONG);
-		new WaitWhile(new ShellIsAvailable("New Fuse Integration Project"), TimePeriod.getCustom(900));
+		new WaitWhile(new ShellIsActive(wiz.getShell()), TimePeriod.VERY_LONG);
+		JDKTemplateCompatibleChecker jdkChecker = new JDKTemplateCompatibleChecker(runtimeType, camelVersion);
+		jdkChecker.handleNoStrictlyCompliantJRETemplates(hasJava8, hasJava11, hasJava17, SHELL_NAME);
 	}
 }

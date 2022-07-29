@@ -5,6 +5,9 @@ Bundle-SymbolicName: org.jboss.tools.fuse.ui.bot.tests
 Bundle-Version: 11.16.0.qualifier
 Bundle-Activator: org.jboss.tools.fuse.ui.bot.tests.Activator
 Require-Bundle: org.eclipse.ui,
+ org.eclipse.ui.cheatsheets,
+ org.eclipse.help.ui,
+ org.eclipse.platform,
  org.eclipse.osgi,
  org.eclipse.core.runtime,
  org.junit;bundle-version="4.12.0",
