@@ -18,7 +18,6 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -43,6 +42,7 @@ import org.eclipse.reddeer.workbench.impl.shell.WorkbenchShell;
 import org.jboss.tools.fuse.reddeer.CamelCatalogUtils;
 import org.jboss.tools.fuse.reddeer.MavenDependency;
 import org.jboss.tools.fuse.reddeer.ProjectType;
+import org.jboss.tools.fuse.reddeer.CamelCatalogUtils.CatalogType;
 import org.jboss.tools.fuse.reddeer.component.Transform;
 import org.jboss.tools.fuse.reddeer.editor.CamelEditor;
 import org.jboss.tools.fuse.reddeer.projectexplorer.CamelProject;
@@ -99,36 +99,8 @@ public class CamelEditorLanguageTest {
 
 	@Parameters(name = "{0}")
 	public static Collection<String> getCamelLanguages() {
-		List<String> camelLanguages = new ArrayList<>();
-		// there is a bug in RedDeer, see https://github.com/eclipse/reddeer/issues/1914
-		// that's why we use hard-coded languages - the languages were taken from
-		// cat org/apache/camel/catalog/models/transform.json | jq -r '.properties.expression.oneOf | .[]'
-		camelLanguages.add("constant");
-		camelLanguages.add("el");
-		camelLanguages.add("exchangeProperty");
-		camelLanguages.add("groovy");
-		camelLanguages.add("header");
-		camelLanguages.add("javaScript");
-		camelLanguages.add("jsonpath");
-		camelLanguages.add("jxpath");
-		camelLanguages.add("language");
-		camelLanguages.add("method");
-		camelLanguages.add("mvel");
-		camelLanguages.add("ognl");
-		camelLanguages.add("php");
-		camelLanguages.add("python");
-		camelLanguages.add("ref");
-		camelLanguages.add("ruby");
-		camelLanguages.add("simple");
-		camelLanguages.add("spel");
-		camelLanguages.add("sql");
-		camelLanguages.add("terser");
-		camelLanguages.add("tokenize");
-		camelLanguages.add("vtdxml");
-		camelLanguages.add("xpath");
-		camelLanguages.add("xquery");
-		camelLanguages.add("xtokenize");
-		return camelLanguages;
+		return new CamelCatalogUtils(camelCatalogRequirement.getConfiguration().getHome())
+				.getComponentPropertyValueAsList(CatalogType.MODEL, "transform", "expression", "oneOf");
 	}
 
 	/**
