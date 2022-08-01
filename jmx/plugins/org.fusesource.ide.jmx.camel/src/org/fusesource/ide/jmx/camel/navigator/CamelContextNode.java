@@ -173,6 +173,7 @@ public class CamelContextNode 	extends NodeSupport
 		try {
 			return camelContextMBean.dumpRoutesAsXml();
 		} catch (Exception e) {
+			CamelJMXPlugin.getLogger().error("Cannot retrieve xml of the Camel route through JMX MBean", e);
 			return "";
 		}
 	}
