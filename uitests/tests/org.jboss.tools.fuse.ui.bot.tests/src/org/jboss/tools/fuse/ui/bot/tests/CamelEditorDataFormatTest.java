@@ -18,7 +18,6 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -41,9 +40,9 @@ import org.eclipse.reddeer.swt.condition.ShellIsAvailable;
 import org.eclipse.reddeer.workbench.handler.EditorHandler;
 import org.eclipse.reddeer.workbench.impl.shell.WorkbenchShell;
 import org.jboss.tools.fuse.reddeer.CamelCatalogUtils;
+import org.jboss.tools.fuse.reddeer.CamelCatalogUtils.CatalogType;
 import org.jboss.tools.fuse.reddeer.MavenDependency;
 import org.jboss.tools.fuse.reddeer.ProjectType;
-import org.jboss.tools.fuse.reddeer.SupportedCamelVersions;
 import org.jboss.tools.fuse.reddeer.component.Marshal;
 import org.jboss.tools.fuse.reddeer.editor.CamelEditor;
 import org.jboss.tools.fuse.reddeer.projectexplorer.CamelProject;
@@ -58,7 +57,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized.Parameters;
 import org.junit.runners.Parameterized.UseParametersRunnerFactory;
-import org.osgi.framework.Version;
 import org.xml.sax.SAXException;
 
 /**
@@ -99,54 +97,9 @@ public class CamelEditorDataFormatTest {
 	}
 
 	@Parameters(name = "{0}")
-	public static Collection<String> getCamelLanguages() {
-		List<String> camelDataFormats = new ArrayList<>();
-		// there is a bug in RedDeer, see https://github.com/eclipse/reddeer/issues/1914
-		// that's why we use hard-coded data formats - the data formats were taken from
-		// cat org/apache/camel/catalog/models/marshal.json | jq -r '.properties.dataFormatType.oneOf | .[]'
-		camelDataFormats.add("avro");
-		camelDataFormats.add("base64");
-		camelDataFormats.add("beanio");
-		camelDataFormats.add("bindy");
-		camelDataFormats.add("boon");
-		camelDataFormats.add("castor");
-		camelDataFormats.add("crypto");
-		camelDataFormats.add("csv");
-		camelDataFormats.add("custom");
-		camelDataFormats.add("flatpack");
-		camelDataFormats.add("gzip");
-		camelDataFormats.add("hl7");
-		camelDataFormats.add("ical");
-		camelDataFormats.add("jacksonxml");
-		camelDataFormats.add("jaxb");
-		camelDataFormats.add("jibx");
-		camelDataFormats.add("json");
-		camelDataFormats.add("pgp");
-		camelDataFormats.add("protobuf");
-		camelDataFormats.add("rss");
-		camelDataFormats.add("secureXML");
-		camelDataFormats.add("serialization");
-		camelDataFormats.add("soapjaxb");
-		camelDataFormats.add("string");
-		camelDataFormats.add("syslog");
-		camelDataFormats.add("tarfile");
-		camelDataFormats.add("tidyMarkup");
-		camelDataFormats.add("univocity-csv");
-		camelDataFormats.add("univocity-fixed");
-		camelDataFormats.add("univocity-tsv");
-		camelDataFormats.add("xmlBeans");
-		camelDataFormats.add("xmljson");
-		// checking if Camel version is Fuse 7.8 or newer --> if yes, skip 'xmlrpc' which is no more available in this
-		// version
-		if (new Version(SupportedCamelVersions
-				.getFuseVersionFromString(camelCatalogRequirement.getConfiguration().getVersion()))
-						.compareTo(new Version("7.8.0")) < 0) {
-			camelDataFormats.add("xmlrpc");
-		}
-		camelDataFormats.add("xstream");
-		camelDataFormats.add("zip");
-		camelDataFormats.add("zipFile");
-		return camelDataFormats;
+	public static Collection<String> getCamelDataFormats() {
+		return new CamelCatalogUtils(camelCatalogRequirement.getConfiguration().getHome())
+				.getComponentPropertyValueAsList(CatalogType.MODEL, "marshal", "dataFormatType", "oneOf");
 	}
 
 	/**
