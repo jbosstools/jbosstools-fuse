@@ -249,6 +249,20 @@ public class CamelCatalogUtils {
 		return null;
 	}
 
+	public List<String> getComponentPropertyValueAsList(CatalogType type, String component, String property, String valueOf) {
+		List<String> valuesList = new ArrayList<>();
+		try {
+			JSONObject componentObj = this.getComponentJSONObject(type, component);
+			JSONArray propertyValuesArray = componentObj.getJSONObject("properties").getJSONObject(property).getJSONArray(valueOf);
+			for (int i = 0; i < propertyValuesArray.length(); i++) {
+				valuesList.add(propertyValuesArray.getString(i));
+			}
+		} catch (JSONException e) {
+			log.error(e.getMessage());
+		}
+		return valuesList;
+	}
+
 	private Pattern catalogNamePattern(String name) {
 		return Pattern.compile(name + "|" + name.split("\\s+", 2)[0] + "|" + name.replaceAll("\\s+", "") + "|"
 				+ name.replaceAll("\\s+", "-") + "|" + name.replaceAll("-", ""), Pattern.CASE_INSENSITIVE);
