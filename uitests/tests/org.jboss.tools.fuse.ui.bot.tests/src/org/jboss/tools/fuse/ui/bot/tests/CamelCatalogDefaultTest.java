@@ -106,13 +106,15 @@ public class CamelCatalogDefaultTest {
 
 	private boolean isExist(String name) {
 		/**
-		 * 'Generic' - general component (it is not route component), without properties 'ActiveMQ' - it is not part of
-		 * the standard Apache Camel distribution, it can be used to extend Camel's functionality 'Process' - not
-		 * standard component, it is interface used to implement consumers of message exchanges
+		 * 'Generic' - general component (it is not route component), without properties
+		 * 'ActiveMQ' - it is not part of the standard Apache Camel distribution, it can be used to extend Camel's functionality
+		 * 'Process' - not standard component, it is interface used to implement consumers of message exchanges
+		 * 'Linkedin' - missing component in org.apache.camel > camel-catalog
 		 */
 		skip.add("Generic");
 		skip.add("ActiveMQ");
 		skip.add("Process");
+		skip.add("Linkedin");
 		if (skip.contains(name)) {
 			return true;
 		} else {
