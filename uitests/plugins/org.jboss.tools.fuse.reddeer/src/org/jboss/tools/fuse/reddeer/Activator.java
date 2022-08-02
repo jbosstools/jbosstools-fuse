@@ -11,7 +11,6 @@
 package org.jboss.tools.fuse.reddeer;
 
 import java.io.File;
-import java.io.IOException;
 
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Platform;
@@ -53,12 +52,7 @@ public class Activator implements BundleActivator {
 
 	public static File getResources(String path) {
 		Bundle bundle = Platform.getBundle("org.jboss.tools.fuse.reddeer");
-		try {
-			return new File(FileLocator.getBundleFile(bundle), "resources/" + path);
-		} catch (IOException e) {
-			e.printStackTrace();
-			return null;
-		}
+		return new File(FileLocator.getBundleFileLocation(bundle).get(), "resources/" + path);
 	}
 
 }
