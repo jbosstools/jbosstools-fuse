@@ -99,6 +99,7 @@ public class CamelExampleRequirement extends AbstractConfigurableRequirement<Cam
 				runner.setSystemProperty("com.sun.management.jmxremote.authenticate", "false");
 				runner.setSystemProperty("com.sun.management.jmxremote.ssl", "false");
 			}
+			System.setProperty("java.home", config.getRequiredJRE());
 			runner.run();
 		}
 	}

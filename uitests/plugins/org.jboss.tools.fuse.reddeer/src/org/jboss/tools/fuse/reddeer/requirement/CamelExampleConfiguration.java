@@ -25,6 +25,7 @@ public class CamelExampleConfiguration implements RequirementConfiguration {
 	private String name;
 	private String version;
 	private File jarFile;
+	private String requiredJRE;
 	private JMXConfiguration jmxConfiguration;
 	private JolokiaConfiguration jolokiaConfiguration;
 
@@ -50,6 +51,14 @@ public class CamelExampleConfiguration implements RequirementConfiguration {
 
 	public void setJarFile(File jarFile) {
 		this.jarFile = jarFile;
+	}
+
+	public String getRequiredJRE() {
+		return requiredJRE;
+	}
+
+	public void setRequiredJRE(String requiredJRE) {
+		this.requiredJRE = requiredJRE;
 	}
 
 	public JMXConfiguration getJmxConfiguration() {
