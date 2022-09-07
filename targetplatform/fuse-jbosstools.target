@@ -3,35 +3,35 @@
 <target includeMode="feature" name="fuse" sequenceNumber="8">
 <locations>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="org.jboss.ide.eclipse.archives.feature.feature.group" version="3.6.202.v20181011-1445"/>
-<unit id="org.jboss.ide.eclipse.as.feature.feature.group" version="3.6.2.v20190304-1841"/>
-<unit id="org.jboss.ide.eclipse.as.jmx.integration.feature.feature.group" version="3.6.2.v20190304-1841"/>
-<unit id="org.jboss.ide.eclipse.as.serverAdapter.wtp.feature.feature.group" version="3.6.2.v20190304-1841"/>
-<unit id="org.jboss.tools.archives.scanner.feature.feature.group" version="3.6.202.v20181011-1445"/>
-<unit id="org.jboss.tools.common.core.feature.feature.group" version="3.10.2.v20181225-2142"/>
-<unit id="org.jboss.tools.common.feature.feature.group" version="3.10.2.v20181101-1129"/>
-<unit id="org.jboss.tools.common.jdt.feature.feature.group" version="3.10.2.v20181101-1129"/>
-<unit id="org.jboss.tools.common.text.ext.feature.feature.group" version="3.10.2.v20181101-1129"/>
-<unit id="org.jboss.tools.common.ui.feature.feature.group" version="3.10.2.v20181101-1129"/>
-<unit id="org.jboss.tools.foundation.feature.feature.group" version="1.5.2.v20190301-0221"/>
-<unit id="org.jboss.tools.jmx.feature.feature.group" version="1.10.6.v20181011-1445"/>
-<unit id="org.jboss.tools.maven.feature.feature.group" version="1.9.2.v20181226-1320"/>
-<unit id="org.jboss.tools.runtime.core.feature.feature.group" version="3.4.5.v20181101-1129"/>
-<unit id="org.jboss.tools.stacks.core.feature.feature.group" version="1.4.102.v20181101-1129"/>
-<unit id="org.jboss.tools.usage.feature.feature.group" version="2.2.202.v20181101-1129"/>
-<unit id="org.jboss.tools.openshift.feature.feature.group" version="3.6.0.v20190228-1836"/>
-<unit id="org.jboss.tools.openshift.cdk.feature.feature.group" version="3.6.0.v20181010-1259"/>
-<unit id="org.jboss.tools.openshift.egit.integration.feature.feature.group" version="3.6.0.v20181212-1616"/>
-<unit id="org.jboss.tools.openshift.js.feature.feature.group" version="3.6.0.v20181005-1233"/>
-<unit id="org.jboss.tools.maven.springboot.feature.feature.group" version="1.9.2.v20181211-1326"/>
+<unit id="org.jboss.ide.eclipse.archives.feature.feature.group" version="3.6.400.v20220706-1609"/>
+<unit id="org.jboss.ide.eclipse.as.feature.feature.group" version="3.9.500.v20220706-1609"/>
+<unit id="org.jboss.ide.eclipse.as.jmx.integration.feature.feature.group" version="3.9.500.v20220706-1609"/>
+<unit id="org.jboss.ide.eclipse.as.serverAdapter.wtp.feature.feature.group" version="3.9.500.v20220706-1609"/>
+<unit id="org.jboss.tools.archives.scanner.feature.feature.group" version="3.6.400.v20220706-1609"/>
+<unit id="org.jboss.tools.common.core.feature.feature.group" version="3.17.400.v20220819-0934"/>
+<unit id="org.jboss.tools.common.feature.feature.group" version="3.17.400.v20220819-0934"/>
+<unit id="org.jboss.tools.common.jdt.feature.feature.group" version="3.17.400.v20220819-0934"/>
+<unit id="org.jboss.tools.common.text.ext.feature.feature.group" version="3.17.400.v20220819-0934"/>
+<unit id="org.jboss.tools.common.ui.feature.feature.group" version="3.17.400.v20220819-0934"/>
+<unit id="org.jboss.tools.foundation.feature.feature.group" version="1.6.1400.v20220819-1131"/>
+<unit id="org.jboss.tools.jmx.feature.feature.group" version="1.10.301.v20220705-2049"/>
+<unit id="org.jboss.tools.maven.feature.feature.group" version="1.9.400.v20220110-1812"/>
+<unit id="org.jboss.tools.runtime.core.feature.feature.group" version="3.5.300.v20220704-1257"/>
+<unit id="org.jboss.tools.stacks.core.feature.feature.group" version="1.4.200.v20210628-0724"/>
+<unit id="org.jboss.tools.usage.feature.feature.group" version="2.2.500.v20220704-1257"/>
+<unit id="org.jboss.tools.openshift.feature.feature.group" version="3.20.100.v20220723-0400"/>
+<unit id="org.jboss.tools.openshift.cdk.feature.feature.group" version="3.20.100.v20220707-0845"/>
+<unit id="org.jboss.tools.openshift.egit.integration.feature.feature.group" version="3.20.100.v20220704-0927"/>
+<unit id="org.jboss.tools.openshift.js.feature.feature.group" version="3.20.100.v20220704-0927"/>
+<unit id="org.jboss.tools.maven.springboot.feature.feature.group" version="1.9.400.v20220110-1812"/>
 <repository location="https://download.jboss.org/jbosstools/photon/snapshots/updates/core/master/"/>
 </location>
 
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="org.jboss.ide.eclipse.archives.test.feature.feature.group" version="3.6.202.v20181011-1445"/>
-<unit id="org.jboss.ide.eclipse.as.test.feature.feature.group" version="3.6.2.v20190304-1841"/>
-<unit id="org.jboss.tools.test.feature.feature.group" version="3.7.103.v20181101-1129"/>
-<unit id="org.jboss.tools.runtime.test.feature.feature.group" version="3.4.5.v20181101-1129"/>
+<unit id="org.jboss.ide.eclipse.archives.test.feature.feature.group" version="3.6.400.v20220804-0941"/>
+<unit id="org.jboss.ide.eclipse.as.test.feature.feature.group" version="3.9.500.v20220706-1609"/>
+<unit id="org.jboss.tools.test.feature.feature.group" version="3.7.103.v20200204-1817"/>
+<unit id="org.jboss.tools.runtime.test.feature.feature.group" version="3.5.300.v20220704-1257"/>
 <repository location="https://download.jboss.org/jbosstools/photon/snapshots/updates/coretests/master/"/>
 </location>
 
