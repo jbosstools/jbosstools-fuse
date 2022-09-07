@@ -1195,7 +1195,6 @@
         <setEntry value="org.sonatype.m2e.buildhelper@default:default"/>
         <setEntry value="org.sonatype.m2e.egit@default:default"/>
         <setEntry value="org.sonatype.m2e.mavenarchiver@default:default"/>
-        <setEntry value="org.sonatype.tycho.m2e@default:default"/>
         <setEntry value="org.testng.eclipse@default:default"/>
         <setEntry value="org.testng@default:default"/>
         <setEntry value="org.tukaani.xz@default:default"/>
