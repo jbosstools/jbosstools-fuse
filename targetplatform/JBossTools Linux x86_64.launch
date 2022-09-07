@@ -694,7 +694,6 @@
         <setEntry value="org.eclipse.m2e.jdt.ui@default:false"/>
         <setEntry value="org.eclipse.m2e.jdt@default:default"/>
         <setEntry value="org.eclipse.m2e.launching@default:default"/>
-        <setEntry value="org.eclipse.m2e.maven.indexer@default:default"/>
         <setEntry value="org.eclipse.m2e.maven.runtime.slf4j.simple@default:default"/>
         <setEntry value="org.eclipse.m2e.maven.runtime@default:default"/>
         <setEntry value="org.eclipse.m2e.model.edit@default:default"/>
