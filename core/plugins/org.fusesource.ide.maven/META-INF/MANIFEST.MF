@@ -17,6 +17,5 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.m2e.model.edit,
  org.eclipse.m2e.refactoring,
  org.eclipse.m2e.scm,
- org.eclipse.m2e.maven.runtime;bundle-version="1.6.0",
- org.eclipse.m2e.maven.runtime.slf4j.simple;bundle-version="1.6.0"
+ org.eclipse.m2e.maven.runtime;bundle-version="1.6.0"
 Export-Package: org.fusesource.ide.maven
