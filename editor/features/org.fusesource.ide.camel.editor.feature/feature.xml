@@ -29,14 +29,11 @@
       <import plugin="org.eclipse.jdt.core" version="3.10.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.jdt.ui"/>
       <import plugin="org.eclipse.jdt.junit"/>
-      <import plugin="org.eclipse.jface.text"/>
       <import plugin="org.eclipse.ltk.core.refactoring"/>
-      <import plugin="org.eclipse.m2e.core"/>
       <import plugin="org.eclipse.m2e.core.ui"/>
       <import plugin="org.eclipse.m2e.model.edit"/>
       <import plugin="org.eclipse.ui.intro"/>
       <import plugin="org.eclipse.ui.intro.universal"/>
-      <import plugin="org.eclipse.m2e.maven.runtime"/>
       <import plugin="org.eclipse.core.databinding" version="1.4.1" match="greaterOrEqual"/>
       <import plugin="org.eclipse.core.databinding.beans" version="1.2.200" match="greaterOrEqual"/>
       <import plugin="org.eclipse.core.databinding.property" version="1.4.200" match="greaterOrEqual"/>
@@ -48,7 +45,6 @@
       <import plugin="org.eclipse.help" version="3.6.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.jface.databinding"/>
       <import plugin="org.eclipse.ui.editors"/>
-      <import plugin="org.eclipse.ui.views"/>
       <import plugin="org.eclipse.ui.views.properties.tabbed"/>
       <import plugin="org.eclipse.wst.common.ui"/>
       <import plugin="org.eclipse.wst.sse.core"/>
@@ -71,8 +67,8 @@
       <import plugin="org.eclipse.core.variables" version="3.2.800" match="greaterOrEqual"/>
       <import plugin="org.eclipse.ui.externaltools"/>
       <import plugin="org.eclipse.ui.console"/>
-      <import plugin="org.eclipse.m2e.launching" version="1.5.0" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.m2e.maven.runtime" version="1.5.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.m2e.launching" version="2.0.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.m2e.maven.runtime" version="2.0.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.equinox.security" version="1.2.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.core.filesystem" version="1.4.100" match="greaterOrEqual"/>
       <import plugin="org.eclipse.jdt.debug.ui"/>
@@ -80,7 +76,6 @@
       <import plugin="org.eclipse.m2e.discovery"/>
       <import plugin="org.eclipse.m2e.editor"/>
       <import plugin="org.eclipse.m2e.jdt"/>
-      <import plugin="org.eclipse.m2e.launching" version="1.4.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.ui.views" version="3.7.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.ui.workbench.texteditor" version="3.9.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.jface.text" version="3.9.0" match="greaterOrEqual"/>
@@ -88,7 +83,7 @@
       <import plugin="org.eclipse.ui.navigator"/>
       <import plugin="org.jboss.ide.eclipse.as.wtp.core" version="3.0.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.wst.server.core"/>
-      <import plugin="org.eclipse.m2e.core" version="1.5.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.m2e.core" version="2.0.0" match="greaterOrEqual"/>
       <import feature="com.github.cameltooling.lsp.eclipse.client.feature" version="1.0.0.201804251003" match="greaterOrEqual"/>
    </requires>
 
