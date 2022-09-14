@@ -264,7 +264,7 @@ public abstract class SyndesisExtensionProjectCreatorRunnableIT extends Abstract
 		try {
 			result = context.execute(new ICallable<MavenExecutionResult>() {
 				public MavenExecutionResult call(IMavenExecutionContext context, IProgressMonitor innerMonitor) throws CoreException {
-					return ((MavenImpl)maven).lookupComponent(Maven.class).execute(request);
+					return ((MavenImpl)maven).lookup(Maven.class).execute(request);
 				}
 			}, subMonitor.split(10));
 		} catch (CoreException ex) {

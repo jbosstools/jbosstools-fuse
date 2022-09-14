@@ -11,7 +11,9 @@
 package org.fusesource.ide.projecttemplates.maven;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.maven.model.Dependency;
@@ -86,22 +88,22 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 
 	@Override
 	public void configure(ProjectConfigurationRequest request, IProgressMonitor monitor) throws CoreException {
-		if (checkCamelContextsExist(request.getProject(), monitor) && isValidCamelFacetCandidate(request.getProject())) {
+		if (checkCamelContextsExist(request.mavenProjectFacade().getProject(), monitor) && isValidCamelFacetCandidate(request.mavenProjectFacade().getProject())) {
 			if (!isCamelFacetEnabled(request)) {
 				// if we have a camel context but no facade set we do set it
-				configureFacet(request.getMavenProject(), request.getProject(), monitor);
+				configureFacet(request.mavenProject(), request.mavenProjectFacade().getProject(), monitor);
 			}
 			// handling for projects migrated from tooling version 9.x and earlier with deprecated fact version usage 
 			if (isInvalidCamelFacetVersion(request)) {
 				repairCamelFacet(request, monitor);
 			}
-			if (!isCamelNatureEnabled(request.getProject())) {
+			if (!isCamelNatureEnabled(request.mavenProjectFacade().getProject())) {
 				// enable the camel nature
-				configureNature(request.getProject(), request.getMavenProject(), monitor);
+				configureNature(request.mavenProjectFacade().getProject(), request.mavenProject(), monitor);
 			}
 			// handle linked resources for WAR deployments
-			if (isWARProject(request.getProject(), monitor)) {
-				configureWARStructureMapping(request.getProject(), monitor);
+			if (isWARProject(request.mavenProjectFacade().getProject(), monitor)) {
+				configureWARStructureMapping(request.mavenProjectFacade().getProject(), monitor);
 			}
 			
 		}
@@ -126,7 +128,7 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 	 * @param monitor
 	 * @throws CoreException
 	 */
-	private void updateMappings(IPath[] paths, IProject project, IVirtualFolder vFolder, IProgressMonitor monitor)
+	private void updateMappings(List<IPath> paths, IProject project, IVirtualFolder vFolder, IProgressMonitor monitor)
 			throws CoreException {
 		for (IPath sourceLoc : paths) {
 			IFolder srcFolder = project.getFolder(sourceLoc);
@@ -168,7 +170,7 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 	}
 
 	private boolean isInvalidCamelFacetVersion(ProjectConfigurationRequest request) throws CoreException {
-		IProject project = request.getProject();
+		IProject project = request.mavenProjectFacade().getProject();
 		IFacetedProject fproj = ProjectFacetsManager.create(project);
 		if (fproj != null && fproj.getInstalledVersion(camelFacet) != null) {
 			return fproj.getInstalledVersion(camelFacet).getVersionString().compareTo(DEFAULT_CAMEL_FACET_VERSION) < 0;
@@ -178,7 +180,7 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 	
 	private void repairCamelFacet(ProjectConfigurationRequest request, IProgressMonitor mon) throws CoreException {
 		SubMonitor subMon = SubMonitor.convert(mon, 3);
-		IProject project = request.getProject();
+		IProject project = request.mavenProjectFacade().getProject();
 		IFacetedProject fproj = ProjectFacetsManager.create(project);
 		if (fproj != null) {
 			IProjectFacetVersion oldfv = fproj.getInstalledVersion(camelFacet);
@@ -193,7 +195,7 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 	}
 	
 	private boolean isCamelFacetEnabled(ProjectConfigurationRequest request) throws CoreException {
-		IProject project = request.getProject();
+		IProject project = request.mavenProjectFacade().getProject();
 		IFacetedProject fproj = ProjectFacetsManager.create(project);
 		if (fproj != null) {
 			Set<IProjectFacetVersion> facets = fproj.getProjectFacets();
@@ -285,7 +287,7 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 		if (project != null) {
 			// update the maven project so we start in a deployable state
 			// with a valid MANIFEST.MF built as part of the build process.
-			Job updateJob = new UpdateMavenProjectJob(new IProject[] { project });
+			Job updateJob = new UpdateMavenProjectJob(Collections.singletonList(project));
 			updateJob.schedule();
 		}
 	}

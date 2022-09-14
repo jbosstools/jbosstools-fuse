@@ -282,7 +282,7 @@ public class KarafUtils {
 		}
 		executionRequest.setGoals(goals);
 		
-		MavenExecutionResult result = maven.execute(executionRequest, monitor);
+		MavenExecutionResult result = executionContext.execute(executionRequest);
 		for (Throwable t : result.getExceptions()) {
 			Activator.getLogger().error(t);
 		}

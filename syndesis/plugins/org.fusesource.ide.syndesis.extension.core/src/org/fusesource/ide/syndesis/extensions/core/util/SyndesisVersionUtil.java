@@ -67,7 +67,7 @@ public class SyndesisVersionUtil {
 			if (bom != null) {
 				versions.put(PROP_SYNDESIS_VERSION, syndesisVersion);
 				
-				Model bomModel = maven.readModel(bom.getFile());
+				Model bomModel = MavenPlugin.getMavenModelManager().readMavenModel(bom.getFile());
 				Properties props = bomModel.getProperties();
 				if (props != null && props.containsKey(PROP_SPRINGBOOT_VERSION)) {
 					versions.put(PROP_SPRINGBOOT_VERSION, props.getProperty(PROP_SPRINGBOOT_VERSION, FALLBACK_SPRINGBOOT_VERSION));

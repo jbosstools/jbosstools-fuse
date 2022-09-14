@@ -17,6 +17,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.IFile;
@@ -32,6 +33,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.internal.IMavenConstants;
 import org.eclipse.m2e.core.internal.MavenPluginActivator;
+import org.eclipse.m2e.core.internal.project.registry.MavenProjectFacade;
 import org.eclipse.m2e.core.internal.project.registry.StaleMutableProjectRegistryException;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.eclipse.m2e.core.project.IProjectConfigurationManager;
@@ -203,8 +205,8 @@ public class FuseProject extends ExternalResource {
 		int time = 0;
 		boolean mavenProjectInRegistry = true;
 		while(mavenProjectInRegistry && time < TIMEOUT_M2E_REGISTRY_REMOVAL ) {
-			IMavenProjectFacade[] projectsInRegistry = MavenPluginActivator.getDefault().getMavenProjectManagerImpl().getProjects();
-			mavenProjectInRegistry = Arrays.asList(projectsInRegistry).stream()
+			List<MavenProjectFacade> projectsInRegistry = MavenPluginActivator.getDefault().getMavenProjectManagerImpl().getProjects();
+			mavenProjectInRegistry = projectsInRegistry.stream()
 					.map(IMavenProjectFacade::getProject)
 					.map(IProject::getName)
 					.filter(projectInRegistryName -> projectInRegistryName.equals(projectName))

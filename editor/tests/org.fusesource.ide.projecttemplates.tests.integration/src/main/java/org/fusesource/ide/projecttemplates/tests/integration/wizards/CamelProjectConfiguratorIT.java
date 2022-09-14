@@ -123,7 +123,7 @@ public class CamelProjectConfiguratorIT {
 	}
 	
 	private void modifyPOM(File pomFile) throws CoreException {
-		Model m2m = MavenPlugin.getMaven().readModel(pomFile);
+		Model m2m = MavenPlugin.getMavenModelManager().readMavenModel(pomFile);
 
 		// some tiny change (including a dependency!)
 		m2m.setDescription("New Description");
