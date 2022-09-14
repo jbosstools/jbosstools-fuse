@@ -82,7 +82,7 @@ final class SearchLatestBomVersionAvailableM2ECallable implements ICallable<Stri
 		return null;
 	}
 
-	private RepositorySystem retrieveRepositorySystem() {
-		return ((MavenImpl)MavenPlugin.getMaven()).lookupComponent(RepositorySystem.class);
+	private RepositorySystem retrieveRepositorySystem() throws CoreException {
+		return ((MavenImpl)MavenPlugin.getMaven()).lookup(RepositorySystem.class);
 	}
 }

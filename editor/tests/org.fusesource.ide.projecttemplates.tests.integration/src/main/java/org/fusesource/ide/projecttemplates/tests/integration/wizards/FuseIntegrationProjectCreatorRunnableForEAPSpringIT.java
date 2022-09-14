@@ -130,7 +130,7 @@ public class FuseIntegrationProjectCreatorRunnableForEAPSpringIT extends FuseInt
 		checkMappingsForSourcePathCorrect(m2prj.getCompileSourceLocations(), classesFolder);
     }
     
-    private void checkMappingsForSourcePathCorrect(IPath[] paths, IVirtualFolder vFolder) throws CoreException {
+    private void checkMappingsForSourcePathCorrect(List<IPath> paths, IVirtualFolder vFolder) throws CoreException {
     	for (IPath sourceLoc : paths) {
 			IFolder srcFolder = project.getFolder(sourceLoc);
 			IPath absSourcePath = srcFolder.getProjectRelativePath().makeAbsolute();

@@ -20,6 +20,7 @@ import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.Repository;
 import org.apache.maven.project.MavenProject;
+import org.eclipse.aether.RepositorySystem;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
@@ -30,7 +31,9 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.m2e.core.MavenPlugin;
+import org.eclipse.m2e.core.embedder.MavenModelManager;
 import org.eclipse.m2e.core.internal.IMavenConstants;
+import org.eclipse.m2e.core.internal.embedder.MavenImpl;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.eclipse.m2e.core.project.IMavenProjectRegistry;
 import org.fusesource.ide.camel.model.service.core.internal.CamelModelServiceCoreActivator;
@@ -62,7 +65,8 @@ public class CamelMavenUtils {
 				return Collections.emptyList();
 			}
 			try {
-				final Model model = MavenPlugin.getMaven().readModel(pomFile);
+				MavenModelManager manager = MavenPlugin.getMavenModelManager();
+				final Model model = manager.readMavenModel(pomFile);
 				List<Repository> repos = new ArrayList<>();
 				if (model.getRepositories() != null) {
 					repos.addAll(model.getRepositories());

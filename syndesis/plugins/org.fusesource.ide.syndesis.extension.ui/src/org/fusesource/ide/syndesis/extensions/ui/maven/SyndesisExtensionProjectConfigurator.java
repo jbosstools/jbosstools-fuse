@@ -10,6 +10,7 @@
  ******************************************************************************/
 package org.fusesource.ide.syndesis.extensions.ui.maven;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.maven.model.Build;
@@ -112,7 +113,7 @@ public class SyndesisExtensionProjectConfigurator extends AbstractProjectConfigu
 		if (project != null) {
 			// update the maven project so we start in a deployable state
 			// with a valid MANIFEST.MF built as part of the build process.
-			Job updateJob = new UpdateMavenProjectJob(new IProject[] { project });
+			Job updateJob = new UpdateMavenProjectJob(Collections.singletonList(project));
 			updateJob.schedule();
 		}
 	}
@@ -131,7 +132,7 @@ public class SyndesisExtensionProjectConfigurator extends AbstractProjectConfigu
 
 	@Override
 	public void configure(ProjectConfigurationRequest request, IProgressMonitor monitor) throws CoreException {
-		IProject project = request.getProject();
+		IProject project = request.mavenProjectFacade().getProject();
 		if (!project.hasNature(RiderProjectNature.NATURE_ID) && isValidSyndesisProject(project)) {
 			// we add the camel nature because this enables the Camel Contexts virtual folder in the project
 			SubMonitor subMonitor = SubMonitor.convert(monitor, 10);

@@ -137,15 +137,13 @@ public class BeanConfigUtil {
 	private IPackageFragmentRoot findPackageFragmentRootWithFacade(final IProject project, IJavaProject javaProject) {
 		IMavenProjectFacade facade = MavenPlugin.getMavenProjectRegistry().create(project, new NullProgressMonitor());
 		if(facade != null){
-			IPath[] paths = facade.getCompileSourceLocations();
-			if (paths != null && paths.length > 0) {
-				for (IPath p : paths) {
-					if (p == null)
-						continue;
-					IResource res = project.findMember(p);
-					if (res != null) {
-						return javaProject.getPackageFragmentRoot(res);
-					}
+			List<IPath> paths = facade.getCompileSourceLocations();
+			for (IPath p : paths) {
+				if (p == null)
+					continue;
+				IResource res = project.findMember(p);
+				if (res != null) {
+					return javaProject.getPackageFragmentRoot(res);
 				}
 			}
 		}

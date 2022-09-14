@@ -11,7 +11,6 @@
 package org.fusesource.ide.camel.model.service.core.util;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,10 +24,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.m2e.core.MavenPlugin;
-import org.eclipse.m2e.core.internal.index.IIndex;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
-import org.eclipse.m2e.core.ui.internal.search.util.IndexSearchEngine;
-import org.eclipse.m2e.core.ui.internal.search.util.Packaging;
 import org.fusesource.ide.camel.model.service.core.internal.CamelModelServiceCoreActivator;
 import org.fusesource.ide.preferences.StagingRepositoriesUtils;
 import org.fusesource.ide.preferences.initializer.StagingRepositoriesPreferenceInitializer;
@@ -58,17 +54,7 @@ public class OnlineArtifactVersionSearcher {
 
 	protected String findLatestBomVersionOnAvailableRepo(IProject project, IProgressMonitor monitor, MavenProject mavenProject, Dependency bomToSearch) throws CoreException {
 		SubMonitor subMon = SubMonitor.convert(monitor, 2);
-		//search with m2e Index, it goes faster in case m2e indexing is activated
-		IIndex index = MavenPlugin.getIndexManager().getIndex(project);
-		IndexSearchEngine indexSearchEngine = new IndexSearchEngine(index);
-		Collection<String> versions = indexSearchEngine.findVersions(bomToSearch.getGroupId(), bomToSearch.getArtifactId(), null, Packaging.POM);
-		subMon.setWorkRemaining(1);
-		if(!versions.isEmpty()) {
-			return versions.iterator().next();
-		} else {
-			//search with Aether APi
-			return MavenPlugin.getMaven().createExecutionContext().execute(mavenProject, new SearchLatestBomVersionAvailableM2ECallable(mavenProject.getRepositories(), bomToSearch), subMon.split(1));
-		}
+		return MavenPlugin.getMaven().createExecutionContext().execute(mavenProject, new SearchLatestBomVersionAvailableM2ECallable(mavenProject.getRepositories(), bomToSearch), subMon.split(1));
 	}
 	
 	public String findLatestVersion(IProgressMonitor monitor, Dependency artifactToSearch) {
@@ -77,36 +63,30 @@ public class OnlineArtifactVersionSearcher {
 	
 	public String findLatestVersion(IProgressMonitor monitor, Dependency artifactToSearch, String searchExpression) {
 		SubMonitor subMon = SubMonitor.convert(monitor, 2);
-		//search with m2e Index, it goes faster in case m2e indexing is activated
-		IIndex index = MavenPlugin.getIndexManager().getWorkspaceIndex();
-		IndexSearchEngine indexSearchEngine = new IndexSearchEngine(index);
-		Collection<String> versions = indexSearchEngine.findVersions(artifactToSearch.getGroupId(), artifactToSearch.getArtifactId(), searchExpression, Packaging.POM);
-		subMon.setWorkRemaining(1);
-		if(!versions.isEmpty()) {
-			return versions.iterator().next();
-		} else {
-			//search with Aether APi
-			List<List<String>> additionalRepos = StagingRepositoriesUtils.getAdditionalRepos();
-			List<Repository> additionalMavenRepos = new ArrayList<>();
-			for (List<String> repo : additionalRepos) {
-				Repository mavenRepo = new Repository();
-				mavenRepo.setId(repo.get(0));
-				mavenRepo.setUrl(repo.get(1));
-				additionalMavenRepos.add(mavenRepo);
-			}
-			StagingRepositoriesPreferenceInitializer initializer = new StagingRepositoriesPreferenceInitializer();
-			if(!initializer.isStagingRepositoriesEnabled()) {
-				Repository mavenRepo = new Repository();
-				mavenRepo.setId("fuse-early-access");
-				mavenRepo.setUrl("https://repository.jboss.org/nexus/content/groups/ea/");
-				additionalMavenRepos.add(mavenRepo);
-			}
-			try {
-				return MavenPlugin.getMaven().createExecutionContext().execute(new SearchLatestBomVersionAvailableM2ECallable(additionalMavenRepos, artifactToSearch, searchExpression), subMon.split(1));
-			} catch (OperationCanceledException | CoreException e) {
-				CamelModelServiceCoreActivator.pluginLog().logError(e);
-				return null;
-			}
+		
+		// search with Aether APi
+		List<List<String>> additionalRepos = StagingRepositoriesUtils.getAdditionalRepos();
+		List<Repository> additionalMavenRepos = new ArrayList<>();
+		for (List<String> repo : additionalRepos) {
+			Repository mavenRepo = new Repository();
+			mavenRepo.setId(repo.get(0));
+			mavenRepo.setUrl(repo.get(1));
+			additionalMavenRepos.add(mavenRepo);
+		}
+		StagingRepositoriesPreferenceInitializer initializer = new StagingRepositoriesPreferenceInitializer();
+		if (!initializer.isStagingRepositoriesEnabled()) {
+			Repository mavenRepo = new Repository();
+			mavenRepo.setId("fuse-early-access");
+			mavenRepo.setUrl("https://repository.jboss.org/nexus/content/groups/ea/");
+			additionalMavenRepos.add(mavenRepo);
+		}
+		try {
+			return MavenPlugin.getMaven().createExecutionContext()
+					.execute(new SearchLatestBomVersionAvailableM2ECallable(additionalMavenRepos, artifactToSearch,
+							searchExpression), subMon.split(1));
+		} catch (OperationCanceledException | CoreException e) {
+			CamelModelServiceCoreActivator.pluginLog().logError(e);
+			return null;
 		}
 	}
 	
