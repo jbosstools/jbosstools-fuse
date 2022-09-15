@@ -22,6 +22,7 @@
 <unit id="org.jboss.tools.common.core.feature.feature.group" version="3.17.400.v20220819-0934"/>
 <unit id="org.jboss.tools.common.feature.feature.group" version="3.17.400.v20220819-0934"/>
 <unit id="org.jboss.tools.common.jdt.feature.feature.group" version="3.17.400.v20220819-0934"/>
+<unit id="org.jboss.tools.common.oauth.feature.feature.group" version="3.17.400.v20220819-0934"/>
 <unit id="org.jboss.tools.common.text.ext.feature.feature.group" version="3.17.400.v20220819-0934"/>
 <unit id="org.jboss.tools.common.ui.feature.feature.group" version="3.17.400.v20220819-0934"/>
 <unit id="org.jboss.tools.foundation.feature.feature.group" version="1.6.1400.v20220913-1730"/>
