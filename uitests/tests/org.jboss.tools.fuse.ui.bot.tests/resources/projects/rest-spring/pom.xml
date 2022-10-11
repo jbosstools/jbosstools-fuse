@@ -145,6 +145,17 @@
             <Bundle-Name>Empty Camel Spring Example [rest-spring]</Bundle-Name>
           </instructions>
         </configuration>
+        <executions>
+              <execution>
+                <id>scr-metadata</id>
+                <goals>
+                   <goal>manifest</goal>
+                </goals>
+                <configuration>
+                   <supportIncrementalBuild>true</supportIncrementalBuild>
+                </configuration>
+              </execution>
+           </executions>
       </plugin>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
