@@ -130,6 +130,17 @@
           <instructions>
             <Bundle-SymbolicName>hello-blueprint</Bundle-SymbolicName>
             <Bundle-Name>Empty Camel Blueprint Example [hello-blueprint]</Bundle-Name></instructions></configuration>
+          <executions>
+              <execution>
+                <id>scr-metadata</id>
+                <goals>
+                   <goal>manifest</goal>
+                </goals>
+                <configuration>
+                   <supportIncrementalBuild>true</supportIncrementalBuild>
+                </configuration>
+              </execution>
+           </executions>
       </plugin>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>

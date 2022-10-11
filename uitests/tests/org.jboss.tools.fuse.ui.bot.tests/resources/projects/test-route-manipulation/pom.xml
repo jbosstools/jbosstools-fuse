@@ -128,6 +128,17 @@
             <Bundle-Name>Empty Camel Blueprint Example [test-route-manipulation]</Bundle-Name>
           </instructions>
         </configuration>
+        <executions>
+              <execution>
+                <id>scr-metadata</id>
+                <goals>
+                   <goal>manifest</goal>
+                </goals>
+                <configuration>
+                   <supportIncrementalBuild>true</supportIncrementalBuild>
+                </configuration>
+              </execution>
+           </executions>
       </plugin>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -144,14 +155,14 @@
           <encoding>UTF-8</encoding>
         </configuration>
       </plugin>
-      <plugin>
+      <!--plugin>
         <groupId>org.apache.camel</groupId>
         <artifactId>camel-maven-plugin</artifactId>
         <version>${camel.version}</version>
         <configuration>
           <useBlueprint>true</useBlueprint>
         </configuration>
-      </plugin>
+      </plugin-->
     </plugins>
   </build>
   <profiles>
