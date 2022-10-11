@@ -101,8 +101,8 @@ public class DeploymentTest {
 	// EAP
 	public static final String PROJECT_EAP_IS_DEPLOYED = "(CamelContext: spring-context) started";
 	public static final String PROJECT_EAP_IS_UNDEPLOYED = "(CamelContext: spring-context) is shutdown";
-	public static final String BROWSER_URL = "http://localhost:8080/camel-test-spring";
-	public static final String BROWSER_CONTENT_DEPLOYED = "Hello null";
+	public static final String BROWSER_URL = "http://localhost:8080/example-camel-cdi/?name=Fuse";
+	public static final String BROWSER_CONTENT_DEPLOYED = "Hello Fuse";
 	public static final String BROWSER_CONTENT_UNDEPLOYED = "404";
 	
 	public static enum DeploymentStatus {
@@ -198,7 +198,6 @@ public class DeploymentTest {
 	public static void cleanServers() {
 		String serverName = serverRequirement.getConfiguration().getServer().getName();
 		FuseServerManipulator.removeAllModules(serverName);
-		FuseServerManipulator.stopServer(serverName);
 		FuseServerManipulator.removeServer(serverName);
 	}
 	
