@@ -154,7 +154,7 @@ public class FuseOnOpenShiftTest {
 		new WaitUntil(new ConsoleHasText(DEPLOYMENT_OK), TimePeriod.VERY_LONG, false);
 		explorer.activate();
 		explorer.openPodLog(OPENSHIFT_CONNECTION, OPENSHIFT_PROJECT_NAME, OPENSHIFT_DEPLOYMENT);
-		new WaitUntil(new ConsoleHasText(DEPLOYMENT_OK2));
+		new WaitUntil(new ConsoleHasText(DEPLOYMENT_OK2), TimePeriod.VERY_LONG, false);
 		LogChecker.assertNoFuseError();
 	}
 }

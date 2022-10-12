@@ -25,6 +25,7 @@ public class OpenShiftConfiguration implements RequirementConfiguration {
 	private String username;
 	private String password;
 	private String protocol;
+	private boolean overrideOC;
 
 	public String getHost() {
 		return host;
@@ -72,6 +73,14 @@ public class OpenShiftConfiguration implements RequirementConfiguration {
 
 	public void setProtocol(String protocol) {
 		this.protocol = protocol;
+	}
+
+	public boolean getOverrideOC() {
+		return overrideOC;
+	}
+
+	public void setOverrideOC(boolean overrideOC) {
+		this.overrideOC = overrideOC;
 	}
 
 	@Override
