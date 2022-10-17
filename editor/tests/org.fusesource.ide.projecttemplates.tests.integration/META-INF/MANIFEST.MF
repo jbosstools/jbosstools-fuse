@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %Bundle-Name
 Bundle-SymbolicName: org.fusesource.ide.projecttemplates.tests.integration
-Bundle-Version: 11.16.0.qualifier
+Bundle-Version: 11.17.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Require-Bundle: org.junit,
  assertj-core;bundle-version="3.22.0",
@@ -60,7 +60,7 @@ Require-Bundle: org.junit,
  org.fusesource.ide.camel.model.service.impl.v2232fuse790054redhat00001;bundle-version="11.14.0",
  org.fusesource.ide.camel.model.service.impl.v2232fuse7_10_100008redhat00001;bundle-version="11.14.0",
  org.fusesource.ide.camel.model.service.impl.v2232fuse7_10_200001redhat00005;bundle-version="11.15.0",
- org.fusesource.ide.camel.model.service.impl.v2232fuse7_11_000037redhat00001;bundle-version="11.16.0"
+ org.fusesource.ide.camel.model.service.impl.v2232fuse7_11_000037redhat00001;bundle-version="11.17.0"
 Bundle-Vendor: %Bundle-Vendor
 Bundle-Activator: org.fusesource.ide.projecttemplates.tests.integration.ProjectTemplatesIntegrationTestsActivator
 Export-Package: org.fusesource.ide.projecttemplates.tests.integration.wizards;x-friends:="org.fusesource.ide.syndesis.extension.core.tests.integration"

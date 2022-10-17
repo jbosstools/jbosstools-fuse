@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %Bundle-Name
 Bundle-SymbolicName: org.fusesource.ide.jsonschema2pojo-0.4.13
-Bundle-Version: 11.16.0.qualifier
+Bundle-Version: 11.17.0.qualifier
 Bundle-Vendor: %Bundle-Vendor
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ClassPath: lib/jsonschema2pojo-core-0.4.13.jar,

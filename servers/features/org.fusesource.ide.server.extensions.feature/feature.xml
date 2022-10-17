@@ -2,7 +2,7 @@
 <feature
       id="org.fusesource.ide.server.extensions.feature"
       label="%featureName"
-      version="11.16.0.qualifier"
+      version="11.17.0.qualifier"
       provider-name="%providerName"
       plugin="org.fusesource.ide.tooling"
       license-feature="org.jboss.tools.foundation.license.feature"
