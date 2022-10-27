@@ -21,7 +21,7 @@ import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.jface.databinding.swt.ISWTObservableValue;
 import org.eclipse.jface.databinding.viewers.IViewerObservableValue;
-import org.eclipse.jface.databinding.viewers.ViewersObservables;
+import org.eclipse.jface.databinding.viewers.typed.ViewerProperties;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.resource.JFaceResources;
@@ -254,7 +254,7 @@ public abstract class FormSupport implements PropertyChangeListener  {
 		ComboViewer combo = new ComboViewer(parent, flags);
 		combo.setContentProvider(ArrayContentProvider.getInstance());
 
-		IViewerObservableValue comboValue = ViewersObservables.observeSingleSelection(combo);
+		IViewerObservableValue comboValue = ViewerProperties.singleSelection().observe(combo);
 		Control control = combo.getControl();
 		GridData gdata = new GridData(SWT.FILL, SWT.CENTER, true, false);
 		gdata.widthHint = 400;
@@ -281,7 +281,7 @@ public abstract class FormSupport implements PropertyChangeListener  {
 		ListViewer combo = new ListViewer(parent, flags);
 		combo.setContentProvider(ArrayContentProvider.getInstance());
 
-		IViewerObservableValue comboValue = ViewersObservables.observeSingleSelection(combo);
+		IViewerObservableValue comboValue = ViewerProperties.singleSelection().observe(combo);
 		Control control = combo.getControl();
 		GridData gdata = new GridData(GridData.FILL_BOTH);
 		control.setLayoutData(gdata);
