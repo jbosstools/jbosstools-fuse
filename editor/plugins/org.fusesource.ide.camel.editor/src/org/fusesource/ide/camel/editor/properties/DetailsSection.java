@@ -13,6 +13,8 @@ package org.fusesource.ide.camel.editor.properties;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.UpdateListStrategy;
@@ -48,6 +50,7 @@ import org.fusesource.ide.camel.editor.properties.creators.details.NumberParamet
 import org.fusesource.ide.camel.editor.properties.creators.details.UnsupportedParameterPropertyUICreatorForDetails;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelModel;
+import org.fusesource.ide.camel.model.service.core.catalog.dataformats.DataFormat;
 import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.util.CamelComponentUtils;
@@ -344,7 +347,14 @@ public class DetailsSection extends FusePropertySection {
                 
 				final AbstractCamelModelElement dataformatElement = selectedEP.getParameter(prop.getName()) != null
 						? (AbstractCamelModelElement) selectedEP.getParameter(prop.getName()) : null;
-                choiceCombo.setItems(CamelComponentUtils.getOneOfList(prop));
+				String[] potentialDataFormatsFromEIP = CamelComponentUtils.getOneOfList(prop);
+				Set<String> availableDataFormatsForCatalog = selectedEP.getCamelFile().getCamelModel().getDataFormats().stream()
+					.map(DataFormat::getModelName).collect(Collectors.toSet());
+				List<String> availableDataFormats = Arrays.asList(potentialDataFormatsFromEIP).stream()
+					.filter(availableDataFormatsForCatalog::contains)
+					.collect(Collectors.toList());
+				
+                choiceCombo.setItems(availableDataFormats.toArray(new String[0]));
 
                 final Composite eform = getWidgetFactory().createFlatFormComposite(page);
 				eform.setLayoutData(GridDataFactory.fillDefaults().indent(5, 0).span(4, 1).grab(true, false).create());
