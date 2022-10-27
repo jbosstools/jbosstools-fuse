@@ -17,7 +17,7 @@ import org.eclipse.core.databinding.observable.value.ComputedValue;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.jface.databinding.fieldassist.ControlDecorationSupport;
 import org.eclipse.jface.databinding.swt.ISWTObservableValue;
-import org.eclipse.jface.databinding.swt.WidgetProperties;
+import org.eclipse.jface.databinding.swt.typed.WidgetProperties;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
@@ -150,7 +150,7 @@ public class GlobalBeanEditWizardPage extends GlobalBeanBaseWizardPage {
 				getValue();
 			}
 		};
-		IObservableValue<?> observable = WidgetProperties.selection().observe(beanRefIdCombo);
+		IObservableValue<?> observable = WidgetProperties.comboSelection().observe(beanRefIdCombo);
 		setRefUiObservable((ISWTObservableValue) observable);
 		Binding binding = dbc.bindValue(observable, refIdValue, strategy, null);
 		ControlDecorationSupport.create(binding, SWT.LEFT | SWT.TOP);

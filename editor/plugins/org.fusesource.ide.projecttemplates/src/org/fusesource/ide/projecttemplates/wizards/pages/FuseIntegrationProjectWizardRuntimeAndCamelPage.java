@@ -24,15 +24,15 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.eclipse.core.databinding.DataBindingContext;
-import org.eclipse.core.databinding.beans.PojoProperties;
+import org.eclipse.core.databinding.beans.typed.PojoProperties;
 import org.eclipse.core.databinding.observable.list.WritableList;
 import org.eclipse.core.databinding.observable.sideeffect.ISideEffect;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.core.databinding.observable.value.SelectObservableValue;
 import org.eclipse.jface.databinding.swt.ISWTObservableValue;
-import org.eclipse.jface.databinding.swt.WidgetProperties;
+import org.eclipse.jface.databinding.swt.typed.WidgetProperties;
 import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
-import org.eclipse.jface.databinding.viewers.ViewerProperties;
+import org.eclipse.jface.databinding.viewers.typed.ViewerProperties;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
@@ -93,7 +93,7 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 	private ComboViewer camelVersionComboViewer;
 	private EnvironmentData environment;
 	private DataBindingContext dbc = new DataBindingContext();
-	private ISWTObservableValue standAloneObservable;
+	private ISWTObservableValue<Boolean> standAloneObservable;
 	private IObservableValue<FuseDeploymentPlatform> environmentPlatformObservable;
 	private IObservableValue<FuseRuntimeKind> environmentRuntimeObservable;
 	private ISideEffect sideEffect;
@@ -107,8 +107,8 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 		setImageDescriptor(ProjectTemplatesActivator.imageDescriptorFromPlugin(ProjectTemplatesActivator.PLUGIN_ID, ProjectTemplatesActivator.IMAGE_CAMEL_PROJECT_ICON));
 		setPageComplete(false);
 		this.environment = environment;
-		environmentRuntimeObservable = PojoProperties.value(EnvironmentData.class, "fuseRuntime").observe(environment);
-		environmentPlatformObservable = PojoProperties.value(EnvironmentData.class, "deploymentPlatform").observe(environment);
+		environmentRuntimeObservable = PojoProperties.value(EnvironmentData.class, "fuseRuntime", FuseRuntimeKind.class).observe(environment);
+		environmentPlatformObservable = PojoProperties.value(EnvironmentData.class, "deploymentPlatform", FuseDeploymentPlatform.class).observe(environment);
 	}
 
 	@Override
@@ -219,9 +219,9 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 		runtimeWildflyComboViewer = createRuntimeSelection(runtimeGrp, eapRadio, getPossibleWildflyRuntimeTypes());
 		
 		SelectObservableValue<FuseRuntimeKind> observableValue = new SelectObservableValue<>();
-		observableValue.addOption(FuseRuntimeKind.SPRINGBOOT, WidgetProperties.selection().observe(springBootRadio));
-		observableValue.addOption(FuseRuntimeKind.KARAF, WidgetProperties.selection().observe(karafRadio));
-		observableValue.addOption(FuseRuntimeKind.WILDFLY, WidgetProperties.selection().observe(eapRadio));
+		observableValue.addOption(FuseRuntimeKind.SPRINGBOOT, WidgetProperties.buttonSelection().observe(springBootRadio));
+		observableValue.addOption(FuseRuntimeKind.KARAF, WidgetProperties.buttonSelection().observe(karafRadio));
+		observableValue.addOption(FuseRuntimeKind.WILDFLY, WidgetProperties.buttonSelection().observe(eapRadio));
 		dbc.bindValue(observableValue, environmentRuntimeObservable);
 		environmentRuntimeObservable.addChangeListener(event -> refreshFilteredTemplates());
 	}
@@ -288,9 +288,9 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 			}
 		});
 		
-		dbc.bindValue(WidgetProperties.enabled().observe(runtimeComboViewer.getCombo()), WidgetProperties.selection().observe(relatedRadioButton));
-		dbc.bindValue(WidgetProperties.enabled().observe(runtimeNewButton), WidgetProperties.selection().observe(relatedRadioButton));
-		dbc.bindValue(WidgetProperties.enabled().observe(runtimeLabel), WidgetProperties.selection().observe(relatedRadioButton));
+		dbc.bindValue(WidgetProperties.enabled().observe(runtimeComboViewer.getCombo()), WidgetProperties.buttonSelection().observe(relatedRadioButton));
+		dbc.bindValue(WidgetProperties.enabled().observe(runtimeNewButton), WidgetProperties.buttonSelection().observe(relatedRadioButton));
+		dbc.bindValue(WidgetProperties.enabled().observe(runtimeLabel), WidgetProperties.buttonSelection().observe(relatedRadioButton));
 		
 		return runtimeComboViewer;
 	}
@@ -308,8 +308,8 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 		standAloneRadioButton.setText(Messages.newProjectWizardRuntimePageDeploymentPlatformStanalone);
 		
 		SelectObservableValue<FuseDeploymentPlatform> observableValue = new SelectObservableValue<>();
-		standAloneObservable = WidgetProperties.selection().observe(standAloneRadioButton);
-		observableValue.addOption(FuseDeploymentPlatform.OPENSHIFT,  WidgetProperties.selection().observe(openShiftRadioButton));
+		standAloneObservable = WidgetProperties.buttonSelection().observe(standAloneRadioButton);
+		observableValue.addOption(FuseDeploymentPlatform.OPENSHIFT,  WidgetProperties.buttonSelection().observe(openShiftRadioButton));
 		observableValue.addOption(FuseDeploymentPlatform.STANDALONE, standAloneObservable);
 		dbc.bindValue(observableValue, environmentPlatformObservable);
 		environmentPlatformObservable.addChangeListener(event -> refreshFilteredTemplates());

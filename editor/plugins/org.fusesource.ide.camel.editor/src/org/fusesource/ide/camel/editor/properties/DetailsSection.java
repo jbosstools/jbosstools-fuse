@@ -25,7 +25,7 @@ import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.databinding.fieldassist.ControlDecorationSupport;
 import org.eclipse.jface.databinding.swt.ISWTObservableValue;
-import org.eclipse.jface.databinding.swt.WidgetProperties;
+import org.eclipse.jface.databinding.swt.typed.WidgetProperties;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.swt.SWT;
@@ -120,7 +120,7 @@ public class DetailsSection extends FusePropertySection {
         	}
         	
             ISWTObservableValue uiObservable = null;
-            IObservableList<Object> uiListObservable = null;
+            IObservableList<String> uiListObservable = null;
             IObservableValue<Object> modelObservable;
             IObservableList<Object> modelListObservable;
             IValidator validator = null;
@@ -165,7 +165,7 @@ public class DetailsSection extends FusePropertySection {
                 //initialize the map entry
                 modelMap.put(p.getName(), choiceCombo.getText());
                 // create observables for the control
-                uiObservable = WidgetProperties.selection().observe(choiceCombo);                
+                uiObservable = WidgetProperties.ccomboSelection().observe(choiceCombo);
                 if (PropertiesUtils.isRequired(p)) {
 					validator = new IValidator() {
 						/*
@@ -223,7 +223,7 @@ public class DetailsSection extends FusePropertySection {
                 //initialize the map entry
                 modelMap.put(p.getName(), choiceCombo.getText());
                 // create observables for the control
-                uiObservable = WidgetProperties.selection().observe(choiceCombo);                
+                uiObservable = WidgetProperties.ccomboSelection().observe(choiceCombo);
 				validator = new IValidator() {
 					@Override
 					public IStatus validate(Object value) {
@@ -321,7 +321,7 @@ public class DetailsSection extends FusePropertySection {
                 //initialize the map entry
                 modelMap.put(p.getName(), choiceCombo.getText());
                 // create observables for the control
-                uiObservable = WidgetProperties.selection().observe(choiceCombo);                
+                uiObservable = WidgetProperties.ccomboSelection().observe(choiceCombo);                
                 if (PropertiesUtils.isRequired(p)) {
 					validator = new IValidator() {
 						@Override
@@ -378,7 +378,7 @@ public class DetailsSection extends FusePropertySection {
                 //initialize the map entry
                 modelMap.put(p.getName(), choiceCombo.getText());
                 // create observables for the control
-                uiObservable = WidgetProperties.selection().observe(choiceCombo);                
+                uiObservable = WidgetProperties.ccomboSelection().observe(choiceCombo);                
                 if (PropertiesUtils.isRequired(p)) {
 					validator = new IValidator() {
 						@Override
