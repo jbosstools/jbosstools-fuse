@@ -12,7 +12,7 @@ package org.fusesource.ide.camel.editor.properties.creators;
 
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.observable.map.IObservableMap;
-import org.eclipse.jface.databinding.swt.WidgetProperties;
+import org.eclipse.jface.databinding.swt.typed.WidgetProperties;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.widgets.Button;
@@ -42,7 +42,7 @@ public abstract class AbstractBooleanParameterPropertyUICreator extends Abstract
 		checkBox.setLayoutData(createPropertyFieldLayoutData());
 		setControl(checkBox);
 
-		setUiObservable(WidgetProperties.selection().observe(checkBox));
+		setUiObservable(WidgetProperties.buttonSelection().observe(checkBox));
 	}
 
 	protected abstract SelectionAdapter createSelectionListener();

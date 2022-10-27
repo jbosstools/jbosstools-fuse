@@ -13,7 +13,7 @@ package org.fusesource.ide.camel.editor.properties.creators;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.observable.map.IObservableMap;
 import org.eclipse.core.databinding.validation.IValidator;
-import org.eclipse.jface.databinding.swt.WidgetProperties;
+import org.eclipse.jface.databinding.swt.typed.WidgetProperties;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.widgets.Combo;
@@ -49,7 +49,7 @@ public abstract class AbstractComboFieldParameterPropertyUICreator extends Abstr
 		comboField.setLayoutData(createPropertyFieldLayoutData());
 		setControl(comboField);
 
-		setUiObservable(WidgetProperties.selection().observe(comboField));
+		setUiObservable(WidgetProperties.comboSelection().observe(comboField));
 		setValidator(createValidator());
 	}
 

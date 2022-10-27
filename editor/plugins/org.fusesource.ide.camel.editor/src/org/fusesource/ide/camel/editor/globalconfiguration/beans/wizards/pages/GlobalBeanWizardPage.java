@@ -15,11 +15,11 @@ import java.util.List;
 import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.UpdateValueStrategy;
-import org.eclipse.core.databinding.beans.PojoProperties;
+import org.eclipse.core.databinding.beans.typed.PojoProperties;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.jface.databinding.fieldassist.ControlDecorationSupport;
 import org.eclipse.jface.databinding.swt.ISWTObservableValue;
-import org.eclipse.jface.databinding.swt.WidgetProperties;
+import org.eclipse.jface.databinding.swt.typed.WidgetProperties;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
@@ -92,7 +92,7 @@ public class GlobalBeanWizardPage extends GlobalBeanBaseWizardPage {
 	@Override
 	protected Binding createBeanRefBinding(UpdateValueStrategy strategy) {
 		final IObservableValue<?> refObservable = PojoProperties.value(GlobalBeanBaseWizardPage.class, "beanRefId", String.class).observe(this); //$NON-NLS-1$
-		final IObservableValue<?> selectedBeanRef = WidgetProperties.selection().observe(beanRefIdCombo);
+		final IObservableValue<?> selectedBeanRef = WidgetProperties.comboSelection().observe(beanRefIdCombo);
 		setRefUiObservable((ISWTObservableValue) selectedBeanRef);
 		Binding binding = dbc.bindValue(selectedBeanRef, refObservable, strategy, null);
 		ControlDecorationSupport.create(binding, SWT.LEFT | SWT.TOP);
