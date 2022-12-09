@@ -19,8 +19,8 @@ import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.w3c.dom.Node;
 
@@ -59,7 +59,7 @@ public class CamelModelElementIDUtilTest {
 		
 		new CamelModelElementIDUtil().ensureUniqueID(cme);
 		
-		verify(cme, never()).setId(Mockito.anyString());
+		verify(cme, never()).setId(ArgumentMatchers.anyString());
 	}
 	
 	@Test
@@ -74,7 +74,7 @@ public class CamelModelElementIDUtilTest {
 		
 		new CamelModelElementIDUtil().ensureUniqueID(cme);
 		
-		verify(cme, never()).setId(Mockito.anyString());
+		verify(cme, never()).setId(ArgumentMatchers.anyString());
 	}
 
 }

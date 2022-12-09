@@ -17,8 +17,8 @@ import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -29,7 +29,7 @@ public class DetailsSectionTest {
 	
 	@Before
 	public void setup(){
-		doCallRealMethod().when(detailsSection).shouldHidePropertyFromGroup(Mockito.anyString(), Mockito.anyObject(), Mockito.anyString());
+		doCallRealMethod().when(detailsSection).shouldHidePropertyFromGroup(ArgumentMatchers.anyString(), ArgumentMatchers.any(), ArgumentMatchers.anyString());
 	}
 
 	@Test

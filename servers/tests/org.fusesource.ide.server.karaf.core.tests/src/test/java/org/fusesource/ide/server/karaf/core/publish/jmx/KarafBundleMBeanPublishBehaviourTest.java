@@ -28,8 +28,8 @@ import javax.management.openmbean.TabularData;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -61,7 +61,7 @@ public class KarafBundleMBeanPublishBehaviourTest {
 		secondVersion.put("ID", 2);
 		secondVersion.put("Version", "2.0");
 		TabularData tabularData = new MockedTabularData(Arrays.asList(new MockedCompositeData(firstVersion), new MockedCompositeData(secondVersion)));
-		doReturn(tabularData).when(mbsc).getAttribute(Mockito.any(), Mockito.anyString());
+		doReturn(tabularData).when(mbsc).getAttribute(ArgumentMatchers.any(), ArgumentMatchers.anyString());
 		KarafBundleMBeanPublishBehaviour karafBundleMBeanPublishBehaviour = new KarafBundleMBeanPublishBehaviour();
 		assertThat(karafBundleMBeanPublishBehaviour.getBundleId(mbsc, "bundleSymbolicName", "2.0")).isEqualTo(2);
 		assertThat(karafBundleMBeanPublishBehaviour.getBundleId(mbsc, "bundleSymbolicName", "1.0")).isEqualTo(1);
@@ -80,7 +80,7 @@ public class KarafBundleMBeanPublishBehaviourTest {
 
 	private void createTabularData(Map<String, Object> map) throws MBeanException, AttributeNotFoundException, InstanceNotFoundException, ReflectionException, IOException {
 		TabularData tabularData = new MockedTabularData(Collections.singletonList(new MockedCompositeData(map)));
-		doReturn(tabularData).when(mbsc).getAttribute(Mockito.any(), Mockito.anyString());
+		doReturn(tabularData).when(mbsc).getAttribute(ArgumentMatchers.any(), ArgumentMatchers.anyString());
 	}
 
 }

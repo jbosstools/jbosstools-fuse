@@ -7,5 +7,5 @@ Bundle-Vendor: %Bundle-Vendor
 Fragment-Host: org.fusesource.ide.launcher.ui;bundle-version="10.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Require-Bundle: org.junit;bundle-version="4.12.0",
- org.mockito;bundle-version="2.23.0",
+ org.mockito.mockito-core;bundle-version="4.8.1",
  assertj-core;bundle-version="3.22.0"

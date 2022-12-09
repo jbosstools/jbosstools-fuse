@@ -27,8 +27,8 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
 import org.mockito.Answers;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -49,7 +49,7 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPageIT {
 		doCallRealMethod().when(page).validate();
 		doCallRealMethod().when(page).getErrorMessage();
 		doCallRealMethod().when(page).determineRuntimeCamelVersion(runtime);
-		doCallRealMethod().when(page).setErrorMessage(Mockito.any());
+		doCallRealMethod().when(page).setErrorMessage(ArgumentMatchers.any());
 		doReturn("2.17.3").when(page).getSelectedCamelVersion();
 	}
 	

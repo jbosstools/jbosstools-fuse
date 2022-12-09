@@ -326,6 +326,7 @@ public class CamelDebugTarget extends CamelDebugElement implements IDebugTarget 
 	
 	@Override
 	public void terminate() throws DebugException {
+		System.out.println("beginning of terminate()");
 		fTerminated = true;
 		unregisterBreakpointListener();
 		try {
@@ -333,17 +334,21 @@ public class CamelDebugTarget extends CamelDebugElement implements IDebugTarget 
 			if (conJob != null) {
 				conJob.cancel();
 			}
+			System.out.println("after cancel conjob");
 			if(!isDisconnected()){
 				disconnect();
 			}
+			System.out.println("after disconnect");
 			if (fProcess != null && !fProcess.isTerminated()) {
 				fProcess.terminate();
 			}
 		} finally {
+			System.out.println("start of finally block");
 			closeRemoteContextEditor();
 			fireTerminateEvent();
 			cleanJobs();
 		}
+		System.out.println("end of terminate()");
 	}
 
 	private void cleanJobs() {

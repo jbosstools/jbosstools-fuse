@@ -6,7 +6,7 @@ Bundle-Version: 11.17.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Require-Bundle: org.junit,
  assertj-core;bundle-version="3.22.0",
- org.mockito;bundle-version="2.23.0",
+ org.mockito.mockito-core;bundle-version="4.8.1",
  org.eclipse.equinox.security;bundle-version="1.2.200",
  org.eclipse.jface,
  org.eclipse.core.runtime;bundle-version="3.12.0",

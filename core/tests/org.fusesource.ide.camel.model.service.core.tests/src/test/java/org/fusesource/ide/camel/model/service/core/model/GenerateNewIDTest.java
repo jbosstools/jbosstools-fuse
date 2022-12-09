@@ -11,6 +11,11 @@
 package org.fusesource.ide.camel.model.service.core.model;
 
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -19,15 +24,9 @@ import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Answers;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
-
-import static org.assertj.core.api.Assertions.assertThat;
-
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class GenerateNewIDTest {
@@ -66,7 +65,7 @@ public class GenerateNewIDTest {
 	public void getNewId_ReturnsSecondValueOnRouteWhenSeveralCamelFileInSameProject() throws Exception {
 		Set<CamelFile> camelFiles = new HashSet<>();
 		camelFiles.add(camelFile);
-		when(camelFile.isNewIDAvailable(Mockito.anyString())).thenCallRealMethod();
+		when(camelFile.isNewIDAvailable(ArgumentMatchers.anyString())).thenCallRealMethod();
 
 		doReturn("route").when(underlyingMetaModel).getName();
 		CamelContextElement parent = new CamelContextElement(camelFile, null);
@@ -81,7 +80,7 @@ public class GenerateNewIDTest {
 		
 		/*Artificially add the second camelfile in the project*/
 		camelFiles.add(camelFile2);
-		when(camelFile2.isNewIDAvailable(Mockito.anyString())).thenCallRealMethod();
+		when(camelFile2.isNewIDAvailable(ArgumentMatchers.anyString())).thenCallRealMethod();
 		/*Configure the second CamelFile*/
 		CamelContextElement parent2 = new CamelContextElement(camelFile2, null);
 		doReturn(parent2).when(camelFile2).getRouteContainer();
@@ -97,14 +96,14 @@ public class GenerateNewIDTest {
 	public void getNewId_supportFileWithoutContext() throws Exception {
 		Set<CamelFile> camelFiles = new HashSet<>();
 		camelFiles.add(camelFile);
-		when(camelFile.isNewIDAvailable(Mockito.anyString())).thenCallRealMethod();
+		when(camelFile.isNewIDAvailable(ArgumentMatchers.anyString())).thenCallRealMethod();
 
 		doReturn("route").when(underlyingMetaModel).getName();
 		doReturn(null).when(camelFile).getRouteContainer();
 		
 		/*Artificially add the second camelfile in the project*/
 		camelFiles.add(camelFile2);
-		when(camelFile2.isNewIDAvailable(Mockito.anyString())).thenCallRealMethod();
+		when(camelFile2.isNewIDAvailable(ArgumentMatchers.anyString())).thenCallRealMethod();
 		/*Configure the second CamelFile*/
 		CamelContextElement parent2 = new CamelContextElement(camelFile2, null);
 		doReturn(parent2).when(camelFile2).getRouteContainer();
