@@ -15,6 +15,7 @@ import org.eclipse.graphiti.ui.internal.parts.ContainerShapeEditPart;
 import org.fusesource.ide.camel.model.service.core.model.CamelBasicModelElement;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.Spy;
@@ -31,13 +32,13 @@ public class CamelTypeMapperTest {
 
 	@Test
 	public void testMapType_CamelNode() throws Exception {
-		Mockito.doReturn(new CamelBasicModelElement(null, null)).when(camelTypeMapper).resolveCamelModelElement(Mockito.any(ContainerShapeEditPart.class));
+		Mockito.doReturn(new CamelBasicModelElement(null, null)).when(camelTypeMapper).resolveCamelModelElement(ArgumentMatchers.any(ContainerShapeEditPart.class));
 		Assertions.assertThat(camelTypeMapper.mapType(editPart)).isEqualTo(CamelBasicModelElement.class);
 	}
 
 	@Test
 	public void testMapType_OtherStuff() throws Exception {
-		Mockito.doReturn(null).when(camelTypeMapper).resolveCamelModelElement(Mockito.any());
+		Mockito.doReturn(null).when(camelTypeMapper).resolveCamelModelElement(ArgumentMatchers.any());
 		Assertions.assertThat(camelTypeMapper.mapType(new Object())).isEqualTo(Object.class);
 	}
 

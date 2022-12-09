@@ -10,6 +10,11 @@
  ******************************************************************************/
 package org.fusesource.ide.launcher.ui.launch;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.content.IContentDescription;
@@ -21,21 +26,15 @@ import org.eclipse.ui.IFileEditorInput;
 import org.fusesource.ide.foundation.core.util.CamelUtils;
 import org.fusesource.ide.foundation.ui.io.CamelXMLEditorInput;
 import org.fusesource.ide.launcher.run.util.CamelContextLaunchConfigConstants;
-import org.junit.Ignore;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Answers;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
-
-import static org.assertj.core.api.Assertions.assertThat;
-
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 @Ignore
@@ -65,7 +64,7 @@ public class ExecutePomActionSupportTest {
 		doReturn(camelFileFromAdapter).when(otherEditorInput).getAdapter(IFile.class);
 		doReturn(contentDescription).when(camelFileFromAdapter).getContentDescription();
 		when(contentDescription.getContentType().getId()).thenReturn(CamelUtils.FUSE_CAMEL_CONTENT_TYPE);
-		doReturn(null).when(executePomAction).launchCamelContext(Mockito.any(), Mockito.anyString());
+		doReturn(null).when(executePomAction).launchCamelContext(ArgumentMatchers.any(), ArgumentMatchers.anyString());
 	}
 
 	@Test

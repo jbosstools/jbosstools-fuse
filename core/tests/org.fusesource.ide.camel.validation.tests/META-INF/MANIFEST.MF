@@ -6,6 +6,6 @@ Bundle-Version: 11.17.0.qualifier
 Fragment-Host: org.fusesource.ide.camel.validation;bundle-version="10.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Require-Bundle: org.junit,
- org.mockito;bundle-version="2.23.0",
+ org.mockito.mockito-core;bundle-version="4.8.1",
  assertj-core;bundle-version="3.22.0"
 Bundle-Vendor: %Bundle-Vendor

@@ -23,6 +23,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
@@ -64,7 +65,7 @@ public class FusePropertySectionIT {
 		fusePropertySection.createPropertyLabel(toolkit, page, parameter);
 		
 		assertEquals("My Name", labelCaptor.getValue());
-		Mockito.verify(label, Mockito.never()).setForeground(Mockito.any(Color.class));
+		Mockito.verify(label, Mockito.never()).setForeground(ArgumentMatchers.any(Color.class));
 	}
 	
 	@Test
@@ -78,7 +79,7 @@ public class FusePropertySectionIT {
 		fusePropertySection.createPropertyLabel(toolkit, page, parameter);
 		
 		assertEquals("My Name (deprecated)", labelCaptor.getValue());
-		Mockito.verify(label, Mockito.never()).setForeground(Mockito.any(Color.class));
+		Mockito.verify(label, Mockito.never()).setForeground(ArgumentMatchers.any(Color.class));
 	}
 	
 	@Test
@@ -92,7 +93,7 @@ public class FusePropertySectionIT {
 		fusePropertySection.createPropertyLabel(toolkit, page, parameter);
 		
 		assertEquals("My Name *", labelCaptor.getValue());
-//		Mockito.verify(label).setForeground(Mockito.any(Color.class));
+//		Mockito.verify(label).setForeground(ArgumentMatchers.any(Color.class));
 	}
 	
 	@Test
@@ -107,7 +108,7 @@ public class FusePropertySectionIT {
 		fusePropertySection.createPropertyLabel(toolkit, page, parameter);
 		
 		assertEquals("My Name * (deprecated)", labelCaptor.getValue());
-//		Mockito.verify(label).setForeground(Mockito.any(Color.class));
+//		Mockito.verify(label).setForeground(ArgumentMatchers.any(Color.class));
 	}
 
 }

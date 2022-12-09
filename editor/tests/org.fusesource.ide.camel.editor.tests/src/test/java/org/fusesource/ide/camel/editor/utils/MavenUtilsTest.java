@@ -41,7 +41,6 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Captor;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
 
@@ -102,7 +101,7 @@ public class MavenUtilsTest {
 		m2eDependency.setGroupId("test-groupID");
 		m2eDependency.setVersion("differentVersion-test");
 		m2eDependencies.add(m2eDependency);
-		when(mavenProjectFacade.getMavenProject(Mockito.any(NullProgressMonitor.class)).getDependencies()).thenReturn(m2eDependencies);
+		when(mavenProjectFacade.getMavenProject(ArgumentMatchers.any(NullProgressMonitor.class)).getDependencies()).thenReturn(m2eDependencies);
 		doReturn(mavenProjectFacade).when(camelMavenUtils).getMavenProjectFacade(project);
 		final Model mavenModel = new Model();
 		final org.apache.maven.model.Dependency mavenDependency = new org.apache.maven.model.Dependency();
@@ -126,7 +125,7 @@ public class MavenUtilsTest {
 	public void testUpdateMavenDependencyForMissingDependency() throws Exception {
 		// so retrieved from the MavenprojectFacade
 		final ArrayList<org.apache.maven.model.Dependency> m2eDependencies = new ArrayList<org.apache.maven.model.Dependency>();
-		when(mavenProjectFacade.getMavenProject(Mockito.any(NullProgressMonitor.class)).getDependencies()).thenReturn(m2eDependencies);
+		when(mavenProjectFacade.getMavenProject(ArgumentMatchers.any(NullProgressMonitor.class)).getDependencies()).thenReturn(m2eDependencies);
 		doReturn(mavenProjectFacade).when(camelMavenUtils).getMavenProjectFacade(project);
 		final Model mavenModel = new Model();
 		final org.apache.maven.model.Dependency mavenDependency = new org.apache.maven.model.Dependency();
