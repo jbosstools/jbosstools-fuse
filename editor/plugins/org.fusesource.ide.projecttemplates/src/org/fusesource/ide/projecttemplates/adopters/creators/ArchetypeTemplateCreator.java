@@ -10,7 +10,7 @@
  ******************************************************************************/ 
 package org.fusesource.ide.projecttemplates.adopters.creators;
 
-import java.util.Properties;
+import java.util.Collections;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -48,7 +48,7 @@ public abstract class ArchetypeTemplateCreator implements TemplateCreatorSupport
 					archetype.getArtifactId(),
 					archetype.getVersion(),
 					getJavaPackage(),
-					new Properties(),
+					Collections.emptyMap(),
 					subMonitor.newChild(1)); 
 		} catch (CoreException ex) {
 			ProjectTemplatesActivator.pluginLog().logError(ex);
