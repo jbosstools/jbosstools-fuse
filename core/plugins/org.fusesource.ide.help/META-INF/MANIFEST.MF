@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Version: 11.17.0.qualifier
+Bundle-Version: 11.18.0.qualifier
 Bundle-Name: %Bundle-Name
 Bundle-SymbolicName: org.fusesource.ide.help;singleton:=true
 Bundle-Vendor: %Bundle-Vendor
