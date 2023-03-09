@@ -98,8 +98,14 @@ public class CamelEditorDataFormatTest {
 
 	@Parameters(name = "{0}")
 	public static Collection<String> getCamelDataFormats() {
-		return new CamelCatalogUtils(camelCatalogRequirement.getConfiguration().getHome())
+		List<String> components = new CamelCatalogUtils(camelCatalogRequirement.getConfiguration().getHome())
 				.getComponentPropertyValueAsList(CatalogType.MODEL, "marshal", "dataFormatType", "oneOf");
+		/**
+		 * Skip 'fhirJson' and 'fhirXml' components (see https://issues.redhat.com/browse/FUSETOOLS-3666)
+		 */
+		components.remove("fhirJson");
+		components.remove("fhirXml");
+		return components;
 	}
 
 	/**
