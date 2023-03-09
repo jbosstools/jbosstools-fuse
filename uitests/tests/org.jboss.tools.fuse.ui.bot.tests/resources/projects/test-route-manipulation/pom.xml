@@ -16,11 +16,11 @@
     </license>
   </licenses>
   <properties>
-    <version.maven-bundle-plugin>3.2.0</version.maven-bundle-plugin>
+    <version.maven-bundle-plugin>5.1.8</version.maven-bundle-plugin>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <jboss.fuse.bom.version>7.11.0.fuse-sb2-7_11_0-00028-redhat-00001</jboss.fuse.bom.version>
-    <camel.version>2.23.2.fuse-7_11_0-00037-redhat-00001</camel.version>
+    <jboss.fuse.bom.version>7.11.1.fuse-sb2-7_11_1-00017-redhat-00002</jboss.fuse.bom.version>
+    <camel.version>2.23.2.fuse-7_11_1-00015-redhat-00002</camel.version>
   </properties>
   <dependencyManagement>
     <dependencies>
