@@ -47,7 +47,7 @@ public class FuseIntegrationProjectCreatorRunnableCheckCatalogCacheLoadingIT
 	@Before
 	public void setup() throws Exception {
 		CamelCatalogCacheManager.getInstance().clear();
-		camelVersion = CamelCatalogUtils.CAMEL_VERSION_LATEST_PRODUCTIZED_63;
+		camelVersion = CamelCatalogUtils.getLatestCamelVersion();
 		super.setup();
 	}
 	

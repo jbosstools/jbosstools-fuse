@@ -21,7 +21,7 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.m2e.actions.MavenLaunchConstants;
 import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
 import org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType;
-import org.fusesource.ide.projecttemplates.impl.simple.CBRTemplateForFuse6;
+import org.fusesource.ide.projecttemplates.impl.simple.CBRTemplateForFuse7101;
 import org.fusesource.ide.projecttemplates.tests.integration.ProjectTemplatesIntegrationTestsActivator;
 import org.fusesource.ide.projecttemplates.util.NewFuseIntegrationProjectMetaData;
 import org.junit.Before;
@@ -32,7 +32,7 @@ public class LaunchFromCamelContextFileIT extends FuseIntegrationProjectCreatorR
 	@Override
 	@Before
 	public void setup() throws Exception{
-		camelVersion = CamelCatalogUtils.CAMEL_VERSION_LATEST_PRODUCTIZED_63;
+		camelVersion = CamelCatalogUtils.getLatestCamelVersion();
 		super.setup();
 	}
 	
@@ -69,7 +69,7 @@ public class LaunchFromCamelContextFileIT extends FuseIntegrationProjectCreatorR
 	@Override
 	protected NewFuseIntegrationProjectMetaData createDefaultNewProjectMetadata(CamelDSLType dsl, String projectName) {
 		NewFuseIntegrationProjectMetaData newProjectMetadata = super.createDefaultNewProjectMetadata(dsl, projectName);
-		newProjectMetadata.setTemplate(new CBRTemplateForFuse6());
+		newProjectMetadata.setTemplate(new CBRTemplateForFuse7101());
 		return newProjectMetadata;
 	}
 
