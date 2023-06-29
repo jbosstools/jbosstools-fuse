@@ -70,7 +70,7 @@ public class FuseIntegrationProjectCreatorRunnableForEAPSpringIT extends FuseInt
 	public void testEAPSpringProjectCreation() throws Exception {
 		String camelFilePath = "src/main/webapp/";
 		if(isNewerThan2232fuse790()){
-			camelFilePath += "META-INF/camel-context.xml";
+			camelFilePath += "WEB-INF/camel-context.xml";
 		} else {
 			camelFilePath += "META-INF/jboss-camel-context.xml";
 		}
