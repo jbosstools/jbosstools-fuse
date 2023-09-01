@@ -134,13 +134,17 @@ public final class TextParameterValidator implements IValidator {
 	private boolean shouldCheckForComponentIdUnicity(AbstractCamelModelElement camelModelElement) {
 		CamelModel camelModel = camelModelElement.getCamelFile().getCamelModel();
 		Eip camelContextDefintion = camelModel.getEip("camelContext");
-		Parameter registerEndpointParameterDefinition = camelContextDefintion.getParameter(REGISTER_ENDPOINT_IDS_FROM_ROUTE);
-		if (registerEndpointParameterDefinition == null) {
-			// prior to 2.20, the registerEndpointIdsFromRoute didn't exist and ids must be different
-			return true;
+		if (camelContextDefintion != null) {
+			Parameter registerEndpointParameterDefinition = camelContextDefintion.getParameter(REGISTER_ENDPOINT_IDS_FROM_ROUTE);
+			if (registerEndpointParameterDefinition == null) {
+				// prior to 2.20, the registerEndpointIdsFromRoute didn't exist and ids must be different
+				return true;
+			} else {
+				Object isRegisteringEndpointIdsFromRoute = camelModelElement.getRouteContainer().getParameter(REGISTER_ENDPOINT_IDS_FROM_ROUTE);
+				return "true".equals(isRegisteringEndpointIdsFromRoute);
+			}
 		} else {
-			Object isRegisteringEndpointIdsFromRoute = camelModelElement.getRouteContainer().getParameter(REGISTER_ENDPOINT_IDS_FROM_ROUTE);
-			return "true".equals(isRegisteringEndpointIdsFromRoute);
+			return true;
 		}
 	}
 }
