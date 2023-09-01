@@ -1432,6 +1432,13 @@ public abstract class AbstractCamelModelElement {
 	 * @return
 	 */
 	protected boolean hasChildren(String name) {
+		/* In 3.x catalog, for route,
+		 * the kind of input parameter is element but the type is object
+		 * it seems to be the only EIPs designed this way, the others seems to have stayed with type array as it was in 2.x
+		*/
+		if ("route".equals(name)) {
+			return true;
+		}
 		Eip eip = getEipByName(name);
 		if (eip != null) {
 			Iterator<Parameter> it = eip.getParameters().iterator();
