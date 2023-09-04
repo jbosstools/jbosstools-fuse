@@ -180,7 +180,12 @@ public class BasicNodeValidator implements ValidationSupport {
 
 			Object value = selectedEP.getParameter(property);
 
-			if (PropertiesUtils.isRequired(prop) || "id".equals(prop.getName())) {
+			if (PropertiesUtils.isRequired(prop) ||
+					("id".equals(prop.getName())
+							// Special handling for Camel 3.x
+							&& !"unmarshal".equals(selectedEP.getNodeTypeId())
+							&& !"marshal".equals(selectedEP.getNodeTypeId()))
+							&& !"jaxb".equals(selectedEP.getNodeTypeId())) {
 				checkFor(result, value, new TextParameterValidator(selectedEP, prop));
 			}
 			checkFor(result, value, new RefOrDataFormatUnicityChoiceValidator(selectedEP, prop));

@@ -45,7 +45,10 @@ public final class TextParameterValidator implements IValidator {
 
 	@Override
 	public IStatus validate(Object value) {
-		if (PropertiesUtils.isRequired(parameter) || "id".equalsIgnoreCase(parameter.getName())) {
+		if (PropertiesUtils.isRequired(parameter) ||
+				("id".equalsIgnoreCase(parameter.getName())
+					// Special handling for Camel 3.x
+					&& !"unmarshal".equals(camelModelElement.getNodeTypeId()) && !"marshal".equals(camelModelElement.getNodeTypeId()))) {
 			final Object uriValue = camelModelElement.getParameter("uri");
 			final Object refValue = camelModelElement.getParameter("ref");
 			CamelRouteContainerElement routeContainer = camelModelElement.getRouteContainer();

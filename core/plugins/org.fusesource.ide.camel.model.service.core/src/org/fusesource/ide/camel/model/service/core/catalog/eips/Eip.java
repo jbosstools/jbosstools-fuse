@@ -13,6 +13,7 @@ package org.fusesource.ide.camel.model.service.core.catalog.eips;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -55,6 +56,13 @@ public class Eip implements ICamelCatalogElement, IParameterContainer {
 
 	private List<String> tags = new ArrayList<>();
 	private Map<String, Object> otherProperties = new HashMap<>();
+
+	/**
+	 * Ugly list to maintain for Camel 3+ as the information has been removed from the catalog
+	 * It might be less guiding for end-users and allow some impossible configuration
+	 * But avoid blocking the valid ones with Camel 3.x
+	 */
+	public static List<String> CAN_HAVE_CHILDREN = Arrays.asList("aggregate", "doTry", "doCatch", "doFinally", "onFallback", "saga", "route", "choice", "when", "otherwise");
 
 	@JsonAnyGetter
 	public Map<String, Object> any() {
@@ -292,13 +300,7 @@ public class Eip implements ICamelCatalogElement, IParameterContainer {
 	 * @return
 	 */
 	public boolean canHaveChildren() {
-		for (Parameter p : getParameters()) {
-			if ("array".equalsIgnoreCase(p.getType())
-					&& AbstractCamelModelElement.NODE_KIND_ELEMENT.equalsIgnoreCase(p.getKind())
-					&& "true".equalsIgnoreCase(getInput()))
-				return true;
-		}
-		return false;
+		return CAN_HAVE_CHILDREN.contains(getName());
 	}
 
 	/**
