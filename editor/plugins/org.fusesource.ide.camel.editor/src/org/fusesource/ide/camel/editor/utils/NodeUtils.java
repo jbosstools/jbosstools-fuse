@@ -87,9 +87,10 @@ public class NodeUtils {
 				// special case for choice
 				return AbstractCamelModelElement.WHEN_NODE_NAME.equalsIgnoreCase(childNodeType) || 
 						(AbstractCamelModelElement.OTHERWISE_NODE_NAME.equalsIgnoreCase(childNodeType) && (parent.getParameter(AbstractCamelModelElement.OTHERWISE_NODE_NAME) == null || parent.getParameter(AbstractCamelModelElement.OTHERWISE_NODE_NAME) == child));
-			} else if (AbstractCamelModelElement.ROUTE_NODE_NAME.equalsIgnoreCase(parentNodeType)) {
+			} else if (Eip.CAN_HAVE_CHILDREN.contains(parentNodeType)) {
 				return !AbstractCamelModelElement.ROUTE_NODE_NAME.equalsIgnoreCase(childNodeType);
 			} else {
+				// Keeping this one in case custom EIPs are added to the catalog
 				Eip containerEip = parent.getUnderlyingMetaModelObject();
 				if (containerEip == null) {
 					containerEip = metaModel.getEip(parentNodeType);
