@@ -697,7 +697,7 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 		if (Objects.equal(node, modelNode) || node.getId().equals(modelNode.getId())) {
 			return part;
 		}
-		List<EditPart> children = part.getChildren();
+		List<? extends EditPart> children = part.getChildren();
 		for (EditPart childPart : children) {
 			EditPart answer = findEditPart(node, childPart);
 			if (answer != null) {

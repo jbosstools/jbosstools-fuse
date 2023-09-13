@@ -38,6 +38,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.wildwebdeveloper.xml.internal.Activator;
 import org.eclipse.wst.common.project.facet.core.IProjectFacet;
 import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
 import org.fusesource.ide.camel.editor.CamelEditor;
@@ -76,6 +77,7 @@ import org.junit.Before;
 public abstract class FuseIntegrationProjectCreatorRunnableIT extends AbstractProjectCreatorRunnableIT {
 	
 	public static IProjectFacet camelFacet = ProjectFacetsManager.getProjectFacet("jst.camel");
+	private static final String XML_PREFERENCES_DOWNLOAD_EXTERNAL_RESOURCES = "org.eclipse.wildwebdeveloper.xml.downloadExternalResources.enabled";
 	
 	boolean deploymentFinished = false;
 	boolean isDeploymentOk = false;
@@ -85,6 +87,7 @@ public abstract class FuseIntegrationProjectCreatorRunnableIT extends AbstractPr
 	public void setup() throws Exception {
 		ProjectTemplatesIntegrationTestsActivator.pluginLog().logInfo("Starting setup for "+ FuseIntegrationProjectCreatorRunnableIT.class.getSimpleName());
 		CommonTestUtils.prepareIntegrationTestLaunch(SCREENSHOT_FOLDER);
+		Activator.getDefault().getPreferenceStore().setValue(XML_PREFERENCES_DOWNLOAD_EXTERNAL_RESOURCES, true);
 
 		String projectName = project != null ? project.getName() : String.format("%s-%s", getClass().getSimpleName(), camelVersion);
 		ScreenshotUtil.saveScreenshotToFile(String.format("%s/MavenLaunchOutput-%s_BEFORE.png", SCREENSHOT_FOLDER, projectName), SWT.IMAGE_PNG);

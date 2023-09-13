@@ -254,8 +254,9 @@
 					</systemProperties>
 					<useUIThread>true</useUIThread>
 					<useUIHarness>true</useUIHarness>
-					<argLine>${tycho.testArgLine} -XX:+HeapDumpOnOutOfMemoryError ${platformSystemProperties} ${systemProperties} --add-exports=jdk.internal.jvmstat/sun.jvmstat.monitor=ALL-UNNAMED ${moduleProperties} -Dusage_reporting_enabled=false -Dorg.jboss.tools.vpe.loadxulrunner=false -Dsun.net.client.defaultConnectTimeout=30000 -Dsun.net.client.defaultReadTimeout=30000</argLine>
+					<argLine>${tycho.testArgLine} -XX:+HeapDumpOnOutOfMemoryError ${platformSystemProperties} ${systemProperties} --add-exports=jdk.internal.jvmstat/sun.jvmstat.monitor=ALL-UNNAMED ${moduleProperties} -Dusage_reporting_enabled=false -Dorg.jboss.tools.vpe.loadxulrunner=false -Dsun.net.client.defaultConnectTimeout=30000 -Dsun.net.client.defaultReadTimeout=30000 -Dorg.eclipse.wildwebdeveloper.xml.downloadExternalResources.enabled=true</argLine>
 					<osgiDataDirectory>${project.basedir}/target/work sp@cé</osgiDataDirectory>
+					
 				</configuration>
 			</plugin>
 		</plugins>
