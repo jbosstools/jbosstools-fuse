@@ -18,10 +18,11 @@ Import-Package: com.sun.istack;version="2.3.3",
  com.sun.xml.bind.v2.model.nav;version="2.3.3",
  com.sun.xml.bind.v2.runtime;version="2.3.3",
  com.sun.xml.bind.v2.util;version="2.3.3",
- javax.activation;version="1.2.2",
+ javax.activation;version="1.2",
  javax.xml.bind;version="2.3.3",
  javax.xml.bind.annotation;version="2.3.3",
  javax.xml.bind.annotation.adapters;version="2.3.3"
+Require-Bundle: jakarta.activation-api;bundle-version="1.2.2"
 Export-Package: com.sun.codemodel;
   x-friends:="org.jboss.tools.fuse.transformation.core,
    org.jboss.tools.fuse.transformation.editor,

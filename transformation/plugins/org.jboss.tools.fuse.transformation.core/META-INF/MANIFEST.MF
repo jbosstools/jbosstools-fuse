@@ -21,7 +21,7 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.11.0",
  org.fusesource.ide.foundation.ui;bundle-version="10.0.0",
  org.fusesource.ide.camel.editor;bundle-version="10.0.0",
  org.fusesource.ide.jsonschema2pojo-0.4.13;bundle-version="11.10.0",
- javax.activation;bundle-version="1.2.2"
+ jakarta.activation-api;bundle-version="1.2.2"
 Import-Package: com.sun.codemodel,
  com.sun.codemodel.fmt,
  com.sun.codemodel.util,
