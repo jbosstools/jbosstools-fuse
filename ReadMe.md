@@ -6,7 +6,8 @@
 Red Hat Fuse Tooling for Eclipse Desktop is deprecated since 11.19.0 version.
 
 For Camel 3+ projects, recommendations are to use the [VS Code extension pack for Camel](https://marketplace.visualstudio.com/items?itemName=redhat.apache-camel-extension-pack) or to stay on Eclipse Desktop using [Textual Language Support](https://marketplace.eclipse.org/content/language-support-apache-camel) and [Debug Adapter for Camel](https://marketplace.eclipse.org/content/textual-debugging-apache-camel).
-
+The extension pack also includes a graphical editor.
+![Screenshot of VS Code extension where we can see the graphical editor](images/vscode-screenshot.png "VS Code with graphical editor") 
 ---
 
 Please visit our [project site](https://tools.jboss.org/features/fusetools.html) or the [documentation provided by _Red Hat_](https://access.redhat.com/documentation/en-us/red_hat_fuse/7.2/html/tooling_tutorials/index) to learn more about _Red Hat Fuse Tooling_ .
